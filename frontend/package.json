@@ -1,0 +1,21 @@
+{
+  "name": "idrem-tereshkova-bot-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Interface web IDREM TERESHKOVA BOT (React + Vite)",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 4173"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.2.0",
+    "vite": "^7.3.6"
+  }
+}

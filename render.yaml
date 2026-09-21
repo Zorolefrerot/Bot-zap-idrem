@@ -1,0 +1,75 @@
+###############################################################################
+# IDREM TERESHKOVA BOT — déploiement Render (Blueprint)
+#
+# 1. Poussez ce dépôt sur GitHub.
+# 2. Render → « New + » → « Blueprint » → sélectionnez le dépôt.
+# 3. Renseignez les variables marquées `sync: false` (DASHBOARD_PASSWORD,
+#    ADMIN_NUMBER, ADMIN_NAME).
+# 4. Déployez. Le service écoute sur le PORT injecté par Render et sert
+#    l'API + le dashboard sur la même URL.
+#
+# IMPORTANT — persistance de la session WhatsApp :
+#   le disque persistant (/data) nécessite un plan payant (Starter ou +).
+#   Sans disque, chaque redéploiement efface la session : il faut regénérer
+#   un Pair Code depuis le dashboard.
+###############################################################################
+
+services:
+  - type: web
+    name: idrem-tereshkova-bot
+    runtime: docker
+    plan: starter
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      # PORT est injecté automatiquement par Render.
+
+      # --- Sécurité : à définir dans le dashboard Render (jamais en clair ici)
+      - key: DASHBOARD_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+
+      # --- Bot (modifiables ensuite depuis le dashboard web)
+      - key: BOT_NAME
+        value: IDREM TERESHKOVA BOT
+      - key: PREFIX
+        value: /
+      - key: STICKER_NAME
+        value: IDREM TERESHKOVA
+      - key: ADMIN_NUMBER
+        sync: false
+      - key: ADMIN_NAME
+        sync: false
+
+      # --- Stockage sur le disque persistant
+      - key: DATA_DIR
+        value: /data/data
+      - key: SESSION_DIR
+        value: /data/sessions
+      - key: LOG_DIR
+        value: /data/logs
+      - key: TMP_DIR
+        value: /data/tmp
+
+      # --- Divers
+      - key: ALLOW_EMBED
+        value: "false"
+      - key: LOG_TO_FILE
+        value: "true"
+      - key: LOG_LEVEL
+        value: info
+      - key: AUTO_RECONNECT
+        value: "true"
+
+    disk:
+      name: idrem-data
+      mountPath: /data
+      sizeGB: 1

@@ -1,0 +1,33 @@
+# Jamais de secrets ni d'état runtime dans l'image Docker
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+.github
+
+# Dépendances (réinstallées dans l'image via npm ci)
+node_modules
+frontend/node_modules
+
+# Build frontend (reconstruit dans l'étape frontend-build)
+frontend/dist
+
+# État runtime (sessions WhatsApp, base, logs, temporaires)
+sessions
+data
+logs
+tmp
+*.log
+
+# Tests et couverture
+tests
+coverage
+
+# Docs et fichiers de déploiement inutiles dans l'image
+README.md
+render.yaml
+ecosystem.config.cjs
+docker-compose.yml
+Dockerfile
+.dockerignore

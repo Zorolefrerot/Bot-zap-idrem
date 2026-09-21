@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>IDREM TERESHKOVA BOT</title>
+    <script>
+      /*
+       * Redirection SPA pour GitHub Pages.
+       * `segmentCount` = nombre de segments de chemin du site (1 pour un repo
+       * projet : https://user.github.io/repo/). À laisser à 0 pour un domaine
+       * personnalisé servi à la racine.
+       */
+      var segmentCount = 1;
+      var l = window.location;
+      var path = l.pathname.replace(/^\//, '').replace(/\/$/, '');
+      var parts = path ? path.split('/') : [];
+      var forward = parts.slice(segmentCount).join('/').replace(/&/g, '~and~');
+      var query = l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '';
+
+      l.replace(
+        l.protocol +
+          '//' +
+          l.hostname +
+          (l.port ? ':' + l.port : '') +
+          '/' +
+          parts.slice(0, segmentCount).join('/') +
+          '/?/' +
+          forward +
+          query +
+          l.hash,
+      );
+    </script>
+  </head>
+  <body></body>
+</html>
