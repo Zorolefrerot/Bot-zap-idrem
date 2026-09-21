@@ -4,17 +4,18 @@
 !.env.example
 *.pem
 *.key
-secrets/
+/secrets/
 
 # === Sessions / credentials WhatsApp (JAMAIS commiter) ===
-sessions/
-auth/
-credentials/
-data/
+# IMPORTANT : motifs ANCRÉS à la racine (/) pour ne pas ignorer src/auth/ !
+/sessions/
+/auth/
+/credentials/
+/data/
 *.creds.json
 
 # === Logs ===
-logs/
+/logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -34,8 +35,8 @@ out/
 coverage/
 
 # === Temporaires / media ===
-tmp/
-temp/
+/tmp/
+/temp/
 *.tmp
 .DS_Store
 Thumbs.db
