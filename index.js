@@ -56,8 +56,9 @@ async function connectWithRetry(loggerFn, attempts = 3) {
     try {
       loggerFn.info(`[facebook] tentative de connexion ${i}/${attempts}…`);
       return await facebook.connect(config, loggerFn, {
+        // TOUT passe par le routeur : messages → commandes/chat, logs → accueil.
         onEvent: (ev) => {
-          if (botRef) botRef.handleEvent(ev).catch(() => {});
+          if (botRef) botRef.handleRawEvent(ev).catch(() => {});
         },
       });
     } catch (err) {

@@ -404,6 +404,22 @@ class Bot {
 
   /* ══════════════════  ÉVÉNEMENTS GROUPE  ══════════════════ */
 
+  /* ══════════════════  ROUTAGE GÉNÉRAL (fix « bot sourd »)  ══════════════════ */
+  /*
+   * Point d'entrée unique de TOUT ce qui arrive du listener Messenger :
+   *  - type « message » / « message_reply » → handleMessage (commandes, chat…)
+   *  - type « event » (log:subscribe, log:unsubscribe…) → handleEvent (accueil…)
+   * Sans ce routage, les messages arrivent mais ne sont jamais traités.
+   */
+  async handleRawEvent(event) {
+    if (!event) return;
+    if (event.type === 'message' || event.type === 'message_reply') {
+      await this.handleMessage(event);
+      return;
+    }
+    await this.handleEvent(event);
+  }
+
   async handleEvent(event) {
     try {
       if (!event || event.type !== 'event' || !event.logMessageType) return;

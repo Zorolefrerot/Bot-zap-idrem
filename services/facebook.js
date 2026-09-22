@@ -40,11 +40,30 @@ function sendMessage(api, payload, threadID) {
       if (fs.existsSync(msg.attachment)) msg.attachment = fs.createReadStream(msg.attachment);
     } catch (_) { /* URL distante : envoyée telle quelle */ }
   }
+  /*
+   * Compatibilité double style : certains forks (ex. @dongdev/fca-unofficial)
+   * renvoient une Promise, d'autres (FCA classiques) appellent un callback.
+   * On résout sur le premier des deux qui aboutit.
+   */
   return new Promise((resolve, reject) => {
+    let settled = false;
+    const done = (err, info) => {
+      if (settled) return;
+      settled = true;
+      if (err) reject(normalizeError(err));
+      else resolve(info && info.messageID !== undefined ? info : { messageID: (info && info.messageID) || null });
+    };
+    let returned;
     try {
-      api.sendMessage(msg, String(threadID), (err, info) => (err ? reject(normalizeError(err)) : resolve(info || { messageID: null })));
+      returned = api.sendMessage(msg, String(threadID), done);
     } catch (e) {
-      reject(normalizeError(e));
+      return reject(normalizeError(e));
+    }
+    if (returned && typeof returned.then === 'function') {
+      returned.then(
+        (info) => done(null, info),
+        (err) => done(err)
+      );
     }
   });
 }

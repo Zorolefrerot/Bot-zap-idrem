@@ -112,8 +112,17 @@ async function boot(opts = {}) {
   };
   if (opts.serviceStubs) Object.assign(services, opts.serviceStubs);
 
-  const adapter = await facebook.connect(config, logger, opts.mock || {});
-  const bot = new Bot({ config, logger, db, adapter, services });
+  /* Câblage IDENTIQUE à index.js : tout événement passe par le routeur. */
+  let bot = null;
+  const connectHooks = Object.assign({}, opts.mock || {});
+  const userOnEvent = connectHooks.onEvent;
+  connectHooks.onEvent = (ev) => {
+    if (!bot) return;
+    if (userOnEvent) userOnEvent(ev);
+    bot.handleRawEvent(ev).catch(() => {});
+  };
+  const adapter = await facebook.connect(config, logger, connectHooks);
+  bot = new Bot({ config, logger, db, adapter, services });
   return { config, logger, db, adapter, bot, services, dataDir };
 }
 
