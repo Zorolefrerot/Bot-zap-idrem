@@ -1,0 +1,37 @@
+# Dépendances
+node_modules/
+
+# === SENSIBLE : ne JAMAIS commiter ===
+account.txt
+.env
+.env.local
+.env.*.local
+*.cookies.json
+appstate.json
+
+# Journaux
+*.log
+logs/
+npm-debug.log*
+yarn-error.log*
+
+# Données runtime (le dossier est conservé, son contenu ignoré)
+data/*
+!data/.gitkeep
+
+# Base SQLite créée par la librairie (cache optionnel)
+Fca_Database/
+*.sqlite
+*.sqlite3
+
+# Sauvegardes / temporaires
+*.bak
+*.tmp
+*.swp
+.cache/
+
+# Système / éditeurs
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -1,0 +1,33 @@
+{
+  "name": "bot-zap-idrem",
+  "version": "2.0.0",
+  "description": "IDREM TERESHKOVA — bot Facebook Messenger modulaire (118 commandes, jeux, économie, IA, médias, administration), basé sur @dongdev/fca-unofficial et prêt pour Render.",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "check": "node index.js --check",
+    "selftest": "node index.js --selftest",
+    "test": "node index.js --selftest",
+    "version": "node index.js --version"
+  },
+  "keywords": [
+    "facebook",
+    "messenger",
+    "bot",
+    "fca-unofficial",
+    "render",
+    "idrem",
+    "modular"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9"
+  },
+  "dependencies": {
+    "@dongdev/fca-unofficial": "^4.0.3"
+  }
+}

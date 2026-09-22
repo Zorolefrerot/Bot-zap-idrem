@@ -1,0 +1,96 @@
+services:
+  # ==========================================================================
+  #  IDREM TERESHKOVA — Blueprint Render
+  #  « New + » → « Blueprint » → sélectionnez ce dépôt.
+  #  Vous pouvez aussi créer le service à la main (README.md, section 6) :
+  #  Render utilise exactement les mêmes commandes.
+  # ==========================================================================
+  - type: web
+    name: idrem-tereshkova
+    runtime: node
+    plan: free
+    region: frankfurt
+    branch: main
+
+    # `npm install` normal ; si la compilation native du cache SQLite optionnel
+    # de la librairie échoue, on retombe sur une installation sans scripts.
+    # Le bot fonctionne dans les deux cas (README.md, section 6).
+    buildCommand: "npm install --no-audit --no-fund || npm install --no-audit --no-fund --ignore-scripts"
+    startCommand: npm start
+
+    # Render interroge cet endpoint pour considérer le service comme vivant.
+    healthCheckPath: /health
+
+    # Redémarrage automatique en cas d'arrêt du processus.
+    restartOnFailure: true
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      - key: BOT_NAME
+        value: IDREM TERESHKOVA
+
+      # Préfixe des commandes (modifiable à chaud : /setprefix).
+      - key: PREFIX
+        value: /
+
+      # Langue des messages système (fr | en).
+      - key: LANGUAGE
+        value: fr
+
+      - key: LOG_LEVEL
+        value: info
+
+      # Petit serveur de statut : obligatoire pour un Web Service Render.
+      - key: HEALTH_SERVER
+        value: "true"
+
+      # Dossier des données JSON. ⚠️ Le disque Render est ÉPHÉMÈRE :
+      # ajoutez REMOTE_STORE_URL / REMOTE_STORE_TOKEN pour les conserver
+      # entre les redéploiements (README.md, section 7).
+      - key: DATA_DIR
+        value: data
+
+      # Conversation naturelle (salutations, remerciements, questions simples).
+      - key: CONVERSATION
+        value: "true"
+
+      # /eval reste désactivé en production (double verrou).
+      - key: ALLOW_EVAL
+        value: "false"
+
+      # ----------------------------------------------------------------------
+      #  SECRETS — `sync: false` : la valeur se saisit dans le tableau de bord
+      #  Render, elle n'est JAMAIS écrite dans ce fichier ni dans Git.
+      # ----------------------------------------------------------------------
+
+      # UID Facebook du propriétaire (commandes owner).
+      - key: OWNER_UID
+        sync: false
+
+      # Session Facebook : contenu de account.txt (tableau JSON de cookies
+      # ou chaîne de cookies). Méthode recommandée sur Render.
+      - key: FB_APPSTATE
+        sync: false
+
+      # Optionnels : sans eux, les commandes concernées affichent un message
+      # « service non configuré » — jamais de faux résultat.
+      - key: AI_PROVIDER
+        sync: false
+      - key: AI_API_KEY
+        sync: false
+      - key: AI_MODEL
+        sync: false
+      - key: IMAGE_API_KEY
+        sync: false
+      - key: MEDIA_API_URL
+        sync: false
+      - key: MEDIA_API_TOKEN
+        sync: false
+      - key: YOUTUBE_API_KEY
+        sync: false
+      - key: REMOTE_STORE_URL
+        sync: false
+      - key: REMOTE_STORE_TOKEN
+        sync: false
