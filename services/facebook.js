@@ -194,12 +194,25 @@ function readAppState(config) {
 }
 
 async function createWs3Adapter(config, logger, { onEvent } = {}) {
+  /*
+   * Extraction robuste de la fonction login — les forks FCA n'exportent pas
+   * tous de la même façon :
+   *   ws3-fca  : module.exports = { login }
+   *   fca-*    : module.exports = login (fonction directe)
+   *   ESM      : { default: login }
+   */
   let login;
   try {
     // eslint-disable-next-line global-require
-    login = require('ws3-fca');
+    const mod = require('ws3-fca');
+    if (typeof mod === 'function') login = mod;
+    else if (mod && typeof mod.login === 'function') login = mod.login;
+    else if (mod && typeof mod.default === 'function') login = mod.default;
   } catch (err) {
     throw new Error('Dépendance ws3-fca manquante — lance « npm install ».');
+  }
+  if (typeof login !== 'function') {
+    throw new Error('ws3-fca : fonction « login » introuvable dans le module (export inattendu).');
   }
   const appState = readAppState(config);
   const options = {
