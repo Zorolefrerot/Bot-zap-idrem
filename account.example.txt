@@ -1,0 +1,86 @@
+# ============================================================================
+#  account.example.txt  →  MODELE de fichier de connexion Facebook
+# ============================================================================
+#
+#  1. Copiez ce fichier vers "account.txt" :
+#         cp account.example.txt account.txt      (Linux / macOS)
+#         copy account.example.txt account.txt    (Windows)
+#
+#  2. Remplacez TOUTES les valeurs "REMPLACEZ_MOI" par vos vraies valeurs.
+#
+#  3. "account.txt" est listé dans ".gitignore" : il ne part JAMAIS sur GitHub.
+#
+#  IMPORTANT : ce fichier donne un accès complet à votre compte Facebook.
+#  Ne le partagez jamais, ne le commitez jamais, ne le mettez pas dans un
+#  message ou un ticket de support.
+#
+# ----------------------------------------------------------------------------
+#  FORMAT A (RECOMMANDE) — appState : tableau JSON de cookies
+# ----------------------------------------------------------------------------
+#  Exportez vos cookies depuis le navigateur avec une extension du type
+#  "Cookie-Editor" / "EditThisCookie" (fonction "Export as JSON"), ou avec
+#  l'outil "c3c-fbstate". Collez le résultat ci-dessous.
+#
+#  Les cookies indispensables sont : c_user, xs, datr, fr, sb.
+#  Les lignes commençant par "#" sont ignorées.
+#
+# ----------------------------------------------------------------------------
+#  FORMAT B — chaîne de cookies brute (une seule ligne)
+# ----------------------------------------------------------------------------
+#  Effacez le bloc JSON ci-dessous et mettez simplement :
+#
+#      c_user=100000000000000; xs=ABCdef123; datr=XYZ; fr=0abc...; sb=0abc...;
+#
+# ----------------------------------------------------------------------------
+#  FORMAT C — identifiants (DECONSEILLE : déclenche souvent des checkpoints)
+# ----------------------------------------------------------------------------
+#      email=votre@email.com
+#      password=votre_mot_de_passe
+#
+#  Pour ce format, préférez les variables d'environnement FB_EMAIL /
+#  FB_PASSWORD (voir .env.example) plutôt qu'un fichier.
+#
+# ----------------------------------------------------------------------------
+#  SUR RENDER (le disque est éphémère) :
+#  utilisez la variable d'environnement FB_APPSTATE avec le contenu JSON,
+#  ou la fonctionnalité "Secret Files" de Render pour monter account.txt.
+#  Tout est expliqué dans le README.md.
+# ============================================================================
+
+[
+  {
+    "key": "c_user",
+    "value": "REMPLACEZ_MOI_VOTRE_C_USER",
+    "domain": ".facebook.com",
+    "path": "/",
+    "secure": true
+  },
+  {
+    "key": "xs",
+    "value": "REMPLACEZ_MOI_VOTRE_XS",
+    "domain": ".facebook.com",
+    "path": "/",
+    "secure": true
+  },
+  {
+    "key": "datr",
+    "value": "REMPLACEZ_MOI_VOTRE_DATR",
+    "domain": ".facebook.com",
+    "path": "/",
+    "secure": true
+  },
+  {
+    "key": "fr",
+    "value": "REMPLACEZ_MOI_VOTRE_FR",
+    "domain": ".facebook.com",
+    "path": "/",
+    "secure": true
+  },
+  {
+    "key": "sb",
+    "value": "REMPLACEZ_MOI_VOTRE_SB",
+    "domain": ".facebook.com",
+    "path": "/",
+    "secure": true
+  }
+]

@@ -1,0 +1,119 @@
+{
+  "identity": {
+    "name": "IDREM TERESHKOVA",
+    "short": "IDREM",
+    "version": "2.0.0",
+    "tagline": "Système modulaire • Facebook Messenger",
+    "palette": { "primary": "🔵", "dark": "⚫", "light": "⚪", "accent": "⚡" },
+    "mentionAliases": ["idrem", "tereshkova", "idrem tereshkova", "idrembot"]
+  },
+
+  "prefix": "/",
+  "language": "fr",
+
+  "owner": {
+    "uid": "100065927401614",
+    "label": "Propriétaire"
+  },
+
+  "currency": {
+    "name": "IDREM Coins",
+    "symbol": "IG",
+    "startBalance": 500,
+    "maxBalance": 1000000000
+  },
+
+  "xp": {
+    "base": 100,
+    "factor": 1.5,
+    "perMessage": 1,
+    "perCommand": 2,
+    "messageIntervalMs": 60000,
+    "maxLevel": 200
+  },
+
+  "limits": {
+    "defaultCooldownSeconds": 3,
+    "globalCooldownMs": 900,
+    "floodMessages": 6,
+    "floodWindowMs": 6000,
+    "floodMuteMs": 60000,
+    "maxMessageLength": 4000,
+    "dedupeTtlMs": 300000,
+    "maxWarns": 3,
+    "maxInventorySlots": 40
+  },
+
+  "conversation": {
+    "enabled": true,
+    "probability": 0.5,
+    "groupProbability": 0.25,
+    "threadCooldownMs": 45000,
+    "userCooldownMs": 90000,
+    "mentionAlwaysReplies": true,
+    "minTextLength": 2,
+    "ignoreBots": true
+  },
+
+  "economy": {
+    "daily": { "cooldownHours": 20, "min": 150, "max": 600 },
+    "work": { "cooldownMinutes": 45, "min": 80, "max": 420 },
+    "crime": { "cooldownMinutes": 90, "successRate": 0.45, "min": 200, "max": 900, "fineMin": 50, "fineMax": 300 },
+    "transferFeePercent": 0
+  },
+
+  "games": {
+    "sessionTimeoutMs": 90000,
+    "xpReward": { "win": 12, "lose": 3, "draw": 6 },
+    "coinReward": { "win": 60, "lose": 0, "draw": 15 }
+  },
+
+  "moderation": {
+    "antilinkDefault": false,
+    "antispamDefault": true,
+    "welcomeDefault": false,
+    "goodbyeDefault": false,
+    "allowedLinkDomains": ["facebook.com", "messenger.com", "youtu.be", "youtube.com"]
+  },
+
+  "security": {
+    "allowEval": false,
+    "logLevel": "info",
+    "logRetention": 300
+  },
+
+  "storage": {
+    "dir": "data",
+    "flushIntervalMs": 5000,
+    "snapshotIntervalMs": 300000,
+    "remote": { "url": "", "token": "", "header": "x-api-key" }
+  },
+
+  "notifications": {
+    "ownerOnReady": true,
+    "ownerOnError": true,
+    "ownerOnBan": false
+  },
+
+  "connection": {
+    "listenEvents": true,
+    "selfListen": false,
+    "selfListenEvent": false,
+    "listenTyping": false,
+    "updatePresence": false,
+    "autoMarkRead": false,
+    "autoReconnect": true,
+    "online": true,
+    "emitReady": true,
+    "forceLogin": false,
+    "userAgent": "",
+    "proxy": "",
+    "loginRetries": 3,
+    "loginRetryDelayMs": 10000,
+    "maxReconnectAttempts": 8
+  },
+
+  "healthServer": { "enabled": true, "host": "0.0.0.0", "port": null },
+
+  "logging": { "level": "info", "file": null }
+}
