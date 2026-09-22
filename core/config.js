@@ -81,6 +81,8 @@ const config = {
 
   /* Adaptateur Messenger : 'ws3-fca' (production) | 'mock' (tests/dev) */
   adapter: (env.BOT_ADAPTER || 'ws3-fca').trim(),
+  /* Bibliothèque FCA forcée (défaut : @dongdev/fca-unofficial puis ws3-fca) */
+  facebookLibrary: env.FACEBOOK_LIBRARY || '',
   appstateFile: env.APPSTATE_FILE || 'appstate.json',
   appstateJson: env.APPSTATE_JSON || '',
 

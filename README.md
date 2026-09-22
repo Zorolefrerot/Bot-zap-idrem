@@ -45,7 +45,8 @@ MeR-NeL/
 │   └── admin/                # 🛡️ xban, xwarn, xkick, xclear, xadd
 │
 ├── services/
-│   ├── facebook.js           # Adaptateur Messenger (ws3-fca) + mode mock
+│   ├── facebook.js           # Adaptateur Messenger (@dongdev/fca-unofficial,
+│   │                         #   secours ws3-fca) + mode mock
 │   ├── ai.js                 # Toutes les requêtes IA (Xask/Xai)
 │   ├── chat.js               # Mode discussion (contexte contrôlé)
 │   ├── imageGenerator.js     # Génération d'images (Agnes)
@@ -157,6 +158,7 @@ Ajoutez le bot à un groupe → il se présente automatiquement.
 | `IDLE_STANDBY_MINUTES` | Inactivité avant mode veille | `30` |
 | `STANDBY_ANNOUNCE` | Annoncer le passage en veille | `true` |
 | `BOT_ADAPTER` | `ws3-fca` (prod) ou `mock` (tests) | `ws3-fca` |
+| `FACEBOOK_LIBRARY` | Force la bibliothèque FCA | `@dongdev/fca-unofficial` puis `ws3-fca` |
 
 ⚠️ **Sécurité** : `.env` et `appstate.json` sont dans `.gitignore`. Aucune clé
 n'apparaît jamais dans les messages du bot, les erreurs ou les logs (masquage
@@ -317,6 +319,12 @@ pour passer sur une vraie BDD (Mongo, Postgres…), réimplémentez cette couche
 > 🔐 **Avertissement** : la clé Agnes par défaut est visible dans ce dépôt.
 > Gardez le dépôt **privé**, ou remplacez-la par la vôtre via la variable
 > `AGNES_API_KEY`, ou révoquez-la si elle fuite.
+
+> 📦 **Connexion Messenger** : le bot utilise **`@dongdev/fca-unofficial`**
+> (bibliothèque demandée), avec bascule automatique sur `ws3-fca` si besoin
+> (variable `FACEBOOK_LIBRARY` pour forcer l'une ou l'autre). L'auto-update du
+> package est désactivé dans `fca-config.json` — un bot ne doit jamais changer
+> ses propres dépendances en production.
 
 > ⚠️ Sur les plans gratuits, le disque est éphémère : branchez un *Disk* sur
 > `database/data` (ou passez sur une vraie BDD) pour conserver l'économie.

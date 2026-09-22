@@ -92,7 +92,7 @@ async function main() {
   const bot = new Bot({ config, logger, db, adapter, services });
   botRef = bot;
 
-  if (adapter.mode === 'ws3-fca') {
+  if (adapter.mode !== 'mock') {
     // L'écouteur a été branché via onEvent au moment du connect().
     logger.info('[bot] écoute des messages active.');
   } else {

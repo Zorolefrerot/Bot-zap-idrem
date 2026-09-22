@@ -193,32 +193,59 @@ function readAppState(config) {
   return state;
 }
 
+/*
+ * Bibliothèques FCA supportées, par priorité :
+ *   1. @dongdev/fca-unofficial (défaut, demandé par le propriétaire)
+ *   2. ws3-fca (secours automatique)
+ * La variable FACEBOOK_LIBRARY force une bibliothèque précise.
+ */
+const FCA_LIBRARIES = ['@dongdev/fca-unofficial', 'ws3-fca'];
+
+/*
+ * Extraction robuste de la fonction login — les forks FCA n'exportent pas
+ * tous de la même façon :
+ *   @dongdev/fca-unofficial : module.exports = login (fonction directe)
+ *   ws3-fca                 : module.exports = { login }
+ *   ESM                     : { default: login }
+ */
+function extractLogin(mod) {
+  if (typeof mod === 'function') return mod;
+  if (mod && typeof mod.login === 'function') return mod.login;
+  if (mod && typeof mod.default === 'function') return mod.default;
+  return null;
+}
+
+function loadFcaLibrary(config, logger) {
+  const wanted = (config.facebookLibrary || '').trim();
+  const candidates = wanted ? [wanted] : FCA_LIBRARIES;
+  const errors = [];
+  for (const name of candidates) {
+    try {
+      // eslint-disable-next-line global-require
+      const login = extractLogin(require(name));
+      if (typeof login === 'function') {
+        logger.info(`[facebook] bibliothèque Messenger : ${name}`);
+        return { name, login };
+      }
+      errors.push(`${name} : fonction login introuvable`);
+    } catch (err) {
+      errors.push(`${name} : ${err.message.split('\n')[0]}`);
+    }
+  }
+  throw new Error(
+    `Aucune bibliothèque FCA exploitable (${errors.join(' ; ')}) — lance « npm install ».`
+  );
+}
+
 async function createWs3Adapter(config, logger, { onEvent } = {}) {
-  /*
-   * Extraction robuste de la fonction login — les forks FCA n'exportent pas
-   * tous de la même façon :
-   *   ws3-fca  : module.exports = { login }
-   *   fca-*    : module.exports = login (fonction directe)
-   *   ESM      : { default: login }
-   */
-  let login;
-  try {
-    // eslint-disable-next-line global-require
-    const mod = require('ws3-fca');
-    if (typeof mod === 'function') login = mod;
-    else if (mod && typeof mod.login === 'function') login = mod.login;
-    else if (mod && typeof mod.default === 'function') login = mod.default;
-  } catch (err) {
-    throw new Error('Dépendance ws3-fca manquante — lance « npm install ».');
-  }
-  if (typeof login !== 'function') {
-    throw new Error('ws3-fca : fonction « login » introuvable dans le module (export inattendu).');
-  }
+  const lib = loadFcaLibrary(config, logger);
+  const { login } = lib;
   const appState = readAppState(config);
   const options = {
     online: true,
     updatePresence: true,
     selfListen: false, // le bot ne s'écoute pas lui-même
+    listenEvents: true, // événements de groupe (arrivées/départs) — requis par l'accueil
     autoMarkRead: false,
     autoMarkDelivery: false,
   };
@@ -238,9 +265,9 @@ async function createWs3Adapter(config, logger, { onEvent } = {}) {
     }
   }
 
-  logger.info('[facebook] connecté (ws3-fca). Capacités:', capabilities);
+  logger.info(`[facebook] connecté (${lib.name}). Capacités:`, capabilities);
   return {
-    mode: 'ws3-fca',
+    mode: lib.name,
     api,
     botID: api.getCurrentUserID ? String(api.getCurrentUserID()) : '',
     capabilities,
