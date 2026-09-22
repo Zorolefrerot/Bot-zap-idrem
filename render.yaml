@@ -1,0 +1,99 @@
+# 🧬 MeR~NeL — Déploiement Render (Blueprint)
+# Déploiement en un clic : New → Blueprint → ce dépôt.
+# ⚠️ Les valeurs marquées sync:false doivent être saisies dans le dashboard
+# Render (Environment) — JAMAIS dans ce fichier.
+
+services:
+  - type: web
+    name: mer-nel-bot
+    runtime: node
+    plan: starter
+    region: frankfurt # au choix : frankfurt / oregon / singapore…
+    branch: arena/01a0c906-bot-zap-idrem # ← votre branche de déploiement (ex. MERNEL-V2)
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      # ── Général ──
+      - key: NODE_ENV
+        value: production
+      - key: BOT_NAME
+        value: MeR~NeL
+      - key: BOT_SIGNATURE
+        value: MeR~NeL Production
+      - key: PREFIX
+        value: X
+
+      # ── Administrateurs (défauts intégrés — surcharger si besoin) ──
+      # - key: ADMIN_UIDS
+      #   sync: false
+      # - key: OWNER_UID
+      #   sync: false
+
+      # ── APIs IA ──
+      - key: SHIZO_API_URL
+        value: https://api.shizo.top/ai/gpt
+      - key: SHIZO_API_KEY
+        value: shizo
+      - key: GEMINI_CHAT_URL
+        value: https://arychauhann.onrender.com/api/gemini-proxy2
+      - key: AGNES_API_URL
+        value: https://apihub.agnes-ai.com/v1
+      # Clé Agnes par défaut intégrée dans core/config.js (Ximg opérationnel
+      # sans variable). Surcharger ici uniquement avec ta propre clé :
+      # - key: AGNES_API_KEY
+      #   sync: false
+      - key: AGNES_IMAGE_MODEL
+        value: dall-e-3
+
+      # ── SEULE VARIABLE OBLIGATOIRE ──
+      # JSON complet des cookies du compte bot (export Cookie Editor,
+      # format [ { "name": ..., "value": ... }, ... ] accepté tel quel).
+      - key: APPSTATE_JSON
+        sync: false
+
+      # ── Économie ──
+      - key: DAILY_REWARD
+        value: "350"
+      - key: DAILY_COOLDOWN_HOURS
+        value: "24"
+      - key: START_BALANCE
+        value: "500"
+
+      # ── Médias ──
+      - key: MAX_IMAGES
+        value: "5"
+      - key: MEDIA_MAX_SECONDS
+        value: "120"
+
+      # ── Jeux ──
+      - key: QUIZ_TIMEOUT_MS
+        value: "30000"
+      - key: DUEL_TIMEOUT_MS
+        value: "25000"
+      - key: QUIZ_COINS_PER_CORRECT
+        value: "15"
+
+      # ── Anti-spam ──
+      - key: SPAM_DUPLICATE_LIMIT
+        value: "5"
+      - key: SPAM_TIME_WINDOW_MS
+        value: "30000"
+      - key: SPAM_WARN_LIMIT
+        value: "3"
+      - key: SPAM_MUTE_MINUTES
+        value: "10"
+
+      # ── Mode veille automatique (défaut intégré : 30 min) ──
+      - key: IDLE_STANDBY_MINUTES
+        value: "30"
+      - key: STANDBY_ANNOUNCE
+        value: "true"
+
+# ── Persistance : disque attaché sur database/data ──
+# (XCoins, XP, niveaux, pseudos, warnings et paramètres survivent aux redéploies)
+    disk:
+      name: mer-nel-data
+      mountPath: /opt/render/project/src/database/data
+      sizeGB: 1

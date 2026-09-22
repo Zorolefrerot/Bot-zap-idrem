@@ -1,0 +1,24 @@
+# ── Secrets & données locales — NE JAMAIS COMMITTER ──
+.env
+appstate.json
+*.appstate
+
+# Données runtime du bot (JSON persistés)
+database/data/*.json
+!database/data/.gitkeep
+
+# Fichiers temporaires médias
+tmp/
+logs/
+
+# Node
+node_modules/
+npm-debug.log*
+package-lock.json.bak
+
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

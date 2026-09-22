@@ -1,0 +1,27 @@
+{
+  "name": "mer-nel-bot",
+  "version": "1.0.0",
+  "description": "🧬 MeR~NeL — Assistant communautaire Facebook/Messenger : IA, économie, XP, jeux, médias, profils, groupe & administration — MeR~NeL Production",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node --test --test-concurrency=1 tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "messenger-bot",
+    "facebook-bot",
+    "ai",
+    "economy",
+    "quiz",
+    "mer-nel"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
+    "ws3-fca": "^3.5.2",
+    "yt-search": "^2.13.1"
+  }
+}
