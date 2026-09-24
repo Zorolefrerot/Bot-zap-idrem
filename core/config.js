@@ -129,19 +129,22 @@ const config = {
 
   /* Jeux */
   games: {
-    quizTimeoutMs: int(env.QUIZ_TIMEOUT_MS, 30000),
+    quizTimeoutMs: int(env.QUIZ_TIMEOUT_MS, 15000), // 15 s par question (quiz de groupe)
     duelTimeoutMs: int(env.DUEL_TIMEOUT_MS, 25000),
     stepTimeoutMs: int(env.SESSION_STEP_TIMEOUT_MS, 150000),
     quizCoinsPerCorrect: int(env.QUIZ_COINS_PER_CORRECT, 15),
     interDelayMs: int(env.QUIZ_INTER_DELAY_MS, 1200),
+    quizAllowedCounts: splitList(env.QUIZ_ALLOWED_COUNTS || '5,10,15').map(Number).filter(Number.isFinite),
     duelAllowedCounts: [10, 20, 30],
   },
 
-  /* Anti-spam */
+  /* Anti-spam : 5 identiques OU 5 messages en 10 s → warn ; à 2 warns → ban auto */
   spam: {
     duplicateLimit: int(env.SPAM_DUPLICATE_LIMIT, 5),
     timeWindowMs: int(env.SPAM_TIME_WINDOW_MS, 30000),
-    warnLimit: int(env.SPAM_WARN_LIMIT, 3),
+    floodWindowMs: int(env.SPAM_FLOOD_WINDOW_MS, 10000),
+    warnLimit: int(env.SPAM_WARN_LIMIT, 2),
+    autoBan: (env.SPAM_AUTO_BAN || 'true') !== 'false',
     muteMinutes: int(env.SPAM_MUTE_MINUTES, 10),
   },
 

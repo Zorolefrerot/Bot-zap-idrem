@@ -1,30 +1,31 @@
 'use strict';
 /*
- * 🧬 MeR~NeL — commands/games/xquiz.js
- * Lance une session quiz (machine d'états dans systems/quiz.js).
- * Le joueur répond ensuite SANS préfixe : le gestionnaire de sessions
- * capte ses messages (CG → 20 → réponses A/B/C/D).
+ * 🧬 MeR~NeL — commands/games/xquiz.js  (v2 — quiz de groupe)
+ * Le lanceur choisit catégorie + nombre, puis TOUT le groupe joue.
  */
 
-const { QuizSession } = require('../../systems/quiz');
+const { GroupQuizSession } = require('../../systems/quiz');
 
 module.exports = {
   name: 'xquiz',
-  description: 'Lance un quiz (ID / MULTIVERS / CG)',
+  description: 'Quiz de groupe : première bonne réponse marque (ID / MULTIVERS / CG)',
   usage: 'Xquiz',
   category: 'games',
   aliases: ['xq'],
   adminOnly: false,
   cooldownMs: 5000,
   run: async (ctx) => {
-    const existing = ctx.sessions.get(ctx.threadID, `quiz:${ctx.senderID}`);
+    if (!ctx.isGroup) {
+      return ctx.send(ctx.fmt.frame('🎮 XQUIZ', '⚠️ ' + ctx.fmt.bold('Le quiz se joue en groupe — tout le monde participe !')));
+    }
+    const existing = ctx.sessions.get(ctx.threadID, 'quiz');
     if (existing) {
       return ctx.send(
-        ctx.fmt.frame('🎮 XQUIZ', '⚠️ ' + ctx.fmt.bold('Un quiz est déjà en cours pour toi.') + '\n🛑 ' + ctx.fmt.bold('Tape « cancel » pour l’annuler.'))
+        ctx.fmt.frame('🎮 XQUIZ', '⚠️ ' + ctx.fmt.bold('Un quiz est déjà en cours dans ce groupe.') + '\n🛑 ' + ctx.fmt.bold('Le lanceur peut taper « cancel ».'))
       );
     }
     const session = ctx.sessions.add(
-      new QuizSession(ctx.bot, {
+      new GroupQuizSession(ctx.bot, {
         threadID: ctx.threadID,
         ownerID: ctx.senderID,
         ownerName: ctx.senderName,

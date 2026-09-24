@@ -14,6 +14,7 @@ const { Database } = require('../database/database');
 const facebook = require('../services/facebook');
 const { createAiService } = require('../services/ai');
 const { createChatService } = require('../services/chat');
+const { createAiPool } = require('../services/aiPool');
 const { createImageGenerator } = require('../services/imageGenerator');
 const { createImageSearch } = require('../services/imageSearch');
 const { createAudioService } = require('../services/audio');
@@ -92,8 +93,15 @@ async function boot(opts = {}) {
   config.chat.minIntervalMs = 0;
   config.idle.sweepMs = 0; // pas de timer de veille en tests (sweep manuel)
   config.xp.messageCooldownMs = 0;
-  config.spam.duplicateLimit = opts.spamDuplicateLimit || 5;
-  config.spam.warnLimit = opts.spamWarnLimit || 3;
+  // Anti-spam DÉSACTIVÉ par défaut en tests (les flux rapides des autres suites
+  // ne doivent pas déclencher de warnings) — activé seulement via opts.spam.
+  config.spam.duplicateLimit = 9999;
+  config.spam.floodWindowMs = 0;
+  config.spam.warnLimit = 2;
+  config.spam.autoBan = true;
+  if (opts.spam) {
+    Object.assign(config.spam, opts.spam);
+  }
   if (opts.adminUids) config.adminUids = opts.adminUids.slice();
 
   const logger = new Logger({ logDir: config.logDir, logFile: false });
@@ -101,9 +109,11 @@ async function boot(opts = {}) {
 
   const db = new Database(config.dataDir, config);
 
+  const aiPool = createAiPool(logger);
   const services = {
-    ai: createAiService(logger),
-    chat: createChatService(logger),
+    aiPool,
+    ai: createAiService(logger, aiPool),
+    chat: createChatService(logger, aiPool),
     imageGen: createImageGenerator(logger),
     imageSearch: createImageSearch(logger),
     audio: createAudioService(logger),

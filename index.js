@@ -17,6 +17,7 @@ const { Database } = require('./database/database');
 const facebook = require('./services/facebook');
 const { createAiService } = require('./services/ai');
 const { createChatService } = require('./services/chat');
+const { createAiPool } = require('./services/aiPool');
 const { createImageGenerator } = require('./services/imageGenerator');
 const { createImageSearch } = require('./services/imageSearch');
 const { createAudioService } = require('./services/audio');
@@ -77,10 +78,12 @@ async function main() {
   const db = new Database(config.dataDir, config);
   db.bumpStat('botStarts');
 
-  /* Services */
+  /* Services — pool IA partagé (rotation automatique des fournisseurs) */
+  const aiPool = createAiPool(logger);
   const services = {
-    ai: createAiService(logger),
-    chat: createChatService(logger),
+    aiPool,
+    ai: createAiService(logger, aiPool),
+    chat: createChatService(logger, aiPool),
     imageGen: createImageGenerator(logger),
     imageSearch: createImageSearch(logger),
     audio: createAudioService(logger),

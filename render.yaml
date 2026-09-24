@@ -67,23 +67,27 @@ services:
       - key: MEDIA_MAX_SECONDS
         value: "120"
 
-      # ── Jeux ──
+      # ── Jeux (quiz de groupe v2 : 15 s/question, tout le monde joue) ──
       - key: QUIZ_TIMEOUT_MS
-        value: "30000"
+        value: "15000"
+      - key: QUIZ_ALLOWED_COUNTS
+        value: "5,10,15"
       - key: DUEL_TIMEOUT_MS
         value: "25000"
       - key: QUIZ_COINS_PER_CORRECT
         value: "15"
 
-      # ── Anti-spam ──
+      # ── Anti-spam v2 (auto : 5 identiques OU 5 msgs/10 s → warn 1/2 → ban) ──
       - key: SPAM_DUPLICATE_LIMIT
         value: "5"
       - key: SPAM_TIME_WINDOW_MS
         value: "30000"
+      - key: SPAM_FLOOD_WINDOW_MS
+        value: "10000"
       - key: SPAM_WARN_LIMIT
-        value: "3"
-      - key: SPAM_MUTE_MINUTES
-        value: "10"
+        value: "2"
+      - key: SPAM_AUTO_BAN
+        value: "true"
 
       # ── Mode veille automatique (défaut intégré : 30 min) ──
       - key: IDLE_STANDBY_MINUTES

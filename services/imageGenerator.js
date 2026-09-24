@@ -28,8 +28,39 @@ function createImageGenerator(logger) {
     return dest;
   }
 
+  /*
+   * 🆓 Génération SANS clé — Pollinations (Flux, gratuit, sans inscription).
+   * Une URL par image ; un seed différent par image pour la variété.
+   */
+  async function generateFree(prompt, n = 1) {
+    const count = Math.max(1, Math.min(Number(n) || 1, config.media.maxImages));
+    fs.mkdirSync(config.tmpDir, { recursive: true });
+    const baseSeed = Math.floor(Math.random() * 1_000_000);
+    const files = [];
+    for (let i = 0; i < count; i++) {
+      const url =
+        `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}` +
+        `?width=1024&height=1024&nologo=true&seed=${baseSeed + i}`;
+      const dest = path.join(config.tmpDir, `img-free-${Date.now()}-${i + 1}.jpg`);
+      let res;
+      try {
+        res = await fetch(url, { signal: AbortSignal.timeout(120_000) });
+      } catch (err) {
+        if (err && (err.name === 'TimeoutError' || err.name === 'AbortError')) throw typedError('API_TIMEOUT');
+        throw typedError('API_UNREACHABLE');
+      }
+      if (!res.ok) throw typedError(res.status === 429 ? 'AI_RATE_LIMIT' : 'IMAGE_UNAVAILABLE', `HTTP ${res.status}`);
+      const buf = Buffer.from(await res.arrayBuffer());
+      if (buf.length < 1000) throw typedError('IMAGE_BAD_RESPONSE');
+      fs.writeFileSync(dest, buf);
+      files.push(dest);
+    }
+    if (files.length === 0) throw typedError('IMAGE_BAD_RESPONSE');
+    return files;
+  }
+
   /**
-   * Génère n images pour un prompt validé.
+   * Génère n images pour un prompt validé (Agnes — clé requise).
    * @returns {Promise<string[]>} chemins locaux des fichiers générés
    */
   async function generate(prompt, n = 1) {
@@ -110,7 +141,7 @@ function createImageGenerator(logger) {
     }
   }
 
-  return { generate, generatePoster, available };
+  return { generateFree, generate, generatePoster, available };
 }
 
 module.exports = { createImageGenerator };

@@ -126,21 +126,21 @@ test('un nouveau membre réveille le bot (accueil envoyé)', async () => {
   assert.strictEqual(bot.idle.isSleeping(t), false);
 });
 
-test('une session de quiz en cours réveille son joueur (pas de quiz bloqué)', async () => {
+test('une session de quiz en cours réveille les joueurs (pas de quiz bloqué)', async () => {
   const { bot, adapter } = await boot();
   bot.config.idle.standbyMs = 300;
   const t = 'veille-quiz';
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg(t, UIDS.shadow, 'Xquiz'));
   await bot.handleMessage(makeMsg(t, UIDS.shadow, 'CG'));
-  await bot.handleMessage(makeMsg(t, UIDS.shadow, '10'));
-  await until(() => /Q 1\/10/.test(lastBody(adapter)), 8000);
-  // Le bot s'endort pendant le quiz (aucune activité depuis la dernière réponse)
+  await bot.handleMessage(makeMsg(t, UIDS.shadow, '5'));
+  await until(() => /QUESTION 1\/5/.test(lastBody(adapter)), 10000);
+  // Le bot s'endort pendant le quiz (aucune activité depuis la question)
   await sleepThread(bot, t);
-  await bot.handleMessage(makeMsg(t, UIDS.shadow, 'A')); // réponse du joueur
-  assert.strictEqual(bot.idle.isSleeping(t), false, 'la session accepte le joueur → réveil');
-  // La réponse a bien été traitée (retour correct/incorrect, pas de silence)
-  await until(() => /Correct|MAUVAISE|TEMPS/.test(lastBody(adapter)), 5000);
+  await bot.handleMessage(makeMsg(t, UIDS.paul, 'A')); // réponse d'un joueur quelconque
+  assert.strictEqual(bot.idle.isSleeping(t), false, 'la session accepte tout le groupe → réveil');
+  // La réponse a bien été traitée (retour point/raté, pas de silence)
+  await until(() => /marque|Point pour|prend le point|RATÉ|TEMPS/.test(lastBody(adapter)), 5000);
   await bot.handleMessage(makeMsg(t, UIDS.shadow, 'cancel'));
 });
 

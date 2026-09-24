@@ -149,12 +149,14 @@ Ajoutez le bot à un groupe → il se présente automatiquement.
 | `START_BALANCE` | Solde de départ | `500` |
 | `MAX_IMAGES` | Max images par Ximg (1-5) | `5` |
 | `MEDIA_MAX_SECONDS` | Durée max Xplay/Xvideo | `120` |
-| `QUIZ_TIMEOUT_MS` / `DUEL_TIMEOUT_MS` | Temps de réponse | `30000` / `25000` |
+| `QUIZ_TIMEOUT_MS` / `DUEL_TIMEOUT_MS` | Temps de réponse | `15000` / `25000` |
+| `QUIZ_ALLOWED_COUNTS` | Nombre de questions proposé (Xquiz) | `5,10,15` |
 | `QUIZ_COINS_PER_CORRECT` | Gain par bonne réponse | `15` |
 | `SPAM_DUPLICATE_LIMIT` | Répétitions avant détection | `5` |
-| `SPAM_TIME_WINDOW_MS` | Fenêtre de détection | `30000` |
-| `SPAM_WARN_LIMIT` | Avertissements avant mute | `3` |
-| `SPAM_MUTE_MINUTES` | Durée du mode silence | `10` |
+| `SPAM_TIME_WINDOW_MS` | Fenêtre de détection (messages identiques) | `30000` |
+| `SPAM_FLOOD_WINDOW_MS` | Fenêtre anti-flood (5 messages quelconques) | `10000` |
+| `SPAM_WARN_LIMIT` | Avertissements avant exclusion auto | `2` |
+| `SPAM_AUTO_BAN` | Exclusion automatique à la limite de warns | `true` |
 | `IDLE_STANDBY_MINUTES` | Inactivité avant mode veille | `30` |
 | `STANDBY_ANNOUNCE` | Annoncer le passage en veille | `true` |
 | `BOT_ADAPTER` | `ws3-fca` (prod) ou `mock` (tests) | `ws3-fca` |

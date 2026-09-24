@@ -50,17 +50,15 @@ module.exports = {
       '「⚡ ' + ctx.fmt.bold('𝗦𝗬𝗦𝗧𝗘𝗠 𝗢𝗡𝗟𝗜𝗡𝗘') + '\n' + ctx.fmt.bold('𝗜𝗠𝗔𝗚𝗜𝗡𝗔𝗧𝗜𝗢𝗡 𝗜𝗡𝗧𝗢 𝗥𝗘𝗔𝗟𝗜𝗧𝗬...」')
     );
 
-    /* 1) Génération IA */
-    try {
-      const files = await ctx.services.imageGen.generate(description, count);
-      ctx.db.bumpStat('imagesGenerated', files.length);
+    /* Envoie une liste de fichiers avec la source annoncée honnêtement. */
+    const sendFiles = async (files, sourceLabel) => {
       let sent = 0;
       for (const file of files) {
         try {
           await ctx.send({
             body: ctx.fmt.frame('🖼️ 𝗫𝗜𝗠𝗚', [
               `🎨 ${ctx.fmt.bold(description)}`,
-              `#${ctx.fmt.boldNum(++sent)}/${ctx.fmt.boldNum(files.length)} — ${ctx.fmt.bold('IA générative')}`,
+              `#${ctx.fmt.boldNum(++sent)}/${ctx.fmt.boldNum(files.length)} — ${ctx.fmt.bold(sourceLabel)}`,
             ]),
             attachment: file,
           });
@@ -68,22 +66,30 @@ module.exports = {
           ctx.logger.warn('[ximg] envoi:', err.message);
         }
       }
-      return;
+      return sent;
+    };
+
+    /* 1) Génération SANS clé (Pollinations) — primaire */
+    try {
+      const files = await ctx.services.imageGen.generateFree(description, count);
+      ctx.db.bumpStat('imagesGenerated', files.length);
+      if ((await sendFiles(files, 'IA générative — Pollinations')) > 0) return;
     } catch (err) {
-      ctx.logger.warn('[ximg] génération:', err.code || err.message);
-      if (err.code === 'IMAGE_NO_KEY') {
-        // Pas de clé → on bascule directement sur la recherche.
-      } else {
-        await ctx.send(
-          ctx.fmt.pick([
-            '⚠️ ' + ctx.fmt.bold('Le générateur est surchargé — bascule sur le mode archive visuelle…'),
-            '🛰️ ' + ctx.fmt.bold('Génération impossible pour le moment — recherche alternative…'),
-          ])
-        );
+      ctx.logger.warn('[ximg] pollinations:', err.code || err.message);
+    }
+
+    /* 2) Génération Agnes (clé configurée) — secondaire */
+    if (ctx.services.imageGen.available()) {
+      try {
+        const files = await ctx.services.imageGen.generate(description, count);
+        ctx.db.bumpStat('imagesGenerated', files.length);
+        if ((await sendFiles(files, 'IA générative')) > 0) return;
+      } catch (err) {
+        ctx.logger.warn('[ximg] agnes:', err.code || err.message);
       }
     }
 
-    /* 2) Repli : recherche d'images (honnêtement signalée) */
+    /* 3) Recherche web — repli clairement signalé */
     try {
       const urls = await ctx.services.imageSearch.search(description, count);
       ctx.db.bumpStat('imagesSearched', urls.length);
@@ -110,5 +116,6 @@ module.exports = {
         ])
       );
     }
+
   },
 };

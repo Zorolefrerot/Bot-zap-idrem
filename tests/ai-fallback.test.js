@@ -1,83 +1,84 @@
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert');
+const { createAiPool } = require('../services/aiPool');
+const { createAiService } = require('../services/ai');
 
 /* Logger muet pour les tests */
-const silentLogger = { warn() {}, error() {}, info() {} };
+const silentLogger = { warn() {}, error() {}, info() {}, debug() {} };
 
-function jsonResponse(payload) {
+function jsonRes(payload, status = 200) {
   return {
-    ok: true,
-    status: 200,
+    ok: status >= 200 && status < 300,
+    status,
     headers: { get: () => 'application/json' },
     json: async () => payload,
     text: async () => JSON.stringify(payload),
   };
 }
 
-const realFetch = globalThis.fetch;
-
-test('Xask : shizo répond → pas de bascule', async () => {
+test('Pool IA : le 1er fournisseur (gemini-proxy2) répond → pas de bascule', async () => {
   let calls = 0;
-  globalThis.fetch = async (url) => {
+  const fetchImpl = async (url, init = {}) => {
     calls++;
-    assert.ok(String(url).includes('api.shizo.top'), '1er appel = shizo');
-    return jsonResponse({ content: 'Tokyo' });
+    assert.ok(String(url).includes('gemini-proxy2'), '1er appel = gemini-proxy2');
+    assert.strictEqual(init.method, 'POST');
+    assert.ok(String(init.body).includes('capitale du Japon'), 'question transmise dans {q}');
+    return jsonRes({ response: 'Tokyo, Japon.' });
   };
-  const { createAiService } = require('../services/ai');
-  const ai = createAiService(silentLogger);
-  const answer = await ai.ask('capitale du Japon ?');
-  assert.strictEqual(answer, 'Tokyo');
+  const pool = createAiPool(silentLogger, { fetchImpl });
+  const res = await pool.ask('capitale du Japon ?');
+  assert.strictEqual(res.text, 'Tokyo, Japon.');
+  assert.strictEqual(res.provider, 'Gemini (proxy)');
   assert.strictEqual(calls, 1);
-  globalThis.fetch = realFetch;
 });
 
-test('Xask : shizo en panne → bascule automatique sur Gemini', async () => {
+test('Pool IA : fournisseur en panne → bascule automatique sur le suivant', async () => {
   const calls = [];
-  globalThis.fetch = async (url, init = {}) => {
+  const fetchImpl = async (url, init = {}) => {
     calls.push(String(url));
-    if (String(url).includes('api.shizo.top')) {
-      // Timeout simulé côté shizo
+    if (String(url).includes('gemini-proxy2')) {
       const e = new Error('The operation was aborted due to timeout');
       e.name = 'TimeoutError';
       throw e;
     }
-    assert.ok(String(url).includes('gemini-proxy2'), '2e appel = gemini-proxy2');
-    assert.strictEqual(init.method, 'POST');
-    assert.ok(String(init.body).includes('capitale du Japon'), 'la question est transmise');
-    return jsonResponse({ response: 'Tokyo, Japon.' });
+    assert.ok(String(url).includes('text.pollinations.ai'), '2e appel = pollinations');
+    void init;
+    return jsonRes({ response: 'Tokyo !' });
   };
-  const { createAiService } = require('../services/ai');
-  const ai = createAiService(silentLogger);
-  const answer = await ai.ask('capitale du Japon ?', { mode: 'short' });
-  assert.strictEqual(answer, 'Tokyo, Japon.');
+  const pool = createAiPool(silentLogger, { fetchImpl });
+  const res = await pool.ask('capitale du Japon ?', { system: 'réponds court' });
+  assert.strictEqual(res.text, 'Tokyo !');
+  assert.strictEqual(res.provider, 'Pollinations');
   assert.strictEqual(calls.length, 2);
-  globalThis.fetch = realFetch;
 });
 
-test('Xask : les deux sources en panne → erreur typée propre', async () => {
-  globalThis.fetch = async (url) => {
-    if (String(url).includes('api.shizo.top')) {
-      const e = new Error('boom');
-      e.name = 'TimeoutError';
-      throw e;
-    }
-    return { ok: false, status: 503, headers: { get: () => 'text/plain' }, text: async () => 'down' };
+test('Pool IA : tous en panne → erreur typée AI_ALL_PROVIDERS_DOWN', async () => {
+  const fetchImpl = async () => {
+    throw new Error('ECONNREFUSED');
   };
-  const { createAiService } = require('../services/ai');
-  const ai = createAiService(silentLogger);
-  await assert.rejects(() => ai.ask('test'), /API_TIMEOUT/);
-  globalThis.fetch = realFetch;
+  const pool = createAiPool(silentLogger, { fetchImpl });
+  await assert.rejects(() => pool.ask('test'), (err) => err.code === 'AI_ALL_PROVIDERS_DOWN');
 });
 
-test('Xai mode avancé : le prompt persona est bien transmis', async () => {
-  globalThis.fetch = async (url, init = {}) => {
-    assert.ok(String(init.body).includes('futuriste'), 'persona avancé présent');
-    return jsonResponse({ content: 'Explication complète.' });
+test('Service IA : ask() enveloppe le pool et renvoie le texte', async () => {
+  const fetchImpl = async (url) => {
+    assert.ok(String(url).includes('gemini-proxy2'));
+    return jsonRes({ content: 'Réponse courte.' });
   };
-  const { createAiService } = require('../services/ai');
-  const ai = createAiService(silentLogger);
+  const pool = createAiPool(silentLogger, { fetchImpl });
+  const ai = createAiService(silentLogger, pool);
+  const answer = await ai.ask('salut', { mode: 'short' });
+  assert.strictEqual(answer, 'Réponse courte.');
+});
+
+test('Service IA : mode avancé → la persona est transmise au pool', async () => {
+  const fetchImpl = async (url, init = {}) => {
+    assert.ok(String(init.body).includes('futuriste'), 'persona avancée présente dans la requête');
+    return jsonRes({ content: 'Explication complète.' });
+  };
+  const pool = createAiPool(silentLogger, { fetchImpl });
+  const ai = createAiService(silentLogger, pool);
   const answer = await ai.ask('explique les trous noirs', { mode: 'advanced' });
   assert.strictEqual(answer, 'Explication complète.');
-  globalThis.fetch = realFetch;
 });

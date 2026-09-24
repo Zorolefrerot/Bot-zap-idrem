@@ -78,30 +78,68 @@ test('Xkick : échec API annoncé + succès quand le mock le permet', async () =
   assert.ok(ctxB.adapter.removed.includes(UIDS.shadow));
 });
 
-test('Xclear : unsend effectué sur le message cité', async () => {
+test('Xclear v2 : supprime les messages DU BOT (réponse à un message bot)', async () => {
   const { bot, adapter } = await boot();
-  const target = makeMsg('thread-1', UIDS.shadow, 'à supprimer');
+  clearCooldowns(bot);
+  // Le bot envoie un message (journalisé)
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xmenu'));
+  await require('./helpers').until(() => adapter.sent.length > 0, 3000);
+  const botMsg = adapter.sent[adapter.sent.length - 1];
+  assert.ok(botMsg.id, 'message bot journalisé');
+
+  // L'admin répond à CE message du bot
+  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xclear', {
+    messageReply: { senderID: 'BOT_MOCK_000000', messageID: botMsg.id },
+  }));
+  const cleared = lastBody(adapter);
+  assert.ok(
+    cleared.includes('Nettoyage') || cleared.includes('effacé') || cleared.includes('Zone propre'),
+    `succès attendu, reçu: ${cleared.slice(0, 140)}`
+  );
+  assert.ok(adapter.unsent.includes(botMsg.id), 'unsend appelé sur le message du bot');
+});
+
+test('Xclear v2 : message d’un utilisateur → jamais de unsend sur lui', async () => {
+  const { bot, adapter } = await boot();
+  clearCooldowns(bot);
+  const target = makeMsg('thread-1', UIDS.shadow, 'message utilisateur');
   await bot.handleMessage(target);
   await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xclear', {
     messageReply: { senderID: UIDS.shadow, messageID: target.messageID },
   }));
-  const cleared = lastBody(adapter);
+  assert.ok(!adapter.unsent.includes(target.messageID), 'jamais de unsend sur un message utilisateur');
+  const body = lastBody(adapter);
   assert.ok(
-    cleared.includes('Nettoyage') || cleared.includes('Message effacé') || cleared.includes('Zone propre'),
-    `réponse de nettoyage attendue, reçu: ${cleared.slice(0, 120)}`
+    body.includes('Nettoyage') || body.includes('effacé') || body.includes('Aucun message du bot') || body.includes('Zone propre'),
+    `réponse cohérente, reçu: ${body.slice(0, 120)}`
   );
-  assert.ok(adapter.unsent.includes(target.messageID));
 });
 
-test('Xwarn : compteur, liste et mute automatique', async () => {
-  const { bot, adapter, db } = await boot({ spamWarnLimit: 3 });
+test('Xclear v2 : Xclear 3 supprime les 3 derniers messages du bot', async () => {
+  const { bot, adapter } = await boot();
+  clearCooldowns(bot);
+  for (const cmd of ['Xmenu', 'Xgame']) {
+    await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, cmd));
+    await require('./helpers').until(() => adapter.sent.filter((x) => x.id.startsWith('mock-')).length >= 1, 3000);
+  }
+  const countBefore = adapter.sent.filter((x) => x.id.startsWith('mock-')).length;
+  assert.ok(countBefore >= 2);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xclear 2'));
+  assert.ok(adapter.unsent.length >= 2, '2 unsend effectués');
+  assert.ok(
+    lastBody(adapter).includes('Nettoyage') || lastBody(adapter).includes('effacé') || lastBody(adapter).includes('Zone propre')
+  );
+});
+
+test('Xwarn : 1/2 puis 2/2 → exclusion automatique', async () => {
+  const { bot, adapter, db } = await boot();
   const reply = makeMsg('thread-1', UIDS.shadow, 'insulte');
   await bot.handleMessage(reply);
 
   await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xwarn', {
     messageReply: { senderID: UIDS.shadow, messageID: reply.messageID },
   }));
-  assert.ok(lastBody(adapter).includes('avertissement 1/3'));
+  assert.ok(lastBody(adapter).includes('avertissement 1/2'));
   assert.strictEqual(db.getUser(UIDS.shadow).warnings, 1);
 
   const r2 = makeMsg('thread-1', UIDS.shadow, 'encore');
@@ -109,21 +147,14 @@ test('Xwarn : compteur, liste et mute automatique', async () => {
   await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xwarn', {
     messageReply: { senderID: UIDS.shadow, messageID: r2.messageID },
   }));
-  assert.ok(lastBody(adapter).includes('avertissement 2/3'));
+  assert.ok(lastBody(adapter).includes('EXCLUSION'));
+  assert.ok(lastBody(adapter).includes('Bye bye'));
+  assert.strictEqual(db.getUser(UIDS.shadow).banned, true, 'exclu à 2 avertissements');
 
-  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xwarn list @Shadow', {
-    mentions: { [UIDS.shadow]: '@Shadow' },
-  }));
-  assert.ok(lastBody(adapter).includes('Avertissements : 2/3'));
-
-  // 3e warn → mute 10 min
-  const r3 = makeMsg('thread-1', UIDS.shadow, 'rebelote');
-  await bot.handleMessage(r3);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xwarn', {
-    messageReply: { senderID: UIDS.shadow, messageID: r3.messageID },
-  }));
-  assert.ok(lastBody(adapter).includes('mode silence'));
-  assert.ok(db.getUser(UIDS.shadow).mutedUntil > Date.now());
+  // Le membre exclu est ignoré
+  const before = adapter.sent.length;
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcoins'));
+  assert.strictEqual(adapter.sent.length, before);
 });
 
 test('Xadd : UID invalide rejeté, UID valide transmis à l’API', async () => {

@@ -71,7 +71,22 @@ class Bot {
       },
     });
 
-    this.send = (payload, threadID) => p.adapter.send(payload, threadID);
+    /* Journal des messages DU BOT par conversation (pour Xclear). */
+    this.sentLog = new Map(); // threadID → [messageID…]
+    const rawSend = p.adapter.send.bind(p.adapter);
+    this.send = async (payload, threadID) => {
+      const info = await rawSend(payload, threadID);
+      try {
+        if (info && info.messageID) {
+          const key = String(threadID);
+          const list = this.sentLog.get(key) || [];
+          list.push(String(info.messageID));
+          while (list.length > 50) list.shift();
+          this.sentLog.set(key, list);
+        }
+      } catch (_) { /* jamais bloquer l'envoi */ }
+      return info;
+    };
   }
 
   /* ── Noms d'utilisateurs (via cache adaptateur) ── */
@@ -232,16 +247,21 @@ class Bot {
           if (joinedCmd) {
             return this._runCommand(joinedCmd, { ...ctx, args: args.slice(1), commandName: joined });
           }
+          // Mode chat ON → tout message (même avec X) part vers l'IA.
+          const grp = this.db.getGroup(threadID);
+          if (isGroup && grp && grp.chatMode) {
+            return this._chatFlow(threadID, senderID, senderName, body);
+          }
           return this._sendUnknown(threadID, rawToken || commandName);
         }
         return this._runCommand(cmd, ctx);
       }
 
-      /* ── 4) Chat automatique (#6) ── */
+      /* ── 4) Chat automatique (#6) : mode ON → répondre SANS préfixe ── */
       if (isGroup && body && body.length >= 2) {
         const group = this.db.getGroup(threadID);
         if (group && group.chatMode) {
-          await this._chatFlow(threadID, senderID, senderName, body, event);
+          await this._chatFlow(threadID, senderID, senderName, body);
           return;
         }
       }
@@ -260,25 +280,52 @@ class Bot {
 
   async _handleSpamViolation(threadID, senderID, violation) {
     const name = await this.getUserName(senderID);
-    if (violation.mutedUntil > Date.now()) {
-      await this.send(
-        fmt.frame('☠️ SPAM DÉTECTÉ', [
-          '☠️ ' + fmt.bold('C’est ton spam qui a causé ta perte.'),
-          '🔇 ' + fmt.bold('Mode silence activé') + ` ${fmt.bold(humanDelay(violation.mutedUntil - Date.now()))}.`,
-          '🫠 ' + fmt.bold('Le groupe va désormais mieux respirer.'),
-        ]),
-        threadID
-      );
-    } else {
-      await this.send(
-        fmt.frame('☠️ SPAM DÉTECTÉ', [
-          `⚠️ ${name} — ${fmt.bold('détecté par le système anti-spam.')}`,
-          `🚨 ${fmt.bold('Avertissement')} ${fmt.boldNum(violation.warnings)}/${fmt.boldNum(this.config.spam.warnLimit)}`,
-          '🫠 ' + fmt.bold('Continue et le silence t’accompagnera.'),
-        ]),
-        threadID
-      );
+    const safeName = (name || 'Membre').split(/\s+/)[0];
+
+    if (violation.action === 'ban') {
+      // 💀 Ban automatique après warnLimit avertissements.
+      const user = this.db.ensureUser(senderID);
+      user.banned = true;
+      user.bannedReason = 'spam';
+      user.bannedAt = Date.now();
+      this.db.users.save();
+
+      let kickedNote = '🔇 ' + fmt.bold('Sanction appliquée côté bot : ses messages seront ignorés.');
+      if (this.capabilities.removeUser) {
+        try {
+          await this.adapter.removeUser(senderID, threadID);
+          kickedNote = '🚫 ' + fmt.bold('Le membre a été retiré du groupe par l’API.');
+        } catch (_) {
+          /* l'API refuse → on l'annonce honnêtement */
+        }
+      }
+      const mentionTag = `@${safeName}`;
+      const body =
+        fmt.frame('💀 SPAM — EXCLUSION', [
+          `💀 ${fmt.bold(`Ton spam t'a conduit à ta perte, ${mentionTag}. Bye bye.`)}`,
+          '☠️ ' + fmt.bold(`Avertissements : ${fmt.boldNum(this.config.spam.warnLimit)}/${fmt.boldNum(this.config.spam.warnLimit)}`),
+          kickedNote,
+        ]) || '';
+      const payload = { body };
+      const tagIndex = payload.body.indexOf(mentionTag);
+      if (tagIndex >= 0) payload.mentions = { [senderID]: { tag: mentionTag, from: tagIndex } };
+      await this.send(payload, threadID);
+      this.db.bumpStat('spamAutoBans');
+      return;
     }
+
+    // ⚠️ Simple avertissement (avec mention du fautif).
+    const mentionTag = `@${safeName}`;
+    const payload = {
+      body: fmt.frame('⚠️ ANTI-SPAM', [
+        `⚠️ ${mentionTag}, ${fmt.bold('stop le spam.')}`,
+        `🚨 ${fmt.bold('Avertissement')} ${fmt.boldNum(violation.warnings)}/${fmt.boldNum(violation.warnLimit)}`,
+        '💀 ' + fmt.bold(`À ${fmt.boldNum(violation.warnLimit)} : exclusion automatique.`),
+      ]),
+    };
+    const tagIndex = payload.body.indexOf(mentionTag);
+    if (tagIndex >= 0) payload.mentions = { [senderID]: { tag: mentionTag, from: tagIndex } };
+    await this.send(payload, threadID);
   }
 
   async _runCommand(cmd, ctx) {
@@ -370,14 +417,12 @@ class Bot {
     );
   }
 
-  /* ── Chat automatique ── */
-  async _chatFlow(threadID, senderID, senderName, body, event) {
-    // Filtre de pertinence : ignorer messages ultra-courts sans question.
-    const trimmed = body.trim();
-    const questionish = /[?]|comment|pourquoi|quest|quoi|qui|quand|où|peux|fais|dis|raconte|help|aide/i.test(trimmed);
-    if (trimmed.length <= 4 && !questionish) {
-      if (Math.random() < 0.8) return this._grantMessageXp(threadID, senderID);
-    }
+  /* ── Chat automatique : quand le mode est ON, TOUT est traité ── */
+  async _chatFlow(threadID, senderID, senderName, body) {
+    const trimmed = String(body || '').trim();
+    if (trimmed.length < 1) return;
+
+    // Anti-tempête : un seul appel IA à la fois par conversation.
     const gate = this.cooldowns.check(`chat:${threadID}`, this.config.chat.minIntervalMs);
     if (!gate.ok) return this._grantMessageXp(threadID, senderID);
 
@@ -395,8 +440,13 @@ class Bot {
       }
     } catch (err) {
       this.logger.warn('[bot] chat:', err.code || err.message);
-      if (err.code === 'CHAT_UNAVAILABLE' || err.code === 'API_TIMEOUT' || err.code === 'API_UNREACHABLE') {
-        // Silence poli plutôt que message d'erreur à chaque message de groupe.
+      // Erreur annoncée avec parcimonie (1 fois/2 min max par conversation).
+      const notice = this.cooldowns.check(`chat-err:${threadID}`, 120_000);
+      if (notice.ok) {
+        await this.send(
+          fmt.frame('🛰️ IA SATURÉE', '⚠️ ' + fmt.bold('Mon cerveau IA est momentanément surchargé — réessaie dans un instant.')),
+          threadID
+        );
       }
     }
     this._grantMessageXp(threadID, senderID);

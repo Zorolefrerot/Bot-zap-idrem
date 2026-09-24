@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { boot, until, makeMsg, lastBody, UIDS, clearCooldowns } = require('./helpers');
+const { boot, until, makeMsg, lastBody, bodies, UIDS, clearCooldowns } = require('./helpers');
 
 test('Ximg : limite 5 images annoncée si dépassement', async () => {
   const { bot, adapter } = await boot();
@@ -20,9 +20,35 @@ test('Ximg : sans argument → aide', async () => {
   assert.ok(lastBody(adapter).includes('Décris l’image'));
 });
 
-test('Ximg : repli recherche quand la clé génération est absente (honnête)', async () => {
+const failImageGen = {
+  available: () => true,
+  generateFree: async () => { throw Object.assign(new Error('down'), { code: 'IMAGE_UNAVAILABLE' }); },
+  generate: async () => { throw Object.assign(new Error('down'), { code: 'IMAGE_UNAVAILABLE' }); },
+  generatePoster: async () => null,
+};
+
+test('Ximg : Pollinations (sans clé) en primaire — succès', async () => {
   const { bot, adapter } = await boot({
     serviceStubs: {
+      imageGen: {
+        available: () => true,
+        generateFree: async (q, n) => Array.from({ length: n }, (_, i) => `/tmp/poll-${i}.jpg`),
+        generate: async () => { throw new Error('ne doit pas être appelé'); },
+        generatePoster: async () => null,
+      },
+    },
+  });
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Ximg robot bleu 2'));
+  await require('./helpers').until(() => bodies(adapter).filter((b) => b.includes('Pollinations')).length >= 2, 3000);
+  assert.ok(bodies(adapter).some((b) => b.includes('IA générative — Pollinations')), 'source Pollinations annoncée');
+  assert.ok(!bodies(adapter).some((b) => b.includes('recherche web')), 'pas de repli nécessaire');
+});
+
+test('Ximg : repli recherche quand les générateurs sont en panne (honnête)', async () => {
+  const { bot, adapter } = await boot({
+    serviceStubs: {
+      imageGen: failImageGen,
       imageSearch: { search: async (q, n) => Array.from({ length: n }, (_, i) => `https://img.example/${i}.jpg`) },
     },
   });
@@ -140,7 +166,7 @@ test('Xpseudo : changement, via tag, et reset', async () => {
 });
 
 test('Xannonce : collecte guidée en 5 étapes puis annonce + tag all', async () => {
-  const { bot, adapter } = await boot();
+  const { bot, adapter } = await boot({ serviceStubs: { imageGen: failImageGen } });
   const t = 'annonce-thread';
 
   await bot.handleMessage(makeMsg(t, UIDS.shadow, 'Xannonce'));
