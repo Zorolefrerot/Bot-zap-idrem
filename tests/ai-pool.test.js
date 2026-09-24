@@ -83,6 +83,43 @@ test('aiPool : 5 fournisseurs déclarés (gemini-proxy + pollinations + shizo + 
   assert.ok(list.some((p) => /Ryzendesu/i.test(p)));
 });
 
+test('aiPool : page HTML (clé morte / 429 HTML) → JAMAIS renvoyée, rotation vers le suivant', async () => {
+  const calls = [];
+  const htmlRes = {
+    ok: true,
+    status: 200,
+    headers: { get: () => 'text/html; charset=utf-8' },
+    json: async () => { throw new Error('pas du JSON'); },
+    text: async () => '<html><body>Error 429 — quota exceeded</body></html>',
+  };
+  const fetchImpl = stubFetch([
+    ['gemini-proxy2', () => { calls.push('gemini-html'); return htmlRes; }],
+    ['pollinations', () => { calls.push('poll'); return jsonRes({ response: 'vraie réponse' }); }],
+  ]);
+  const pool = createAiPool(noopLogger, { fetchImpl, timeoutMs: 500 });
+  const res = await pool.ask('salut');
+  assert.strictEqual(res.text, 'vraie réponse');
+  assert.strictEqual(res.provider, 'Pollinations');
+  assert.deepStrictEqual(calls, ['gemini-html', 'poll'], 'le fournisseur HTML a été contourné');
+});
+
+test('aiPool : corps HTML déguisé en text/plain → rejeté aussi', async () => {
+  const plainHtml = {
+    ok: true,
+    status: 200,
+    headers: { get: () => 'text/plain' },
+    json: async () => { throw new Error('pas du JSON'); },
+    text: async () => '<!DOCTYPE html><html><body><h1>Service unavailable</h1></body></html>',
+  };
+  const fetchImpl = stubFetch([
+    ['gemini-proxy2', () => plainHtml],
+    ['pollinations', () => jsonRes({ response: 'ok texte propre' })],
+  ]);
+  const pool = createAiPool(noopLogger, { fetchImpl, timeoutMs: 500 });
+  const res = await pool.ask('test');
+  assert.strictEqual(res.text, 'ok texte propre');
+});
+
 test('aiPool : si le fournisseur en tête échoue, on repart du suivant SANS le rater', async () => {
   // gemini réussit une fois puis tombe → la rotation doit passer à pollinations
   let geminiUp = true;

@@ -1,8 +1,19 @@
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert');
-const { boot, until, makeMsg, lastBody, bodies, UIDS, NAME_TO_UID, clearCooldowns } = require('./helpers');
+const { boot, until, makeMsg, lastBody, bodies, UIDS, clearCooldowns } = require('./helpers');
 const cgBank = require('../systems/questions/cg.json');
+
+const BOT_ID = 'BOT_MOCK_000000';
+
+/* Réponse au message QUESTION courant du bot (mode REPLY obligatoire). */
+function answerMsg(bot, threadID, uid, text) {
+  const session = bot.sessions.get(threadID, 'quiz');
+  assert.ok(session && session.currentQuestionID, 'question active avec messageID');
+  return makeMsg(threadID, uid, text, {
+    messageReply: { senderID: BOT_ID, messageID: session.currentQuestionID },
+  });
+}
 
 /*
  * Attend qu'un cadre correspondant à `re` apparaisse parmi les corps envoyés
@@ -17,7 +28,7 @@ async function nextFrame(adapter, re, ms = 15000, from = 0) {
   return bodies(adapter).slice(from).find((b) => re.test(b)) || null;
 }
 
-test('Xquiz v2 : flux complet CG → 10 → « tout le monde peut jouer » → première question', async () => {
+test('Xquiz v3 : question TAGUÉE + consigne REPLY + flux complet', async () => {
   const { bot, adapter } = await boot();
   clearCooldowns(bot);
   const from = adapter.sent.length;
@@ -34,10 +45,18 @@ test('Xquiz v2 : flux complet CG → 10 → « tout le monde peut jouer » → p
   assert.ok(launch.includes('Tout le monde peut jouer'));
   const q = await nextFrame(adapter, /QUESTION 1\/10/, 15000, from);
   assert.ok(q, 'première question posée au groupe');
+  // 📢 Question TAGUÉE : mentions + membres du groupe
+  const qIdx = bodies(adapter).slice(from).findIndex((b) => /QUESTION 1\/10/.test(b));
+  const qPayload = adapter.sent[from + qIdx].payload;
+  assert.ok(qPayload.mentions && Object.keys(qPayload.mentions).length >= 2, 'le groupe est tagué sur la question');
+  assert.ok(q.includes('@Shadow'), 'le lanceur figure dans les tags');
+  assert.ok(q.includes('RÉPONDEZ à ce message'), 'consigne REPLY affichée');
+  const session = bot.sessions.get('thread-1', 'quiz');
+  assert.ok(session.currentQuestionID, 'messageID de la question capturé');
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cancel'));
 });
 
-test('FIX VOL DE POINTS : le point va à celui qui RÉPOND, pas au lanceur', async () => {
+test('FIX VOL DE POINTS : le point va à celui qui RÉPOND (reply), tagué sur l’annonce', async () => {
   const { bot, adapter, db } = await boot();
   clearCooldowns(bot);
   db.ensureUser(UIDS.shadow, 'Shadow');
@@ -50,27 +69,22 @@ test('FIX VOL DE POINTS : le point va à celui qui RÉPOND, pas au lanceur', asy
   const q = await nextFrame(adapter, /QUESTION 1\/10/, 15000, from);
   assert.ok(q, 'question 1 posée');
 
-  // Paul (PAS le lanceur) répond le premier correctement
-  const body = q;
-  const qLine = body.split('\n').find((l) => l.trim().startsWith('🧠'));
-  const qText = qLine ? qLine.replace(/^\s*🧠\s*/, '').trim() : '';
-  const item = cgBank.find((q) => q.q === qText);
+  // Paul (PAS le lanceur) répond en REPLY à la question du bot
+  const qText = (q.split('\n').find((l) => l.trim().startsWith('🧠')) || '').replace(/^\s*🧠\s*/, '').trim();
+  const item = cgBank.find((x) => x.q === qText);
   assert.ok(item, 'question connue');
-  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, item.answer));
+  await bot.handleMessage(answerMsg(bot, 'thread-1', UIDS.paul, item.answer));
 
-  const scored = await nextFrame(adapter, /Point pour|marque|prend le point|CLASSEMENT/, 20000);
+  const scored = await nextFrame(adapter, /prend le point|CLASSEMENT/, 20000, from);
   assert.ok(scored, 'message de point');
+  assert.ok(scored.includes('@Paul'), 'Paul est TAGUÉ sur l’annonce');
   const session = bot.sessions.get('thread-1', 'quiz');
-  if (session && session.scores) {
-    const paulScore = session.scores.get(UIDS.paul);
-    const shadowScore = session.scores.get(UIDS.shadow);
-    assert.ok(paulScore && paulScore.score >= 1, 'PAUL (le répondeur) a le point');
-    assert.ok(!shadowScore || shadowScore.score === 0, 'le lanceur n’a PAS volé le point');
-  }
+  assert.ok(session.scores.get(UIDS.paul), 'PAUL (le répondeur) a le point');
+  assert.ok(!session.scores.get(UIDS.shadow), 'le lanceur n’a PAS volé le point');
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cancel'));
 });
 
-test('mauvaise réponse → exclu de la question ; un autre joueur peut encore marquer', async () => {
+test('plusieurs essais : une mauvaise réponse NE BLOQUE PAS (pas de frame RATÉ)', async () => {
   const { bot, adapter } = await boot();
   clearCooldowns(bot);
   const from = adapter.sent.length;
@@ -80,32 +94,86 @@ test('mauvaise réponse → exclu de la question ; un autre joueur peut encore m
   const q = await nextFrame(adapter, /QUESTION 1\/10/, 15000, from);
   assert.ok(q, 'question 1 posée');
 
-  // Shadow se trompe VOLONTAIREMENT : on identifie la bonne lettre via la banque
-  // et on répond une AUTRE lettre (jamais la bonne, pas de hasard).
   const qText = (q.split('\n').find((l) => l.trim().startsWith('🧠')) || '').replace(/^\s*🧠\s*/, '').trim();
   const item = cgBank.find((x) => x.q === qText);
-  assert.ok(item, 'question connue');
   const norm = (t) => String(t || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
   const options = [...q.matchAll(/([A-F])\)\s*(.+)/g)].map((m) => ({ letter: m[1], text: m[2].trim() }));
   const goodLetter = (options.find((o) => norm(o.text) === norm(item.answer)) || {}).letter || 'A';
   const wrong = goodLetter === 'A' ? 'B' : 'A';
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, wrong));
-  const missed = await nextFrame(adapter, /RATÉ/, 5000);
-  assert.ok(missed && missed.includes('ne peux plus répondre'), 'exclusion de la question annoncée');
 
-  // Paul répond correctement malgré l'erreur de Shadow
-  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, item.answer));
-  await nextFrame(adapter, /Point pour|marque|prend le point|CLASSEMENT/, 20000);
+  // 1er essai : faux → silencieux, pas de blocage
+  await bot.handleMessage(answerMsg(bot, 'thread-1', UIDS.shadow, wrong));
+  await new Promise((r) => setTimeout(r, 300));
+  assert.ok(!bodies(adapter).slice(from).some((b) => b.includes('RATÉ')), 'aucun message « RATÉ »');
   const session = bot.sessions.get('thread-1', 'quiz');
-  if (session && session.scores) {
-    assert.ok(session.scores.get(UIDS.paul), 'Paul marque après l’échec de Shadow');
-  }
+  assert.strictEqual(session.awaitingAnswer, true, 'toujours possible de répondre');
+
+  // 2e essai : bon → Shadow marque
+  await bot.handleMessage(answerMsg(bot, 'thread-1', UIDS.shadow, item.answer));
+  const scored = await nextFrame(adapter, /prend le point|CLASSEMENT/, 20000, from);
+  assert.ok(scored, 'le 2e essai marque');
+  assert.ok(session.scores.get(UIDS.shadow), 'Shadow a son point après réessai');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cancel'));
+});
+
+test('réponse SANS reply au message de la question → pas comptée', async () => {
+  const { bot, adapter } = await boot();
+  clearCooldowns(bot);
+  const from = adapter.sent.length;
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'CG'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '10'));
+  const q = await nextFrame(adapter, /QUESTION 1\/10/, 15000, from);
+  const qText = (q.split('\n').find((l) => l.trim().startsWith('🧠')) || '').replace(/^\s*🧠\s*/, '').trim();
+  const item = cgBank.find((x) => x.q === qText);
+
+  // Bonne réponse… mais SANS reply au message de la question
+  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, item.answer));
+  await new Promise((r) => setTimeout(r, 400));
+  const session = bot.sessions.get('thread-1', 'quiz');
+  assert.ok(!session.scores.get(UIDS.paul), 'pas de point sans reply');
+  assert.strictEqual(session.awaitingAnswer, true, 'la question reste ouverte');
+
+  // Puis en reply → ça compte
+  await bot.handleMessage(answerMsg(bot, 'thread-1', UIDS.paul, item.answer));
+  await nextFrame(adapter, /prend le point|CLASSEMENT/, 20000, from);
+  assert.ok(session.scores.get(UIDS.paul), 'le reply marque');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cancel'));
+});
+
+test('reply à une ANCIENNE question (ID périmé) → pas comptée', async () => {
+  const { bot, adapter } = await boot();
+  bot.config.games.quizTimeoutMs = 600;
+  clearCooldowns(bot);
+  const from = adapter.sent.length;
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'CG'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
+  await nextFrame(adapter, /QUESTION 1\/5/, 15000, from);
+  const session = bot.sessions.get('thread-1', 'quiz');
+  const staleID = session.currentQuestionID;
+
+  // On attend la question 2 (temps écoulé sur la 1)
+  const timeoutMsg = await nextFrame(adapter, /TEMPS ÉCOULÉ/, 8000, from);
+  assert.ok(timeoutMsg, 'timeout de la question 1');
+  // Le messageID de la question arrive via le callback d'envoi (tick suivant) :
+  // on attend le CHANGEMENT d'ID, pas seulement l'apparition du cadre.
+  await until(() => session.currentQuestionID && session.currentQuestionID !== staleID, 8000);
+  assert.ok(session.currentQuestionID && session.currentQuestionID !== staleID, 'nouvelle question = nouveau messageID');
+
+  // Réponse à l'ANCIENNE question → ignorée
+  const q2 = session.questions[1];
+  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, q2.answer, {
+    messageReply: { senderID: BOT_ID, messageID: staleID },
+  }));
+  await new Promise((r) => setTimeout(r, 400));
+  assert.ok(!session.scores.get(UIDS.paul), 'pas de point sur une question périmée');
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cancel'));
 });
 
 test('personne ne répond → « Temps écoulé, réponse: X » → question suivante', async () => {
   const { bot, adapter } = await boot();
-  bot.config.games.quizTimeoutMs = 800; // accélérer le test (mais laisse le temps de répondre)
+  bot.config.games.quizTimeoutMs = 800; // accélérer le test
   clearCooldowns(bot);
   const from = adapter.sent.length;
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
@@ -120,19 +188,18 @@ test('personne ne répond → « Temps écoulé, réponse: X » → question sui
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cancel'));
 });
 
-test('fin du quiz : classement général avec vainqueur et gains', async () => {
+test('fin du quiz : classement général avec gains pour le joueur', async () => {
   const { bot, adapter, db } = await boot();
-  bot.config.games.quizTimeoutMs = 800;
+  bot.config.games.quizTimeoutMs = 900;
   clearCooldowns(bot);
   db.ensureUser(UIDS.shadow, 'Shadow');
   db.ensureUser(UIDS.paul, 'Paul');
-  const beforeShadow = db.ensureUser(UIDS.shadow).xcoins;
   let cursor = adapter.sent.length;
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'CG'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
 
-  // Jouer les 5 questions : Paul répond correctement à chaque fois
+  // Jouer les 5 questions : Paul répond (en reply) correctement à chaque fois
   let finished = false;
   for (let guard = 0; guard < 40 && !finished; guard++) {
     const appeared = await until(() => bodies(adapter).slice(cursor).some((b) => /QUESTION \d+\/\d+|CLASSEMENT GÉNÉRAL/.test(b)), 12000);
@@ -147,9 +214,9 @@ test('fin du quiz : classement général avec vainqueur et gains', async () => {
       break;
     }
     const qText = (body.split('\n').find((l) => l.trim().startsWith('🧠')) || '').replace(/^\s*🧠\s*/, '').trim();
-    const item = cgBank.find((q) => q.q === qText);
+    const item = cgBank.find((x) => x.q === qText);
     if (!item) break;
-    await bot.handleMessage(makeMsg('thread-1', UIDS.paul, item.answer));
+    await bot.handleMessage(answerMsg(bot, 'thread-1', UIDS.paul, item.answer));
   }
   assert.ok(finished, 'le quiz s’est terminé avec le classement');
   const final = bodies(adapter).reverse().find((b) => b.includes('CLASSEMENT GÉNÉRAL'));
@@ -158,7 +225,6 @@ test('fin du quiz : classement général avec vainqueur et gains', async () => {
   assert.ok(paul.xcoins > 0, 'gains crédités au joueur');
   assert.strictEqual(paul.stats.quizPlayed, 1);
   assert.ok(bot.sessions.get('thread-1', 'quiz') === null, 'session purgée');
-  void beforeShadow;
 });
 
 test('seul le lanceur navigue la configuration ; un autre ne peut pas annuler en jeu', async () => {

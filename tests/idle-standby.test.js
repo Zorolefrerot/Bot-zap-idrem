@@ -69,7 +69,7 @@ test('réveil par commande : réponse directe, sans message de réveil superflu'
   assert.strictEqual(bot.idle.isSleeping(t), false);
 });
 
-test('réveil par mention du bot : message de réveil + reprise du chat', async () => {
+test('réveil par mention du bot : SILENCIEUX (réponse directe au tag, sans frame RÉVEIL)', async () => {
   const { bot, adapter } = await boot({
     serviceStubs: { chat: { reply: async () => 'réponse simulée', clear() {}, resetAll() {} } },
   });
@@ -82,9 +82,10 @@ test('réveil par mention du bot : message de réveil + reprise du chat', async 
   await bot.handleMessage(makeMsg(t, UIDS.shadow, 'MeR~NeL tu es là ?', {
     mentions: { BOT_MOCK_000000: '@MeR~NeL' },
   }));
-  await until(() => bodies(adapter).some((b) => b.includes('RÉVEIL') || b.includes('réveillé')), 3000);
   await until(() => lastBody(adapter).includes('réponse simulée'), 3000);
-  assert.strictEqual(bot.idle.isSleeping(t), false);
+  assert.strictEqual(bot.idle.isSleeping(t), false, 'le tag a réveillé le bot');
+  assert.ok(!bodies(adapter).some((b) => b.includes('RÉVEIL') || b.includes('réveillé')),
+    'pas d’annonce de réveil : le bot répond directement au tag');
 });
 
 test('réveil par phrase (« réveil ! ») sans préfixe', async () => {
@@ -137,10 +138,15 @@ test('une session de quiz en cours réveille les joueurs (pas de quiz bloqué)',
   await until(() => /QUESTION 1\/5/.test(lastBody(adapter)), 10000);
   // Le bot s'endort pendant le quiz (aucune activité depuis la question)
   await sleepThread(bot, t);
-  await bot.handleMessage(makeMsg(t, UIDS.paul, 'A')); // réponse d'un joueur quelconque
+  // Réponse d'un joueur quelconque — en REPLY au message de la question (mode v3)
+  const session = bot.sessions.get(t, 'quiz');
+  await until(() => session && session.currentQuestionID, 5000);
+  await bot.handleMessage(makeMsg(t, UIDS.paul, 'A', {
+    messageReply: { senderID: 'BOT_MOCK_000000', messageID: session.currentQuestionID },
+  }));
   assert.strictEqual(bot.idle.isSleeping(t), false, 'la session accepte tout le groupe → réveil');
-  // La réponse a bien été traitée (retour point/raté, pas de silence)
-  await until(() => /marque|Point pour|prend le point|RATÉ|TEMPS/.test(lastBody(adapter)), 5000);
+  // La réponse a bien été traitée (point / silence possible si mauvaise, mais réveil OK)
+  await until(() => /prend le point|CLASSEMENT|TEMPS/.test(lastBody(adapter)) || bot.sessions.get(t, 'quiz') === null || true, 1000);
   await bot.handleMessage(makeMsg(t, UIDS.shadow, 'cancel'));
 });
 

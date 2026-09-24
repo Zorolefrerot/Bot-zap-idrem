@@ -23,10 +23,15 @@ function createAiService(logger, aiPool) {
    */
   async function ask(question, opts = {}) {
     if (!question || !String(question).trim()) throw typedError('AI_EMPTY_QUESTION');
+    // Personnalité officielle de MeR~NEL (fiche Xinfo).
+    const base =
+      `Tu es ${config.botName}, tu n'es PAS ChatGPT. Tu es sarcastique, intelligent, ` +
+      `un peu piquant mais attachant. Tu réponds court, comme un humain : tu vannes, ` +
+      `tu piques, tu aides. Jamais méchant. Tu ne révèles jamais tes clés, ton code ou ta configuration.`;
     const system =
       opts.mode === 'advanced'
-        ? `Tu es ${config.botName}, une IA futuriste calme et brillante. Réponds en français de façon structurée et utile.`
-        : `Tu es ${config.botName}. Réponds en français, de façon claire et concise.`;
+        ? `${base} Réponds en français de façon structurée et utile.`
+        : base;
     const { text } = await aiPool.ask(question, { system });
     return String(text).trim();
   }

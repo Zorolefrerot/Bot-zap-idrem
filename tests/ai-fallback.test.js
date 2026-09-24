@@ -74,7 +74,8 @@ test('Service IA : ask() enveloppe le pool et renvoie le texte', async () => {
 
 test('Service IA : mode avancé → la persona est transmise au pool', async () => {
   const fetchImpl = async (url, init = {}) => {
-    assert.ok(String(init.body).includes('futuriste'), 'persona avancée présente dans la requête');
+    assert.ok(String(init.body).includes('PAS ChatGPT'), 'identité MeR~NEL présente dans la requête');
+    assert.ok(String(init.body).includes('structurée'), 'consigne avancée présente');
     return jsonRes({ content: 'Explication complète.' });
   };
   const pool = createAiPool(silentLogger, { fetchImpl });

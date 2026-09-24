@@ -50,8 +50,15 @@ function createImageGenerator(logger) {
         throw typedError('API_UNREACHABLE');
       }
       if (!res.ok) throw typedError(res.status === 429 ? 'AI_RATE_LIMIT' : 'IMAGE_UNAVAILABLE', `HTTP ${res.status}`);
+      const ctype = ((res.headers && res.headers.get && res.headers.get('content-type')) || '').toLowerCase();
+      if (ctype.includes('text/html')) throw typedError('IMAGE_BAD_RESPONSE', 'page HTML au lieu d’une image');
       const buf = Buffer.from(await res.arrayBuffer());
       if (buf.length < 1000) throw typedError('IMAGE_BAD_RESPONSE');
+      // Signature magique : JPEG (FFD8) / PNG (8950) — sinon c'est du texte/HTML.
+      const isJpeg = buf[0] === 0xff && buf[1] === 0xd8;
+      const isPng = buf[0] === 0x89 && buf[1] === 0x50;
+      const isWebp = buf[0] === 0x52 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x46;
+      if (!isJpeg && !isPng && !isWebp) throw typedError('IMAGE_BAD_RESPONSE', 'contenu non image');
       fs.writeFileSync(dest, buf);
       files.push(dest);
     }

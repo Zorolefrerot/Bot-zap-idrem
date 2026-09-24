@@ -183,11 +183,17 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 |---|---|
 | `Xask <question>` | Question rapide → réponse IA courte |
 | `Xai <demande>` | IA avancée : analyse, rédaction, code |
-
-> ♻️ **Double source IA** : `Xask`/`Xai` utilisent l'API shizo (GPT) et
-> **basculent automatiquement sur le proxy Gemini** en cas d'indisponibilité,
-> de timeout ou de limite de débit — sans interruption pour les utilisateurs.
+| `Xinfo` | La fiche d'identité officielle de MeR~NEL |
 | `Xchat on/off/status` | Discussion automatique sans préfixe (admins groupe/bot) |
+
+> ♻️ **Pool IA 5 fournisseurs SANS clé** (gemini-proxy2 → Pollinations → Shizo
+> → Paxsenix → Ryzendesu) avec **rotation automatique** : panne, timeout, 429
+> ou page HTML → fournisseur suivant, sans interruption. Les réponses HTML des
+> APIs ne sont **jamais** renvoyées dans le chat (message « cerveau en pause »).
+
+> 😏 **Personnalité** : MeR~NEL n'est PAS ChatGPT — sarcastique, intelligent,
+> piquant mais attachant, réponses courtes. **Auto-réponse** : réponds à un
+> message du bot ou tague `@MeR~NeL` → il répond direct, sans préfixe.
 
 ### 💰 Économie
 | Commande | Description |
@@ -200,7 +206,7 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 ### 🎮 Jeux
 | Commande | Description |
 |---|---|
-| `Xquiz` | Quiz solo : ID / MULTIVERS / CG → 10-50 questions |
+| `Xquiz` | Quiz de GROUPE : question taguée, on répond en RÉPONDANT au message (plusieurs essais), 15 s/question, 5/10/15 questions |
 | `Xduel` | Duel 1v1 avec mise en XCoins |
 | `Xgame` | Catalogue des jeux |
 
@@ -229,7 +235,7 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 | `Xban` (en réponse à un message) | Bannit le membre (API si possible, sinon côté bot) |
 | `Xwarn` (en réponse) / `Xwarn list` | Avertissement |
 | `Xkick` (en réponse) | Expulsion si l'API le permet |
-| `Xclear` (en réponse) | Suppression du message cité (si l'API le permet) |
+| `Xclear` / `Xclear 3` | Supprime les derniers messages DU BOT uniquement (limite Messenger) |
 | `Xadd @Paul` / `Xadd <UID>` | Ajoute un membre |
 
 ### Divers
@@ -245,11 +251,12 @@ Le bot comprend les réponses successives **sans préfixe** pendant une session 
 > Xquiz
   「PLEASE CHOOSE YOUR CATEGORY」 ID / MULTIVERS / CG
 > CG
-  「NOMBRE DE QUESTIONS」 10 / 20 / 30 / 40 / 50
-> 20
-  🎮 Quiz lancé — réponds A/B/C/D !
-> A
-  ✅ Correct ! Série : 1
+  「NOMBRE DE QUESTIONS」 5 / 10 / 15
+> 10
+  🎮 QUIZ LANCÉ — Thème : CG — 10 Questions — Tout le monde peut jouer !
+  🎮 QUESTION 1/10 (message tagué — tout le groupe est mentionné)
+  (@Paul RÉPOND au message de la question : « C »)
+  ⚡ BONNE RÉPONSE — @Paul prend le point ! (+1)
 ```
 
 - Sessions **isolées par joueur ET par groupe** (les messages des autres membres

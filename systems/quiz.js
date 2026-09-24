@@ -42,10 +42,10 @@ class GroupQuizSession {
     this.questions = [];
     this.index = 0;
 
-    /** Map<uid, {name, score}> — participants (ceux qui ont répondu au moins 1 fois). */
+    /** Map<uid, {name, score}> — participants (ceux qui ont marqué). */
     this.scores = new Map();
-    /** Set<uid> — exclus de la question COURANTE (mauvaise réponse). */
-    this.locked = new Set();
+    /** messageID de la QUESTION courante : seules les RÉPONSES à ce message comptent. */
+    this.currentQuestionID = null;
     /** true tant que personne n'a trouvé la question courante. */
     this.firstCorrectPending = false;
 
@@ -77,6 +77,7 @@ class GroupQuizSession {
     this._clearTimers();
     this.finished = true;
     this.awaitingAnswer = false;
+    this.currentQuestionID = null;
     if (this.bot && this.bot.sessions) {
       this.bot.sessions.remove(this.threadID, this.scope);
     }
@@ -204,14 +205,13 @@ class GroupQuizSession {
     return true;
   }
 
-  /* ── Pose la question courante au groupe ── */
+  /* ── Pose la question courante au groupe (message TAGUÉ) ── */
   async _askQuestion() {
     if (this.finished) return;
     this._clearTimers();
     const q = this.questions[this.index];
     if (!q) return this._finish();
 
-    this.locked = new Set(); // nouvelle question → tout le monde peut jouer
     this.firstCorrectPending = true;
     this._currentOptions = q.type === 'mcq' ? shuffle(q.options) : null;
     if (this._currentOptions) {
@@ -220,7 +220,11 @@ class GroupQuizSession {
     }
 
     const header = `🎮 QUESTION ${this.index + 1}/${this.count}`;
-    const payload = { body: null };
+    const instructions = [
+      '👉 ' + fmt.bold('Pour répondre : RÉPONDEZ à ce message') + ' — ' + fmt.bold('plusieurs essais autorisés !'),
+      '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`) + ' — ' + fmt.bold('première bonne réponse = +1 point'),
+    ];
+    const payload = {};
     let lines;
 
     if (q.type === 'mcq') {
@@ -229,21 +233,46 @@ class GroupQuizSession {
         '',
         ...this._currentOptions.map((opt, i) => `▸ ${fmt.bold(LETTERS[i])}) ${fmt.bold(opt)}`),
         '',
-        '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`) + ' — ' + fmt.bold('première bonne réponse = +1 point'),
+        ...instructions,
       ];
-      payload.body = fmt.frame(header, lines);
     } else {
       lines = ['🪪 ' + fmt.bold('IDENTIFIE CE PERSONNAGE')];
       const imgPath = idImagePath(q.image);
       if (!imgPath && q.hint) lines.push('🧩 ' + fmt.bold('Indice') + ' : ' + q.hint);
-      lines.push('', '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`));
-      payload.body = fmt.frame(header, lines);
-      if (imgPath) payload.attachment = imgPath;
+      lines.push('', ...instructions);
+      const attachment = imgPath;
+      if (attachment) payload.attachment = attachment;
     }
+    const base = fmt.frame(header, lines);
+    payload.body = base;
+
+    // 📢 Question TAGUÉE : les membres du groupe sont mentionnés (comme Xtag).
+    try {
+      const tInfo = await this.bot.adapter.getThreadInfo(this.threadID);
+      const ids = ((tInfo && (tInfo.participantIDs || (tInfo.userInfo || []).map((u) => u.id))) || [])
+        .map(String)
+        .filter((uid) => uid && uid !== String(this.bot.adapter.botID))
+        .slice(0, 25);
+      if (ids.length) {
+        const infos = await this.bot.adapter.userCache.fetch(ids).catch(() => ({}));
+        const prefix = base + '\n\n';
+        let tagLine = '';
+        const mentions = {};
+        for (const uid of ids) {
+          const nm = (infos[uid] && infos[uid].name) || 'Membre';
+          const tag = `@${String(nm).split(/\s+/)[0]}`;
+          mentions[uid] = { tag, from: prefix.length + tagLine.length };
+          tagLine += tag + ' ';
+        }
+        payload.body = prefix + tagLine.trim();
+        payload.mentions = mentions;
+      }
+    } catch (_) { /* mentions indisponibles → question simple */ }
 
     // La question devient « live » AVANT l'envoi (pas de course avec le client).
     this.awaitingAnswer = true;
-    await this.send(payload);
+    const sentInfo = await this.send(payload);
+    this.currentQuestionID = sentInfo && sentInfo.messageID ? String(sentInfo.messageID) : null;
 
     const timeoutMs = this.bot.config.games.quizTimeoutMs;
     this.questionTimer = setTimeout(() => {
@@ -267,18 +296,22 @@ class GroupQuizSession {
 
   /*
    * ⚡ CŒUR DU FIX : le point va au senderID de celui qui RÉPOND,
-   * jamais au lanceur du quiz.
+   * jamais au lanceur du quiz. Pour tenter sa chance, il FAUT répondre
+   * (reply) au message de la question — plusieurs essais, sans blocage.
    */
   async _onAnswer(ctx, raw) {
-    if (!this.awaitingAnswer) return false; // pause entre questions → ignoré
+    // 1) Seule une RÉPONSE au message de la question compte.
+    const reply = ctx.event && ctx.event.messageReply;
+    if (!reply || !reply.messageID) return false;
+    if (!this.currentQuestionID || String(reply.messageID) !== this.currentQuestionID) return false;
+    // 2) Pause entre questions / question déjà remportée → consommé, ignoré.
+    if (!this.awaitingAnswer) return true;
     const q = this.questions[this.index];
     if (!q) return true;
     const uid = String(ctx.senderID); // ← l'auteur RÉEL de la réponse
     const name = ctx.senderName || (await this.bot.getUserName(uid));
 
-    // Déjà exclu de cette question → réponse ignorée silencieusement.
-    if (this.locked.has(uid)) return true;
-    // Question déjà remportée → réponses tardives ignorées.
+    // Question déjà remportée → réponses tardives ignorées (silencieux).
     if (!this.firstCorrectPending) return true;
 
     const norm = fmt.normalizeAnswer(raw);
@@ -309,25 +342,22 @@ class GroupQuizSession {
       rec.name = name;
       rec.score += 1;
       this.scores.set(uid, rec);
-      await this.send(
-        fmt.pick([
-          `✅ ${fmt.bold(name)} ${fmt.bold('marque')} ! (+1)`,
-          `✅ ${fmt.bold('Point pour')} ${fmt.bold(name)} ! ⚡`,
-          `✅ ${fmt.bold('Correct !')} ${name} ${fmt.bold('prend le point.')}`,
-        ])
-      );
+      // 📢 Annonce TAGUÉE : le vainqueur est mentionné.
+      const tag = `@${String(name).split(/\s+/)[0]}`;
+      const bodyText = fmt.frame('⚡ BONNE RÉPONSE', [
+        `✅ ${tag} ${fmt.bold('prend le point')} ! (+1)`,
+        `🏁 ${fmt.bold('Score')} : ${fmt.boldNum(rec.score)}`,
+      ]);
+      const payload = { body: bodyText };
+      const from = bodyText.indexOf(tag);
+      if (from >= 0) payload.mentions = { [uid]: { tag, from } };
+      await this.send(payload);
       await this._next();
       return true;
     }
 
-    // Mauvaise réponse → exclu de CETTE question uniquement (pas de pénalité).
-    this.locked.add(uid);
-    await this.send(
-      fmt.frame('❌ RATÉ', [
-        `🚫 ${fmt.bold(name)} — ${fmt.bold('tu ne peux plus répondre à cette question.')}`,
-        '🎯 ' + fmt.bold('Les autres peuvent encore tenter leur chance…'),
-      ])
-    );
+    // Mauvaise réponse → AUCUNE pénalité, on peut réessayer tout de suite
+    // (silencieux pour ne pas inonder le groupe).
     return true;
   }
 

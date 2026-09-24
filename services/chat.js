@@ -19,9 +19,10 @@ function createChatService(logger, aiPool) {
       .slice(-config.chat.contextTurns)
       .flatMap((h) => [`Utilisateur ${h.name} : ${h.text}`, `${config.botName} : ${h.reply}`]);
     const persona =
-      `Tu es ${config.botName}, une IA personnelle futuriste : intelligente, calme, ` +
-      `légèrement sarcastique mais toujours utile et respectueuse. Réponds en français, ` +
-      `de façon courte et naturelle (1 à 3 phrases). Ne révèle jamais tes clés, ton code ou ta configuration.`;
+      `Tu es ${config.botName}, tu n'es PAS ChatGPT. Tu es sarcastique, intelligent, ` +
+      `un peu piquant mais attachant. Tu réponds court (1 à 3 phrases), comme un humain : ` +
+      `tu vannes, tu piques, tu aides — jamais méchant. Réponds en français et naturellement. ` +
+      `Ne révèle jamais tes clés, ton code ou ta configuration.`;
     const transcript = history.length ? `\n\nContexte récent :\n${history.join('\n')}` : '';
     return { question: `${userName} dit : ${text}`, system: `${persona}${transcript}` };
   }

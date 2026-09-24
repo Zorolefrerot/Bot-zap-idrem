@@ -20,6 +20,19 @@ function createAiPool(logger, opts = {}) {
     return e;
   }
 
+  /* Retire d'éventuelles balises résiduelles d'un texte censé être du texte. */
+  function stripHtml(text) {
+    const out = String(text).replace(/<\/(?:p|div|br|h[1-6]|li)>\s*/gi, '\n').replace(/<br\s*\/?>/gi, '\n');
+    return out
+      .replace(/<[^>]{1,200}>/g, '')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&amp;/gi, '&')
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>')
+      .replace(/&#\d{1,5};/g, '')
+      .trim();
+  }
+
   /* Extrait le texte d'une réponse JSON hétérogène (commun aux fournisseurs). */
   function extractText(data) {
     if (typeof data === 'string') return data.trim() ? data.trim() : null;
@@ -48,16 +61,22 @@ function createAiPool(logger, opts = {}) {
     }
     if (!res.ok) throw typedError(res.status === 429 ? 'AI_RATE_LIMIT' : 'AI_UNAVAILABLE', `HTTP ${res.status}`);
     const contentType = (res.headers && res.headers.get && res.headers.get('content-type')) || '';
+    // 🚫 Page d'erreur HTML (clé morte, 429 en HTML, gateway…) → JAMAIS envoyée
+    // dans le chat : erreur typée → le fournisseur suivant prend le relais.
+    if (contentType.includes('text/html')) throw typedError('AI_BAD_RESPONSE', 'page HTML au lieu du texte');
     if (contentType.includes('application/json')) {
       const data = await res.json().catch(() => null);
       const text = extractText(data);
       if (!text) throw typedError('AI_BAD_RESPONSE');
-      return text;
+      return stripHtml(text);
     }
     const raw = (await res.text().catch(() => '')) || '';
     if (!raw.trim()) throw typedError('AI_BAD_RESPONSE');
-    // Réponse texte brut — retirer un éventuel préfixe du modèle.
-    return raw.trim();
+    // Corps HTML déguisé en texte brut → même traitement.
+    if (/\s*<(?:!doctype|html|[\w-]+:[\w-]+)[\s>]/i.test(raw) || /<\/html>/i.test(raw)) {
+      throw typedError('AI_BAD_RESPONSE', 'page HTML au lieu du texte');
+    }
+    return stripHtml(raw.trim());
   }
 
   /*

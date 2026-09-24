@@ -202,13 +202,15 @@ class Bot {
 
       /* ── 🌙 0) Mode veille : après 30 min d'inactivité, le bot dort ── */
       if (this.idle.isSleeping(threadID)) {
-        const botMentioned = Object.keys(event.mentions || {}).some((id) => String(id) === this.adapter.botID);
+        const botID = String(this.adapter.botID || '');
+        const botMentioned = Object.keys(event.mentions || {}).some((id) => String(id) === botID);
+        const replyToBot = Boolean(event.messageReply && event.messageReply.messageID && String(event.messageReply.senderID) === botID);
         const firstWord = fmt.normalizeAnswer(body.split(/\s+/)[0] || '');
         const wakePhrase = ['reveil', 'reveille', 'eveille', 'wake', 'wakeup', 'debout'].includes(firstWord);
         const sessionAccepts = this.sessions.hasSessionFor(threadID, senderID);
-        const wakeWorthy = isCommand || commandName || this.config.isAdmin(senderID) || botMentioned || wakePhrase || sessionAccepts;
+        const wakeWorthy = isCommand || commandName || this.config.isAdmin(senderID) || botMentioned || replyToBot || wakePhrase || sessionAccepts;
         if (!wakeWorthy) return; // 💤 messages ordinaires ignorés pendant la veille
-        const silentWake = Boolean(isCommand || sessionAccepts);
+        const silentWake = Boolean(isCommand || sessionAccepts || replyToBot || botMentioned);
         const woke = this.idle.wake(threadID);
         if (woke && !silentWake && this.idle.canAnnounceWake(threadID)) {
           await this.send(
@@ -255,6 +257,22 @@ class Bot {
           return this._sendUnknown(threadID, rawToken || commandName);
         }
         return this._runCommand(cmd, ctx);
+      }
+
+      /* ── 3.5) Auto-réponse : reply à un message DU BOT ou tag @MeR~NeL → IA directe ── */
+      if (body && !commandName) {
+        const botID = String(this.adapter.botID || '');
+        const reply = event.messageReply;
+        const replyToBot = Boolean(reply && reply.messageID && String(reply.senderID) === botID && senderID !== botID);
+        const mentionEntry = botID ? event.mentions && event.mentions[botID] : null;
+        const botTagged = Boolean(mentionEntry) || (body && new RegExp(`@${this.config.botName}`, 'i').test(body));
+        if (replyToBot || botTagged) {
+          // On retire le tag du texte pour ne pas polluer la question.
+          let text = body;
+          if (mentionEntry && mentionEntry.tag) text = text.split(mentionEntry.tag).join(' ');
+          text = text.replace(new RegExp(`@${this.config.botName}`, 'gi'), ' ').trim();
+          if (text) return this._chatFlow(threadID, senderID, senderName, text);
+        }
       }
 
       /* ── 4) Chat automatique (#6) : mode ON → répondre SANS préfixe ── */
@@ -444,7 +462,10 @@ class Bot {
       const notice = this.cooldowns.check(`chat-err:${threadID}`, 120_000);
       if (notice.ok) {
         await this.send(
-          fmt.frame('🛰️ IA SATURÉE', '⚠️ ' + fmt.bold('Mon cerveau IA est momentanément surchargé — réessaie dans un instant.')),
+          fmt.frame('🛰️ CERVEAU EN PAUSE', [
+            '⚠️ ' + fmt.bold('Mon cerveau a bugué — réessaie dans 5 secondes.'),
+            `🧾 ${fmt.bold('CODE')} : ${fmt.bold(String(err.code || 'AI_ALL_PROVIDERS_DOWN').toUpperCase())}`,
+          ]),
           threadID
         );
       }
