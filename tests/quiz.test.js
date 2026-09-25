@@ -51,7 +51,7 @@ test('Xquiz v4 : 5 catégories proposées + flux complet CG en réponse LIBRE', 
   assert.ok(launch.includes('Tout le monde peut jouer'));
   const q = await nextFrame(adapter, /QUESTION 1\/10/, 15000, from);
   assert.ok(q, 'première question posée');
-  assert.ok(q.includes('Réponds directement'), 'consigne réponse libre');
+  assert.ok(!q.includes('Réponds directement'), 'pas d’instructions répétées sous la question');
   assert.ok(!/[▸]\s*[A-F]\)/.test(q), 'PLUS de QCM (aucune proposition A-D)');
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cancel'));
 });
@@ -146,7 +146,7 @@ test('CAPITALE : le bot donne un pays, la capitale est la réponse (alts accept�
   const session = bot.sessions.get('thread-1', 'quiz');
   assert.strictEqual(session.category, 'capitale');
   const item = session.questions[0];
-  const q = await nextFrame(adapter, /Quelle est SA capitale/, 5000, from);
+  const q = await nextFrame(adapter, /Capitale \?/, 5000, from);
   assert.ok(q, 'cadre capitales');
   assert.ok(q.includes(item.q), `pays affiché: ${item.q}`);
   await bot.handleMessage(makeMsg('thread-1', UIDS.paul, item.a));

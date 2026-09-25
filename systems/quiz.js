@@ -212,6 +212,8 @@ class GroupQuizSession {
 
     this.firstCorrectPending = true;
 
+    /* Question en GRAND — les règles sont annoncées une seule fois au
+     * lancement : pas d'instructions répétées sous chaque question. */
     const style = CATEGORIES[this.category].style;
     const header = `🎮 QUESTION ${this.index + 1}/${this.count}`;
     const lines = [];
@@ -219,14 +221,11 @@ class GroupQuizSession {
     if (style === 'drapeau') {
       lines.push(q.q, '', '❓ ' + fmt.bold('Quel pays ?'));
     } else if (style === 'capitale') {
-      lines.push('🌍 ' + fmt.bold('Pays') + ' : ' + fmt.bold(q.q), '', '❓ ' + fmt.bold('Quelle est SA capitale ?'));
+      lines.push('🌍 ' + fmt.bold('Pays') + ' : ' + fmt.bold(q.q), '', '❓ ' + fmt.bold('Capitale ?'));
     } else {
       lines.push('🧩 ' + fmt.bold(q.q), '', '❓ ' + fmt.bold('Qui ou quoi ?'));
     }
-    lines.push(
-      '👉 ' + fmt.bold('Réponds directement') + ' — ' + fmt.bold('prénom OU nom OU nom complet'),
-      '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`) + ' — ' + fmt.bold('première bonne réponse = +10 pts')
-    );
+    lines.push('', '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`));
 
     const payload = { body: fmt.frame(header, lines) };
 

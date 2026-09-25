@@ -477,12 +477,14 @@ class MangaQuizSession {
     this.firstCorrectPending = true;
 
     const payload = { body: null };
+    /* Question en GRAND — les règles sont annoncées une seule fois au
+     * lancement : pas d'instructions répétées sous chaque image. */
     const lines = [
       `🖼️ ${fmt.boldNum(this.index + 1)}/${fmt.boldNum(this.total)}  —  📚 ${fmt.bold(this.source)}`,
       '',
       '❓ ' + fmt.bold('QUI EST-CE ?'),
-      '👉 ' + fmt.bold('Réponds directement') + ' — ' + fmt.bold('prénom OU nom complet'),
-      '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`) + ' — ' + fmt.bold('première bonne réponse = +10 pts'),
+      '',
+      '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`),
     ];
     payload.body = fmt.frame(`🎌 IDENTIFICATION ${this.index + 1}/${this.total}`, lines);
 
