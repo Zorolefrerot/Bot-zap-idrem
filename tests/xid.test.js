@@ -9,12 +9,12 @@ const realFetch = global.fetch;
 
 /* ── Stub Jikan + CDN images ── */
 const CHARACTERS = [
-  { name: 'Satoru Gojo', image: 'https://cdn.myanimelist.net/gojo.jpg' },
-  { name: 'Naruto Uzumaki', image: 'https://cdn.myanimelist.net/naruto.jpg' },
-  { name: 'Sasuke Uchiha', image: 'https://cdn.myanimelist.net/sasuke.jpg' },
-  { name: 'Kakashi Hatake', image: 'https://cdn.myanimelist.net/kakashi.jpg' },
-  { name: 'Hinata Hyuuga', image: 'https://cdn.myanimelist.net/hinata.jpg' },
-  { name: 'Monkey D. Luffy', image: 'https://cdn.myanimelist.net/luffy.jpg' },
+  { name: 'Satoru Gojo', image: 'https://s4.anilist.co/gojo.jpg' },
+  { name: 'Naruto Uzumaki', image: 'https://s4.anilist.co/naruto.jpg' },
+  { name: 'Sasuke Uchiha', image: 'https://s4.anilist.co/sasuke.jpg' },
+  { name: 'Kakashi Hatake', image: 'https://s4.anilist.co/kakashi.jpg' },
+  { name: 'Hinata Hyuuga', image: 'https://s4.anilist.co/hinata.jpg' },
+  { name: 'Monkey D. Luffy', image: 'https://s4.anilist.co/luffy.jpg' },
 ];
 
 function makeJson(data) {
@@ -39,19 +39,37 @@ function makeImage() {
 function stubFetch(overrides = {}) {
   global.fetch = async (url) => {
     const u = String(url);
-    if (overrides.jikanFail) {
-      if (u.includes('api.jikan.moe')) throw new Error('ECONNREFUSED');
+    /* ── AniList (primaire) ── */
+    if (u.includes('graphql.anilist.co')) {
+      if (overrides.anilistFail) throw new Error('ECONNREFUSED anilist');
+      if (overrides.anilist429) {
+        return { ok: false, status: 429, headers: { get: () => 'application/json' }, json: async () => ({}) };
+      }
+      return makeJson({
+        data: {
+          Media: {
+            title: { romaji: 'Naruto', english: 'Naruto' },
+            characters: { edges: CHARACTERS.map((c) => ({ node: { name: { full: c.name }, image: { large: c.image } } })) },
+          },
+          Page: { characters: CHARACTERS.map((c) => ({ name: { full: c.name }, image: { large: c.image } })) },
+        },
+      });
     }
-    if (overrides.rateLimit && u.includes('api.jikan.moe')) {
-      return { ok: false, status: 429, headers: { get: () => 'application/json' }, json: async () => ({}) };
+    /* ── Jikan (repli) ── */
+    if (u.includes('api.jikan.moe')) {
+      if (overrides.jikanFail) throw new Error('ECONNREFUSED jikan');
+      if (overrides.jikan429) {
+        return { ok: false, status: 429, headers: { get: () => 'application/json' }, json: async () => ({}) };
+      }
+      if (u.includes('/top/characters')) return makeJson({ data: CHARACTERS.map((c) => ({ name: c.name, images: { jpg: { image_url: c.image } } })) });
+      if (u.includes('/manga?') || (u.includes('/manga') && u.includes('q='))) return makeJson({ data: [{ mal_id: 1, title: 'Naruto' }] });
+      if (u.includes('/manga/1/characters')) {
+        return makeJson({ data: CHARACTERS.map((c) => ({ character: { name: c.name, images: { jpg: { image_url: c.image } } } })) });
+      }
     }
-    if (u.includes('/top/characters')) return makeJson({ data: CHARACTERS.map((c) => ({ name: c.name, images: { jpg: { image_url: c.image } } })) });
-    if (u.includes('/manga?') || (u.includes('/manga') && u.includes('q='))) return makeJson({ data: [{ mal_id: 1, title: 'Naruto' }] });
-    if (u.includes('/manga/1/characters')) {
-      return makeJson({ data: CHARACTERS.map((c) => ({ character: { name: c.name, images: { jpg: { image_url: c.image } } } })) });
-    }
-    if (u.includes('cdn.myanimelist.net')) return makeImage();
-    throw new Error('ECONNREFUSED');
+    /* ── CDN images ── */
+    if (u.includes('s4.anilist.co') || u.includes('cdn.myanimelist.net')) return makeImage();
+    throw new Error('ECONNREFUSED ' + u.slice(0, 60));
   };
 }
 
@@ -144,17 +162,21 @@ test('Xid : mauvaise réponse SILENCIEUSE — on peut retenter tout de suite', a
   const from = await launch(bot, adapter, 'naruto', '2');
   const session = bot.sessions.get('thread-1', 'xid');
   const current = session.characters[0];
-  const wrong = current.name.split(' ')[0] === 'gojo' ? 'ichigo' : 'gojo';
+  // Fausse réponse certaine : si le personnage EST Gojo → « ichigo »,
+  // sinon → « gojo ». (Détection sur le NOM COMPLET, pas le premier mot :
+  // « Satoru » Gojo aurait fait choisir « gojo »… la bonne réponse !)
+  const wrong = /gojo/i.test(current.name) ? 'ichigo' : 'gojo';
   const before = adapter.sent.length;
   await bot.handleMessage(makeMsg('thread-1', UIDS.paul, wrong));
-  await new Promise((r) => setTimeout(r, 400));
+  await new Promise((r) => setTimeout(r, 900)); // marge large (suite chargée)
   assert.strictEqual(adapter.sent.length, before, 'aucun message envoyé sur une mauvaise réponse');
   assert.strictEqual(session.awaitingAnswer, true, 'la question reste ouverte');
   // Réessai correct
   const firstName = current.name.split(' ')[0];
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, firstName));
-  await until(() => bodies(adapter).slice(from).some((b) => /prend le point/.test(b)), 10000);
+  await until(() => session.scores.get(UIDS.shadow), 15000);
   assert.ok(session.scores.get(UIDS.shadow), 'le 2e essai marque');
+  await until(() => bodies(adapter).slice(from).some((b) => /prend le point/.test(b)), 15000);
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
 });
 
@@ -223,23 +245,49 @@ test('Xid : stop par un tiers refusé, par le lanceur accepté', async () => {
   assert.strictEqual(bot.sessions.get('thread-1', 'xid'), null, 'annulé par le lanceur');
 });
 
-test('Xid : Jikan en panne / 429 → message honnête, jamais de crash', async () => {
-  stubFetch({ jikanFail: true });
+test('Xid : AniList en panne → Jikan prend le relais AUTOMATIQUEMENT', async () => {
+  stubFetch({ anilistFail: true });
+  const { bot, adapter } = await boot();
+  clearCooldowns(bot);
+  const from = await launch(bot, adapter, 'naruto', '2');
+  const session = bot.sessions.get('thread-1', 'xid');
+  assert.strictEqual(session.source, 'Naruto', 'quiz lancé via Jikan (repli)');
+  assert.strictEqual(session.total, 2);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+});
+
+test('Xid : AniList 429 → Jikan répond (rotation), quiz lancé quand même', async () => {
+  stubFetch({ anilist429: true });
+  const { bot, adapter } = await boot();
+  clearCooldowns(bot);
+  const from = await launch(bot, adapter, 'MULTIVERS', '2');
+  const session = bot.sessions.get('thread-1', 'xid');
+  assert.strictEqual(session.source, 'Multivers');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+});
+
+test('Xid : AniList ET Jikan en panne → message honnête, jamais de crash', async () => {
+  stubFetch({ anilistFail: true, jikanFail: true });
   const { bot, adapter } = await boot();
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xid'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'naruto'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
-  await until(() => bodies(adapter).some((b) => b.includes('JIKAN INDISPONIBLE')), 10000);
-  assert.ok(bodies(adapter).some((b) => b.includes('CODE')), 'code typé affiché');
+  const down = await until(() => bodies(adapter).some((b) => b.includes('SOURCES INDISPONIBLES')), 10000);
+  assert.ok(down, 'sources indisponibles annoncé');
+  assert.ok(bodies(adapter).some((b) => b.includes('QUIZ_SOURCES_DOWN')), 'code typé affiché');
   assert.strictEqual(bot.sessions.get('thread-1', 'xid'), null, 'session nettoyée');
+});
 
-  stubFetch({ rateLimit: true });
+test('Xid : AniList ET Jikan en 429 → « sources en pause »', async () => {
+  stubFetch({ anilist429: true, jikan429: true });
+  const { bot, adapter } = await boot();
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xid'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'naruto'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
-  const paused = await until(() => bodies(adapter).some((b) => b.includes('JIKAN EN PAUSE')), 10000);
-  assert.ok(paused, 'Jikan en pause annoncé');
-  assert.ok(bodies(adapter).some((b) => b.includes('JIKAN_RATE_LIMIT')), 'rate limit annoncé');
+  const paused = await until(() => bodies(adapter).some((b) => b.includes('SOURCES EN PAUSE')), 10000);
+  assert.ok(paused, 'sources en pause annoncé');
+  assert.ok(bodies(adapter).some((b) => b.includes('RATE_LIMITED')), 'rate limit annoncé');
+  assert.strictEqual(bot.sessions.get('thread-1', 'xid'), null, 'session nettoyée');
 });

@@ -1,7 +1,9 @@
 'use strict';
 /*
  * 🧬 MeR~NeL — systems/mangaQuiz.js  (Xid — quiz d'identification manga)
- * Sources : API publique Jikan (MyAnimeList) — SANS clé.
+ * Sources SANS clé, en ROTATION automatique :
+ *   1) AniList (GraphQL graphql.anilist.co — primaire, ~90 req/min) ;
+ *   2) Jikan / MyAnimeList (repli si AniList tombe).
  *
  * Déroulé :
  *  - configuration réservée au lanceur : nom du manga (ou MULTIVERS) →
@@ -22,6 +24,45 @@ const fmt = require('../utils/formatter');
 const { safeInt } = require('../utils/sanitize');
 
 const JIKAN = 'https://api.jikan.moe/v4';
+const ANILIST = 'https://graphql.anilist.co';
+
+/* Requête GraphQL AniList (POST JSON, sans clé) → data ou erreur typée. */
+async function anilistQuery(query, variables, fetchImpl) {
+  const f = fetchImpl || global.fetch;
+  let res;
+  try {
+    res = await f(ANILIST, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ query, variables: variables || {} }),
+      signal: AbortSignal.timeout(15000),
+    });
+  } catch (err) {
+    if (err && (err.name === 'TimeoutError' || err.name === 'AbortError')) {
+      throw Object.assign(new Error('AniList timeout'), { code: 'ANILIST_TIMEOUT' });
+    }
+    throw Object.assign(new Error('AniList injoignable'), { code: 'ANILIST_UNREACHABLE' });
+  }
+  if (res.status === 429) throw Object.assign(new Error('AniList 429'), { code: 'ANILIST_RATE_LIMIT' });
+  if (!res.ok) throw Object.assign(new Error(`AniList HTTP ${res.status}`), { code: 'ANILIST_ERROR' });
+  const ctype = ((res.headers && res.headers.get && res.headers.get('content-type')) || '').toLowerCase();
+  if (ctype.includes('text/html')) throw Object.assign(new Error('AniList HTML'), { code: 'ANILIST_BAD_RESPONSE' });
+  const body = await res.json().catch(() => null);
+  if (!body || body.errors) throw Object.assign(new Error('AniList errors'), { code: 'ANILIST_ERROR' });
+  return body.data || {};
+}
+
+/* Les DEUX sources sont tombées → erreur combinée honnête.
+ * Si les deux sont en limite de débit → code dédié (message adapté). */
+function sourcesDown(errA, errB) {
+  const bothRate = /RATE_LIMIT/.test(String(errA.code || '')) && /RATE_LIMIT/.test(String(errB.code || ''));
+  return Object.assign(
+    new Error(`AniList (${errA.code || errA.message}) + Jikan (${errB.code || errB.message}) indisponibles`),
+    { code: bothRate ? 'QUIZ_RATE_LIMITED' : 'QUIZ_SOURCES_DOWN' }
+  );
+}
+
+/* Requête Jikan (repli) → data ou erreur typée. */
 const CANCEL_WORDS = new Set(['cancel', 'annuler', 'stop', 'quit', 'quitter', 'exit', '!stop']);
 const MAX_IMAGES = 20;
 
@@ -305,9 +346,9 @@ class MangaQuizSession {
     } catch (err) {
       this.dispose();
       const msg =
-        err.code === 'JIKAN_RATE_LIMIT'
-          ? ['🎌 ' + fmt.bold('JIKAN EN PAUSE'), '⚠️ ' + fmt.bold('MyAnimeList limite le débit — réessaie dans ~1 minute.'), `🧾 ${fmt.bold('CODE')} : ${fmt.bold('JIKAN_RATE_LIMIT')}`]
-          : ['🎌 ' + fmt.bold('JIKAN INDISPONIBLE'), '⚠️ ' + fmt.bold('Impossible de charger les personnages pour le moment.'), `🧾 ${fmt.bold('CODE')} : ${fmt.bold(String(err.code || 'JIKAN_ERROR').toUpperCase())}`];
+        err.code === 'QUIZ_RATE_LIMITED'
+          ? ['🎌 ' + fmt.bold('SOURCES EN PAUSE'), '⚠️ ' + fmt.bold('Limite de débit des serveurs — réessaie dans ~1 minute.'), `🧾 ${fmt.bold('CODE')} : ${fmt.bold('RATE_LIMITED')}`]
+          : ['🎌 ' + fmt.bold('SOURCES INDISPONIBLES'), '⚠️ ' + fmt.bold('Impossible de charger les personnages pour le moment (AniList + Jikan).'), `🧾 ${fmt.bold('CODE')} : ${fmt.bold(String(err.code || 'QUIZ_SOURCES_DOWN').toUpperCase())}`];
       await this.send(fmt.frame('⚠️ SYSTÈME EN PAUSE', msg));
       return true;
     }
@@ -334,26 +375,95 @@ class MangaQuizSession {
     return true;
   }
 
-  /* Charge les personnages depuis Jikan. */
+  /*
+   * Charge les personnages — AniList d'abord, Jikan en repli automatique.
+   * Une seule source suffit pour lancer le quiz.
+   */
   async _loadCharacters(count) {
     if (this.manga === 'multivers') {
-      const data = await jikanGet(`${JIKAN}/top/characters`, { page: 1 }, this.fetchImpl);
-      this.source = 'Multivers';
-      const list = ((data && data.data) || [])
-        .filter((c) => c && c.images && c.images.jpg && c.images.jpg.image_url)
-        .map((c) => ({ name: c.name, image: c.images.jpg.image_url }));
-      return shuffle(list).slice(0, count);
+      try {
+        return await this._multiversAniList(count);
+      } catch (errA) {
+        try {
+          return await this._multiversJikan(count);
+        } catch (errB) {
+          throw sourcesDown(errA, errB);
+        }
+      }
     }
+    try {
+      return await this._mangaAniList(count);
+    } catch (errA) {
+      try {
+        return await this._mangaJikan(count);
+      } catch (errB) {
+        throw sourcesDown(errA, errB);
+      }
+    }
+  }
 
+  /* 🌌 Multivers — top personnages (par popularité) via AniList. */
+  async _multiversAniList(count) {
+    const query = `query ($page: Int, $perPage: Int) {
+      Page(page: $page, perPage: $perPage) {
+        characters(sort: FAVOURITES_DESC) { name { full } image { large } }
+      }
+    }`;
+    const data = await anilistQuery(query, { page: 1, perPage: 50 }, this.fetchImpl);
+    const list = (((data.Page || {}).characters) || [])
+      .filter((c) => c && c.name && c.name.full && c.image && c.image.large)
+      .map((c) => ({ name: c.name.full, image: c.image.large }));
+    if (list.length === 0) throw Object.assign(new Error('AniList vide'), { code: 'ANILIST_BAD_RESPONSE' });
+    this.source = 'Multivers';
+    return shuffle(list).slice(0, count);
+  }
+
+  /* 📚 Manga précis via AniList (replie sur ANIME si le titre est un anime). */
+  async _mangaAniList(count) {
+    const build = (type) => `query ($search: String, $perPage: Int) {
+      Media(search: $search, type: ${type}) {
+        title { romaji english }
+        characters(sort: FAVOURITES_DESC, perPage: $perPage) {
+          edges { node { name { full } image { large } } }
+        }
+      }
+    }`;
+    const vars = { search: this.manga, perPage: 50 };
+    let media = (await anilistQuery(build('MANGA'), vars, this.fetchImpl)).Media;
+    if (!media) media = (await anilistQuery(build('ANIME'), vars, this.fetchImpl)).Media;
+    if (!media) throw Object.assign(new Error('introuvable sur AniList'), { code: 'ANILIST_NOT_FOUND' });
+    const list = (((media.characters || {}).edges) || [])
+      .map((e) => e && e.node)
+      .filter((n) => n && n.name && n.name.full && n.image && n.image.large)
+      .map((n) => ({ name: n.name.full, image: n.image.large }));
+    if (list.length === 0) throw Object.assign(new Error('AniList sans personnages'), { code: 'ANILIST_BAD_RESPONSE' });
+    const t = media.title || {};
+    this.source = t.english || t.romaji || this.manga;
+    return shuffle(list).slice(0, count);
+  }
+
+  /* 🌌 Multivers via Jikan (repli). */
+  async _multiversJikan(count) {
+    const data = await jikanGet(`${JIKAN}/top/characters`, { page: 1 }, this.fetchImpl);
+    this.source = 'Multivers';
+    const list = ((data && data.data) || [])
+      .filter((c) => c && c.images && c.images.jpg && c.images.jpg.image_url)
+      .map((c) => ({ name: c.name, image: c.images.jpg.image_url }));
+    if (list.length === 0) throw Object.assign(new Error('Jikan vide'), { code: 'JIKAN_BAD_RESPONSE' });
+    return shuffle(list).slice(0, count);
+  }
+
+  /* 📚 Manga précis via Jikan (repli). */
+  async _mangaJikan(count) {
     const search = await jikanGet(`${JIKAN}/manga`, { q: this.manga, limit: 1 }, this.fetchImpl);
     const manga = search && search.data && search.data[0];
     if (!manga) throw Object.assign(new Error('manga introuvable'), { code: 'JIKAN_NOT_FOUND' });
     this.source = manga.title || this.manga;
-
     const chars = await jikanGet(`${JIKAN}/manga/${manga.mal_id}/characters`, null, this.fetchImpl);
     const list = ((chars && chars.data) || [])
       .filter((x) => x && x.character && x.character.images && x.character.images.jpg && x.character.images.jpg.image_url)
       .map((x) => ({ name: x.character.name, image: x.character.images.jpg.image_url }));
+    if (list.length === 0) throw Object.assign(new Error('Jikan sans personnages'), { code: 'JIKAN_BAD_RESPONSE' });
     return shuffle(list).slice(0, count);
   }
 
