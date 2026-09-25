@@ -237,6 +237,7 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 | `Xwarn` (en réponse) / `Xwarn list` | Avertissement |
 | `Xkick` (en réponse) | Expulsion si l'API le permet |
 | `Xclear` / `Xclear 3` | Supprime les derniers messages DU BOT uniquement (limite Messenger) |
+| `Xoff` / `Xon` | Éteint / rallume le bot dans CE groupe (silence total, persistant) |
 | `Xadd @Paul` / `Xadd <UID>` | Ajoute un membre |
 
 ### Divers

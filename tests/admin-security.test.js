@@ -131,6 +131,96 @@ test('Xclear v2 : Xclear 3 supprime les 3 derniers messages du bot', async () =>
   );
 });
 
+test('Xoff : extinction du groupe — silence total jusqu’au rallumage par un admin', async () => {
+  const { bot, adapter, db } = await boot();
+  const t = 'off-thread';
+  clearCooldowns(bot);
+
+  // ❌ Un NON-admin ne peut pas éteindre
+  await bot.handleMessage(makeMsg(t, UIDS.shadow, 'Xoff'));
+  assert.ok(lastBody(adapter).includes('ACCÈS REFUSÉ'), 'refus pour un non-admin');
+  assert.ok(!db.getGroup(t).disabled, 'groupe toujours allumé');
+
+  // ✅ L'admin éteint
+  await bot.handleMessage(makeMsg(t, UIDS.admin, 'Xoff'));
+  const offBody = lastBody(adapter);
+  assert.ok(offBody.includes('EXTINCTION'), 'annonce d’extinction');
+  assert.ok(offBody.includes('Xoff'), 'rappel de la commande de rallumage');
+  assert.strictEqual(db.getGroup(t).disabled, true, 'groupe éteint en base');
+
+  // 🔇 Silence TOTAL : plus AUCUNE réponse (même pour l'admin, même Xmenu)
+  const afterOff = adapter.sent.length;
+  await bot.handleMessage(makeMsg(t, UIDS.shadow, 'Xmenu'));
+  await bot.handleMessage(makeMsg(t, UIDS.shadow, 'hello sans préfixe'));
+  await bot.handleMessage(makeMsg(t, UIDS.admin, 'Xmenu'));
+  await bot.handleMessage(makeMsg(t, UIDS.admin, 'Xcoins'));
+  await bot.handleMessage(makeMsg(t, UIDS.owner, 'X'));
+  assert.strictEqual(adapter.sent.length, afterOff, 'aucun message envoyé pendant l’extinction');
+
+  // 🌙 Pas d'annonce de veille non plus
+  const beforeSleep = adapter.sent.length;
+  bot.idle.touch(t);
+  bot.idle.sweep();
+  await new Promise((r) => setTimeout(r, 300));
+  assert.strictEqual(adapter.sent.length, beforeSleep, 'pas d’annonce de veille en groupe éteint');
+
+  // ✅ Rallumage par Xon (alias) — admin uniquement
+  await bot.handleMessage(makeMsg(t, UIDS.admin, 'Xon'));
+  const onBody = lastBody(adapter);
+  assert.ok(onBody.includes('REDÉMARRAGE'), 'annonce de rallumage');
+  assert.strictEqual(db.getGroup(t).disabled, false, 'groupe rallumé');
+
+  // ⚡ Tout refonctionne
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg(t, UIDS.shadow, 'Xmenu'));
+  assert.ok(lastBody(adapter).includes('𝗠𝗘𝗡𝗨') || lastBody(adapter).toLowerCase().includes('menu'), 'commandes à nouveau actives');
+});
+
+test('Xoff : rallumage possible avec Xoff lui-même (toggle)', async () => {
+  const { bot, adapter, db } = await boot();
+  const t = 'toggle-thread';
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg(t, UIDS.admin, 'Xoff'));
+  assert.strictEqual(db.getGroup(t).disabled, true);
+  await bot.handleMessage(makeMsg(t, UIDS.admin, 'Xoff'));
+  assert.strictEqual(db.getGroup(t).disabled, false);
+  assert.ok(lastBody(adapter).includes('REDÉMARRAGE'));
+});
+
+test('Xoff : extinction PERSISTANTE sur disque', async () => {
+  const { bot, db } = await boot();
+  const t = 'persist-off';
+  await bot.handleMessage(makeMsg(t, UIDS.admin, 'Xoff'));
+  db.groups.saveNow();
+  const raw = JSON.parse(require('fs').readFileSync(db.groups.file, 'utf8'));
+  assert.strictEqual(raw[t].disabled, true, 'état sur disque');
+  assert.strictEqual(raw[t].disabledBy, UIDS.admin, 'admin rapporté');
+});
+
+test('Xoff : en privé → refusé (groupe uniquement)', async () => {
+  const { bot, adapter, db } = await boot();
+  // En DM, threadID === senderID (convention du bot)
+  await bot.handleMessage(makeMsg(UIDS.admin, UIDS.admin, 'Xoff'));
+  assert.ok(lastBody(adapter).includes('groupe'), 'réservé aux groupes');
+  assert.ok(!db.getGroup(UIDS.admin) || !db.getGroup(UIDS.admin).disabled);
+});
+
+test('Xoff : les bienvenues sont coupées dans un groupe éteint', async () => {
+  const { bot, adapter, db } = await boot();
+  const t = 'welcome-off';
+  await bot.handleMessage(makeMsg(t, UIDS.admin, 'Xoff'));
+  assert.strictEqual(db.getGroup(t).disabled, true);
+  const before = adapter.sent.length;
+  await bot.handleEvent({
+    type: 'event',
+    threadID: t,
+    logMessageType: 'log:subscribe',
+    logMessageData: { addedParticipants: [{ userFbId: '999888777666555', fullName: 'Nouveau' }] },
+  });
+  await new Promise((r) => setTimeout(r, 300));
+  assert.strictEqual(adapter.sent.length, before, 'aucune bienvenue envoyée');
+});
+
 test('Xwarn : 1/2 puis 2/2 → exclusion automatique', async () => {
   const { bot, adapter, db } = await boot();
   const reply = makeMsg('thread-1', UIDS.shadow, 'insulte');

@@ -45,7 +45,8 @@ class Bot {
     /* 🌙 Mode veille automatique (après IDLE_STANDBY_MINUTES d'inactivité) */
     this.idle = new IdleMonitor(this.config, this.logger, {
       onSleepStart: async (threadID) => {
-        if (this.config.idle.announce) {
+        const grpOff = (() => { const g = this.db.getGroup(threadID); return Boolean(g && g.disabled); })();
+        if (this.config.idle.announce && !grpOff) {
           await this.send(
             fmt.frame('🌙 MODE VEILLE', [
               '🌙 ' + fmt.bold(`Aucune activité depuis ${humanDelay(this.config.idle.standbyMs)}.`),
@@ -126,10 +127,16 @@ class Bot {
       if (senderRec && senderRec.banned) return;
 
       if (isGroup) this.db.ensureGroup(threadID);
-      if (body) this.db.bumpStat('messages');
+      // 🔌 Groupe éteint par un admin ? (silence total sauf Xoff admin)
+      const disabledGroup = (() => {
+        if (!isGroup) return false;
+        const g = this.db.getGroup(threadID);
+        return Boolean(g && g.disabled);
+      })();
+      if (body && !disabledGroup) this.db.bumpStat('messages');
 
-      /* ── Mute actif ? (anti-spam) ── */
-      if (this.antiSpam.isMuted(senderID)) {
+      /* ── Mute actif ? (anti-spam) — silencieux si groupe éteint ── */
+      if (!disabledGroup && this.antiSpam.isMuted(senderID)) {
         const gate = this.cooldowns.check(`mute-notice:${senderID}`, 60_000);
         if (gate.ok) {
           await this.send(
@@ -143,8 +150,8 @@ class Bot {
         return;
       }
 
-      /* ── Anti-spam (groupes, non-admins) ── */
-      if (isGroup && body && !this.config.isAdmin(senderID)) {
+      /* ── Anti-spam (groupes, non-admins) — inactif si groupe éteint ── */
+      if (!disabledGroup && isGroup && body && !this.config.isAdmin(senderID)) {
         const violation = this.antiSpam.observe(threadID, senderID, body);
         if (violation) return this._handleSpamViolation(threadID, senderID, violation);
       }
@@ -199,6 +206,16 @@ class Bot {
         getUserName: (uid) => this.getUserName(uid),
         getUserInfo: (uid) => this.getUserInfo(uid),
       };
+
+      /* ── 🔌 Groupe ÉTEINT par un admin → silence total ──
+       * Seule la commande de réactivation (Xoff/Xon + alias) tapée par un
+       * ADMIN est traitée — tout le reste est ignoré, même pour un admin. */
+      if (disabledGroup) {
+        const t = String(commandName || '');
+        const toggle = ['xoff', 'xon', 'xshutdown', 'xeteindre', 'xpoweroff'].includes(t);
+        if (!(toggle && this.config.isAdmin(senderID))) return; // 🔇 silence
+        return this._runCommand(this.commands.get('xoff'), ctx);
+      }
 
       /* ── 🌙 0) Mode veille : après 30 min d'inactivité, le bot dort ── */
       if (this.idle.isSleeping(threadID)) {
@@ -496,6 +513,8 @@ class Bot {
       if (!event || event.type !== 'event' || !event.logMessageType) return;
 
       if (event.logMessageType === 'log:subscribe') {
+        const grpOff = (() => { const g = this.db.getGroup(String(event.threadID || '')); return Boolean(g && g.disabled); })();
+        if (grpOff) return; // 🔌 groupe éteint → aucun message d'accueil
         this.idle.wake(String(event.threadID || '')); // 👋 un arrivant réveille le bot
         const data = event.logMessageData || {};
         const added = (data.addedParticipants || []).map((u) => ({
@@ -509,6 +528,8 @@ class Bot {
       }
 
       if (event.logMessageType === 'log:unsubscribe') {
+        const grpOff = (() => { const g = this.db.getGroup(String(event.threadID || '')); return Boolean(g && g.disabled); })();
+        if (grpOff) return; // 🔌 groupe éteint → silence
         this.idle.wake(String(event.threadID || ''));
         const data = event.logMessageData || {};
         const left = String(data.leftParticipantFbId || '');

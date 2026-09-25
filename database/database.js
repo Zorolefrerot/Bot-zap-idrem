@@ -133,6 +133,9 @@ class Database {
         name: name || '',
         chatMode: false,
         welcome: true,
+        disabled: false, // 🔌 groupe éteint par un admin → silence total
+        disabledBy: null,
+        disabledAt: null,
         settings: {},
         createdAt: Date.now(),
       };
