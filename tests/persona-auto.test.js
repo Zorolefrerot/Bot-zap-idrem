@@ -107,7 +107,7 @@ test('persona : le prompt système embarque l’identité MeR~NEL (ni ChatGPT, s
   assert.ok(captured.chat.includes("PAS ChatGPT"), 'chat : même identité');
 });
 
-test('cohabitation : un reply à la QUESTION du quiz reste un ANSWER (pas de dérive vers l’IA)', async () => {
+test('cohabitation : une RÉPONSE au quiz (libre) reste un ANSWER (pas de dérive vers l’IA)', async () => {
   const { bot, adapter } = await boot({
     serviceStubs: { chat: { reply: async () => 'PAS POUR LE QUIZ', clear() {}, resetAll() {} } },
   });
@@ -117,15 +117,11 @@ test('cohabitation : un reply à la QUESTION du quiz reste un ANSWER (pas de dé
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
   await until(() => bodies(adapter).some((b) => /QUESTION 1\/5/.test(b)), 15000);
   const session = bot.sessions.get('thread-1', 'quiz');
-  await until(() => session && session.currentQuestionID, 5000);
-  const cgBank = require('../systems/questions/cg.json');
-  const q = bodies(adapter).reverse().find((b) => /QUESTION 1\/5/.test(b));
-  const qText = (q.split('\n').find((l) => l.trim().startsWith('🧠')) || '').replace(/^\s*🧠\s*/, '').trim();
-  const item = cgBank.find((x) => x.q === qText);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, item.answer, {
-    messageReply: { senderID: BOT_ID, messageID: session.currentQuestionID },
-  }));
-  await until(() => bodies(adapter).some((b) => /prend le point|CLASSEMENT/.test(b)), 20000);
+  assert.ok(session && session.questions && session.questions[0], 'question active');
+  const item = session.questions[0];
+  // Réponse directe (sans reply — moteur Xid) au milieu d'un quiz
+  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, item.a));
+  await until(() => session.scores && session.scores.get(UIDS.paul), 15000);
   assert.ok(session.scores.get(UIDS.paul), 'la réponse au quiz marque le point');
   assert.ok(!bodies(adapter).some((b) => b.includes('PAS POUR LE QUIZ')), 'l’IA n’intervient pas sur le quiz');
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cancel'));

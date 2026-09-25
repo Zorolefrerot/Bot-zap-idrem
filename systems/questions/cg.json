@@ -1,62 +1,1200 @@
 [
-  { "q": "Quelle est la capitale du Japon ?", "options": ["Tokyo", "Osaka", "Kyoto", "Séoul"], "answer": "Tokyo" },
-  { "q": "Quelle planète est la plus proche du Soleil ?", "options": ["Mercure", "Vénus", "Mars", "Neptune"], "answer": "Mercure" },
-  { "q": "Qui a écrit « Les Misérables » ?", "options": ["Victor Hugo", "Émile Zola", "Alexandre Dumas", "Molière"], "answer": "Victor Hugo" },
-  { "q": "Quel est le plus grand océan du monde ?", "options": ["Pacifique", "Atlantique", "Indien", "Arctique"], "answer": "Pacifique" },
-  { "q": "Combien y a-t-il de continents sur Terre ?", "options": ["5", "6", "7", "8"], "answer": "7" },
-  { "q": "Quel gaz les plantes absorbent-elles pour la photosynthèse ?", "options": ["Dioxyde de carbone", "Oxygène", "Azote", "Hélium"], "answer": "Dioxyde de carbone" },
-  { "q": "En quelle année l'homme a-t-il marché sur la Lune pour la première fois ?", "options": ["1969", "1965", "1972", "1958"], "answer": "1969" },
-  { "q": "Quel est traditionnellement considéré comme le plus long fleuve du monde ?", "options": ["Le Nil", "L'Amazone", "Le Yangtsé", "Le Mississippi"], "answer": "Le Nil" },
-  { "q": "Quelle est la capitale du Canada ?", "options": ["Ottawa", "Toronto", "Vancouver", "Montréal"], "answer": "Ottawa" },
-  { "q": "Qui a peint la Joconde ?", "options": ["Léonard de Vinci", "Pablo Picasso", "Michel-Ange", "Raphaël"], "answer": "Léonard de Vinci" },
-  { "q": "Quel élément chimique a pour symbole « Fe » ?", "options": ["Fer", "Fluor", "Phosphore", "Francium"], "answer": "Fer" },
-  { "q": "Combien de joueurs composent une équipe de football sur le terrain ?", "options": ["11", "10", "12", "9"], "answer": "11" },
-  { "q": "Quelle est la monnaie du Japon ?", "options": ["Yen", "Won", "Yuan", "Roupie"], "answer": "Yen" },
-  { "q": "Quel pays a offert la Statue de la Liberté aux États-Unis ?", "options": ["France", "Royaume-Uni", "Espagne", "Italie"], "answer": "France" },
-  { "q": "Quel est le plus grand désert chaud du monde ?", "options": ["Sahara", "Kalahari", "Gobi", "Atacama"], "answer": "Sahara" },
-  { "q": "Combien de cordes possède une guitare classique ?", "options": ["6", "4", "7", "12"], "answer": "6" },
-  { "q": "Qui a formulé la théorie de la relativité ?", "options": ["Albert Einstein", "Isaac Newton", "Galilée", "Nikola Tesla"], "answer": "Albert Einstein" },
-  { "q": "Quelle mer borde la France au sud ?", "options": ["La Méditerranée", "La mer Noire", "La mer Baltique", "La mer Rouge"], "answer": "La Méditerranée" },
-  { "q": "Quel est le plus petit pays du monde ?", "options": ["Le Vatican", "Monaco", "Nauru", "Saint-Marin"], "answer": "Le Vatican" },
-  { "q": "En quelle année le mur de Berlin est-il tombé ?", "options": ["1989", "1985", "1991", "1979"], "answer": "1989" },
-  { "q": "Quelle langue compte le plus de locuteurs natifs ?", "options": ["Le mandarin", "L'anglais", "L'espagnol", "Le hindi"], "answer": "Le mandarin" },
-  { "q": "Quel organe pompe le sang dans le corps humain ?", "options": ["Le cœur", "Les poumons", "Le foie", "Les reins"], "answer": "Le cœur" },
-  { "q": "Combien de minutes dure un match de football (hors prolongations) ?", "options": ["90", "80", "100", "120"], "answer": "90" },
-  { "q": "Quelle est la capitale de l'Australie ?", "options": ["Canberra", "Sydney", "Melbourne", "Perth"], "answer": "Canberra" },
-  { "q": "Qui est considéré comme le père de l'informatique (machine de Turing) ?", "options": ["Alan Turing", "Bill Gates", "Steve Jobs", "Tim Berners-Lee"], "answer": "Alan Turing" },
-  { "q": "Quel est l'os le plus long du corps humain ?", "options": ["Le fémur", "Le tibia", "L'humérus", "Le bassin"], "answer": "Le fémur" },
-  { "q": "Quelle planète est surnommée « la planète rouge » ?", "options": ["Mars", "Jupiter", "Vénus", "Saturne"], "answer": "Mars" },
-  { "q": "Combien de côtés possède un hexagone ?", "options": ["6", "5", "7", "8"], "answer": "6" },
-  { "q": "Quel écrivain français a reçu le prix Nobel de littérature en 1957 ?", "options": ["Albert Camus", "Jean-Paul Sartre", "André Gide", "Marcel Proust"], "answer": "Albert Camus" },
-  { "q": "Quelle est la plus haute montagne du monde ?", "options": ["L'Everest", "Le K2", "Le Kilimandjaro", "Le Mont Blanc"], "answer": "L'Everest" },
-  { "q": "Quelle est la capitale de la République démocratique du Congo ?", "options": ["Kinshasa", "Brazzaville", "Lubumbashi", "Goma"], "answer": "Kinshasa" },
-  { "q": "Quel inventeur américain est célèbre pour ses brevets sur l'ampoule électrique ?", "options": ["Thomas Edison", "James Watt", "Alexander Bell", "Guglielmo Marconi"], "answer": "Thomas Edison" },
-  { "q": "Combien d'États membres compte l'Union africaine ?", "options": ["55", "48", "52", "60"], "answer": "55" },
-  { "q": "Quel océan se trouve à l'est des États-Unis ?", "options": ["L'Atlantique", "Le Pacifique", "L'Indien", "L'Arctique"], "answer": "L'Atlantique" },
-  { "q": "Quelle est la formule chimique de l'eau ?", "options": ["H2O", "CO2", "O2", "NaCl"], "answer": "H2O" },
-  { "q": "Qui a écrit « Roméo et Juliette » ?", "options": ["William Shakespeare", "Charles Dickens", "Victor Hugo", "Molière"], "answer": "William Shakespeare" },
-  { "q": "Quelle est approximativement la vitesse de la lumière ?", "options": ["300 000 km/s", "150 000 km/s", "1 million km/s", "30 000 km/s"], "answer": "300 000 km/s" },
-  { "q": "Combien de couleurs compte traditionnellement l'arc-en-ciel ?", "options": ["7", "5", "6", "9"], "answer": "7" },
-  { "q": "Quel pays est surnommé « le pays du soleil levant » ?", "options": ["Le Japon", "La Chine", "La Corée du Sud", "La Thaïlande"], "answer": "Le Japon" },
-  { "q": "Quelle est la capitale du Sénégal ?", "options": ["Dakar", "Bamako", "Conakry", "Abidjan"], "answer": "Dakar" },
-  { "q": "Quel sport a rendu célèbre Michael Jordan ?", "options": ["Basket-ball", "Football", "Baseball", "Boxe"], "answer": "Basket-ball" },
-  { "q": "Combien de lettres compte l'alphabet français ?", "options": ["26", "24", "25", "27"], "answer": "26" },
-  { "q": "Quel gaz rend les boissons pétillantes ?", "options": ["Dioxyde de carbone", "Oxygène", "Hélium", "Hydrogène"], "answer": "Dioxyde de carbone" },
-  { "q": "Qui fut le premier président des États-Unis ?", "options": ["George Washington", "Abraham Lincoln", "Thomas Jefferson", "John Adams"], "answer": "George Washington" },
-  { "q": "Quelle est la plus grande île du monde ?", "options": ["Groenland", "Madagascar", "Cuba", "Islande"], "answer": "Groenland" },
-  { "q": "En quelle année la Première Guerre mondiale a-t-elle commencé ?", "options": ["1914", "1918", "1912", "1920"], "answer": "1914" },
-  { "q": "Quel instrument sert à mesurer la température ?", "options": ["Le thermomètre", "Le baromètre", "L'anémomètre", "Le chronomètre"], "answer": "Le thermomètre" },
-  { "q": "Quelle est la capitale du Brésil ?", "options": ["Brasília", "Rio de Janeiro", "São Paulo", "Salvador"], "answer": "Brasília" },
-  { "q": "Combien de roues possède un tricycle ?", "options": ["3", "2", "4", "1"], "answer": "3" },
-  { "q": "Quelle mer est la plus salée du monde ?", "options": ["La mer Morte", "La mer Rouge", "La mer Baltique", "La mer d'Aral"], "answer": "La mer Morte" },
-  { "q": "Qui a découvert la pénicilline ?", "options": ["Alexander Fleming", "Louis Pasteur", "Marie Curie", "Robert Koch"], "answer": "Alexander Fleming" },
-  { "q": "Quelle est la langue officielle du Brésil ?", "options": ["Portugais", "Espagnol", "Français", "Italien"], "answer": "Portugais" },
-  { "q": "Combien y a-t-il de secondes dans une heure ?", "options": ["3600", "3000", "4200", "600"], "answer": "3600" },
-  { "q": "Quel peintre est connu pour avoir coupé son propre oreille ?", "options": ["Vincent van Gogh", "Claude Monet", "Salvador Dalí", "Paul Gauguin"], "answer": "Vincent van Gogh" },
-  { "q": "Quelle est la capitale de l'Égypte ?", "options": ["Le Caire", "Alexandrie", "Gizeh", "Louxor"], "answer": "Le Caire" },
-  { "q": "Quelle planète possède le plus de lunes connues ?", "options": ["Saturne", "Jupiter", "Uranus", "Neptune"], "answer": "Saturne" },
-  { "q": "Parmi les 7 merveilles du monde antique, laquelle se dressait à Alexandrie ?", "options": ["Le Phare", "La grande pyramide", "Le Colosse", "Les jardins suspendus"], "answer": "Le Phare" },
-  { "q": "Quelle est l'unité de mesure de la force ?", "options": ["Le newton", "Le joule", "Le watt", "Le pascal"], "answer": "Le newton" },
-  { "q": "Quel est le symbole chimique de l'or ?", "options": ["Au", "Ag", "Or", "Fe"], "answer": "Au" },
-  { "q": "Combien de joueurs d'une équipe de basketball sont sur le terrain ?", "options": ["5", "6", "7", "4"], "answer": "5" }
+ {
+  "a": "Lionel Messi",
+  "q": "Argentin octuple Ballon d'Or formé à La Masia",
+  "alts": [
+   "Messi"
+  ]
+ },
+ {
+  "a": "Cristiano Ronaldo",
+  "q": "Portugais au cri de « Siuuu », meilleur buteur de l'histoire des sélections",
+  "alts": [
+   "Ronaldo",
+   "CR7"
+  ]
+ },
+ {
+  "a": "Pelé",
+  "q": "Brésilien triple champion du monde, « O Rei », décédé en 2022",
+  "alts": [
+   "Pele"
+  ]
+ },
+ {
+  "a": "Diego Maradona",
+  "q": "Argentin à la main de Dieu et au but du siècle",
+  "alts": [
+   "Maradona"
+  ]
+ },
+ {
+  "a": "Zinedine Zidane",
+  "q": "Français à la tête vermoulue de 2006, doublé en finale 98",
+  "alts": [
+   "Zidane"
+  ]
+ },
+ {
+  "a": "Ronaldinho",
+  "q": "Brésilien au sourire permanent, maître des gestes impossibles au Barça"
+ },
+ {
+  "a": "Neymar",
+  "q": "Brésilien record de transfert au PSG en 2017"
+ },
+ {
+  "a": "Kylian Mbappé",
+  "q": "Buteur de la finale 2022, formé à Monaco, étoile du Real",
+  "alts": [
+   "Mbappe"
+  ]
+ },
+ {
+  "a": "Erling Haaland",
+  "q": "Colosse norvégien buteur de Manchester City",
+  "alts": [
+   "Haaland"
+  ]
+ },
+ {
+  "a": "Karim Benzema",
+  "q": "Français Ballon d'Or 2022 après sa légende du Real",
+  "alts": [
+   "Benzema"
+  ]
+ },
+ {
+  "a": "Luka Modric",
+  "q": "Croix Ballon d'Or 2018, milieu du Real",
+  "alts": [
+   "Modric"
+  ]
+ },
+ {
+  "a": "Mohamed Salah",
+  "q": "Égyptien éclair de Liverpool surnommé le Pharaon",
+  "alts": [
+   "Salah"
+  ]
+ },
+ {
+  "a": "Kevin De Bruyne",
+  "q": "Belge aux passes chirurgicales de City",
+  "alts": [
+   "De Bruyne"
+  ]
+ },
+ {
+  "a": "Kaka",
+  "q": "Brésilien Ballon d'Or 2007 avant l'ère Messi-Ronaldo",
+  "alts": [
+   "Kaká"
+  ]
+ },
+ {
+  "a": "Fabio Cannavaro",
+  "q": "Défenseur italien Ballon d'Or 2006"
+ },
+ {
+  "a": "Gianluigi Buffon",
+  "q": "Gardien légendaire italien champion du monde 2006"
+ },
+ {
+  "a": "Paolo Maldini",
+  "q": "Défenseur une seule vie à Milan pendant 25 saisons"
+ },
+ {
+  "a": "Franz Beckenbauer",
+  "q": "Allemand surnommé le Kaiser, inventeur du libéro moderne"
+ },
+ {
+  "a": "Johan Cruyff",
+  "q": "Néerlandais à la pirouette, père du football total"
+ },
+ {
+  "a": "Michel Platini",
+  "q": "Français triple Ballon d'Or des années 80"
+ },
+ {
+  "a": "Marco Van Basten",
+  "q": "Néerlandais au volley acrobatique de l'Euro 88"
+ },
+ {
+  "a": "Eusebio",
+  "q": "Portugais de Benfica surnommé la Panthère Noire"
+ },
+ {
+  "a": "Ferenc Puskás",
+  "q": "Hongrois de la « Mi-Équipe d'or » au tir cannon"
+ },
+ {
+  "a": "Xavi",
+  "q": "Milieu mètreur de passes du Barça, cerveau du tiki-taka"
+ },
+ {
+  "a": "Andres Iniesta",
+  "q": "Auteur du but de la première étoile espagnole en 2010"
+ },
+ {
+  "a": "Sergio Ramos",
+  "q": "Défenseur buteur aux derniers minutes légendaires du Real"
+ },
+ {
+  "a": "Iker Casillas",
+  "q": "Gardien espagnol surnommé Saint Iker"
+ },
+ {
+  "a": "Lev Yachine",
+  "q": "Gardien soviétique unique Ballon d'Or, le Chat Noir",
+  "alts": [
+   "Yachine",
+   "Lev Yashin"
+  ]
+ },
+ {
+  "a": "Zlatan Ibrahimovic",
+  "q": "Suédois au « Zlatan-time », karatéka du ballon",
+  "alts": [
+   "Zlatan",
+   "Ibrahimovic"
+  ]
+ },
+ {
+  "a": "Luis Suarez",
+  "q": "Uruguayen mordu de buts et... d'adversaires",
+  "alts": [
+   "Suarez"
+  ]
+ },
+ {
+  "a": "Antoine Griezmann",
+  "q": "Attaquant français star de l'Atlético, mondial 2018",
+  "alts": [
+   "Griezmann"
+  ]
+ },
+ {
+  "a": "Olivier Giroud",
+  "q": "Buteur français labourer devenu meilleur buteur des Bleus",
+  "alts": [
+   "Giroud"
+  ]
+ },
+ {
+  "a": "Hugo Lloris",
+  "q": "Gardien-capitaine français de la période 2018",
+  "alts": [
+   "Lloris"
+  ]
+ },
+ {
+  "a": "N'Golo Kante",
+  "q": "Milieu français qui a récupéré le double de la planète",
+  "alts": [
+   "Kante",
+   "Kanté"
+  ]
+ },
+ {
+  "a": "Paul Pogba",
+  "q": "Milieu français à la touche de cheveux changeante",
+  "alts": [
+   "Pogba"
+  ]
+ },
+ {
+  "a": "Vinicius Junior",
+  "q": "Brésilien filant du Real, MVP de la finale 2022",
+  "alts": [
+   "Vinicius"
+  ]
+ },
+ {
+  "a": "Jude Bellingham",
+  "q": "Anglais au célébration bras écartés du Real",
+  "alts": [
+   "Bellingham"
+  ]
+ },
+ {
+  "a": "Gareth Bale",
+  "q": "Gallois au cœur de la caste et au soulevé de drapeau",
+  "alts": [
+   "Bale"
+  ]
+ },
+ {
+  "a": "Wayne Rooney",
+  "q": "Buteur anglai légende de Manchester United",
+  "alts": [
+   "Rooney"
+  ]
+ },
+ {
+  "a": "David Beckham",
+  "q": "Milieu anglai à la frappe bannie et au n°7 de United",
+  "alts": [
+   "Beckham"
+  ]
+ },
+ {
+  "a": "Thierry Henry",
+  "q": "Buteur français d'Arsenal devenu commentateur",
+  "alts": [
+   "Henry"
+  ]
+ },
+ {
+  "a": "Ronaldo Nazario",
+  "q": "Brésilien « phénomène » aux deux Coupes du monde avant CR7",
+  "alts": [
+   "Ronaldo Fenomeno",
+   "Le Phénomène"
+  ]
+ },
+ {
+  "a": "Romário",
+  "q": "Brésilien buteur de la Coupe du monde 1994"
+ },
+ {
+  "a": "Rivaldo",
+  "q": "Brésilien au ballon du gauche volcanique de 2002"
+ },
+ {
+  "a": "Michael Jordan",
+  "q": "Numéro 23 des Bulls, six anneaux, le GOAT du basket",
+  "alts": [
+   "Jordan"
+  ]
+ },
+ {
+  "a": "LeBron James",
+  "q": "« The King », meilleur marqueur de l'histoire de la NBA",
+  "alts": [
+   "Lebron",
+   "LeBron"
+  ]
+ },
+ {
+  "a": "Kobe Bryant",
+  "q": "« Black Mamba », 81 points en un match, 5 anneaux",
+  "alts": [
+   "Kobe"
+  ]
+ },
+ {
+  "a": "Stephen Curry",
+  "q": "Meilleur tireur à trois points de l'histoire des Warriors",
+  "alts": [
+   "Curry"
+  ]
+ },
+ {
+  "a": "Kevin Durant",
+  "q": "Squelette à deux mètres, deux anneaux, MVP de finales",
+  "alts": [
+   "Durant"
+  ]
+ },
+ {
+  "a": "Shaquille O'Neal",
+  "q": "Colosse au dunk briseur de panneaux"
+ },
+ {
+  "a": "Magic Johnson",
+  "q": "Meneur souriant du Showtime des Lakers des années 80",
+  "alts": [
+   "Magic"
+  ]
+ },
+ {
+  "a": "Larry Bird",
+  "q": "Rival de Magic, celtique au tir parfait"
+ },
+ {
+  "a": "Kareem Abdul-Jabbar",
+  "q": "Skyhook imparable, meilleur marqueur avant LeBron",
+  "alts": [
+   "Kareem"
+  ]
+ },
+ {
+  "a": "Wilt Chamberlain",
+  "q": "100 points en un match, record intouchable",
+  "alts": [
+   "Wilt"
+  ]
+ },
+ {
+  "a": "Bill Russell",
+  "q": "11 anneaux en 13 saisons, légende défensive des Celtics",
+  "alts": [
+   "Russell"
+  ]
+ },
+ {
+  "a": "Tim Duncan",
+  "q": "« The Big Fundamental », pilier discret des Spurs",
+  "alts": [
+   "Duncan"
+  ]
+ },
+ {
+  "a": "Giannis Antetokounmpo",
+  "q": "« Greek Freak », MVP grec des Bucks",
+  "alts": [
+   "Giannis"
+  ]
+ },
+ {
+  "a": "Nikola Jokic",
+  "q": "Serbe centre-meneur MVP, triple-double en série",
+  "alts": [
+   "Jokic"
+  ]
+ },
+ {
+  "a": "Luka Doncic",
+  "q": "Slovène magicien des Mavericks",
+  "alts": [
+   "Doncic"
+  ]
+ },
+ {
+  "a": "Kawhi Leonard",
+  "q": "Main de fer et rire rare, deux titres avec deux franchises",
+  "alts": [
+   "Kawhi"
+  ]
+ },
+ {
+  "a": "James Harden",
+  "q": "Barbe iconique du step-back",
+  "alts": [
+   "Harden"
+  ]
+ },
+ {
+  "a": "Russell Westbrook",
+  "q": "Triple-double en moyenne sur une saison",
+  "alts": [
+   "Westbrook"
+  ]
+ },
+ {
+  "a": "Allen Iverson",
+  "q": "« The Answer », petite taille, grand cœur, crossover",
+  "alts": [
+   "Iverson"
+  ]
+ },
+ {
+  "a": "Vince Carter",
+  "q": "Demi-homme, demi-spectacle au dunk olympique",
+  "alts": [
+   "Carter"
+  ]
+ },
+ {
+  "a": "Dirk Nowitzki",
+  "q": "Allemand à la fadeaway légendaire des Mavericks",
+  "alts": [
+   "Nowitzki",
+   "Dirk"
+  ]
+ },
+ {
+  "a": "Tony Parker",
+  "q": "Meneur français quadruple champion des Spurs",
+  "alts": [
+   "Parker"
+  ]
+ },
+ {
+  "a": "Dwyane Wade",
+  "q": "« Flash » du Heat aux trois anneaux",
+  "alts": [
+   "Wade"
+  ]
+ },
+ {
+  "a": "Chris Paul",
+  "q": "« Point God » du passif de la NBA",
+  "alts": [
+   "Paul"
+  ]
+ },
+ {
+  "a": "Usain Bolt",
+  "q": "Jamaïcain le plus rapide de l'histoire sur 100 m",
+  "alts": [
+   "Bolt"
+  ]
+ },
+ {
+  "a": "Serena Williams",
+  "q": "23 titres du Grand Chelem en tennis féminin",
+  "alts": [
+   "Serena"
+  ]
+ },
+ {
+  "a": "Roger Federer",
+  "q": "Suisse aux 8 Wimbledon, élégance du tennis",
+  "alts": [
+   "Federer"
+  ]
+ },
+ {
+  "a": "Rafael Nadal",
+  "q": "Taureau de Majorque, roi de Roland-Garros",
+  "alts": [
+   "Nadal"
+  ]
+ },
+ {
+  "a": "Novak Djokovic",
+  "q": "Serbe recordman de titres du Grand Chelem",
+  "alts": [
+   "Djokovic"
+  ]
+ },
+ {
+  "a": "Tiger Woods",
+  "q": "Golf légendaire au tigre du même surnom",
+  "alts": [
+   "Tiger"
+  ]
+ },
+ {
+  "a": "Muhammad Ali",
+  "q": "Boxeur « plus grand », flotte comme un papillon",
+  "alts": [
+   "Ali",
+   "Cassius Clay"
+  ]
+ },
+ {
+  "a": "Mike Tyson",
+  "q": "Boxeur au morsure d'oreille et KO foudroyant",
+  "alts": [
+   "Tyson"
+  ]
+ },
+ {
+  "a": "Ferrari",
+  "q": "Marque italienne au cheval cabré"
+ },
+ {
+  "a": "Lamborghini",
+  "q": "Marque au taureau, née d'une rivalité avec le tracteur du même propriétaire"
+ },
+ {
+  "a": "Porsche",
+  "q": "Marque allemande de la 911 légendaire"
+ },
+ {
+  "a": "Bugatti",
+  "q": "Marque française-allemande de la Veyron à 400 km/h"
+ },
+ {
+  "a": "Rolls-Royce",
+  "q": "Marque britannique du Spirit of Ecstasy sur le capot"
+ },
+ {
+  "a": "Mercedes",
+  "q": "Marque à l'étoile de Stuttgart"
+ },
+ {
+  "a": "BMW",
+  "q": "Marque bavaroise au losange bleu et blanc"
+ },
+ {
+  "a": "Audi",
+  "q": "Marque aux quatre anneaux"
+ },
+ {
+  "a": "Tesla",
+  "q": "Marque électrique d'Elon Musk"
+ },
+ {
+  "a": "Toyota",
+  "q": "Premier constructeur mondial, japonais, créateur de la Prius"
+ },
+ {
+  "a": "Honda",
+  "q": "Constructeur japonais de la Civic et des moteurs de F1"
+ },
+ {
+  "a": "Nissan",
+  "q": "Constructeur de la GT-R surnommée Godzilla"
+ },
+ {
+  "a": "Ford",
+  "q": "Constructeur américain de la Model T et de la Mustang"
+ },
+ {
+  "a": "Chevrolet",
+  "q": "Marque américaine de la Camaro, filiale de GM"
+ },
+ {
+  "a": "Dodge",
+  "q": "Marque américaine des Charger et Challenger musclées"
+ },
+ {
+  "a": "McLaren",
+  "q": "Écurie et constructeur britannique de F1 et d'hypercars"
+ },
+ {
+  "a": "Aston Martin",
+  "q": "Marque de James Bond"
+ },
+ {
+  "a": "Bentley",
+  "q": "Marque de luxe britannique au « B » ailé"
+ },
+ {
+  "a": "Maserati",
+  "q": "Marque italienne au trident"
+ },
+ {
+  "a": "Jaguar",
+  "q": "Félin britannique devenu électrique"
+ },
+ {
+  "a": "Peugeot",
+  "q": "Constructeur français au lion"
+ },
+ {
+  "a": "Renault",
+  "q": "Constructeur français au losange, fondateur Fernand"
+ },
+ {
+  "a": "Citroen",
+  "q": "Constructeur français aux chevrons"
+ },
+ {
+  "a": "Fiat",
+  "q": "Constructeur italien de Turin"
+ },
+ {
+  "a": "Alfa Romeo",
+  "q": "Marque milanaise au serpent et à la croix"
+ },
+ {
+  "a": "Volvo",
+  "q": "Constructeur suédois synonyme de sécurité"
+ },
+ {
+  "a": "Koenigsegg",
+  "q": "Hypercar suédoise qui défie Bugatti"
+ },
+ {
+  "a": "Pagani",
+  "q": "Hypercar italienne d'Horacio, artisan argentin"
+ },
+ {
+  "a": "Elephant",
+  "q": "Plus grand animal terrestre"
+ },
+ {
+  "a": "Girafe",
+  "q": "Animal au cou le plus long du monde"
+ },
+ {
+  "a": "Hippopotame",
+  "q": "Mammifère semi-aquatique africain le plus dangereux"
+ },
+ {
+  "a": "Rhinoceros",
+  "q": "Pachyderme cornu chassé pour sa corne",
+  "alts": [
+   "Rhinocéros"
+  ]
+ },
+ {
+  "a": "Guepard",
+  "q": "Animal terrestre le plus rapide"
+ },
+ {
+  "a": "Leopard",
+  "q": "Grand félin tacheté qui hisse ses proies dans les arbres"
+ },
+ {
+  "a": "Tiger",
+  "q": "Plus grand félin du monde, rayé"
+ },
+ {
+  "a": "Loup",
+  "q": "Prédateur social hurlant à la lune"
+ },
+ {
+  "a": "Renard",
+  "q": "Canidé roux rusé à la queue brossée"
+ },
+ {
+  "a": "Ours Polaire",
+  "q": "Plus grand prédateur terrestre, roi de l'Arctique",
+  "alts": [
+   "Ours polaire"
+  ]
+ },
+ {
+  "a": "Panda",
+  "q": "Ours noir et blanc qui ne mange que du bambou"
+ },
+ {
+  "a": "Koala",
+  "q": "Marsupial australien qui dort 20h par jour dans l'eucalyptus"
+ },
+ {
+  "a": "Kangourou",
+  "q": "Marsupial bondissant à la poche ventrale"
+ },
+ {
+  "a": "Dauphin",
+  "q": "Mammifère marin très intelligent qui vit en groupes"
+ },
+ {
+  "a": "Baleine Bleue",
+  "q": "Plus grand animal ayant jamais existé",
+  "alts": [
+   "Baleine bleue"
+  ]
+ },
+ {
+  "a": "Requin",
+  "q": "Grand prédateur marin aux dents renouvelables"
+ },
+ {
+  "a": "Poulpe",
+  "q": "Mollusque à huit bras très intelligent qui change de couleur"
+ },
+ {
+  "a": "Cameleon",
+  "q": "Reptile qui change de couleur et roule ses yeux",
+  "alts": [
+   "Caméléon"
+  ]
+ },
+ {
+  "a": "Paresseux",
+  "q": "Animal le plus lent des arbres"
+ },
+ {
+  "a": "Autruche",
+  "q": "Oiseau le plus rapide en course, incapable de voler"
+ },
+ {
+  "a": "Aigle",
+  "q": "Rapace au vol majestueux, symbole des empires"
+ },
+ {
+  "a": "Hibou",
+  "q": "Oiseau de nuit à la tête rotative"
+ },
+ {
+  "a": "Perroquet",
+  "q": "Oiseau qui répète les mots"
+ },
+ {
+  "a": "Flamant Rose",
+  "q": "Oiseau rose qui dort sur une patte",
+  "alts": [
+   "Flamant"
+  ]
+ },
+ {
+  "a": "Fourmi",
+  "q": "Insecte travailleur qui peut porter 50 fois son poids"
+ },
+ {
+  "a": "Abeille",
+  "q": "Insecte pollinisateur qui produit le miel"
+ },
+ {
+  "a": "Araignee",
+  "q": "Arachnide tisseuse de toiles",
+  "alts": [
+   "Araignée"
+  ]
+ },
+ {
+  "a": "Scorpion",
+  "q": "Arachnide à la queue venimeuse"
+ },
+ {
+  "a": "Tortue",
+  "q": "Reptile à carapace qui vit plus de 150 ans pour certaines"
+ },
+ {
+  "a": "Caméléon",
+  "q": "Reptile à la langue fusée et au regard indépendant",
+  "alts": [
+   "Caméléon"
+  ]
+ },
+ {
+  "a": "Ampoule",
+  "q": "Invention électrique attribuée à Edison en 1879"
+ },
+ {
+  "a": "Telephone",
+  "q": "Invention de Graham Bell en 1876"
+ },
+ {
+  "a": "Avion",
+  "q": "Invention des frères Wright en 1903"
+ },
+ {
+  "a": "Imprimerie",
+  "q": "Invention de Gutenberg vers 1450"
+ },
+ {
+  "a": "Machine à Vapeur",
+  "q": "Invention perfectionnée par James Watt, cœur de la révolution industrielle"
+ },
+ {
+  "a": "Dynamite",
+  "q": "Invention d'Alfred Nobel qui a financé un prix célèbre"
+ },
+ {
+  "a": "Penicilline",
+  "q": "Découverte accidentelle de Fleming en 1928",
+  "alts": [
+   "Pénicilline"
+  ]
+ },
+ {
+  "a": "World Wide Web",
+  "q": "Invention de Tim Berners-Lee en 1989 au CERN",
+  "alts": [
+   "WWW"
+  ]
+ },
+ {
+  "a": "Radio",
+  "q": "Invention attribuée à Marconi, une des premières transmissions sans fil"
+ },
+ {
+  "a": "Television",
+  "q": "Invention de Baird, démonstration en 1926"
+ },
+ {
+  "a": "Boussole",
+  "q": "Invention chinoise qui indique le nord"
+ },
+ {
+  "a": "Papier",
+  "q": "Invention chinoise attribuée à Cai Lun"
+ },
+ {
+  "a": "Poudre a Canon",
+  "q": "Invention chinoise aux usines militaires et festives",
+  "alts": [
+   "Poudre à canon"
+  ]
+ },
+ {
+  "a": "Microscope",
+  "q": "Invention perfectionnée par Leeuwenhoek qui vit les premiers microbes"
+ },
+ {
+  "a": "Vaccin",
+  "q": "Découverte de Jenner contre la variole en 1796"
+ },
+ {
+  "a": "Relativite",
+  "q": "Théorie d'Einstein : E = mc²",
+  "alts": [
+   "Relativité"
+  ]
+ },
+ {
+  "a": "Gravite",
+  "q": "Loi d'Newton, la pomme légendaire",
+  "alts": [
+   "Gravitation"
+  ]
+ },
+ {
+  "a": "Michael Jackson",
+  "q": "« Roi de la Pop », moonwalk et « Thriller »",
+  "alts": [
+   "MJ"
+  ]
+ },
+ {
+  "a": "Elvis Presley",
+  "q": "« Roi du Rock'n'Roll », déhanchements scandaleux",
+  "alts": [
+   "Elvis"
+  ]
+ },
+ {
+  "a": "Beatles",
+  "q": "Quatuor de Liverpool qui a révolutionné la musique",
+  "alts": [
+   "Les Beatles",
+   "The Beatles"
+  ]
+ },
+ {
+  "a": "Freddie Mercury",
+  "q": "Voix légendaire de Queen, Bohemian Rhapsody",
+  "alts": [
+   "Freddie"
+  ]
+ },
+ {
+  "a": "Queen",
+  "q": "Groupe de « We Will Rock You » et de « Don't Stop Me Now »"
+ },
+ {
+  "a": "Beyonce",
+  "q": "Reine de la pop, ex-membre des Destiny's Child"
+ },
+ {
+  "a": "Rihanna",
+  "q": "Barbadienne devenue milliardaire avec le maquillage Fenty"
+ },
+ {
+  "a": "Taylor Swift",
+  "q": "Américaine aux tournées Eras record"
+ },
+ {
+  "a": "Eminem",
+  "q": "Rappeur blanc de Detroit, « Lose Yourself »"
+ },
+ {
+  "a": "Drake",
+  "q": "Canadien de Toronto, roi des streams"
+ },
+ {
+  "a": "Madonna",
+  "q": "« Reine de la Pop » des années 80 à nos jours"
+ },
+ {
+  "a": "Leonardo DiCaprio",
+  "q": "Acteur de Titanic devenu Oscar avec The Revenant"
+ },
+ {
+  "a": "Brad Pitt",
+  "q": "Acteur de Fight Club et Once Upon a Time",
+  "alts": [
+   "Pitt"
+  ]
+ },
+ {
+  "a": "Angelina Jolie",
+  "q": "Actrice de Maleficent et ambassadrice de l'ONU",
+  "alts": [
+   "Jolie"
+  ]
+ },
+ {
+  "a": "Tom Cruise",
+  "q": "Acteur de Mission Impossible qui fait ses cascades lui-même",
+  "alts": [
+   "Cruise"
+  ]
+ },
+ {
+  "a": "Will Smith",
+  "q": "Acteur de Men in Black et de La Méthode Williams",
+  "alts": [
+   "Smith"
+  ]
+ },
+ {
+  "a": "Dwayne Johnson",
+  "q": "Catcheur devenu acteur, surnommé The Rock",
+  "alts": [
+   "The Rock"
+  ]
+ },
+ {
+  "a": "Arnold Schwarzenegger",
+  "q": "Mr. Olympia devenu Terminator puis gouverneur",
+  "alts": [
+   "Arnold",
+   "Schwarzenegger"
+  ]
+ },
+ {
+  "a": "Bruce Lee",
+  "q": "Légende des arts martiaux au cinéma, nunchaku iconique",
+  "alts": [
+   "Lee"
+  ]
+ },
+ {
+  "a": "Jackie Chan",
+  "q": "Cascadeur-humoriste des arts martiaux de Hong Kong",
+  "alts": [
+   "Chan"
+  ]
+ },
+ {
+  "a": "Shakira",
+  "q": "Chanteuse colombienne aux hanches qui ne mentent pas"
+ },
+ {
+  "a": "Wizkid",
+  "q": "Star nigériane de l'afrobeats, Grammy Award"
+ },
+ {
+  "a": "Davido",
+  "q": "Star de l'afrobeats nigériane, « Fall » et « Fem »"
+ },
+ {
+  "a": "Fally Ipupa",
+  "q": "Star de la rumba congolaise, ex-chanteur de Quartier Latin"
+ },
+ {
+  "a": "Koffi Olomide",
+  "q": "Star de la rumba congolaise, leader du Quartier Latin avant Fally"
+ },
+ {
+  "a": "Papa Wemba",
+  "q": "« Roi de la rumba rock » congolaise, décédé en 2016"
+ },
+ {
+  "a": "Youssou N'Dour",
+  "q": "Star sénégalaise de la world music, « 7 Seconds »"
+ },
+ {
+  "a": "Tour Eiffel",
+  "q": "Monument parisien construit en 1889"
+ },
+ {
+  "a": "Statue de la Liberte",
+  "q": "Cadeau de la France aux États-Unis en 1886",
+  "alts": [
+   "Statue de la Liberté"
+  ]
+ },
+ {
+  "a": "Colisee",
+  "q": "Arène antique de Rome",
+  "alts": [
+   "Colisée"
+  ]
+ },
+ {
+  "a": "Taj Mahal",
+  "q": "Mausolée blanc d'Inde, témoignage d'amour"
+ },
+ {
+  "a": "Grande Muraille",
+  "q": "Construction chinoise visible depuis l'espace... presque"
+ },
+ {
+  "a": "Pyramides",
+  "q": "Monuments funéraires égyptiens de Gizeh"
+ },
+ {
+  "a": "Machu Picchu",
+  "q": "Cité inca perchée au Pérou"
+ },
+ {
+  "a": "Sagrada Familia",
+  "q": "Basilique inachevée de Barcelone par Gaudi"
+ },
+ {
+  "a": "Big Ben",
+  "q": "Clocher iconique de Londres"
+ },
+ {
+  "a": "Burj Khalifa",
+  "q": "Plus grande tour du monde, à Dubaï"
+ },
+ {
+  "a": "Kilimandjaro",
+  "q": "Plus haut sommet d'Afrique, en Tanzanie"
+ },
+ {
+  "a": "Amazonie",
+  "q": "Plus grande forêt tropicale, poumon vert"
+ },
+ {
+  "a": "Sahara",
+  "q": "Plus grand désert chaud du monde"
+ },
+ {
+  "a": "Pacifique",
+  "q": "Plus grand océan du monde"
+ },
+ {
+  "a": "Nil",
+  "q": "Fleuve mythique d'Afrique du Nord-Est, 6650 km"
+ },
+ {
+  "a": "Everest",
+  "q": "Plus haut sommet du monde, 8849 m"
+ },
+ {
+  "a": "Inde",
+  "q": "Pays le plus peuplé du monde depuis 2023"
+ },
+ {
+  "a": "Russie",
+  "q": "Plus grand pays du monde en superficie"
+ },
+ {
+  "a": "Vatican",
+  "q": "Plus petit pays du monde"
+ },
+ {
+  "a": "Canada",
+  "q": "Pays au plus long littoral et au sirop d'érable"
+ },
+ {
+  "a": "Japon",
+  "q": "Pays du soleil levant"
+ },
+ {
+  "a": "Australie",
+  "q": "Pays-continent des kangourous"
+ },
+ {
+  "a": "Pays-Bas",
+  "q": "Pays des tulipes, des moulins et des canaux",
+  "alts": [
+   "Hollande"
+  ]
+ },
+ {
+  "a": "Argentine",
+  "q": "Pays du tango et du Mate"
+ },
+ {
+  "a": "Bresil",
+  "q": "Pays du carnaval de Rio et du football roi",
+  "alts": [
+   "Brésil"
+  ]
+ },
+ {
+  "a": "Jamaique",
+  "q": "Pays de Bob Marley et du sprint"
+ },
+ {
+  "a": "Coree du Sud",
+  "q": "Pays de la K-pop et des kdramas",
+  "alts": [
+   "Corée du Sud"
+  ]
+ },
+ {
+  "a": "Egypte",
+  "q": "Pays des pharaons et du Nil"
+ },
+ {
+  "a": "Grece",
+  "q": "Berceau des Jeux Olympiques antiques"
+ },
+ {
+  "a": "Chine",
+  "q": "Pays qui a inventé papier, boussole et poudre"
+ },
+ {
+  "a": "Turquie",
+  "q": "Pays à cheval sur deux continents"
+ },
+ {
+  "a": "Indonesie",
+  "q": "Plus grand archipel du monde"
+ },
+ {
+  "a": "Madagascar",
+  "q": "Grande île aux lémuriens, au large de l'Afrique"
+ },
+ {
+  "a": "Congo",
+  "q": "Fleuve le plus profond du monde, en Afrique centrale"
+ },
+ {
+  "a": "Didier Drogba",
+  "q": "Ivoirien buteur légende de Chelsea, « Drogba President »",
+  "alts": [
+   "Drogba"
+  ]
+ },
+ {
+  "a": "Yaya Toure",
+  "q": "Milieu ivoirien puissant de Manchester City",
+  "alts": [
+   "Yaya Touré",
+   "Touré"
+  ]
+ },
+ {
+  "a": "Samuel Eto'o",
+  "q": "Camerounais quadruple meilleur africain, légende du Barça",
+  "alts": [
+   "Etoo",
+   "Eto"
+  ]
+ },
+ {
+  "a": "George Weah",
+  "q": "Seul africain Ballon d'Or (1995), devenu président du Liberia",
+  "alts": [
+   "Weah"
+  ]
+ },
+ {
+  "a": "Sadio Mane",
+  "q": "Sénégalais Ballon d'Or africain 2022, légende de Liverpool",
+  "alts": [
+   "Mané",
+   "Mane"
+  ]
+ },
+ {
+  "a": "Riyad Mahrez",
+  "q": "Algérien au pied gauche magique de Manchester City",
+  "alts": [
+   "Mahrez"
+  ]
+ },
+ {
+  "a": "Jean-Pierre Papin",
+  "q": "Français Ballon d'Or 1991 à la retournée iconique",
+  "alts": [
+   "Papin"
+  ]
+ },
+ {
+  "a": "Just Fontaine",
+  "q": "Français recordman de buts en une Coupe du monde (13 en 1958)",
+  "alts": [
+   "Fontaine"
+  ]
+ },
+ {
+  "a": "Raymond Kopa",
+  "q": "Français Ballon d'Or 1958 du Real de Di Stéfano"
+ },
+ {
+  "a": "Air Jordan",
+  "q": "Marque de baskets née de la légende des Bulls",
+  "alts": [
+   "Jordan"
+  ]
+ },
+ {
+  "a": "Nike",
+  "q": "Marque au swoosh, plus grande marque de sport"
+ },
+ {
+  "a": "Adidas",
+  "q": "Marque aux trois bandes, allemande"
+ },
+ {
+  "a": "Puma",
+  "q": "Marque au félin bondissant, rivale des trois bandes"
+ }
 ]

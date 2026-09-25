@@ -206,7 +206,7 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 ### 🎮 Jeux
 | Commande | Description |
 |---|---|
-| `Xquiz` | Quiz de GROUPE : question taguée, on répond en RÉPONDANT au message (plusieurs essais), 15 s/question, 5/10/15 questions |
+| `Xquiz` | Quiz de GROUPE à réponses LIBRES (plus de QCM) : ID (indices de personnages) · MULTIVERS (anime) · CG (foot, basket, voitures, animaux, célébrités…) · CAPITALE (pays → capitale) · DRAPEAU (emoji → pays). ~1100 questions, tolérance fautes/variantes, +10 pts au premier bon répondeur, classement final |
 | `Xid` | Quiz manga (AniList + repli Jikan/MyAnimeList — sans clé) : identifie le personnage sur l'image — prénom OU nom OU nom complet, tolérant aux variantes de traduction (Gojo/Goujou) et aux petites fautes. 5/10/15 images (max 20), tableau des scores à la fin |
 | `Xduel` | Duel 1v1 avec mise en XCoins |
 | `Xgame` | Catalogue des jeux |

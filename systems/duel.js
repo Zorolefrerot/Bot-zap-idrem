@@ -8,7 +8,7 @@
  * double récompense : une seule source de vérité (database).
  */
 
-const { CATEGORIES, loadBank, resolveCategory, shuffle } = require('./questions');
+const { DUEL_CATEGORIES, loadDuelBank, resolveDuelCategory, shuffle } = require('./questions');
 const fmt = require('../utils/formatter');
 const { safeInt } = require('../utils/sanitize');
 
@@ -225,7 +225,7 @@ class DuelSession {
   }
 
   async _onCategory(raw) {
-    const cat = resolveCategory(raw);
+    const cat = resolveDuelCategory(raw);
     if (!cat) {
       this.tries++;
       if (this.tries >= 3) {
@@ -236,7 +236,7 @@ class DuelSession {
       await this.send(fmt.frame('⚔️ XDUEL', '⚠️ ' + fmt.bold('Choisis :') + ` ${fmt.bold('CG')} / ${fmt.bold('ID')} / ${fmt.bold('MULTIVERS')}`));
       return true;
     }
-    const bank = loadBank(cat);
+    const bank = loadDuelBank(cat);
     if (bank.length < 10) {
       this.dispose();
       await this.send(fmt.frame('⚔️ XDUEL', '⚠️ ' + fmt.bold('Banque de questions indisponible.')));
@@ -268,7 +268,7 @@ class DuelSession {
       await this.send(fmt.frame('⚔️ XDUEL', '⚠️ ' + fmt.bold('Choisis :') + ` ${allowed.map((a) => fmt.bold(a)).join(' / ')}`));
       return true;
     }
-    const bank = loadBank(this.category);
+    const bank = loadDuelBank(this.category);
     this.questionCount = Math.min(n, bank.length);
     this.tries = 0;
     this.state = 'WAITING_BET';
@@ -328,7 +328,7 @@ class DuelSession {
     this.bet = bet;
     this.betLocked = true;
 
-    const bank = loadBank(this.category);
+    const bank = loadDuelBank(this.category);
     this.questions = shuffle(bank).slice(0, this.questionCount);
     this.index = 0;
     this.turn = Math.floor(Math.random() * 2); // départ aléatoire
@@ -339,7 +339,7 @@ class DuelSession {
       fmt.frame('⚔️ DUEL LANCÉ', [
         `🥊 ${this.duelist1.name}  ${fmt.bold('VS')}  ${this.duelist2.name}`,
         '',
-        '🧠 ' + fmt.bold('Catégorie') + ' : ' + fmt.bold(CATEGORIES[this.category].short),
+        '🧠 ' + fmt.bold('Catégorie') + ' : ' + fmt.bold(DUEL_CATEGORIES[this.category].short),
         '❓ ' + fmt.bold('Questions') + ' : ' + fmt.boldNum(this.questionCount),
         '💰 ' + fmt.bold('Mise') + ' : ' + fmt.boldNum(this.bet) + ` ${fmt.bold('XCoins')} ${fmt.bold('chacun')}`,
         '',

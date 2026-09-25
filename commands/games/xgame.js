@@ -6,7 +6,7 @@
 
 /* Registre extensible : ajouter une entrée ici pour référencer un futur jeu. */
 const GAMES = [
-  { label: '𝗫𝗾𝘂𝗶𝘇', command: 'xquiz', available: true, hint: 'Quiz solo — ID / MULTIVERS / CG' },
+  { label: '𝗫𝗾𝘂𝗶𝘇', command: 'xquiz', available: true, hint: 'Quiz de groupe — ID / MULTIVERS / CG / CAPITALE / DRAPEAU' },
   { label: '𝗫𝗱𝘂𝗲𝗹', command: 'xduel', available: true, hint: 'Duel 1v1 avec mise' },
   { label: '𝗫𝗿𝗼𝘂𝗹𝗲𝘁𝘁𝗲', command: null, available: false, hint: 'Bientôt disponible…' },
   { label: '𝗫𝗽𝗲𝗻𝗱𝘂', command: null, available: false, hint: 'Bientôt disponible…' },

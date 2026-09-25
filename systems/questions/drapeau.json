@@ -1,0 +1,1373 @@
+[
+ {
+  "q": "🇦🇱",
+  "a": "Albanie",
+  "alts": [
+   "Albania"
+  ]
+ },
+ {
+  "q": "🇩🇪",
+  "a": "Allemagne",
+  "alts": [
+   "Germany"
+  ]
+ },
+ {
+  "q": "🇦🇩",
+  "a": "Andorre",
+  "alts": [
+   "Andorra"
+  ]
+ },
+ {
+  "q": "🇦🇹",
+  "a": "Autriche",
+  "alts": [
+   "Austria"
+  ]
+ },
+ {
+  "q": "🇧🇪",
+  "a": "Belgique",
+  "alts": [
+   "Belgium"
+  ]
+ },
+ {
+  "q": "🇧🇾",
+  "a": "Biélorussie",
+  "alts": [
+   "Belarus"
+  ]
+ },
+ {
+  "q": "🇧🇦",
+  "a": "Bosnie-Herzégovine",
+  "alts": [
+   "Bosnia and Herzegovina"
+  ]
+ },
+ {
+  "q": "🇧🇬",
+  "a": "Bulgarie",
+  "alts": [
+   "Bulgaria"
+  ]
+ },
+ {
+  "q": "🇨🇾",
+  "a": "Chypre",
+  "alts": [
+   "Cyprus"
+  ]
+ },
+ {
+  "q": "🇭🇷",
+  "a": "Croatie",
+  "alts": [
+   "Croatia"
+  ]
+ },
+ {
+  "q": "🇩🇰",
+  "a": "Danemark",
+  "alts": [
+   "Denmark"
+  ]
+ },
+ {
+  "q": "🇪🇸",
+  "a": "Espagne",
+  "alts": [
+   "Spain"
+  ]
+ },
+ {
+  "q": "🇪🇪",
+  "a": "Estonie",
+  "alts": [
+   "Estonia"
+  ]
+ },
+ {
+  "q": "🇫🇮",
+  "a": "Finlande",
+  "alts": [
+   "Finland"
+  ]
+ },
+ {
+  "q": "🇫🇷",
+  "a": "France",
+  "alts": []
+ },
+ {
+  "q": "🇬🇷",
+  "a": "Grèce",
+  "alts": [
+   "Greece"
+  ]
+ },
+ {
+  "q": "🇭🇺",
+  "a": "Hongrie",
+  "alts": [
+   "Hungary"
+  ]
+ },
+ {
+  "q": "🇮🇪",
+  "a": "Irlande",
+  "alts": [
+   "Ireland"
+  ]
+ },
+ {
+  "q": "🇮🇸",
+  "a": "Islande",
+  "alts": [
+   "Iceland"
+  ]
+ },
+ {
+  "q": "🇮🇹",
+  "a": "Italie",
+  "alts": [
+   "Italy"
+  ]
+ },
+ {
+  "q": "🇱🇻",
+  "a": "Lettonie",
+  "alts": [
+   "Latvia"
+  ]
+ },
+ {
+  "q": "🇱🇮",
+  "a": "Liechtenstein",
+  "alts": []
+ },
+ {
+  "q": "🇱🇹",
+  "a": "Lituanie",
+  "alts": [
+   "Lithuania"
+  ]
+ },
+ {
+  "q": "🇱🇺",
+  "a": "Luxembourg",
+  "alts": []
+ },
+ {
+  "q": "🇲🇰",
+  "a": "Macédoine du Nord",
+  "alts": [
+   "North Macedonia"
+  ]
+ },
+ {
+  "q": "🇲🇹",
+  "a": "Malte",
+  "alts": [
+   "Malta"
+  ]
+ },
+ {
+  "q": "🇲🇩",
+  "a": "Moldavie",
+  "alts": [
+   "Moldova"
+  ]
+ },
+ {
+  "q": "🇲🇨",
+  "a": "Monaco",
+  "alts": []
+ },
+ {
+  "q": "🇲🇪",
+  "a": "Monténégro",
+  "alts": [
+   "Montenegro"
+  ]
+ },
+ {
+  "q": "🇳🇴",
+  "a": "Norvège",
+  "alts": [
+   "Norway"
+  ]
+ },
+ {
+  "q": "🇳🇱",
+  "a": "Pays-Bas",
+  "alts": [
+   "Netherlands"
+  ]
+ },
+ {
+  "q": "🇵🇱",
+  "a": "Pologne",
+  "alts": [
+   "Poland"
+  ]
+ },
+ {
+  "q": "🇵🇹",
+  "a": "Portugal",
+  "alts": []
+ },
+ {
+  "q": "🇷🇴",
+  "a": "Roumanie",
+  "alts": [
+   "Romania"
+  ]
+ },
+ {
+  "q": "🇬🇧",
+  "a": "Royaume-Uni",
+  "alts": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "q": "🇷🇺",
+  "a": "Russie",
+  "alts": [
+   "Russia"
+  ]
+ },
+ {
+  "q": "🇸🇲",
+  "a": "Saint-Marin",
+  "alts": [
+   "San Marino"
+  ]
+ },
+ {
+  "q": "🇷🇸",
+  "a": "Serbie",
+  "alts": [
+   "Serbia"
+  ]
+ },
+ {
+  "q": "🇸🇰",
+  "a": "Slovaquie",
+  "alts": [
+   "Slovakia"
+  ]
+ },
+ {
+  "q": "🇸🇮",
+  "a": "Slovénie",
+  "alts": [
+   "Slovenia"
+  ]
+ },
+ {
+  "q": "🇸🇪",
+  "a": "Suède",
+  "alts": [
+   "Sweden"
+  ]
+ },
+ {
+  "q": "🇨🇭",
+  "a": "Suisse",
+  "alts": [
+   "Switzerland"
+  ]
+ },
+ {
+  "q": "🇨🇿",
+  "a": "Tchéquie",
+  "alts": [
+   "Czech Republic"
+  ]
+ },
+ {
+  "q": "🇺🇦",
+  "a": "Ukraine",
+  "alts": []
+ },
+ {
+  "q": "🇻🇦",
+  "a": "Vatican",
+  "alts": [
+   "Vatican City"
+  ]
+ },
+ {
+  "q": "🇿🇦",
+  "a": "Afrique du Sud",
+  "alts": [
+   "South Africa"
+  ]
+ },
+ {
+  "q": "🇩🇿",
+  "a": "Algérie",
+  "alts": [
+   "Algeria"
+  ]
+ },
+ {
+  "q": "🇦🇴",
+  "a": "Angola",
+  "alts": []
+ },
+ {
+  "q": "🇧🇯",
+  "a": "Bénin",
+  "alts": [
+   "Benin"
+  ]
+ },
+ {
+  "q": "🇧🇼",
+  "a": "Botswana",
+  "alts": []
+ },
+ {
+  "q": "🇧🇫",
+  "a": "Burkina Faso",
+  "alts": []
+ },
+ {
+  "q": "🇧🇮",
+  "a": "Burundi",
+  "alts": []
+ },
+ {
+  "q": "🇨🇲",
+  "a": "Cameroun",
+  "alts": [
+   "Cameroon"
+  ]
+ },
+ {
+  "q": "🇨🇻",
+  "a": "Cap-Vert",
+  "alts": [
+   "Cape Verde"
+  ]
+ },
+ {
+  "q": "🇨🇫",
+  "a": "République centrafricaine",
+  "alts": [
+   "Central African Republic"
+  ]
+ },
+ {
+  "q": "🇰🇲",
+  "a": "Comores",
+  "alts": [
+   "Comoros"
+  ]
+ },
+ {
+  "q": "🇨🇬",
+  "a": "Congo",
+  "alts": [
+   "Republic of the Congo"
+  ]
+ },
+ {
+  "q": "🇨🇩",
+  "a": "RD Congo",
+  "alts": [
+   "Democratic Republic of the Congo"
+  ]
+ },
+ {
+  "q": "🇨🇮",
+  "a": "Côte d'Ivoire",
+  "alts": [
+   "Ivory Coast"
+  ]
+ },
+ {
+  "q": "🇩🇯",
+  "a": "Djibouti",
+  "alts": []
+ },
+ {
+  "q": "🇪🇬",
+  "a": "Égypte",
+  "alts": [
+   "Egypt"
+  ]
+ },
+ {
+  "q": "🇪🇷",
+  "a": "Érythrée",
+  "alts": [
+   "Eritrea"
+  ]
+ },
+ {
+  "q": "🇸🇿",
+  "a": "Eswatini",
+  "alts": []
+ },
+ {
+  "q": "🇪🇹",
+  "a": "Éthiopie",
+  "alts": [
+   "Ethiopia"
+  ]
+ },
+ {
+  "q": "🇬🇦",
+  "a": "Gabon",
+  "alts": []
+ },
+ {
+  "q": "🇬🇲",
+  "a": "Gambie",
+  "alts": [
+   "Gambia"
+  ]
+ },
+ {
+  "q": "🇬🇭",
+  "a": "Ghana",
+  "alts": []
+ },
+ {
+  "q": "🇬🇳",
+  "a": "Guinée",
+  "alts": [
+   "Guinea"
+  ]
+ },
+ {
+  "q": "🇬🇼",
+  "a": "Guinée-Bissau",
+  "alts": [
+   "Guinea-Bissau"
+  ]
+ },
+ {
+  "q": "🇬🇶",
+  "a": "Guinée équatoriale",
+  "alts": [
+   "Equatorial Guinea"
+  ]
+ },
+ {
+  "q": "🇰🇪",
+  "a": "Kenya",
+  "alts": []
+ },
+ {
+  "q": "🇱🇸",
+  "a": "Lesotho",
+  "alts": []
+ },
+ {
+  "q": "🇱🇷",
+  "a": "Liberia",
+  "alts": []
+ },
+ {
+  "q": "🇱🇾",
+  "a": "Libye",
+  "alts": [
+   "Libya"
+  ]
+ },
+ {
+  "q": "🇲🇬",
+  "a": "Madagascar",
+  "alts": []
+ },
+ {
+  "q": "🇲🇼",
+  "a": "Malawi",
+  "alts": []
+ },
+ {
+  "q": "🇲🇱",
+  "a": "Mali",
+  "alts": []
+ },
+ {
+  "q": "🇲🇦",
+  "a": "Maroc",
+  "alts": [
+   "Morocco"
+  ]
+ },
+ {
+  "q": "🇲🇺",
+  "a": "Maurice",
+  "alts": [
+   "Mauritius"
+  ]
+ },
+ {
+  "q": "🇲🇷",
+  "a": "Mauritanie",
+  "alts": [
+   "Mauritania"
+  ]
+ },
+ {
+  "q": "🇲🇿",
+  "a": "Mozambique",
+  "alts": []
+ },
+ {
+  "q": "🇳🇦",
+  "a": "Namibie",
+  "alts": [
+   "Namibia"
+  ]
+ },
+ {
+  "q": "🇳🇪",
+  "a": "Niger",
+  "alts": []
+ },
+ {
+  "q": "🇳🇬",
+  "a": "Nigeria",
+  "alts": []
+ },
+ {
+  "q": "🇺🇬",
+  "a": "Ouganda",
+  "alts": [
+   "Uganda"
+  ]
+ },
+ {
+  "q": "🇷🇼",
+  "a": "Rwanda",
+  "alts": []
+ },
+ {
+  "q": "🇸🇹",
+  "a": "São Tomé-et-Príncipe",
+  "alts": [
+   "Sao Tome and Principe"
+  ]
+ },
+ {
+  "q": "🇸🇳",
+  "a": "Sénégal",
+  "alts": [
+   "Senegal"
+  ]
+ },
+ {
+  "q": "🇸🇨",
+  "a": "Seychelles",
+  "alts": []
+ },
+ {
+  "q": "🇸🇱",
+  "a": "Sierra Leone",
+  "alts": []
+ },
+ {
+  "q": "🇸🇴",
+  "a": "Somalie",
+  "alts": [
+   "Somalia"
+  ]
+ },
+ {
+  "q": "🇸🇩",
+  "a": "Soudan",
+  "alts": [
+   "Sudan"
+  ]
+ },
+ {
+  "q": "🇸🇸",
+  "a": "Soudan du Sud",
+  "alts": [
+   "South Sudan"
+  ]
+ },
+ {
+  "q": "🇹🇿",
+  "a": "Tanzanie",
+  "alts": [
+   "Tanzania"
+  ]
+ },
+ {
+  "q": "🇹🇩",
+  "a": "Tchad",
+  "alts": [
+   "Chad"
+  ]
+ },
+ {
+  "q": "🇹🇬",
+  "a": "Togo",
+  "alts": []
+ },
+ {
+  "q": "🇹🇳",
+  "a": "Tunisie",
+  "alts": [
+   "Tunisia"
+  ]
+ },
+ {
+  "q": "🇿🇲",
+  "a": "Zambie",
+  "alts": [
+   "Zambia"
+  ]
+ },
+ {
+  "q": "🇿🇼",
+  "a": "Zimbabwe",
+  "alts": []
+ },
+ {
+  "q": "🇦🇫",
+  "a": "Afghanistan",
+  "alts": []
+ },
+ {
+  "q": "🇸🇦",
+  "a": "Arabie saoudite",
+  "alts": [
+   "Saudi Arabia"
+  ]
+ },
+ {
+  "q": "🇦🇲",
+  "a": "Arménie",
+  "alts": [
+   "Armenia"
+  ]
+ },
+ {
+  "q": "🇦🇿",
+  "a": "Azerbaïdjan",
+  "alts": [
+   "Azerbaijan"
+  ]
+ },
+ {
+  "q": "🇧🇭",
+  "a": "Bahreïn",
+  "alts": [
+   "Bahrain"
+  ]
+ },
+ {
+  "q": "🇧🇩",
+  "a": "Bangladesh",
+  "alts": []
+ },
+ {
+  "q": "🇧🇹",
+  "a": "Bhoutan",
+  "alts": [
+   "Bhutan"
+  ]
+ },
+ {
+  "q": "🇲🇲",
+  "a": "Birmanie",
+  "alts": [
+   "Myanmar"
+  ]
+ },
+ {
+  "q": "🇧🇳",
+  "a": "Brunei",
+  "alts": []
+ },
+ {
+  "q": "🇰🇭",
+  "a": "Cambodge",
+  "alts": [
+   "Cambodia"
+  ]
+ },
+ {
+  "q": "🇨🇳",
+  "a": "Chine",
+  "alts": [
+   "China"
+  ]
+ },
+ {
+  "q": "🇰🇵",
+  "a": "Corée du Nord",
+  "alts": [
+   "North Korea"
+  ]
+ },
+ {
+  "q": "🇰🇷",
+  "a": "Corée du Sud",
+  "alts": [
+   "South Korea"
+  ]
+ },
+ {
+  "q": "🇦🇪",
+  "a": "Émirats arabes unis",
+  "alts": [
+   "United Arab Emirates"
+  ]
+ },
+ {
+  "q": "🇬🇪",
+  "a": "Géorgie",
+  "alts": [
+   "Georgia"
+  ]
+ },
+ {
+  "q": "🇮🇳",
+  "a": "Inde",
+  "alts": [
+   "India"
+  ]
+ },
+ {
+  "q": "🇮🇩",
+  "a": "Indonésie",
+  "alts": [
+   "Indonesia"
+  ]
+ },
+ {
+  "q": "🇮🇶",
+  "a": "Irak",
+  "alts": [
+   "Iraq"
+  ]
+ },
+ {
+  "q": "🇮🇷",
+  "a": "Iran",
+  "alts": []
+ },
+ {
+  "q": "🇮🇱",
+  "a": "Israël",
+  "alts": [
+   "Israel"
+  ]
+ },
+ {
+  "q": "🇯🇵",
+  "a": "Japon",
+  "alts": [
+   "Japan"
+  ]
+ },
+ {
+  "q": "🇯🇴",
+  "a": "Jordanie",
+  "alts": [
+   "Jordan"
+  ]
+ },
+ {
+  "q": "🇰🇿",
+  "a": "Kazakhstan",
+  "alts": []
+ },
+ {
+  "q": "🇰🇬",
+  "a": "Kirghizistan",
+  "alts": [
+   "Kyrgyzstan"
+  ]
+ },
+ {
+  "q": "🇰🇼",
+  "a": "Koweït",
+  "alts": [
+   "Kuwait"
+  ]
+ },
+ {
+  "q": "🇱🇦",
+  "a": "Laos",
+  "alts": []
+ },
+ {
+  "q": "🇱🇧",
+  "a": "Liban",
+  "alts": [
+   "Lebanon"
+  ]
+ },
+ {
+  "q": "🇲🇾",
+  "a": "Malaisie",
+  "alts": [
+   "Malaysia"
+  ]
+ },
+ {
+  "q": "🇲🇻",
+  "a": "Maldives",
+  "alts": []
+ },
+ {
+  "q": "🇲🇳",
+  "a": "Mongolie",
+  "alts": [
+   "Mongolia"
+  ]
+ },
+ {
+  "q": "🇳🇵",
+  "a": "Népal",
+  "alts": [
+   "Nepal"
+  ]
+ },
+ {
+  "q": "🇴🇲",
+  "a": "Oman",
+  "alts": []
+ },
+ {
+  "q": "🇺🇿",
+  "a": "Ouzbékistan",
+  "alts": [
+   "Uzbekistan"
+  ]
+ },
+ {
+  "q": "🇵🇰",
+  "a": "Pakistan",
+  "alts": []
+ },
+ {
+  "q": "🇵🇸",
+  "a": "Palestine",
+  "alts": []
+ },
+ {
+  "q": "🇵🇭",
+  "a": "Philippines",
+  "alts": []
+ },
+ {
+  "q": "🇶🇦",
+  "a": "Qatar",
+  "alts": []
+ },
+ {
+  "q": "🇸🇬",
+  "a": "Singapour",
+  "alts": [
+   "Singapore"
+  ]
+ },
+ {
+  "q": "🇱🇰",
+  "a": "Sri Lanka",
+  "alts": []
+ },
+ {
+  "q": "🇸🇾",
+  "a": "Syrie",
+  "alts": [
+   "Syria"
+  ]
+ },
+ {
+  "q": "🇹🇯",
+  "a": "Tadjikistan",
+  "alts": [
+   "Tajikistan"
+  ]
+ },
+ {
+  "q": "🇹🇼",
+  "a": "Taïwan",
+  "alts": [
+   "Taiwan"
+  ]
+ },
+ {
+  "q": "🇹🇭",
+  "a": "Thaïlande",
+  "alts": [
+   "Thailand"
+  ]
+ },
+ {
+  "q": "🇹🇱",
+  "a": "Timor oriental",
+  "alts": [
+   "East Timor"
+  ]
+ },
+ {
+  "q": "🇹🇷",
+  "a": "Turquie",
+  "alts": [
+   "Turkey"
+  ]
+ },
+ {
+  "q": "🇹🇲",
+  "a": "Turkménistan",
+  "alts": [
+   "Turkmenistan"
+  ]
+ },
+ {
+  "q": "🇻🇳",
+  "a": "Viêt Nam",
+  "alts": [
+   "Vietnam"
+  ]
+ },
+ {
+  "q": "🇾🇪",
+  "a": "Yémen",
+  "alts": [
+   "Yemen"
+  ]
+ },
+ {
+  "q": "🇦🇬",
+  "a": "Antigua-et-Barbuda",
+  "alts": [
+   "Antigua and Barbuda"
+  ]
+ },
+ {
+  "q": "🇦🇷",
+  "a": "Argentine",
+  "alts": [
+   "Argentina"
+  ]
+ },
+ {
+  "q": "🇧🇸",
+  "a": "Bahamas",
+  "alts": []
+ },
+ {
+  "q": "🇧🇧",
+  "a": "Barbade",
+  "alts": [
+   "Barbados"
+  ]
+ },
+ {
+  "q": "🇧🇿",
+  "a": "Belize",
+  "alts": []
+ },
+ {
+  "q": "🇧🇴",
+  "a": "Bolivie",
+  "alts": [
+   "Bolivia"
+  ]
+ },
+ {
+  "q": "🇧🇷",
+  "a": "Brésil",
+  "alts": [
+   "Brazil"
+  ]
+ },
+ {
+  "q": "🇨🇦",
+  "a": "Canada",
+  "alts": []
+ },
+ {
+  "q": "🇨🇱",
+  "a": "Chili",
+  "alts": [
+   "Chile"
+  ]
+ },
+ {
+  "q": "🇨🇴",
+  "a": "Colombie",
+  "alts": [
+   "Colombia"
+  ]
+ },
+ {
+  "q": "🇨🇷",
+  "a": "Costa Rica",
+  "alts": []
+ },
+ {
+  "q": "🇨🇺",
+  "a": "Cuba",
+  "alts": []
+ },
+ {
+  "q": "🇩🇲",
+  "a": "Dominique",
+  "alts": [
+   "Dominica"
+  ]
+ },
+ {
+  "q": "🇪🇨",
+  "a": "Équateur",
+  "alts": [
+   "Ecuador"
+  ]
+ },
+ {
+  "q": "🇺🇸",
+  "a": "États-Unis",
+  "alts": [
+   "United States"
+  ]
+ },
+ {
+  "q": "🇬🇩",
+  "a": "Grenade",
+  "alts": [
+   "Grenada"
+  ]
+ },
+ {
+  "q": "🇬🇹",
+  "a": "Guatemala",
+  "alts": []
+ },
+ {
+  "q": "🇬🇾",
+  "a": "Guyana",
+  "alts": []
+ },
+ {
+  "q": "🇭🇹",
+  "a": "Haïti",
+  "alts": [
+   "Haiti"
+  ]
+ },
+ {
+  "q": "🇭🇳",
+  "a": "Honduras",
+  "alts": []
+ },
+ {
+  "q": "🇯🇲",
+  "a": "Jamaïque",
+  "alts": [
+   "Jamaica"
+  ]
+ },
+ {
+  "q": "🇲🇽",
+  "a": "Mexique",
+  "alts": [
+   "Mexico"
+  ]
+ },
+ {
+  "q": "🇳🇮",
+  "a": "Nicaragua",
+  "alts": []
+ },
+ {
+  "q": "🇵🇦",
+  "a": "Panama",
+  "alts": []
+ },
+ {
+  "q": "🇵🇾",
+  "a": "Paraguay",
+  "alts": []
+ },
+ {
+  "q": "🇵🇪",
+  "a": "Pérou",
+  "alts": [
+   "Peru"
+  ]
+ },
+ {
+  "q": "🇩🇴",
+  "a": "République dominicaine",
+  "alts": [
+   "Dominican Republic"
+  ]
+ },
+ {
+  "q": "🇰🇳",
+  "a": "Saint-Christophe-et-Niévès",
+  "alts": [
+   "Saint Kitts and Nevis"
+  ]
+ },
+ {
+  "q": "🇱🇨",
+  "a": "Sainte-Lucie",
+  "alts": [
+   "Saint Lucia"
+  ]
+ },
+ {
+  "q": "🇻🇨",
+  "a": "Saint-Vincent-et-les-Grenadines",
+  "alts": [
+   "Saint Vincent and the Grenadines"
+  ]
+ },
+ {
+  "q": "🇸🇻",
+  "a": "Salvador",
+  "alts": [
+   "El Salvador"
+  ]
+ },
+ {
+  "q": "🇸🇷",
+  "a": "Suriname",
+  "alts": []
+ },
+ {
+  "q": "🇹🇹",
+  "a": "Trinité-et-Tobago",
+  "alts": [
+   "Trinidad and Tobago"
+  ]
+ },
+ {
+  "q": "🇺🇾",
+  "a": "Uruguay",
+  "alts": []
+ },
+ {
+  "q": "🇻🇪",
+  "a": "Venezuela",
+  "alts": []
+ },
+ {
+  "q": "🇦🇺",
+  "a": "Australie",
+  "alts": [
+   "Australia"
+  ]
+ },
+ {
+  "q": "🇫🇯",
+  "a": "Fidji",
+  "alts": [
+   "Fiji"
+  ]
+ },
+ {
+  "q": "🇰🇮",
+  "a": "Kiribati",
+  "alts": []
+ },
+ {
+  "q": "🇲🇭",
+  "a": "Marshall",
+  "alts": [
+   "Marshall Islands"
+  ]
+ },
+ {
+  "q": "🇫🇲",
+  "a": "Micronésie",
+  "alts": [
+   "Micronesia"
+  ]
+ },
+ {
+  "q": "🇳🇷",
+  "a": "Nauru",
+  "alts": []
+ },
+ {
+  "q": "🇳🇿",
+  "a": "Nouvelle-Zélande",
+  "alts": [
+   "New Zealand"
+  ]
+ },
+ {
+  "q": "🇵🇼",
+  "a": "Palaos",
+  "alts": [
+   "Palau"
+  ]
+ },
+ {
+  "q": "🇵🇬",
+  "a": "Papouasie-Nouvelle-Guinée",
+  "alts": [
+   "Papua New Guinea"
+  ]
+ },
+ {
+  "q": "🇸🇧",
+  "a": "Salomon",
+  "alts": [
+   "Solomon Islands"
+  ]
+ },
+ {
+  "q": "🇼🇸",
+  "a": "Samoa",
+  "alts": []
+ },
+ {
+  "q": "🇹🇴",
+  "a": "Tonga",
+  "alts": []
+ },
+ {
+  "q": "🇹🇻",
+  "a": "Tuvalu",
+  "alts": []
+ },
+ {
+  "q": "🇻🇺",
+  "a": "Vanuatu",
+  "alts": []
+ },
+ {
+  "q": "🇭🇰",
+  "a": "Hong Kong",
+  "alts": []
+ },
+ {
+  "q": "🇲🇴",
+  "a": "Macao",
+  "alts": []
+ },
+ {
+  "q": "🇬🇱",
+  "a": "Groenland",
+  "alts": [
+   "Greenland"
+  ]
+ },
+ {
+  "q": "🇵🇷",
+  "a": "Porto Rico",
+  "alts": [
+   "Puerto Rico"
+  ]
+ },
+ {
+  "q": "🇦🇼",
+  "a": "Aruba",
+  "alts": []
+ },
+ {
+  "q": "🇧🇲",
+  "a": "Bermudes",
+  "alts": [
+   "Bermuda"
+  ]
+ },
+ {
+  "q": "🇨🇼",
+  "a": "Curaçao",
+  "alts": [
+   "Curacao"
+  ]
+ },
+ {
+  "q": "🇫🇴",
+  "a": "Îles Féroé",
+  "alts": [
+   "Faroe Islands"
+  ]
+ },
+ {
+  "q": "🇵🇫",
+  "a": "Polynésie française",
+  "alts": [
+   "French Polynesia"
+  ]
+ },
+ {
+  "q": "🇬🇺",
+  "a": "Guam",
+  "alts": []
+ },
+ {
+  "q": "🇳🇨",
+  "a": "Nouvelle-Calédonie",
+  "alts": [
+   "New Caledonia"
+  ]
+ },
+ {
+  "q": "🇦🇮",
+  "a": "Anguilla",
+  "alts": []
+ },
+ {
+  "q": "🇰🇾",
+  "a": "Îles Caïmans",
+  "alts": [
+   "Cayman Islands"
+  ]
+ },
+ {
+  "q": "🇯🇪",
+  "a": "Jersey",
+  "alts": []
+ },
+ {
+  "q": "🇬🇬",
+  "a": "Guernesey",
+  "alts": [
+   "Guernsey"
+  ]
+ },
+ {
+  "q": "🇮🇲",
+  "a": "Île de Man",
+  "alts": [
+   "Isle of Man"
+  ]
+ },
+ {
+  "q": "🇲🇫",
+  "a": "Saint-Martin",
+  "alts": [
+   "Saint Martin"
+  ]
+ },
+ {
+  "q": "🇹🇨",
+  "a": "Îles Turques-et-Caïques",
+  "alts": [
+   "Turks and Caicos Islands"
+  ]
+ },
+ {
+  "q": "🇻🇬",
+  "a": "Îles Vierges britanniques",
+  "alts": [
+   "British Virgin Islands"
+  ]
+ }
+]

@@ -1,45 +1,1145 @@
 [
-  { "q": "Quel est le nom du protagoniste de One Piece ?", "options": ["Monkey D. Luffy", "Portgas D. Ace", "Shanks", "Barbe Blanche"], "answer": "Monkey D. Luffy" },
-  { "q": "Dans Naruto, comment s'appelle le démon renard à neuf queues scellé en Naruto ?", "options": ["Kurama", "Shukaku", "Gyûki", "Matatabi"], "answer": "Kurama" },
-  { "q": "Dans Naruto, quelle technique est la signature de Sasuke Uchiwa ?", "options": ["Le Chidori", "Le Rasengan", "Le Kage Bunshin", "Le Byakugan"], "answer": "Le Chidori" },
-  { "q": "Dans Demon Slayer, qui est l'ancêtre de tous les démons ?", "options": ["Muzan Kibutsuji", "Kokushibo", "Rui", "Kaigaku"], "answer": "Muzan Kibutsuji" },
-  { "q": "Quelle technique de respiration Tanjiro utilise-t-il au début de Demon Slayer ?", "options": ["La respiration de l'eau", "La respiration du tonnerre", "La respiration des flammes", "La respiration du vent"], "answer": "La respiration de l'eau" },
-  { "q": "Dans Jujutsu Kaisen, qui est considéré comme le sorcier le plus puissant ?", "options": ["Satoru Gojo", "Suguru Geto", "Nanami", "Yuta Okkotsu"], "answer": "Satoru Gojo" },
-  { "q": "Dans Attack on Titan, comment s'appelle le titan que Eren peut incarner au début ?", "options": ["Le Titan Assaillant", "Le Titan Cuirassé", "Le Titan Colossal", "Le Titan Bestial"], "answer": "Le Titan Assaillant" },
-  { "q": "Dans Dragon Ball Z, qui est le père biologique de Goku ?", "options": ["Bardock", "Gohan grand-père", "Broly", "Nappa"], "answer": "Bardock" },
-  { "q": "Combien de sabres Roronoa Zoro utilise-t-il dans son style de combat ?", "options": ["3", "1", "2", "4"], "answer": "3" },
-  { "q": "Dans Death Note, comment s'appelle le célèbre détective qui traque Kira ?", "options": ["L", "Near", "Mello", "Soichiro"], "answer": "L" },
-  { "q": "Quel animé met en scène des géants et trois murs géants ?", "options": ["L'Attaque des Titans", "Demon Slayer", "Jujutsu Kaisen", "One Punch Man"], "answer": "L'Attaque des Titans" },
-  { "q": "Dans My Hero Academia, quel est le pouvoir d'Izuku Midoriya ?", "options": ["Le One For All", "L'All For One", "L'Explosion", "La Demi-Froide"], "answer": "Le One For All" },
-  { "q": "Dans Naruto, qui est le frère de Sasuke Uchiwa ?", "options": ["Itachi", "Madara", "Obito", "Shisui"], "answer": "Itachi" },
-  { "q": "Dans Hunter x Hunter, qui est le meilleur ami de Gon ?", "options": ["Kirua", "Kurapika", "Leorio", "Hisoka"], "answer": "Kirua" },
-  { "q": "Quel est le premier Pokémon du Pokédex national ?", "options": ["Bulbizarre", "Pikachu", "Salamèche", "Carapuce"], "answer": "Bulbizarre" },
-  { "q": "Dans Jujutsu Kaisen, comment s'appelle le roi des fléaux aux vingt doigts ?", "options": ["Ryomen Sukuna", "Mahito", "Jogo", "Hanami"], "answer": "Ryomen Sukuna" },
-  { "q": "Dans Bleach, quel est le nom du zanpakutō d'Ichigo Kurosaki ?", "options": ["Zangetsu", "Senbonzakura", "Hyōrinmaru", "Ryūjin Jakka"], "answer": "Zangetsu" },
-  { "q": "Dans Fullmetal Alchemist, lequel des frères Elric a perdu tout son corps ?", "options": ["Alphonse", "Edward", "Hohenheim", "Aucun des deux"], "answer": "Alphonse" },
-  { "q": "Dans One Punch Man, dans quelle classe de héros Saitama commence-t-il ?", "options": ["Classe C", "Classe S", "Classe A", "Classe B"], "answer": "Classe C" },
-  { "q": "Dans Demon Slayer, comment s'appelle la sœur de Tanjiro devenue démon ?", "options": ["Nezuko", "Kanao", "Shinobu", "Mitsuri"], "answer": "Nezuko" },
-  { "q": "Dans Naruto, qui est le professeur de l'équipe 7 (Naruto, Sasuke, Sakura) ?", "options": ["Kakashi Hatake", "Iruka Umino", "Jiraya", "Tsunade"], "answer": "Kakashi Hatake" },
-  { "q": "Dans Dragon Ball, comment s'appelle la planète d'origine des Saiyans ?", "options": ["Planète Végéta", "Planète Namek", "Planète Terre", "Planète Freezer"], "answer": "Planète Végéta" },
-  { "q": "Quel fruit du démon Luffy a-t-il mangé dans One Piece ?", "options": ["Le Gomu Gomu no Mi", "Le Mera Mera no Mi", "Le Gura Gura no Mi", "Le Ope Ope no Mi"], "answer": "Le Gomu Gomu no Mi" },
-  { "q": "Dans Sword Art Online, quel est le vrai prénom de Kirito ?", "options": ["Kazuto", "Kirigaya", "Eugeo", "Klein"], "answer": "Kazuto" },
-  { "q": "Dans Naruto, quel village caché est dirigé par le Hokage ?", "options": ["Konoha", "Suna", "Kiri", "Kumo"], "answer": "Konoha" },
-  { "q": "Quel est le rêve de Luffy dans One Piece ?", "options": ["Devenir le roi des pirates", "Devenir l'amiral de la marine", "Trouver le One Piece pour son équipage", "Venger Ace"], "answer": "Devenir le roi des pirates" },
-  { "q": "Dans Demon Slayer, quel pilier utilise la respiration du son ?", "options": ["Tengen Uzui", "Rengoku", "Giyu Tomioka", "Sanemi"], "answer": "Tengen Uzui" },
-  { "q": "Dans Dragon Ball Z, qui vainc Cell lors du Cell Game ?", "options": ["Gohan", "Goku", "Vegeta", "Trunks"], "answer": "Gohan" },
-  { "q": "Dans Death Note, comment s'appelle le shinigami qui suit Light ?", "options": ["Ryuk", "Rem", "Sidoh", "Jealous"], "answer": "Ryuk" },
-  { "q": "Dans My Hero Academia, quel héros est surnommé le symbole de la paix ?", "options": ["All Might", "Endeavor", "Best Jeanist", "Hawks"], "answer": "All Might" },
-  { "q": "Dans Hunter x Hunter, dans quelle famille Kirua a-t-il grandi ?", "options": ["Une famille d'assassins", "Une famille de hunters", "Une famille royale", "Une famille de ninjas"], "answer": "Une famille d'assassins" },
-  { "q": "Dans One Piece, comment s'appelle le second navire de l'équipage au chapeau de paille ?", "options": ["Thousand Sunny", "Going Merry", "Oro Jackson", "Moby Dick"], "answer": "Thousand Sunny" },
-  { "q": "Dans Naruto, quel dōjutsu Kakashi possède-t-il grâce à Obito ?", "options": ["Le Sharingan", "Le Byakugan", "Le Rinnegan", "Le Jōgan"], "answer": "Le Sharingan" },
-  { "q": "Dans Jujutsu Kaisen, comment appelle-t-on les esprits nés des émotions négatives ?", "options": ["Les fléaux", "Les démons", "Les titans", "Les hollows"], "answer": "Les fléaux" },
-  { "q": "Dans Bleach, Ichigo Kurosaki est un…", "options": ["Shinigami", "Ninja", "Saiyan", "Chasseur"], "answer": "Shinigami" },
-  { "q": "Dans Demon Slayer, combien compte-t-on de lunes (démoniaques) au total ?", "options": ["12", "6", "10", "14"], "answer": "12" },
-  { "q": "Dans Naruto, quel est le clan de Hinata Hyûga ?", "options": ["Hyûga", "Uchiwa", "Uzumaki", "Nara"], "answer": "Hyûga" },
-  { "q": "Dans Attack on Titan, qui est le meilleur ami d'enfance de Eren ?", "options": ["Armin", "Reiner", "Jean", "Connie"], "answer": "Armin" },
-  { "q": "Dans Dragon Ball Super, quel est le dieu destructeur de l'Univers 7 ?", "options": ["Beerus", "Whis", "Champa", "Jiren"], "answer": "Beerus" },
-  { "q": "Dans Demon Slayer, quel pilier incarne la respiration des flammes ?", "options": ["Kyōjuro Rengoku", "Giyu Tomioka", "Shinobu Kocho", "Obanai Iguro"], "answer": "Kyōjuro Rengoku" },
-  { "q": "Dans One Piece, quel est le surnom de Marshall D. Teach ?", "options": ["Barbe Noire", "Barbe Blanche", "Barbe Orange", "Barbe Rouge"], "answer": "Barbe Noire" },
-  { "q": "Dans Naruto, quel est le nom du jutsu signature de Naruto ?", "options": ["Le Rasengan", "Le Chidori", "L'Amaterasu", "Le Kirin"], "answer": "Le Rasengan" },
-  { "q": "Dans Fairy Tail, de quel métal est l'armure… plutôt, quel dragon a élevé Natsu ?", "options": ["Igneel", "Metalicana", "Grandiney", "Atlas Flame"], "answer": "Igneel" }
+ {
+  "a": "Naruto",
+  "q": "Anime des ninjas du village caché de la Feuille"
+ },
+ {
+  "a": "One Piece",
+  "q": "Anime des pirates qui cherchent le trésor du même nom"
+ },
+ {
+  "a": "Dragon Ball",
+  "q": "Anime où des guerriers élèvent leur puissance en criant et en changeant de cheveux"
+ },
+ {
+  "a": "Bleach",
+  "q": "Anime des Shinigami qui fauchent les âmes avec de grands sabres"
+ },
+ {
+  "a": "Fairy Tail",
+  "q": "Anime de la guilde du même nom, symbole féerique sur le ventre des mages"
+ },
+ {
+  "a": "My Hero Academia",
+  "q": "Anime d'une école de super-héros au Japon, les élèves ont des Dons"
+ },
+ {
+  "a": "Jujutsu Kaisen",
+  "q": "Anime des exorcistes modernes qui manient l'énergie occulte"
+ },
+ {
+  "a": "Demon Slayer",
+  "q": "Anime des pourfendeurs qui traquent les démons au souffle proche de l'eau et de la flamme"
+ },
+ {
+  "a": "L'Attaque des Titans",
+  "q": "Anime de l'humanité recluse derrière des murs géants",
+  "alts": [
+   "Attaque des Titans",
+   "Attack on Titan",
+   "Shingeki no Kyojin"
+  ]
+ },
+ {
+  "a": "Death Note",
+  "q": "Anime d'un cahier qui tue quiconque y est inscrit"
+ },
+ {
+  "a": "Hunter x Hunter",
+  "q": "Anime des chasseurs de licences et du Nen"
+ },
+ {
+  "a": "Fullmetal Alchemist",
+  "q": "Anime de deux frères qui cherchent la pierre philosophale"
+ },
+ {
+  "a": "Sword Art Online",
+  "q": "Anime où les joueurs sont piégés dans un MMO mortel"
+ },
+ {
+  "a": "Tokyo Ghoul",
+  "q": "Anime des goules qui se cachent parmi les humains"
+ },
+ {
+  "a": "One Punch Man",
+  "q": "Anime d'un héros qui gagne chaque bataille d'un seul coup de poing"
+ },
+ {
+  "a": "Cowboy Bebop",
+  "q": "Anime de chasseurs de primes jazzeux dans l'espace"
+ },
+ {
+  "a": "Neon Genesis Evangelion",
+  "q": "Anime des géants mécaniques pilotés par des adolescents fragiles"
+ },
+ {
+  "a": "Code Geass",
+  "q": "Anime d'un prince masqué qui révolte le Japon occupé"
+ },
+ {
+  "a": "Steins;Gate",
+  "q": "Anime d'un savant autoproclamé qui découvre le voyage dans le temps par micro-ondes",
+  "alts": [
+   "Steins Gate"
+  ]
+ },
+ {
+  "a": "Re:Zero",
+  "q": "Anime d'un héros qui revit la même boucle après chaque mort"
+ },
+ {
+  "a": "Vinland Saga",
+  "q": "Anime de Vikings et de vengeance dans l'Angleterre danoise"
+ },
+ {
+  "a": "Dr. Stone",
+  "q": "Anime où la civilisation renaît grâce à la science après pétrification"
+ },
+ {
+  "a": "Black Clover",
+  "q": "Anime d'un royaume de mages et d'un garçon né sans mana"
+ },
+ {
+  "a": "Fire Force",
+  "q": "Anime des pompiers qui affrontent des humains en flammes"
+ },
+ {
+  "a": "Haikyuu",
+  "q": "Anime de volley-ball lycéen au saut légendaire"
+ },
+ {
+  "a": "Kuroko no Basket",
+  "q": "Anime de basket où un joueur invisible fait des passes parfaites"
+ },
+ {
+  "a": "Olive et Tom",
+  "q": "Anime culte du football avec la breche de feu et le tigre enragé",
+  "alts": [
+   "Captain Tsubasa"
+  ]
+ },
+ {
+  "a": "Captain Tsubasa",
+  "q": "Titre original japonais de l'anime du football au tir du tigre",
+  "alts": [
+   "Olive et Tom"
+  ]
+ },
+ {
+  "a": "Pokémon",
+  "q": "Anime des créatures capturées dans des balles rouges et blanches"
+ },
+ {
+  "a": "Yu-Gi-Oh",
+  "q": "Anime des duels de cartes aux monstres anciens"
+ },
+ {
+  "a": "Doraemon",
+  "q": "Anime du chat-robot venu du futur pour aider un écolier nul en tout"
+ },
+ {
+  "a": "Détective Conan",
+  "q": "Anime d'un grand détective coincé dans un corps d'enfant",
+  "alts": [
+   "Detective Conan",
+   "Conan"
+  ]
+ },
+ {
+  "a": "Inuyasha",
+  "q": "Anime d'une jeune fille traversant un puits vers le Japon féodal"
+ },
+ {
+  "a": "Noragami",
+  "q": "Anime d'un dieu vagabond qui fait des ménages pour 5 yens"
+ },
+ {
+  "a": "Violet Evergarden",
+  "q": "Anime d'une ancienne soldate devenue plume de lettres d'amour"
+ },
+ {
+  "a": "Mob Psycho 100",
+  "q": "Anime d'un espérumber discret au pourcentage d'explosion émotionnelle",
+  "alts": [
+   "Mob Psycho"
+  ]
+ },
+ {
+  "a": "Chainsaw Man",
+  "q": "Anime du chasseur de démons au cœur de tronçonneuse"
+ },
+ {
+  "a": "Spy x Family",
+  "q": "Anime d'une famille de façade : tueur, tueuse et télépathe",
+  "alts": [
+   "Spy Family"
+  ]
+ },
+ {
+  "a": "Sailor Moon",
+  "q": "Anime des guerrières en uniforme marin défendant la lune",
+  "alts": [
+   "Bishoujo Senshi Sailor Moon"
+  ]
+ },
+ {
+  "a": "Saint Seiya",
+  "q": "Anime des chevaliers aux armures dorées protégés par des constellations",
+  "alts": [
+   "Les Chevaliers du Zodiaque"
+  ]
+ },
+ {
+  "a": "Les Chevaliers du Zodiaque",
+  "q": "Titre français du chevaliers du zodiaque de Masami Kurumada",
+  "alts": [
+   "Saint Seiya"
+  ]
+ },
+ {
+  "a": "Ken le Survivant",
+  "q": "Anime post-apocalyptique des arts martiaux assassins au Hokuto",
+  "alts": [
+   "Hokuto no Ken",
+   "Fist of the North Star"
+  ]
+ },
+ {
+  "a": "Naruto Shippuden",
+  "q": "Suite plus sombre des aventures du ninja au démon renard",
+  "alts": [
+   "Shippuden"
+  ]
+ },
+ {
+  "a": "Boruto",
+  "q": "Anime du fils du septième Hokage"
+ },
+ {
+  "a": "Dragon Ball Z",
+  "q": "Saga des Saiyans, des cellules et des boules de cristal"
+ },
+ {
+  "a": "Dragon Ball Super",
+  "q": "Suite des dieux de destruction et du tournoi du pouvoir"
+ },
+ {
+  "a": "JoJo's Bizarre Adventure",
+  "q": "Anime générationnel aux poses mythiques et aux Stands",
+  "alts": [
+   "JoJo"
+  ]
+ },
+ {
+  "a": "JoJo",
+  "q": "Surnom court de l'aventure bizarre des Joestar",
+  "alts": [
+   "JoJo's Bizarre Adventure",
+   "Jojo"
+  ]
+ },
+ {
+  "a": "Kenshin le Vagabond",
+  "q": "Anime d'un samouraï repenti à la lame inversée de l'ère Meiji"
+ },
+ {
+  "a": "Gintama",
+  "q": "Anime du samouraï des sucreries au samourai blanc argenté"
+ },
+ {
+  "a": "Dr. Slump",
+  "q": "Premier grand succès du créateur de Dragon Ball, la petite androïde Arale"
+ },
+ {
+  "a": "Monster",
+  "q": "Anime d'un chirurgien japonais traquant le monstre qu'il a sauvé"
+ },
+ {
+  "a": "20th Century Boys",
+  "q": "Œuvre de Naoki Urasawa sur un symbole de fin du monde"
+ },
+ {
+  "a": "Berserk",
+  "q": "Anime sombre du mercenaire à l'épée géante marqué du sacrifice"
+ },
+ {
+  "a": "Guts",
+  "q": "Nom du mercenaire à la main de fer de Berserk"
+ },
+ {
+  "a": "Griffith",
+  "q": "Nom du chef de la Bande du Faucon, traître devenu dieu"
+ },
+ {
+  "a": "Akira",
+  "q": "Anime culte de Neo-Tokyo 2019 et d'un pouvoir psychique destructeur"
+ },
+ {
+  "a": "Ghost in the Shell",
+  "q": "Anime de cyborgs et de questions d'âme dans un réseau mondial"
+ },
+ {
+  "a": "Major Motoko Kusanagi",
+  "q": "Nom de la cyborg du Groupe 9"
+ },
+ {
+  "a": "Initial D",
+  "q": "Anime des courses de dérive dans les montagnes au Toyota AE86"
+ },
+ {
+  "a": "Fruits Basket",
+  "q": "Anime du zodiaque chinois et de la famille Soma"
+ },
+ {
+  "a": "Toradora",
+  "q": "Anime du dragon de poche et du chien en colère"
+ },
+ {
+  "a": "Your Name",
+  "q": "Film de Makoto Shinkai sur deux adolescents qui échangent de corps",
+  "alts": [
+   "Kimi no Na wa"
+  ]
+ },
+ {
+  "a": "Weathering with You",
+  "q": "Film de Shinkai sur la fille qui contrôle le soleil et la pluie"
+ },
+ {
+  "a": "Kimi no Na wa",
+  "q": "Titre original japonais de « Your Name »",
+  "alts": [
+   "Your Name"
+  ]
+ },
+ {
+  "a": "Le Voyage de Chihiro",
+  "q": "Film Ghibli d'une petite fille servante des bains spirituels"
+ },
+ {
+  "a": "Mon Voisin Totoro",
+  "q": "Film Ghibli de la créature de la forêt et du arrêt de bus sous la pluie"
+ },
+ {
+  "a": "Le Château Ambulant",
+  "q": "Film Ghibli du magicien Howl et de la vieille Sophie"
+ },
+ {
+  "a": "Princesse Mononoké",
+  "q": "Film Ghibli des dieux-loups et de la forêt menacée par le fer"
+ },
+ {
+  "a": "Kiki la Petite Sorcière",
+  "q": "Film Ghibli de la jeune sorcière livreuse à balai"
+ },
+ {
+  "a": "Hayao Miyazaki",
+  "q": "Réalisateur légendaire du studio aux Totoro"
+ },
+ {
+  "a": "Studio Ghibli",
+  "q": "Studio japonais de l'ours de la forêt et de la petite fille des bains"
+ },
+ {
+  "a": "Isao Takahata",
+  "q": "Cofondateur du même studio, réalisateur du Tombeau des lucioles"
+ },
+ {
+  "a": "Le Tombeau des Lucioles",
+  "q": "Film Ghibli le plus déchirant, frère et sœur en 1945"
+ },
+ {
+  "a": "Eiichiro Oda",
+  "q": "Auteur de One Piece"
+ },
+ {
+  "a": "Masashi Kishimoto",
+  "q": "Auteur de Naruto"
+ },
+ {
+  "a": "Akira Toriyama",
+  "q": "Auteur de Dragon Ball"
+ },
+ {
+  "a": "Kohei Horikoshi",
+  "q": "Auteur de My Hero Academia"
+ },
+ {
+  "a": "Gege Akutami",
+  "q": "Auteur de Jujutsu Kaisen"
+ },
+ {
+  "a": "Koyoharu Gotouge",
+  "q": "Auteur de Demon Slayer"
+ },
+ {
+  "a": "Hajime Isayama",
+  "q": "Auteur de L'Attaque des Titans"
+ },
+ {
+  "a": "Yoshihiro Togashi",
+  "q": "Auteur de Hunter x Hunter et de Yu Yu Hakusho"
+ },
+ {
+  "a": "Tsugumi Ohba",
+  "q": "Scénariste de Death Note"
+ },
+ {
+  "a": "Takeshi Obata",
+  "q": "Dessinateur de Death Note et de Bakuman"
+ },
+ {
+  "a": "Hirohiko Araki",
+  "q": "Auteur de JoJo's Bizarre Adventure"
+ },
+ {
+  "a": "Rumiko Takahashi",
+  "q": "Auteure d'Inuyasha et de Ranma 1/2"
+ },
+ {
+  "a": "Naoki Urasawa",
+  "q": "Auteur de Monster et de 20th Century Boys"
+ },
+ {
+  "a": "ONE",
+  "q": "Auteur du webcomic original de One Punch Man"
+ },
+ {
+  "a": "Yusuke Murata",
+  "q": "Dessinateur de One Punch Man"
+ },
+ {
+  "a": "Kentaro Miura",
+  "q": "Auteur de Berserk décédé en 2021"
+ },
+ {
+  "a": "Go Nagai",
+  "q": "Pionnier des mechas démoniaques avec Mazinger Z"
+ },
+ {
+  "a": "Mazinger Z",
+  "q": "Anime pionnier du mecha piloté depuis la tête"
+ },
+ {
+  "a": "Gundam",
+  "q": "Saga de robots militaires amorcée en 1979"
+ },
+ {
+  "a": "Kaiji",
+  "q": "Anime des jeux d'argent mortels de Fukumoto"
+ },
+ {
+  "a": "One Outs",
+  "q": "Anime de baseball psychologique aux paris truqués"
+ },
+ {
+  "a": "Kakegurui",
+  "q": "Anime du lycée où tout se joue en paris mortels"
+ },
+ {
+  "a": "Yumeko Jabami",
+  "q": "Étudiante aux paris compulsifs et au sourire lumineux"
+ },
+ {
+  "a": "Kaguya-sama: Love is War",
+  "q": "Anime de la guerre psychologique en love entre deux génies",
+  "alts": [
+   "Kaguya sama",
+   "Kaguya"
+  ]
+ },
+ {
+  "a": "Rent-A-Girlfriend",
+  "q": "Anime de la fausse petite amie louée par application"
+ },
+ {
+  "a": "Horimiya",
+  "q": "Anime de lycée où les deux héros cachent une face cachée"
+ },
+ {
+  "a": "Your Lie in April",
+  "q": "Anime du pianiste qui retrouve les couleurs grâce à un violon — « Shigatsu »"
+ },
+ {
+  "a": "A Silent Voice",
+  "q": "Film d'animation sur l'intimidation et la langue des signes"
+ },
+ {
+  "a": "I Want to Eat Your Pancreas",
+  "q": "Film au titre étrange sur une fille malade et son camarade discret"
+ },
+ {
+  "a": "Suzume",
+  "q": "Film de Shinkai sur les portes et les catastrophes"
+ },
+ {
+  "a": "Akame ga Kill",
+  "q": "Anime des assassins de nuit contre un empire corrompu"
+ },
+ {
+  "a": "Kill la Kill",
+  "q": "Anime des uniformes vivants et des ciseaux géants"
+ },
+ {
+  "a": "Gurren Lagann",
+  "q": "Anime des perceurs de ciel et du spiral"
+ },
+ {
+  "a": "Tengen Toppa Gurren Lagann",
+  "q": "Titre complet de l'anime du foret céleste"
+ },
+ {
+  "a": "Attack on Titan",
+  "q": "Titre anglais de l'anime des murs",
+  "alts": [
+   "L'Attaque des Titans",
+   "Shingeki no Kyojin"
+  ]
+ },
+ {
+  "a": "Shingeki no Kyojin",
+  "q": "Titre original japonais des titans",
+  "alts": [
+   "L'Attaque des Titans",
+   "Attack on Titan"
+  ]
+ },
+ {
+  "a": "Kimetsu no Yaiba",
+  "q": "Titre original japonais des pourfendeurs de démons",
+  "alts": [
+   "Demon Slayer"
+  ]
+ },
+ {
+  "a": "Boku no Hero Academia",
+  "q": "Titre original japonais des héros en formation",
+  "alts": [
+   "My Hero Academia"
+  ]
+ },
+ {
+  "a": "One Piece Film Red",
+  "q": "Film de 2022 centré sur la diva Uta"
+ },
+ {
+  "a": "Bleach: Thousand-Year Blood War",
+  "q": "Arc final de l'anime des Shinigami contre les Quincy",
+  "alts": [
+   "Thousand Year Blood War"
+  ]
+ },
+ {
+  "a": "Boruto: Naruto Next Generations",
+  "q": "Titre complet de la suite de Naruto",
+  "alts": [
+   "Boruto"
+  ]
+ },
+ {
+  "a": "Great Teacher Onizuka",
+  "q": "Anime de l'ancien voyou devenu professeur légendaire",
+  "alts": [
+   "GTO"
+  ]
+ },
+ {
+  "a": "Onizuka",
+  "q": "Nom du professeur voyou de l'anime GTO"
+ },
+ {
+  "a": "GTO",
+  "q": "Sigle du Grand Teacher Onizuka",
+  "alts": [
+   "Great Teacher Onizuka"
+  ]
+ },
+ {
+  "a": "Lupin III",
+  "q": "Anime du petit-fils du gentleman cambrioleur le plus célèbre"
+ },
+ {
+  "a": "Lupin",
+  "q": "Nom de famille du cambrioleur au chapeau, arrière-petit-fils du célèbre voleur français"
+ },
+ {
+  "a": "Goemon",
+  "q": "Épéiste de l'équipe de Lupin au sabre Zantetsuken"
+ },
+ {
+  "a": "Jigen",
+  "q": "Tireur d'élite barbu du trio de Lupin"
+ },
+ {
+  "a": "Fujiko",
+  "q": "Voleuse envoûtante du gang de Lupin"
+ },
+ {
+  "a": "Zenigata",
+  "q": "Inspecteur de l'Interpol qui traque Lupin sans relâche"
+ },
+ {
+  "a": "City Hunter",
+  "q": "Anime du nettoyeur au marteau-piqueur qui répond aux annonces",
+  "alts": [
+   "Nicky Larson"
+  ]
+ },
+ {
+  "a": "Nicky Larson",
+  "q": "Nom français de Ryo Saeba dans le City Hunter",
+  "alts": [
+   "City Hunter",
+   "Ryo Saeba"
+  ]
+ },
+ {
+  "a": "Ryo Saeba",
+  "q": "Nom original du nettoyeur de Tokyo dans City Hunter",
+  "alts": [
+   "Nicky Larson",
+   "City Hunter"
+  ]
+ },
+ {
+  "a": "Cat's Eyes",
+  "q": "Anime des trois sœurs voleuses d'œuvres d'art"
+ },
+ {
+  "a": "Hokuto no Ken",
+  "q": "Titre original de l'anime de Kenshiro",
+  "alts": [
+   "Ken le Survivant",
+   "Fist of the North Star"
+  ]
+ },
+ {
+  "a": "Kenshiro",
+  "q": "Héros des cent craquements du Hokuto Shinken"
+ },
+ {
+  "a": "Raoh",
+  "q": "Frère aîné de Kenshiro, conquérant du Hokuto"
+ },
+ {
+  "a": "Fist of the North Star",
+  "q": "Titre anglais de l'anime de Kenshiro",
+  "alts": [
+   "Hokuto no Ken",
+   "Ken le Survivant"
+  ]
+ },
+ {
+  "a": "Baki",
+  "q": "Anime des combats de mains nues entre monstres de musculation"
+ },
+ {
+  "a": "Hanma Baki",
+  "q": "Nom complet du jeune champion de l'anime Baki"
+ },
+ {
+  "a": "Yujiro Hanma",
+  "q": "Le père le plus fort du monde dans Baki"
+ },
+ {
+  "a": "Kengan Ashura",
+  "q": "Anime des combats d'entreprises aux gladiateurs"
+ },
+ {
+  "a": "Ohma Tokita",
+  "q": "Gladiateur principal du Kengan"
+ },
+ {
+  "a": "Shuumatsu no Valkyrie",
+  "q": "Anime des dieux contre les humains en 13 duels, Record of Ragnarok",
+  "alts": [
+   "Record of Ragnarok"
+  ]
+ },
+ {
+  "a": "Record of Ragnarok",
+  "q": "Titre anglais du tournoi des dieux contre l'humanité",
+  "alts": [
+   "Shuumatsu no Valkyrie"
+  ]
+ },
+ {
+  "a": "Lu Bu",
+  "q": "Champion chinois premier duel de Ragnarok"
+ },
+ {
+  "a": "Adam",
+  "q": "Premier homme à boxer Zeus en Ragnarok"
+ },
+ {
+  "a": "Zeus",
+  "q": "Dieu suprême grec au combat dans Ragnarok"
+ },
+ {
+  "a": "Hell's Paradise",
+  "q": "Anime de l'immortelle et de l'île aux elixirs, Jigokuraku"
+ },
+ {
+  "a": "Gabimaru",
+  "q": "Ninja immortel de Hell's Paradise"
+ },
+ {
+  "a": "Oshi no Ko",
+  "q": "Anime de l'idole assassinée et de ses jumeaux"
+ },
+ {
+  "a": "Ai Hoshino",
+  "q": "Idole étoile d'Oshi no Ko"
+ },
+ {
+  "a": "Bocchi the Rock",
+  "q": "Anime de la guitariste anxieuse en survêtement rose"
+ },
+ {
+  "a": "Hitori Gotoh",
+  "q": "Nom complet de la guitariste anxieuse de Bocchi"
+ },
+ {
+  "a": "Angel Beats",
+  "q": "Anime des adolescents décédés dans un lycée de l'au-delà"
+ },
+ {
+  "a": "Clannad",
+  "q": "Anime touchant de la famille et de la grande illusion"
+ },
+ {
+  "a": "Air",
+  "q": "Anime de Key sur la fille ailée d'été"
+ },
+ {
+  "a": "Kanon",
+  "q": "Anime de Key sur la neige et les souvenirs oubliés"
+ },
+ {
+  "a": "Charlotte",
+  "q": "Anime des adolescentes aux pouvoirs instables d'un compositeur de Jun Maeda"
+ },
+ {
+  "a": "Erased",
+  "q": "Anime du retour dans l'enfance pour empêcher des enlèvements"
+ },
+ {
+  "a": "The Promised Neverland",
+  "q": "Anime de l'orphelinat où les enfants sont du bétail",
+  "alts": [
+   "Promised Neverland"
+  ]
+ },
+ {
+  "a": "Emma",
+  "q": "Principale fugueuse du Promised Neverland"
+ },
+ {
+  "a": "Norman",
+  "q": "Génie brun du Promised Neverland"
+ },
+ {
+  "a": "Ray",
+  "q": "Stratège sombre du Promised Neverland"
+ },
+ {
+  "a": "Assassination Classroom",
+  "q": "Anime d'une classe chargée de tuer leur professeur pieuvre"
+ },
+ {
+  "a": "Koro-sensei",
+  "q": "Professeur pieuvre supersonique de la classe 3-E"
+ },
+ {
+  "a": "Karma Akabane",
+  "q": "Élève sulfureux et sadique de la classe 3-E"
+ },
+ {
+  "a": "Nagisa Shiota",
+  "q": "Élève au don d'agression de la classe d'assassination"
+ },
+ {
+  "a": "Made in Abyss",
+  "q": "Anime du gouffre aux trésors mortels"
+ },
+ {
+  "a": "Riko",
+  "q": "Exploratrice du gouffre dans Made in Abyss"
+ },
+ {
+  "a": "Reg",
+  "q": "Robot garçon du gouffre dans Made in Abyss"
+ },
+ {
+  "a": "Nanatsu no Taizai",
+  "q": "Titre original des sept péchés capitaux",
+  "alts": [
+   "Seven Deadly Sins"
+  ]
+ },
+ {
+  "a": "Seven Deadly Sins",
+  "q": "Titre anglais des chevaliers du péché",
+  "alts": [
+   "Nanatsu no Taizai"
+  ]
+ },
+ {
+  "a": "Konosuba",
+  "q": "Anime du party dysfonctionnel dans un monde de fantasy parodique"
+ },
+ {
+  "a": "Kazuma",
+  "q": "Héros cynique renaissant dans Konosuba"
+ },
+ {
+  "a": "Aqua",
+  "q": "Déesse inutile aux larmes faciles dans Konosuba"
+ },
+ {
+  "a": "Megumin",
+  "q": "Archimage qui ne lance qu'une seule explosion par jour"
+ },
+ {
+  "a": "Darkness",
+  "q": "Croisée masochiste qui ne touche jamais sa cible"
+ },
+ {
+  "a": "Overlord",
+  "q": "Anime du joueur coincé dans son avatar de roi-squelette"
+ },
+ {
+  "a": "Ainz Ooal Gown",
+  "q": "Roi-squelette de Nazarick dans Overlord"
+ },
+ {
+  "a": "Albedo",
+  "q": "Soubrette succube amoureuse du roi-squelette"
+ },
+ {
+  "a": "Saga of Tanya the Evil",
+  "q": "Anime de la réincarnation d'un salaryman en petite fille militaire"
+ },
+ {
+  "a": "Tanya Degurechaff",
+  "q": "Petite fille soldat rationnelle et terrifiante"
+ },
+ {
+  "a": "Youjo Senki",
+  "q": "Titre original de la saga de Tanya"
+ },
+ {
+  "a": "Rising of the Shield Hero",
+  "q": "Anime du héros trahi au bouclier"
+ },
+ {
+  "a": "Naofumi Iwatani",
+  "q": "Héros du bouclier trahi au royaume de Melromarc"
+ },
+ {
+  "a": "Mushoku Tensei",
+  "q": "Anime de réincarnation dans un monde de magie avec un bebé surdoué"
+ },
+ {
+  "a": "Rudeus Greyrat",
+  "q": "Réincarnation prodige de la magie dans Mushoku Tensei"
+ },
+ {
+  "a": "Slime",
+  "q": "Anime du salaryman réincarné en slime le plus fort",
+  "alts": [
+   "That Time I Got Reincarnated as a Slime"
+  ]
+ },
+ {
+  "a": "Rimuru Tempest",
+  "q": "Slime diplomate et dévoreur de compétences"
+ },
+ {
+  "a": "That Time I Got Reincarnated as a Slime",
+  "q": "Titre complet de l'anime du slime",
+  "alts": [
+   "Slime",
+   "Tensei Shitara Slime Datta Ken"
+  ]
+ },
+ {
+  "a": "Tenkaichi",
+  "q": "Nom du grand tournoi d'arts martiaux de Dragon Ball",
+  "alts": [
+   "Tenkaichi Budokai"
+  ]
+ },
+ {
+  "a": "Sannin",
+  "q": "Nom collectif des Jiraiya, Orochimaru et Tsunade",
+  "alts": [
+   "Les 3 Sannin"
+  ]
+ },
+ {
+  "a": "Katsuyu",
+  "q": "Nom de l'escargot géant invoqué par Tsunade"
+ },
+ {
+  "a": "Soul Society",
+  "q": "Monde des Shinigami dans Bleach"
+ },
+ {
+  "a": "Hueco Mundo",
+  "q": "Monde des Hollows dans Bleach"
+ },
+ {
+  "a": "Gomu Gomu",
+  "q": "Nom du fruit du démon élastique de Luffy"
+ },
+ {
+  "a": "Suna",
+  "q": "Nom original du village de Gaara"
+ },
+ {
+  "a": "Dark Continent",
+  "q": "Nom du continent interdit exploré dans Hunter x Hunter"
+ },
+ {
+  "a": "Nichirin",
+  "q": "Nom du métal des sabres des pourfendeurs"
+ },
+ {
+  "a": "Hashira",
+  "q": "Nom des neuf piliers des pourfendeurs"
+ },
+ {
+  "a": "Domain Expansion",
+  "q": "Nom de la technique ultime d'espace des exorcistes"
+ },
+ {
+  "a": "Class 1-A",
+  "q": "Nom de la classe de Deku et Bakugo",
+  "alts": [
+   "1-A"
+  ]
+ },
+ {
+  "a": "UA",
+  "q": "Nom de l'école de héros de My Hero Academia",
+  "alts": [
+   "U.A.",
+   "Yuei"
+  ]
+ },
+ {
+  "a": "Aincrad",
+  "q": "Nom du château flottant de SAO"
+ },
+ {
+  "a": "Maria",
+  "q": "Nom du mur extérieur des trois de l'humanité"
+ },
+ {
+  "a": "Shinigami",
+  "q": "Type d'être qui possède le cahier mortel de l'anime de Kira"
+ },
+ {
+  "a": "Pokemon",
+  "q": "Nom du premier partenaire électrique de Sacha"
+ },
+ {
+  "a": "Ash",
+  "q": "Nom anglais de Sacha dans Pokémon",
+  "alts": [
+   "Sacha"
+  ]
+ },
+ {
+  "a": "Brock",
+  "q": "Nom du dresseur de roche compagnon de route de Sacha"
+ },
+ {
+  "a": "Team Rocket",
+  "q": "Nom de l'équipe aux uniformes noirs qui veut voler Pikachu",
+  "alts": [
+   "La Team Rocket"
+  ]
+ },
+ {
+  "a": "Jessie",
+  "q": "Femme de la Team Rocket aux cheveux rouges flamboyants"
+ },
+ {
+  "a": "Himiko Toga",
+  "q": "Vilaine sangsue du même anime que Deku qui se déguise en buvant le sang"
+ },
+ {
+  "a": "All For One",
+  "q": "Grand méchant voleur de Dons, opposé au One For All"
+ },
+ {
+  "a": "One For All",
+  "q": "Nom du Don transmissible qui s'accumule de génération en génération"
+ },
+ {
+  "a": "Zoro",
+  "q": "Nom de l'épéiste qui rêve de devenir le meilleur sabreur du monde"
+ },
+ {
+  "a": "Mihawk",
+  "q": "Nom du meilleur sabreur du monde aux yeux de faucon"
+ },
+ {
+  "a": "Gol D. Roger",
+  "q": "Roi des pirates exécuté à Log Town"
+ },
+ {
+  "a": "Haki",
+  "q": "Nom des trois types de volonté armée, observée et des conquérants"
+ },
+ {
+  "a": "Conqueror",
+  "q": "Type de Haki rare des rois naturels"
+ },
+ {
+  "a": "Kenbunshoku",
+  "q": "Nom du Haki d'observation"
+ },
+ {
+  "a": "Busoshoku",
+  "q": "Nom du Haki de l'armement"
+ },
+ {
+  "a": "Nen",
+  "q": "Nom du pouvoir intérieur universel de Hunter x Hunter"
+ },
+ {
+  "a": "Rasengan",
+  "q": "Technique sphérique tournoyante créée par le Quatrième Hokage"
+ },
+ {
+  "a": "Chidori",
+  "q": "Technique d'éclair du poing de Sasuke et Kakashi"
+ },
+ {
+  "a": "Sharingan",
+  "q": "Œil qui copie les techniques et lit les mouvements"
+ },
+ {
+  "a": "Byakugan",
+  "q": "Œil blanc qui voit tout le réseau d'énergie"
+ },
+ {
+  "a": "Rinnegan",
+  "q": "Œil en cercles concentriques du leader de l'Akatsuki"
+ },
+ {
+  "a": "Susanoo",
+  "q": "Armure spectrale géante du MS"
+ },
+ {
+  "a": "Bankai",
+  "q": "Deuxième libération des sabres divins dans Bleach"
+ },
+ {
+  "a": "Getsuga Tensho",
+  "q": "Technique de lune féroce du sabre d'Ichigo"
+ },
+ {
+  "a": "Kamehameha",
+  "q": "Salut de la tortue le plus célèbre des animes"
+ },
+ {
+  "a": "Kaioken",
+  "q": "Technique de multiplication de la puissance de Goku"
+ },
+ {
+  "a": "Super Saiyan",
+  "q": "Transformation dorée légendaire des Saiyans"
+ },
+ {
+  "a": "Ultra Instinct",
+  "q": "État des dieux où le corps bouge sans penser"
+ },
+ {
+  "a": "Titan",
+  "q": "Créature géante qui dévore les humains dans l'anime des murs"
+ },
+ {
+  "a": "Odm",
+  "q": "Équipement tridimensionnel des soldats contre les titans",
+  "alts": [
+   "EDM",
+   "Dispositif Tridimensionnel"
+  ]
+ },
+ {
+  "a": "Total Concentration",
+  "q": "Respiration constante des pourfendeurs"
+ },
+ {
+  "a": "Black Flash",
+  "q": "Phénomène d'impact parfait de l'énergie occulte"
+ },
+ {
+  "a": "Chunin",
+  "q": "Grade des ninjas confirmés après l'examen du même nom"
+ },
+ {
+  "a": "Hokage",
+  "q": "Titre du chef du village de la Feuille"
+ },
+ {
+  "a": "Kazekage",
+  "q": "Titre du chef du village du Sable"
+ },
+ {
+  "a": "Raikage",
+  "q": "Titre du chef du village de la Nuée"
+ },
+ {
+  "a": "Jinchuriki",
+  "q": "Nom des humains porteurs de démons à queues"
+ },
+ {
+  "a": "Mangekyo",
+  "q": "Forme évoluée du œil copieur après un trauma",
+  "alts": [
+   "Mangekyou"
+  ]
+ },
+ {
+  "a": "Eternal Mangekyo",
+  "q": "Forme éternelle de l'œil obtenu avec un œil de frère",
+  "alts": [
+   "Mangekyo Eternel"
+  ]
+ },
+ {
+  "a": "Madara",
+  "q": "Uchiha légendaire ressuscité, rival du Premier Hokage",
+  "alts": [
+   "Madara Uchiha"
+  ]
+ },
+ {
+  "a": "Hashirama",
+  "q": "Premier Hokage, maître du bois",
+  "alts": [
+   "Hashirama Senju"
+  ]
+ },
+ {
+  "a": "Konoha",
+  "q": "Village caché de la Feuille"
+ },
+ {
+  "a": "Kirigakure",
+  "q": "Village caché de la Brume"
+ },
+ {
+  "a": "Iwagakure",
+  "q": "Village caché de la Roche"
+ },
+ {
+  "a": "Kumogakure",
+  "q": "Village caché de la Nuée"
+ }
 ]

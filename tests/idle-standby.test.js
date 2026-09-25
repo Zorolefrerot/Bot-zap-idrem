@@ -138,15 +138,14 @@ test('une session de quiz en cours réveille les joueurs (pas de quiz bloqué)',
   await until(() => /QUESTION 1\/5/.test(lastBody(adapter)), 10000);
   // Le bot s'endort pendant le quiz (aucune activité depuis la question)
   await sleepThread(bot, t);
-  // Réponse d'un joueur quelconque — en REPLY au message de la question (mode v3)
+  // Réponse LIBRE correcte d'un joueur quelconque (moteur Xid)
   const session = bot.sessions.get(t, 'quiz');
-  await until(() => session && session.currentQuestionID, 5000);
-  await bot.handleMessage(makeMsg(t, UIDS.paul, 'A', {
-    messageReply: { senderID: 'BOT_MOCK_000000', messageID: session.currentQuestionID },
-  }));
+  const cgBank = require('../systems/questions/cg.json');
+  const item = session && session.questions ? session.questions[0] : null;
+  await bot.handleMessage(makeMsg(t, UIDS.paul, item ? item.a : 'réponse'));
   assert.strictEqual(bot.idle.isSleeping(t), false, 'la session accepte tout le groupe → réveil');
-  // La réponse a bien été traitée (point / silence possible si mauvaise, mais réveil OK)
-  await until(() => /prend le point|CLASSEMENT|TEMPS/.test(lastBody(adapter)) || bot.sessions.get(t, 'quiz') === null || true, 1000);
+  // La réponse a bien été traitée → réveil + point
+  await until(() => /prend le point|CLASSEMENT/.test(lastBody(adapter)), 8000);
   await bot.handleMessage(makeMsg(t, UIDS.shadow, 'cancel'));
 });
 

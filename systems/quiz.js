@@ -1,29 +1,29 @@
 'use strict';
 /*
- * 🧬 MeR~NeL — systems/quiz.js  (v2 — quiz de GROUPE)
- * Machine d'état : WAITING_CATEGORY → WAITING_COUNT → RUNNING → FINISHED
+ * 🧬 MeR~NeL — systems/quiz.js  (v4 — moteur Xid, réponses LIBRES)
+ * Xquiz de groupe : plus de QCM. Le bot donne un INDICE (personnage,
+ * anime, culture générale, capitale ou drapeau) et tout le groupe
+ * répond DIRECTEMENT — prénom OU nom OU nom complet.
  *
- * Logique demandée :
- *  - LANCEUR choisit catégorie (CG/MULTIVERS/ID) puis nombre (5/10/15) ;
- *  - « 🎮 QUIZ LANCÉ — Thème: CG — 10 Questions — Tout le monde peut jouer ! » ;
- *  - chaque question : 15 s, TOUT le groupe peut répondre, 1 réponse/personne ;
- *  - la PREMIÈRE bonne réponse marque +1 point — pour le senderID de celui
- *    qui a répondu (JAMAIS celui du lanceur — fix du vol de points) ;
- *  - une mauvaise réponse = exclu de CETTE question (pas de pénalité) ;
- *  - personne ne trouve → « Temps écoulé, réponse: X » → question suivante ;
- *  - fin : classement général avec gains.
+ *  - configuration réservée au lanceur : catégorie → nombre (5/10/15) ;
+ *  - « 🎮 QUIZ LANCÉ — Thème/Questions/Tout le monde peut jouer ! » ;
+ *  - première bonne réponse = +10 points AU senderID de celui qui répond
+ *    (jamais au lanceur) ; tolérance orthographique + variantes (moteur Xid) ;
+ *  - mauvaise réponse = silencieuse, on peut retenter immédiatement ;
+ *  - timer 15 s → « Temps écoulé + réponse » → suivante ;
+ *  - fin : 🏁 CLASSEMENT GÉNÉRAL (tableau final seul) + gains.
  */
 
-const { CATEGORIES, loadBank, resolveCategory, shuffle, idImagePath } = require('./questions');
+const { CATEGORIES, loadBank, resolveCategory, shuffle } = require('./questions');
+const { matchAnswer } = require('./mangaQuiz');
 const fmt = require('../utils/formatter');
 const { safeInt } = require('../utils/sanitize');
 
-const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
-const CANCEL_WORDS = new Set(['cancel', 'annuler', 'stop', 'quit', 'quitter', 'exit']);
+const CANCEL_WORDS = new Set(['cancel', 'annuler', 'stop', 'quit', 'quitter', 'exit', '!stop']);
 
 class GroupQuizSession {
   /**
-   * @param {object} bot contexte global (api, config, db, economy, xp…)
+   * @param {object} bot contexte global
    * @param {object} p   { threadID, ownerID, ownerName, send }
    */
   constructor(bot, p) {
@@ -42,10 +42,8 @@ class GroupQuizSession {
     this.questions = [];
     this.index = 0;
 
-    /** Map<uid, {name, score}> — participants (ceux qui ont marqué). */
+    /** Map<uid, {name, score}> — points (+10 par bonne réponse). */
     this.scores = new Map();
-    /** messageID de la QUESTION courante : seules les RÉPONSES à ce message comptent. */
-    this.currentQuestionID = null;
     /** true tant que personne n'a trouvé la question courante. */
     this.firstCorrectPending = false;
 
@@ -77,7 +75,6 @@ class GroupQuizSession {
     this._clearTimers();
     this.finished = true;
     this.awaitingAnswer = false;
-    this.currentQuestionID = null;
     if (this.bot && this.bot.sessions) {
       this.bot.sessions.remove(this.threadID, this.scope);
     }
@@ -95,12 +92,14 @@ class GroupQuizSession {
       fmt.frame('🎮 XQUIZ', [
         '「' + fmt.bold('PLEASE CHOOSE YOUR CATEGORY') + '」',
         '',
-        `🪪 ${fmt.bold('ID')} — ${fmt.bold('Identification')}`,
-        `🌌 ${fmt.bold('MULTIVERS')} — ${fmt.bold('Anime')}`,
-        `🧠 ${fmt.bold('CG')} — ${fmt.bold('Culture générale')}`,
+        '🪪 ' + fmt.bold('ID') + ' — ' + fmt.bold('Indices de personnages'),
+        '🌌 ' + fmt.bold('MULTIVERS') + ' — ' + fmt.bold('Anime & mangas'),
+        '🧠 ' + fmt.bold('CG') + ' — ' + fmt.bold('Culture générale'),
+        '🌍 ' + fmt.bold('CAPITALE') + ' — ' + fmt.bold('Trouve la capitale du pays'),
+        '🚩 ' + fmt.bold('DRAPEAU') + ' — ' + fmt.bold('Trouve le pays du drapeau'),
         '',
-        fmt.bold('Réponds directement : ID / MULTIVERS / CG'),
-        '⚠️ ' + fmt.bold('Tape « cancel » pour annuler.'),
+        '⚠️ ' + fmt.bold('Réponses LIBRES : tape directement la réponse.'),
+        '🛑 ' + fmt.bold('Tape « cancel » pour annuler.'),
       ])
     );
   }
@@ -148,7 +147,7 @@ class GroupQuizSession {
         await this.send(fmt.frame('🎮 XQUIZ', '🛑 ' + fmt.bold('Trop d’erreurs — quiz annulé.')));
         return true;
       }
-      await this.send(fmt.frame('🎮 XQUIZ', '⚠️ ' + fmt.bold('Catégorie inconnue.') + '\nRéponds : 𝗜𝗗 / 𝗠𝗨𝗟𝗧𝗜𝗩𝗘𝗥𝗦 / 𝗖𝗚'));
+      await this.send(fmt.frame('🎮 XQUIZ', '⚠️ ' + fmt.bold('Catégorie inconnue.') + '\nRéponds : 𝗜𝗗 / 𝗠𝗨𝗟𝗧𝗜𝗩𝗘𝗥𝗦 / 𝗖𝗚 / 𝗖𝗔𝗣𝗜𝗧𝗔𝗟𝗘 / 𝗗𝗥𝗔𝗣𝗘𝗔𝗨'));
       return true;
     }
     const bank = loadBank(cat);
@@ -197,15 +196,14 @@ class GroupQuizSession {
         `🎯 ${fmt.bold('Thème')} : ${fmt.bold(catLabel)} — ${fmt.bold('Questions')} : ${fmt.boldNum(this.count)}`,
         '',
         '📢 ' + fmt.bold('Tout le monde peut jouer !'),
-        '⚡ ' + fmt.bold(`Première bonne réponse = +1 point (${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s par question).`),
-        '🚫 ' + fmt.bold('Réponse fausse = exclu de la question en cours.'),
+        '⚡ ' + fmt.bold(`Réponds directement — prénom OU nom OU nom complet (+10 pts, ${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s par question).`),
       ])
     );
     await this._askQuestion();
     return true;
   }
 
-  /* ── Pose la question courante au groupe (message TAGUÉ) ── */
+  /* ── Pose la question courante (indice texte / drapeau) ── */
   async _askQuestion() {
     if (this.finished) return;
     this._clearTimers();
@@ -213,66 +211,28 @@ class GroupQuizSession {
     if (!q) return this._finish();
 
     this.firstCorrectPending = true;
-    this._currentOptions = q.type === 'mcq' ? shuffle(q.options) : null;
-    if (this._currentOptions) {
-      const correctIdx = this._currentOptions.indexOf(q.answer);
-      this._correctLetter = LETTERS[correctIdx];
-    }
 
+    const style = CATEGORIES[this.category].style;
     const header = `🎮 QUESTION ${this.index + 1}/${this.count}`;
-    const instructions = [
-      '👉 ' + fmt.bold('Pour répondre : RÉPONDEZ à ce message') + ' — ' + fmt.bold('plusieurs essais autorisés !'),
-      '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`) + ' — ' + fmt.bold('première bonne réponse = +1 point'),
-    ];
-    const payload = {};
-    let lines;
+    const lines = [];
 
-    if (q.type === 'mcq') {
-      lines = [
-        '🧠 ' + fmt.bold(q.q),
-        '',
-        ...this._currentOptions.map((opt, i) => `▸ ${fmt.bold(LETTERS[i])}) ${fmt.bold(opt)}`),
-        '',
-        ...instructions,
-      ];
+    if (style === 'drapeau') {
+      lines.push(q.q, '', '❓ ' + fmt.bold('Quel pays ?'));
+    } else if (style === 'capitale') {
+      lines.push('🌍 ' + fmt.bold('Pays') + ' : ' + fmt.bold(q.q), '', '❓ ' + fmt.bold('Quelle est SA capitale ?'));
     } else {
-      lines = ['🪪 ' + fmt.bold('IDENTIFIE CE PERSONNAGE')];
-      const imgPath = idImagePath(q.image);
-      if (!imgPath && q.hint) lines.push('🧩 ' + fmt.bold('Indice') + ' : ' + q.hint);
-      lines.push('', ...instructions);
-      const attachment = imgPath;
-      if (attachment) payload.attachment = attachment;
+      lines.push('🧩 ' + fmt.bold(q.q), '', '❓ ' + fmt.bold('Qui ou quoi ?'));
     }
-    const base = fmt.frame(header, lines);
-    payload.body = base;
+    lines.push(
+      '👉 ' + fmt.bold('Réponds directement') + ' — ' + fmt.bold('prénom OU nom OU nom complet'),
+      '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`) + ' — ' + fmt.bold('première bonne réponse = +10 pts')
+    );
 
-    // 📢 Question TAGUÉE : les membres du groupe sont mentionnés (comme Xtag).
-    try {
-      const tInfo = await this.bot.adapter.getThreadInfo(this.threadID);
-      const ids = ((tInfo && (tInfo.participantIDs || (tInfo.userInfo || []).map((u) => u.id))) || [])
-        .map(String)
-        .filter((uid) => uid && uid !== String(this.bot.adapter.botID))
-        .slice(0, 25);
-      if (ids.length) {
-        const infos = await this.bot.adapter.userCache.fetch(ids).catch(() => ({}));
-        const prefix = base + '\n\n';
-        let tagLine = '';
-        const mentions = {};
-        for (const uid of ids) {
-          const nm = (infos[uid] && infos[uid].name) || 'Membre';
-          const tag = `@${String(nm).split(/\s+/)[0]}`;
-          mentions[uid] = { tag, from: prefix.length + tagLine.length };
-          tagLine += tag + ' ';
-        }
-        payload.body = prefix + tagLine.trim();
-        payload.mentions = mentions;
-      }
-    } catch (_) { /* mentions indisponibles → question simple */ }
+    const payload = { body: fmt.frame(header, lines) };
 
     // La question devient « live » AVANT l'envoi (pas de course avec le client).
     this.awaitingAnswer = true;
-    const sentInfo = await this.send(payload);
-    this.currentQuestionID = sentInfo && sentInfo.messageID ? String(sentInfo.messageID) : null;
+    await this.send(payload);
 
     const timeoutMs = this.bot.config.games.quizTimeoutMs;
     this.questionTimer = setTimeout(() => {
@@ -288,24 +248,19 @@ class GroupQuizSession {
     await this.send(
       fmt.frame('⏱️ TEMPS ÉCOULÉ', [
         '❌ ' + fmt.bold('Personne n’a trouvé.'),
-        '✅ ' + fmt.bold('Réponse') + ' : ' + fmt.bold(q.answer),
+        '✅ ' + fmt.bold('Réponse') + ' : ' + fmt.bold(q.a),
       ])
     );
     await this._next();
   }
 
   /*
-   * ⚡ CŒUR DU FIX : le point va au senderID de celui qui RÉPOND,
-   * jamais au lanceur du quiz. Pour tenter sa chance, il FAUT répondre
-   * (reply) au message de la question — plusieurs essais, sans blocage.
+   * ⚡ CŒUR (moteur Xid) : première bonne réponse = +10 points au senderID
+   * de celui qui répond, jamais au lanceur. Tolérance orthographique et
+   * variantes. Mauvaise réponse = silencieuse, retente quand tu veux.
    */
   async _onAnswer(ctx, raw) {
-    // 1) Seule une RÉPONSE au message de la question compte.
-    const reply = ctx.event && ctx.event.messageReply;
-    if (!reply || !reply.messageID) return false;
-    if (!this.currentQuestionID || String(reply.messageID) !== this.currentQuestionID) return false;
-    // 2) Pause entre questions / question déjà remportée → consommé, ignoré.
-    if (!this.awaitingAnswer) return true;
+    if (!this.awaitingAnswer) return false; // pause entre questions → ignoré
     const q = this.questions[this.index];
     if (!q) return true;
     const uid = String(ctx.senderID); // ← l'auteur RÉEL de la réponse
@@ -314,50 +269,33 @@ class GroupQuizSession {
     // Question déjà remportée → réponses tardives ignorées (silencieux).
     if (!this.firstCorrectPending) return true;
 
-    const norm = fmt.normalizeAnswer(raw);
-    let correct = false;
-    if (q.type === 'mcq') {
-      // 1) égalité EXACTE (normalisée) avec le texte d'une option ;
-      const textHit = this._currentOptions.findIndex((opt) => fmt.normalizeAnswer(opt) === norm);
-      if (textHit >= 0) {
-        correct = textHit === this._currentOptions.indexOf(q.answer);
-      } else {
-        // 2) lettre (A-D) ou numéro d'option (1-4)
-        const m = norm.match(/^([abcd])(\)|\s|$)/) || norm.match(/^([1-4])$/);
-        if (m) {
-          const letter = /[1-4]/.test(m[1]) ? LETTERS[Number(m[1]) - 1] : m[1].toUpperCase();
-          correct = letter === this._correctLetter;
-        }
-      }
-    } else {
-      correct = fmt.answerMatches(raw, q.answer) || norm.includes(fmt.normalizeAnswer(q.answer));
-    }
+    // Tolérance : réponse exacte, prénom/nom seul, variantes (alts), petites fautes.
+    const candidates = [q.a, ...(q.alts || [])];
+    const correct = candidates.some((c) => matchAnswer(raw, c));
+    if (!correct) return true; // silencieux — réessaie !
 
-    if (correct) {
-      // PREMIER bon answerer → +1 point POUR LUI.
-      this.firstCorrectPending = false;
-      this.awaitingAnswer = false;
-      this._clearTimers();
-      const rec = this.scores.get(uid) || { name, score: 0 };
-      rec.name = name;
-      rec.score += 1;
-      this.scores.set(uid, rec);
-      // 📢 Annonce TAGUÉE : le vainqueur est mentionné.
-      const tag = `@${String(name).split(/\s+/)[0]}`;
-      const bodyText = fmt.frame('⚡ BONNE RÉPONSE', [
-        `✅ ${tag} ${fmt.bold('prend le point')} ! (+1)`,
-        `🏁 ${fmt.bold('Score')} : ${fmt.boldNum(rec.score)}`,
-      ]);
-      const payload = { body: bodyText };
-      const from = bodyText.indexOf(tag);
-      if (from >= 0) payload.mentions = { [uid]: { tag, from } };
-      await this.send(payload);
-      await this._next();
-      return true;
-    }
+    this.firstCorrectPending = false;
+    this.awaitingAnswer = false;
+    this._clearTimers();
 
-    // Mauvaise réponse → AUCUNE pénalité, on peut réessayer tout de suite
-    // (silencieux pour ne pas inonder le groupe).
+    const rec = this.scores.get(uid) || { name, score: 0 };
+    rec.name = name;
+    rec.score += 10;
+    this.scores.set(uid, rec);
+
+    // 📢 Annonce TAGUÉE : le gagnant est mentionné.
+    const tag = `@${String(name).split(/\s+/)[0]}`;
+    const bodyText = fmt.frame('⚡ BONNE RÉPONSE', [
+      `✅ ${tag} ${fmt.bold('prend le point')} ! (+10)`,
+      `✅ ${fmt.bold('Réponse')} : ${fmt.bold(q.a)}`,
+      `🏁 ${fmt.bold('Score')} : ${fmt.boldNum(rec.score)}`,
+    ]);
+    const payload = { body: bodyText };
+    const from = bodyText.indexOf(tag);
+    if (from >= 0) payload.mentions = { [uid]: { tag, from } };
+    await this.send(payload);
+
+    await this._next();
     return true;
   }
 
@@ -373,7 +311,7 @@ class GroupQuizSession {
     }, this.bot.config.games.interDelayMs);
   }
 
-  /* ── Classement général ── */
+  /* ── 🏁 CLASSEMENT GÉNÉRAL (tableau final, seul) ── */
   async _finish(notice) {
     if (this.finished) return;
     this.finished = true;
@@ -382,7 +320,6 @@ class GroupQuizSession {
 
     const ranking = [...this.scores.values()].sort((a, b) => b.score - a.score);
     const medals = ['🏆', '🥈', '🥉'];
-    const perCorrect = this.bot.config.games.quizCoinsPerCorrect;
     const lines = [];
 
     if (notice) lines.push(notice, '');
@@ -391,23 +328,23 @@ class GroupQuizSession {
     } else {
       ranking.forEach((rec, i) => {
         const icon = i < 3 ? medals[i] : '▸';
-        const coins = rec.score * perCorrect;
-        lines.push(`${icon} ${fmt.bold(rec.name)} — ${fmt.boldNum(rec.score)} ${fmt.bold(rec.score > 1 ? 'pts' : 'pt')}  (+${fmt.boldNum(coins)} XCoins)`);
+        const coins = Math.round((rec.score / 10) * 2); // 2 XCoins par bonne réponse
+        lines.push(`${icon} ${fmt.bold(rec.name)} — ${fmt.boldNum(rec.score)} ${fmt.bold(rec.score > 10 ? 'pts' : 'pt')}  (+${fmt.boldNum(coins)} XCoins)`);
       });
     }
     lines.push('', '🧠 ' + fmt.bold('Catégorie') + ' : ' + fmt.bold(this.category ? CATEGORIES[this.category].short : '—'));
 
     // Gains, XP et stats — par participant, selon SON score.
     for (const [uid, rec] of this.scores) {
-      const coins = rec.score * perCorrect;
+      const coins = Math.round((rec.score / 10) * 2);
       if (coins > 0) this.bot.economy.addCoins(uid, coins);
-      const xpGain = rec.score * 3 + 5;
+      const xpGain = Math.round(rec.score / 10) * 2 + 5;
       const xpRes = this.bot.xp.addXp(uid, xpGain);
       const user = this.bot.db.ensureUser(uid);
       user.stats.quizPlayed += 1;
-      user.stats.quizCorrect += rec.score;
-      user.stats.quizBestScore = Math.max(user.stats.quizBestScore || 0, rec.score);
-      if (xpRes.leveledUp) lines.push(`🎉 ${fmt.bold(rec.name)} ${fmt.bold('passe niveau')} ${fmt.boldNum(xpRes.level)} !`);
+      user.stats.quizCorrect += Math.round(rec.score / 10);
+      user.stats.quizBestScore = Math.max(user.stats.quizBestScore || 0, Math.round(rec.score / 10));
+      if (xpRes && xpRes.leveledUp) lines.push(`🎉 ${fmt.bold(rec.name)} ${fmt.bold('passe niveau')} ${fmt.boldNum(xpRes.level)} !`);
     }
     this.bot.db.users.save();
     this.bot.db.bumpStat('quizzesPlayed');

@@ -1,28 +1,1117 @@
 [
-  { "answer": "Luffy", "image": "luffy.jpg", "hint": "Chapeau de paille, cicatrice sous l'œil, futur roi des pirates." },
-  { "answer": "Zoro", "image": "zoro.jpg", "hint": "Cheveux verts, trois sabres, il se perd même en ligne droite." },
-  { "answer": "Nami", "image": null, "hint": "Cheveux orange, elle manipule le climat… et les portefeuilles." },
-  { "answer": "Sanji", "image": null, "hint": "Cigarette au bec, sourcil bouclé, il ne frappe jamais une femme." },
-  { "answer": "Naruto", "image": "naruto.jpg", "hint": "Blond, marques sur les joues, veste orange, ninja du village caché de la feuille." },
-  { "answer": "Sasuke", "image": null, "hint": "Cheveux noirs en piques, œil rouge, dernier survivant de son clan." },
-  { "answer": "Kakashi", "image": null, "hint": "Masque sur le visage, bandeau sur l'œil, il lit en marchant." },
-  { "answer": "Goku", "image": "goku.jpg", "hint": "Cheveux noirs dressés, kimono orange, il devient doré quand il s'énerve." },
-  { "answer": "Vegeta", "image": null, "hint": "Crête en flammes, prince fier d'une planète détruite." },
-  { "answer": "Gojo", "image": "gojo.jpg", "hint": "Cheveux blancs, bandeau noir sur les yeux, l'homme le plus fort de son école." },
-  { "answer": "Itadori", "image": null, "hint": "Cheveux roses, il a avalé un doigt maudit sans mourir." },
-  { "answer": "Sukuna", "image": null, "hint": "Tatouages noirs sur le visage, roi des fléaux aux vingt doigts." },
-  { "answer": "Tanjiro", "image": "tanjiro.jpg", "hint": "Boucles d'oreilles hanafuda, cicatrice au front, il renifle les démons." },
-  { "answer": "Nezuko", "image": "nezuko.jpg", "hint": "Bambou dans la bouche, elle craint le soleil mais protège son frère." },
-  { "answer": "Zenitsu", "image": null, "hint": "Kimono jaune, il tremble… jusqu'à ce qu'il s'endorme." },
-  { "answer": "Inosuke", "image": null, "hint": "Tête de sanglier, mais un visage d'ange caché dessous." },
-  { "answer": "Levi", "image": "levi.jpg", "hint": "Petit de taille, redoutable aux lames, obsédé par la propreté." },
-  { "answer": "Mikasa", "image": null, "hint": "Écharpe rouge, elle protège Eren quoi qu'il arrive." },
-  { "answer": "Eren", "image": null, "hint": "Il rêvait de liberté au-delà des murs… et criait sa rage." },
-  { "answer": "Light", "image": null, "hint": "Carnet noir à la main, il voulait un monde parfait en mangeant des pommes avec un démon." },
-  { "answer": "L", "image": null, "hint": "Assis accroupi, il ne mange que des sucreries et suspecte tout le monde." },
-  { "answer": "Killua", "image": "killua.jpg", "hint": "Cheveux blancs, ongles griffus, héritier d'une famille d'assassins." },
-  { "answer": "Gon", "image": null, "hint": "Cheveux noirs hérissés, canne à pêche, il part chercher son père." },
-  { "answer": "Edward", "image": null, "hint": "Alchimiste d'argent, très sensible sur sa petite taille, frère en armure." },
-  { "answer": "Pikachu", "image": null, "hint": "Souris jaune électrique qui refuse la pokéball de son dresseur." },
-  { "answer": "Itachi", "image": null, "hint": "Manteau aux nuages rouges, il a sacrifié son nom pour la paix." }
+ {
+  "a": "Naruto Uzumaki",
+  "q": "Ninja de Konoha en combinaison orange qui rêve de devenir Hokage"
+ },
+ {
+  "a": "Sasuke Uchiha",
+  "q": "Dernier survivant de son clan, rival de Naruto, aveuglé par la vengeance"
+ },
+ {
+  "a": "Sakura Haruno",
+  "q": "Ninja médecin aux cheveux roses, membre de l'équipe 7"
+ },
+ {
+  "a": "Kakashi Hatake",
+  "q": "Sensei de l'équipe 7, lit un livre orange, copie les techniques avec son Sharingan"
+ },
+ {
+  "a": "Itachi Uchiha",
+  "q": "Frère aîné de Sasuke, manteau noir à nuages rouges, génie tragique"
+ },
+ {
+  "a": "Gaara",
+  "q": "Maître du sable au front marqué « amour », futur Kazekage"
+ },
+ {
+  "a": "Jiraiya",
+  "q": "Ermite aux grenouilles, marrain de Naruto, légendaire Sannin"
+ },
+ {
+  "a": "Tsunade",
+  "q": "Cinquième Hokage, guérisseuse légendaire, grande amatrice de sake"
+ },
+ {
+  "a": "Orochimaru",
+  "q": "Serpent immortel obsédé par l'apprentissage de tous les jutsu"
+ },
+ {
+  "a": "Hinata Hyuga",
+  "q": "Timide héritière du Byakugan, secrètement amoureuse de Naruto"
+ },
+ {
+  "a": "Shikamaru Nara",
+  "q": "Stratège paresseux qui manipule les ombres, adore les nuages"
+ },
+ {
+  "a": "Rock Lee",
+  "q": "Maître du taijutsu pur, sauts légendaires, sourcils iconiques"
+ },
+ {
+  "a": "Might Guy",
+  "q": "Sensei de Lee, vert de la jeunesse, rival éternel de Kakashi"
+ },
+ {
+  "a": "Minato Namikaze",
+  "q": "Quatrième Hokage, surnommé l'Éclair Jaune de Konoha, père de Naruto"
+ },
+ {
+  "a": "Kurama",
+  "q": "Démon renard à neuf queues scellé dans un ninja",
+  "alts": [
+   "Kyubi"
+  ]
+ },
+ {
+  "a": "Konan",
+  "q": "Kunoichi de l'Akatsuki qui manie des fleurs en papier"
+ },
+ {
+  "a": "Monkey D. Luffy",
+  "q": "Pirate au chapeau de paille au corps élastique",
+  "alts": [
+   "Luffy"
+  ]
+ },
+ {
+  "a": "Roronoa Zoro",
+  "q": "Escrimeur à trois sabres qui ne connaît jamais le chemin",
+  "alts": [
+   "Zoro"
+  ]
+ },
+ {
+  "a": "Nami",
+  "q": "Navigatrice géniale qui manie le climat avec son bâton"
+ },
+ {
+  "a": "Usopp",
+  "q": "Tireur d'élite au long nez, roi des mensonges"
+ },
+ {
+  "a": "Sanji",
+  "q": "Cuisinier de l'équipage qui ne frappe jamais une femme"
+ },
+ {
+  "a": "Tony Tony Chopper",
+  "q": "Renne médecin qui a mangé un fruit du démon",
+  "alts": [
+   "Chopper"
+  ]
+ },
+ {
+  "a": "Nico Robin",
+  "q": "Archéologue qui fait pousser des membres n'importe où",
+  "alts": [
+   "Robin"
+  ]
+ },
+ {
+  "a": "Franky",
+  "q": "Charpentier cyborg en maillot hawaïen, super !"
+ },
+ {
+  "a": "Brook",
+  "q": "Squelette violoniste qui rit « yohohoho »"
+ },
+ {
+  "a": "Jinbe",
+  "q": "Timonier homme-poisson, maître du karaté de l'eau"
+ },
+ {
+  "a": "Portgas D. Ace",
+  "q": "Frère de Luffy, commandant en flammes, mort à Marineford",
+  "alts": [
+   "Ace"
+  ]
+ },
+ {
+  "a": "Marshall D. Teach",
+  "q": "Barbe Noire, l'homme qui trahit tout le monde pour le pouvoir",
+  "alts": [
+   "Barbe Noire"
+  ]
+ },
+ {
+  "a": "Edward Newgate",
+  "q": "Barbe Blanche, naginata géante, père de tout un équipage",
+  "alts": [
+   "Barbe Blanche"
+  ]
+ },
+ {
+  "a": "Boa Hancock",
+  "q": "Impératrice pirate au pouvoir de la pierre, éperdument amoureuse du héros au chapeau de paille"
+ },
+ {
+  "a": "Trafalgar Law",
+  "q": "Chirurgien de la Mort au chapeau à fourrure, chirurgie immortelle"
+ },
+ {
+  "a": "Shanks",
+  "q": "Le roux légendaire qui a offert le chapeau de paille"
+ },
+ {
+  "a": "Kaido",
+  "q": "Empereur de la mer au corps de dragon, la créature la plus forte du monde"
+ },
+ {
+  "a": "Eustass Kid",
+  "q": "Capitaine magnétique roux, rival féroce du chapeau de paille"
+ },
+ {
+  "a": "Smoker",
+  "q": "Marine enchaîné à la fumée permanente"
+ },
+ {
+  "a": "Buggy",
+  "q": "Pirate clown qui se découpe en morceaux"
+ },
+ {
+  "a": "Son Goku",
+  "q": "Saiyan né Kakarot, gi orange, salut de la tortue Kamehameha",
+  "alts": [
+   "Goku",
+   "Kakarot"
+  ]
+ },
+ {
+  "a": "Vegeta",
+  "q": "Prince fier des Saiyans, éternel second,Galick Gun"
+ },
+ {
+  "a": "Gohan",
+  "q": "Fils aîné de Goku, scientifique doux devenu machine de guerre contre Cell"
+ },
+ {
+  "a": "Piccolo",
+  "q": "Namek vert, ancien démon, mentor attentif du fils de Goku"
+ },
+ {
+  "a": "Krillin",
+  "q": "Moine chauve sans nez, meilleur ami fidèle du héros"
+ },
+ {
+  "a": "Bulma",
+  "q": "Scientifique aux cheveux bleus, inventrice des capsules"
+ },
+ {
+  "a": "Trunks",
+  "q": "Guerrier du futur au sabre, fils du prince des Saiyans"
+ },
+ {
+  "a": "Cell",
+  "q": "Monstre biologique parfait organisateur de son propre tournoi"
+ },
+ {
+  "a": "Majin Buu",
+  "q": "Boule rose qui transforme ses ennemis en chocolat"
+ },
+ {
+  "a": "Frieza",
+  "q": "Tyran galactique blanc et doré, destructeur de la planète Vegeta"
+ },
+ {
+  "a": "Beerus",
+  "q": "Dieu de la destruction félin qui dort pendant des siècles"
+ },
+ {
+  "a": "Jiren",
+  "q": "Colosse gris silencieux, plus fort que les dieux au tournoi du pouvoir"
+ },
+ {
+  "a": "Broly",
+  "q": "Saiyan légendaire à la rage incontrôlable"
+ },
+ {
+  "a": "Bardock",
+  "q": "Guerrier saiyan au bandana ensanglanté, père du héros"
+ },
+ {
+  "a": "Izuku Midoriya",
+  "q": "Appliqué, héritier du One For All, surnommé Deku",
+  "alts": [
+   "Deku",
+   "Midoriya"
+  ]
+ },
+ {
+  "a": "Katsuki Bakugo",
+  "q": "Explosif au caractère de feu, rival d'enfance de Deku"
+ },
+ {
+  "a": "Ochaco Uraraka",
+  "q": "Héroïne de la gravité zéro, débordante de gentillesse"
+ },
+ {
+  "a": "All Might",
+  "q": "Symbole de la paix au sourire éclatant, plus jamais vaincu... jusqu'à son retrait"
+ },
+ {
+  "a": "Shoto Todoroki",
+  "q": "Moitié glace, moitié flammes, héritier d'un héros numéro un controversé"
+ },
+ {
+  "a": "Endeavor",
+  "q": "Héros flamboyant devenu numéro un après le retrait du symbole de la paix"
+ },
+ {
+  "a": "Tomura Shigaraki",
+  "q": "Vilain aux mains griffues qui fait se désagréger ce qu'il touche"
+ },
+ {
+  "a": "Eijiro Kirishima",
+  "q": "Héros chevelu rouge au corps indestructible comme la pierre"
+ },
+ {
+  "a": "Tsuyu Asui",
+  "q": "Héroïne grenouille qui parle sans filtre"
+ },
+ {
+  "a": "Tenya Iida",
+  "q": "Délégué rigoriste aux moteurs dans les mollets"
+ },
+ {
+  "a": "Momo Yaoyorozu",
+  "q": "Crée n'importe quel objet depuis son corps, brillante stratégie"
+ },
+ {
+  "a": "Dabi",
+  "q": "Vilain aux flammes bleues et à la voix brisée"
+ },
+ {
+  "a": "Hawks",
+  "q": "Héros ailé le plus rapide du classement"
+ },
+ {
+  "a": "Satoru Gojo",
+  "q": "Sorcier le plus fort, yeux voilés, maître de l'Infini"
+ },
+ {
+  "a": "Yuji Itadori",
+  "q": "Lycéen sportif devenu réceptacle du Roi des Fléaux"
+ },
+ {
+  "a": "Megumi Fushiguro",
+  "q": "Sorcier taciturne qui invoque des shikigamis d'ombre"
+ },
+ {
+  "a": "Nobara Kugisaki",
+  "q": "Sorcière au marteau et aux clous, assurance tout risque"
+ },
+ {
+  "a": "Ryomen Sukuna",
+  "q": "Roi des Fléaux à quatre bras et double visage",
+  "alts": [
+   "Sukuna"
+  ]
+ },
+ {
+  "a": "Nanami Kento",
+  "q": "Ex-salaryman au couteau maudit, cravate impeccable"
+ },
+ {
+  "a": "Toji Fushiguro",
+  "q": "Assassin redoutable dépourvu d'énergie occulte"
+ },
+ {
+  "a": "Maki Zenin",
+  "q": "Manie les armes maudites malgré sa famille hostile"
+ },
+ {
+  "a": "Panda",
+  "q": "Ours parlant et combattant de l'école d'exorcisme"
+ },
+ {
+  "a": "Suguru Geto",
+  "q": "Ancien meilleur ami de Gojo, avaleur d'orbes maudits"
+ },
+ {
+  "a": "Tanjiro Kamado",
+  "q": "Pourfendeur à la cicatrice frontale et au flair légendaire",
+  "alts": [
+   "Tanjiro"
+  ]
+ },
+ {
+  "a": "Nezuko Kamado",
+  "q": "Sœur démone au morceau de bambou en bouche",
+  "alts": [
+   "Nezuko"
+  ]
+ },
+ {
+  "a": "Zenitsu Agatsuma",
+  "q": "Combattant du tonnerre qui ne se bat qu'en dormant",
+  "alts": [
+   "Zenitsu"
+  ]
+ },
+ {
+  "a": "Inosuke Hashibira",
+  "q": "Tête de sanglier, deux sabres dentelés, sauvageon",
+  "alts": [
+   "Inosuke"
+  ]
+ },
+ {
+  "a": "Giyu Tomioka",
+  "q": "Pilier de l'Eau taciturne au haori bicolore"
+ },
+ {
+  "a": "Kyojuro Rengoku",
+  "q": "Pilier de la Flamme au sourire éclatant, umm !"
+ },
+ {
+  "a": "Tengen Uzui",
+  "q": "Pilier du Son flamboyant, ex-ninja, trois épouses"
+ },
+ {
+  "a": "Shinobu Kocho",
+  "q": "Pilier de l'Insecte au sourire vénéneux"
+ },
+ {
+  "a": "Gyomei Himejima",
+  "q": "Pilier de la Pierre aveugle au chapelet géant"
+ },
+ {
+  "a": "Muichiro Tokito",
+  "q": "Pilier de la Brume, génie distrait de 14 ans"
+ },
+ {
+  "a": "Mitsuri Kanroji",
+  "q": "Pilier de l'Amour aux cheveux tricolores"
+ },
+ {
+  "a": "Muzan Kibutsuji",
+  "q": "Progéniteur de tous les démons, chapeau melon et gants blancs",
+  "alts": [
+   "Muzan"
+  ]
+ },
+ {
+  "a": "Eren Jäger",
+  "q": "Garçon qui rêvait de brûler tous les Titans, devenu le pire cauchemar du monde",
+  "alts": [
+   "Eren Jaeger",
+   "Eren"
+  ]
+ },
+ {
+  "a": "Mikasa Ackerman",
+  "q": "Écharpe rouge, lame humaine la plus douée de sa promotion",
+  "alts": [
+   "Mikasa"
+  ]
+ },
+ {
+  "a": "Armin Arlelt",
+  "q": "Cerveau blond du trio de Shiganshina, héritier du Colosse",
+  "alts": [
+   "Armin"
+  ]
+ },
+ {
+  "a": "Levi Ackerman",
+  "q": "Caporal-chef au foulard noir, soldat le plus fort de l'humanité, maniaque du ménage",
+  "alts": [
+   "Levi"
+  ]
+ },
+ {
+  "a": "Erwin Smith",
+  "q": "Commandant aux sourcils légendaires, bras perdu pour ses hommes"
+ },
+ {
+  "a": "Hange Zoë",
+  "q": "Scientifique frénétique obsédée par les Titans"
+ },
+ {
+  "a": "Reiner Braun",
+  "q": "Guerrier cuirassé déchiré entre deux patries",
+  "alts": [
+   "Reiner"
+  ]
+ },
+ {
+  "a": "Annie Leonhart",
+  "q": "Guerrière cristalline au combat de jambes redoutable",
+  "alts": [
+   "Annie"
+  ]
+ },
+ {
+  "a": "Zeke Jäger",
+  "q": "Titan Bestial aux lancers de précision, frère aîné",
+  "alts": [
+   "Zeke"
+  ]
+ },
+ {
+  "a": "Historia Reiss",
+  "q": "Bergerie blonde devenue reine, ancienne « Christa »",
+  "alts": [
+   "Christa"
+  ]
+ },
+ {
+  "a": "Light Yagami",
+  "q": "Lycée modèle devenu dieu autoproclamé grâce à un cahier",
+  "alts": [
+   "Kira"
+  ]
+ },
+ {
+  "a": "L",
+  "q": "Détective géniale accroupi, sucreries et cercles sous les yeux",
+  "alts": [
+   "Eru",
+   "Eldo"
+  ]
+ },
+ {
+  "a": "Ryuk",
+  "q": "Dieu de la mort qui ne mange que des pommes"
+ },
+ {
+  "a": "Misa Amane",
+  "q": "Idole gothique aux yeux du marché, éperdument amoureuse de Kira"
+ },
+ {
+  "a": "Near",
+  "q": "Successeur blanc aux jouets et à la boucle de cheveux"
+ },
+ {
+  "a": "Mello",
+  "q": "Successeur rebelle au barre de chocolat"
+ },
+ {
+  "a": "Natsu Dragneel",
+  "q": "Dragon Slayer de feu aux cheveux roses et à l'écharpe écaille"
+ },
+ {
+  "a": "Lucy Heartfilia",
+  "q": "Mage aux clés célestes qui invoque des esprits"
+ },
+ {
+  "a": "Gray Fullbuster",
+  "q": "Mage de glace qui se retrouve en sous-vêtements sans s'en rendre compte"
+ },
+ {
+  "a": "Erza Scarlet",
+  "q": "Reine des Fées qui change d'armure en un éclair"
+ },
+ {
+  "a": "Happy",
+  "q": "Chat bleu volant qui dit « aye »"
+ },
+ {
+  "a": "Gajeel Redfox",
+  "q": "Dragon Slayer de fer aux cheveux noirs en pique"
+ },
+ {
+  "a": "Juvia Lockser",
+  "q": "Mage de la pluie éperdument amoureuse du mage de glace"
+ },
+ {
+  "a": "Zeref",
+  "q": "Mage noir maudit : tout ce qu'il touche meurt"
+ },
+ {
+  "a": "Ichigo Kurosaki",
+  "q": "Shinigami substitut au grand sabre orange"
+ },
+ {
+  "a": "Rukia Kuchiki",
+  "q": "Shinigami au kimono blanc qui a tout déclenché avec son sabre brisé"
+ },
+ {
+  "a": "Byakuya Kuchiki",
+  "q": "Noble aux pétales de cerisier microscopiques"
+ },
+ {
+  "a": "Aizen",
+  "q": "Traître aux lunettes lissés, maître de l'hypnose parfaite",
+  "alts": [
+   "Sosuke Aizen"
+  ]
+ },
+ {
+  "a": "Kenpachi Zaraki",
+  "q": "Capitaine aux cloches dans les cheveux qui vit pour le combat"
+ },
+ {
+  "a": "Uryu Ishida",
+  "q": "Archer au sang de Quincy, rival précis du Shinigami"
+ },
+ {
+  "a": "Orihime Inoue",
+  "q": "Guérisseuse aux six fées lumineuses, cheveux en épis"
+ },
+ {
+  "a": "Yoruichi",
+  "q": "Maîtresse du flash qui se transforme en chatte noire",
+  "alts": [
+   "Yoruichi Shihoin"
+  ]
+ },
+ {
+  "a": "Gon Freecss",
+  "q": "Garçon à la canne à pêche parti sur les traces de son père",
+  "alts": [
+   "Gon"
+  ]
+ },
+ {
+  "a": "Killua Zoldyck",
+  "q": "Héritier d'une famille d'assassins, yo-yos et électricité",
+  "alts": [
+   "Killua"
+  ]
+ },
+ {
+  "a": "Kurapika",
+  "q": "Dernier des yeux écarlates, chaînes mortelles au poing"
+ },
+ {
+  "a": "Leorio Paradinight",
+  "q": "Costume-cravate, sacoche de médecin, cœur immense"
+ },
+ {
+  "a": "Hisoka",
+  "q": "Magicien aux cartes à jouer au sourire inquiétant"
+ },
+ {
+  "a": "Isaac Netero",
+  "q": "Président des Hunters, maître du Bodhisattva aux mainsmillénaires",
+  "alts": [
+   "Netero"
+  ]
+ },
+ {
+  "a": "Chrollo Lucilfer",
+  "q": "Chef de la Troupe Fantôme, voleur de pouvoirs, croix au front",
+  "alts": [
+   "Chrollo"
+  ]
+ },
+ {
+  "a": "Meruem",
+  "q": "Roi des fourmis-chimères né pour dominer le monde",
+  "alts": [
+   "Meruem"
+  ]
+ },
+ {
+  "a": "Edward Elric",
+  "q": "Alchimiste d'Acier petit de taille, bras et jambe d'acier",
+  "alts": [
+   "Ed"
+  ]
+ },
+ {
+  "a": "Alphonse Elric",
+  "q": "Âme d'enfant scellée dans une armure géante",
+  "alts": [
+   "Al"
+  ]
+ },
+ {
+  "a": "Roy Mustang",
+  "q": "Colonel aux gants d'allumage, l'Alchimiste des Flammes",
+  "alts": [
+   "Mustang"
+  ]
+ },
+ {
+  "a": "Riza Hawkeye",
+  "q": "Lieutenante tireuse d'élite à l'œil de faucon"
+ },
+ {
+  "a": "Father",
+  "q": "Homme pâle au sourire froid derrière tout le complot d'Amestris"
+ },
+ {
+  "a": "Winry Rockbell",
+  "q": "Mécanicienne d'automail amie d'enfance des frères Elric"
+ },
+ {
+  "a": "Kirito",
+  "q": "Épéiste en noir du château flottant mortel"
+ },
+ {
+  "a": "Asuna",
+  "q": "Foudre éclair en rouge de la même montagne flottante"
+ },
+ {
+  "a": "Kaneki Ken",
+  "q": "Ghoul à lunette d'œil et cheveux devenus blancs",
+  "alts": [
+   "Kaneki"
+  ]
+ },
+ {
+  "a": "Touka Kirishima",
+  "q": "Ghoul de café au masque de lapin"
+ },
+ {
+  "a": "Saitama",
+  "q": "Héros chauve en combinaison jaune qui finit tout d'un seul poing"
+ },
+ {
+  "a": "Genos",
+  "q": "Cyborg solennel, disciple dévoué du héros chauve"
+ },
+ {
+  "a": "Tatsumaki",
+  "q": "Espoir télékinétique aux boucles vertes, taille d'enfant"
+ },
+ {
+  "a": "Yato",
+  "q": "Dieu vagabond aux yeux bleus qui livre ses services pour 5 yens"
+ },
+ {
+  "a": "Inuyasha",
+  "q": "Demi-démon chien aux griffes et au sabre denté rouge"
+ },
+ {
+  "a": "Kagome Higurashi",
+  "q": "Collégienne moderne qui traverse un puits sacré"
+ },
+ {
+  "a": "Conan Edogawa",
+  "q": "Détective légendaire rétréci en écolier à lunettes",
+  "alts": [
+   "Shinichi Kudo"
+  ]
+ },
+ {
+  "a": "Kenshin Himura",
+  "q": "Rōnin à la cicatrice en croix, sabre à lame inversée"
+ },
+ {
+  "a": "Rem",
+  "q": "Soubrette démonne aux cheveux bleus à la masse d'armes",
+  "alts": [
+   "Remu"
+  ]
+ },
+ {
+  "a": "Emilia",
+  "q": "Half-elfe aux cheveux argentés candidate au trône du royaume"
+ },
+ {
+  "a": "Violet Evergarden",
+  "q": "Ex-enfant soldate devenue écrivaine publique aux gants mécaniques"
+ },
+ {
+  "a": "Shoyo Hinata",
+  "q": "Petit ailier de Karasuno au saut hors norme",
+  "alts": [
+   "Hinata Shoyo"
+  ]
+ },
+ {
+  "a": "Tobio Kageyama",
+  "q": "Passeur génie surnommé le Roi du Terrain",
+  "alts": [
+   "Kageyama"
+  ]
+ },
+ {
+  "a": "Lelouch vi Britannia",
+  "q": "Prince exilé au pouvoir d'ordre absolu, masque de Zero",
+  "alts": [
+   "Lelouch",
+   "Zero"
+  ]
+ },
+ {
+  "a": "Senku Ishigami",
+  "q": "Scientifique des temps primitifs qui compte les secondes depuis l'éclair",
+  "alts": [
+   "Senku"
+  ]
+ },
+ {
+  "a": "Asta",
+  "q": "Chevalier-mage criard né sans aucun mana, épée noire anti-magie"
+ },
+ {
+  "a": "Yuno",
+  "q": "Génie du vent, rival silencieux du criard sans magie"
+ },
+ {
+  "a": "Meliodas",
+  "q": "Capitaine du péché du dragon, tavernier immortel au sourire d'ange"
+ },
+ {
+  "a": "Escanor",
+  "q": "Le Lion du Jour : le plus faible la nuit, intouchable à midi"
+ },
+ {
+  "a": "Ban",
+  "q": "Péché du renard, immortel et voleur légendaire"
+ },
+ {
+  "a": "Diane",
+  "q": "Péché du serpent, géante au cœur tendre"
+ },
+ {
+  "a": "King",
+  "q": "Péché de l'ours, fée au coussin volant, roi des fées"
+ },
+ {
+  "a": "Shinra Kusakabe",
+  "q": "Pompier aux pieds-fusées surnommé le Démon"
+ },
+ {
+  "a": "Yugi Muto",
+  "q": "Adolescent timide au puzzle millénaire qui change de personnage",
+  "alts": [
+   "Yugi"
+  ]
+ },
+ {
+  "a": "Sacha",
+  "q": "Dresseur de Pallet avec un chapeau qui ne quitte jamais son premier partenaire électrique"
+ },
+ {
+  "a": "Pikachu",
+  "q": "Souris électrique jaune au cri iconique"
+ },
+ {
+  "a": "Ondine",
+  "q": "Dresseuse d'eau au cheveu en queue de cavalière, pique-sacs"
+ },
+ {
+  "a": "Doraemon",
+  "q": "Chat-robot bleu du 22e siècle à la poche à gâteau"
+ },
+ {
+  "a": "Spike Spiegel",
+  "q": "Chasseur de primes nonchalant au passé mafieux, « see you space cowboy »"
+ },
+ {
+  "a": "Mickey Mouse",
+  "q": "Souris au short rouge créée en 1928",
+  "alts": [
+   "Mickey"
+  ]
+ },
+ {
+  "a": "Minnie",
+  "q": "Compagne du célèbre rongeur au nœud rouge",
+  "alts": [
+   "Minnie Mouse"
+  ]
+ },
+ {
+  "a": "Donald Duck",
+  "q": "Canard marin colérique et incompréhensible",
+  "alts": [
+   "Donald"
+  ]
+ },
+ {
+  "a": "Bugs Bunny",
+  "q": "Lapin gris qui mâchouille une carotte et creuse la terre",
+  "alts": [
+   "Bugs"
+  ]
+ },
+ {
+  "a": "Titi",
+  "q": "Petit canari jaune protégé d'un chat cathodique"
+ },
+ {
+  "a": "Tom",
+  "q": "Chat gris qui traque sans jamais réussir une souris"
+ },
+ {
+  "a": "Jerry",
+  "q": "Souris brune maligne qui humilie son chat"
+ },
+ {
+  "a": "Scooby-Doo",
+  "q": "Danois peureux amateur de snacks mystère"
+ },
+ {
+  "a": "Sammy",
+  "q": "Jeune barbu à l'appétit sans fond de la Mystery Machine",
+  "alts": [
+   "Shaggy"
+  ]
+ },
+ {
+  "a": "Bob l'Éponge",
+  "q": "Éponge jaune à culotte carrée de Bikini Bottom",
+  "alts": [
+   "SpongeBob"
+  ]
+ },
+ {
+  "a": "Patrick",
+  "q": "Étoile de mer rose qui vit sous un rocher"
+ },
+ {
+  "a": "Homer Simpson",
+  "q": "Père de famille jaune fan de donuts et de « D'oh ! »",
+  "alts": [
+   "Homer"
+  ]
+ },
+ {
+  "a": "Bart Simpson",
+  "q": "Rebelle de 10 ans à la fronde et au skate",
+  "alts": [
+   "Bart"
+  ]
+ },
+ {
+  "a": "Stewie",
+  "q": "Bébé britannique machiavélique au accent raffiné"
+ },
+ {
+  "a": "Mario",
+  "q": "Plombier moustachu en salopette rouge qui sauve une princesse"
+ },
+ {
+  "a": "Luigi",
+  "q": "Frère vert plus grand et plus craintif du plombier rouge"
+ },
+ {
+  "a": "Bowser",
+  "q": "Tortue dragon kidnapeuse de princesses"
+ },
+ {
+  "a": "Link",
+  "q": "Héros de Hyrule à la tunique verte et à l'épée légendaire"
+ },
+ {
+  "a": "Zelda",
+  "q": "Princesse de Hyrule porteuse de la sagesse"
+ },
+ {
+  "a": "Ganondorf",
+  "q": "Roi des Gerudo, seigneur maléfique aux cheveux roux"
+ },
+ {
+  "a": "Sonic",
+  "q": "Hérisson bleu supersonique qui collectionne les anneaux"
+ },
+ {
+  "a": "Kratos",
+  "q": "Guerrier sparte barbu qui a tué les dieux grecs puis les nordiques"
+ },
+ {
+  "a": "Lara Croft",
+  "q": "Archéologue britannique à la双人 pistolet"
+ },
+ {
+  "a": "Master Chief",
+  "q": "Spartan au casque vert qui sauve l'humanité du Covenant",
+  "alts": [
+   "John117"
+  ]
+ },
+ {
+  "a": "Steve",
+  "q": "Personnage en blocs qui mine et fabrique tout"
+ },
+ {
+  "a": "Creeper",
+  "q": "Créature verte silencieuse qui explose au contact"
+ },
+ {
+  "a": "Iron Man",
+  "q": "Milliardaire génie en armure rouge et or",
+  "alts": [
+   "Tony Stark"
+  ]
+ },
+ {
+  "a": "Captain America",
+  "q": "Super-soldat au bouclier étoilé indestructible",
+  "alts": [
+   "Steve Rogers"
+  ]
+ },
+ {
+  "a": "Thor",
+  "q": "Dieu nordique du tonnerre au marteau enchanté"
+ },
+ {
+  "a": "Hulk",
+  "q": "Scientifique vert qui grossit avec la colère"
+ },
+ {
+  "a": "Spider-Man",
+  "q": "Lycéen new-yorkais à la combinaison rouge et bleue qui grimpe aux murs",
+  "alts": [
+   "Spiderman",
+   "Peter Parker"
+  ]
+ },
+ {
+  "a": "Batman",
+  "q": "Justicier masqué de Gotham sans aucun pouvoir",
+  "alts": [
+   "Bruce Wayne"
+  ]
+ },
+ {
+  "a": "Superman",
+  "q": "Kryptonien à la cape rouge, plus fort du soleil",
+  "alts": [
+   "Clark Kent"
+  ]
+ },
+ {
+  "a": "Joker",
+  "q": "Clown criminel au rire pourpre de Gotham"
+ },
+ {
+  "a": "Wonder Woman",
+  "q": "Amazone au lasso de vérité originaire de Themyscira"
+ },
+ {
+  "a": "Harry Potter",
+  "q": "Sorcier à la cicatrice en éclair du domicile des Dursley",
+  "alts": [
+   "Harry"
+  ]
+ },
+ {
+  "a": "Hermione Granger",
+  "q": "Sorcière surdouée aux cheveux ébouriffés, meilleure amie de Harry"
+ },
+ {
+  "a": "Ron Weasley",
+  "q": "Roux fidèle de la famille aux grille-pyon volants",
+  "alts": [
+   "Ron"
+  ]
+ },
+ {
+  "a": "Dumbledore",
+  "q": "Directeur de Poudlard à la longue barbe argentée"
+ },
+ {
+  "a": "Voldemort",
+  "q": "Seigneur des Ténèbres au visage serpenté sans nez",
+  "alts": [
+   "Tom Jedusor",
+   "You-Know-Who"
+  ]
+ },
+ {
+  "a": "Dark Vador",
+  "q": "Seigneur noir masqué à la respiration sifflante, « je suis ton père »",
+  "alts": [
+   "Darth Vader",
+   "Vador"
+  ]
+ },
+ {
+  "a": "Luke Skywalker",
+  "q": "Jeune fermier de Tatooine devenu Jedi",
+  "alts": [
+   "Luke"
+  ]
+ },
+ {
+  "a": "Yoda",
+  "q": "Maître Jedi vert de 900 ans qui parle à l'envers"
+ },
+ {
+  "a": "Frodon Sacquet",
+  "q": "Hobbit porteur de l'anneau unique vers le Mordor",
+  "alts": [
+   "Frodo"
+  ]
+ },
+ {
+  "a": "Gandalf",
+  "q": "Magicien barbu qui revient en blanc après sa chute"
+ },
+ {
+  "a": "Gollum",
+  "q": "Créature décharnée obsédée par « mon précieux »"
+ },
+ {
+  "a": "Legolas",
+  "q": "Elfe archer aux cheveux plats dorés"
+ },
+ {
+  "a": "Aragorn",
+  "q": "Ranger devenu roi du Gondor"
+ },
+ {
+  "a": "Shrek",
+  "q": "Ogre vert grognon du marais au cœur tendre"
+ },
+ {
+  "a": "Elsa",
+  "q": "Reine aux pouvoirs de glace qui a tout figé « une fois pour toutes »"
+ },
+ {
+  "a": "Simba",
+  "q": "Lionceau futur roi qui revient d'exil"
+ },
+ {
+  "a": "Mufasa",
+  "q": "Roi lion sage trahi par son propre frère"
+ },
+ {
+  "a": "Scar",
+  "q": "Lion noir à la cicatrice, usurpateur du trône de la savane"
+ },
+ {
+  "a": "Aladdin",
+  "q": "Voleur de rue d'Agrabah au tapis volant"
+ },
+ {
+  "a": "Jasmine",
+  "q": "Princesse d'Agrabah qui s'est échappée du palais"
+ },
+ {
+  "a": "Mulan",
+  "q": "Jeune femme déguisée en guerrier pour sauver son père"
+ },
+ {
+  "a": "Tarzan",
+  "q": "Homme des jungle élevé par des gorilles"
+ },
+ {
+  "a": "Peter Pan",
+  "q": "Garçon éternel qui vole depuis le Pays imaginaire"
+ },
+ {
+  "a": "Tinker Bell",
+  "q": "Petite fée clochette jalouse et étincelante",
+  "alts": [
+   "Clochette"
+  ]
+ },
+ {
+  "a": "Woody",
+  "q": "Cowboy de plastique chef du coffre à jouets"
+ },
+ {
+  "a": "Buzz l'Éclair",
+  "q": "Ranger de l'espace qui vole... enfin saute d'un escalier",
+  "alts": [
+   "Buzz Lightyear",
+   "Buzz"
+  ]
+ },
+ {
+  "a": "Tintin",
+  "q": "Jeune reporter belge à la houppette qui voyage le monde"
+ },
+ {
+  "a": "Milou",
+  "q": "Fox-terrier blanc fidèle du reporter belge"
+ }
 ]

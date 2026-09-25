@@ -2,7 +2,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert');
 const { boot, until, makeMsg, lastBody, bodies, UIDS, NAME_TO_UID, clearCooldowns } = require('./helpers');
-const cgBank = require('../systems/questions/cg.json');
+const cgBank = require('../systems/questions/duel-cg.json');
 
 /* Joue un duel automatiquement.
  * doubleFail : index d'une question où LES DEUX joueurs échouent volontairement
