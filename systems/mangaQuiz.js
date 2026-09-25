@@ -64,7 +64,7 @@ function sourcesDown(errA, errB) {
 
 /* Requête Jikan (repli) → data ou erreur typée. */
 const CANCEL_WORDS = new Set(['cancel', 'annuler', 'stop', 'quit', 'quitter', 'exit', '!stop']);
-const MAX_IMAGES = 20;
+const MAX_IMAGES = 100;
 
 /* ── Comparaison de noms (rapide, 100 % local — aucun appel externe) ── */
 
@@ -319,7 +319,7 @@ class MangaQuizSession {
       fmt.frame('🎌 XID', [
         '『' + fmt.bold('NOMBRE D’IMAGES') + '』',
         '',
-        `${fmt.bold(5)}  /  ${fmt.bold(10)}  /  ${fmt.bold(15)}   ${fmt.bold('(max')} ${fmt.bold(MAX_IMAGES)}${fmt.bold(')')}`,
+        `${fmt.bold(5)}  /  ${fmt.bold(10)}  /  ${fmt.bold(15)}  …  ${fmt.bold(MAX_IMAGES)}   ${fmt.bold('(max')} ${fmt.bold(MAX_IMAGES)}${fmt.bold(')')}`,
         '',
         fmt.bold('Réponds simplement par le nombre.'),
       ])
@@ -336,7 +336,7 @@ class MangaQuizSession {
         await this.send(fmt.frame('🎌 XID', '🛑 ' + fmt.bold('Trop d’erreurs — quiz annulé.')));
         return true;
       }
-      await this.send(fmt.frame('🎌 XID', '⚠️ ' + fmt.bold('Choisis :') + ` ${fmt.bold(5)} / ${fmt.bold(10)} / ${fmt.bold(15)}`));
+      await this.send(fmt.frame('🎌 XID', '⚠️ ' + fmt.bold('Choisis :') + ` ${fmt.bold(5)} / ${fmt.bold(10)} / ${fmt.bold(15)} … ${fmt.bold(MAX_IMAGES)}`));
       return true;
     }
 
@@ -402,55 +402,85 @@ class MangaQuizSession {
     }
   }
 
-  /* 🌌 Multivers — top personnages (par popularité) via AniList. */
+  /* 🌌 Multivers — top personnages (par popularité) via AniList.
+   * Pagination : 50 personnages par requête, jusqu'à 2 pages pour 100. */
   async _multiversAniList(count) {
     const query = `query ($page: Int, $perPage: Int) {
       Page(page: $page, perPage: $perPage) {
         characters(sort: FAVOURITES_DESC) { name { full } image { large } }
       }
     }`;
-    const data = await anilistQuery(query, { page: 1, perPage: 50 }, this.fetchImpl);
-    const list = (((data.Page || {}).characters) || [])
-      .filter((c) => c && c.name && c.name.full && c.image && c.image.large)
-      .map((c) => ({ name: c.name.full, image: c.image.large }));
-    if (list.length === 0) throw Object.assign(new Error('AniList vide'), { code: 'ANILIST_BAD_RESPONSE' });
+    const perPage = 50;
+    const pages = Math.ceil(count / perPage);
+    const seen = new Set();
+    let all = [];
+    for (let page = 1; page <= Math.min(pages, 4); page++) {
+      const data = await anilistQuery(query, { page, perPage }, this.fetchImpl);
+      const list = (((data.Page || {}).characters) || [])
+        .filter((c) => c && c.name && c.name.full && c.image && c.image.large)
+        .map((c) => ({ name: c.name.full, image: c.image.large }))
+        .filter((c) => !seen.has(c.name) && seen.add(c.name));
+      all = all.concat(list);
+      if (list.length < perPage) break; // dernière page atteinte
+    }
+    if (all.length === 0) throw Object.assign(new Error('AniList vide'), { code: 'ANILIST_BAD_RESPONSE' });
     this.source = 'Multivers';
-    return shuffle(list).slice(0, count);
+    return shuffle(all).slice(0, count);
   }
 
-  /* 📚 Manga précis via AniList (replie sur ANIME si le titre est un anime). */
+  /* 📚 Manga précis via AniList (replie sur ANIME si le titre est un anime).
+   * Pagination : 50 personnages par requête, jusqu'à 2 pages pour 100. */
   async _mangaAniList(count) {
-    const build = (type) => `query ($search: String, $perPage: Int) {
+    const build = (type) => `query ($search: String, $perPage: Int, $page: Int) {
       Media(search: $search, type: ${type}) {
         title { romaji english }
-        characters(sort: FAVOURITES_DESC, perPage: $perPage) {
+        characters(sort: FAVOURITES_DESC, page: $page, perPage: $perPage) {
           edges { node { name { full } image { large } } }
         }
       }
     }`;
-    const vars = { search: this.manga, perPage: 50 };
-    let media = (await anilistQuery(build('MANGA'), vars, this.fetchImpl)).Media;
-    if (!media) media = (await anilistQuery(build('ANIME'), vars, this.fetchImpl)).Media;
-    if (!media) throw Object.assign(new Error('introuvable sur AniList'), { code: 'ANILIST_NOT_FOUND' });
-    const list = (((media.characters || {}).edges) || [])
-      .map((e) => e && e.node)
-      .filter((n) => n && n.name && n.name.full && n.image && n.image.large)
-      .map((n) => ({ name: n.name.full, image: n.image.large }));
-    if (list.length === 0) throw Object.assign(new Error('AniList sans personnages'), { code: 'ANILIST_BAD_RESPONSE' });
-    const t = media.title || {};
-    this.source = t.english || t.romaji || this.manga;
-    return shuffle(list).slice(0, count);
+    const perPage = 50;
+    const pages = Math.ceil(count / perPage);
+    const seen = new Set();
+    let all = [];
+    let title = null;
+    for (let page = 1; page <= Math.min(pages, 4); page++) {
+      const vars = { search: this.manga, perPage, page };
+      let media = (await anilistQuery(build('MANGA'), vars, this.fetchImpl)).Media;
+      if (!media && page === 1) media = (await anilistQuery(build('ANIME'), vars, this.fetchImpl)).Media;
+      if (!media) throw Object.assign(new Error('introuvable sur AniList'), { code: 'ANILIST_NOT_FOUND' });
+      const t = media.title || {};
+      if (!title) title = t.english || t.romaji || this.manga;
+      const edges = (((media.characters || {}).edges) || [])
+        .map((e) => e && e.node)
+        .filter((n) => n && n.name && n.name.full && n.image && n.image.large)
+        .map((n) => ({ name: n.name.full, image: n.image.large }))
+        .filter((c) => !seen.has(c.name) && seen.add(c.name));
+      all = all.concat(edges);
+      if (edges.length < perPage) break; // dernière page atteinte
+    }
+    if (all.length === 0) throw Object.assign(new Error('AniList sans personnages'), { code: 'ANILIST_BAD_RESPONSE' });
+    this.source = title;
+    return shuffle(all).slice(0, count);
   }
 
-  /* 🌌 Multivers via Jikan (repli). */
+  /* 🌌 Multivers via Jikan (repli) — 25 personnages par page. */
   async _multiversJikan(count) {
-    const data = await jikanGet(`${JIKAN}/top/characters`, { page: 1 }, this.fetchImpl);
+    const pages = Math.ceil(count / 25);
+    const seen = new Set();
+    let all = [];
+    for (let page = 1; page <= Math.min(pages, 4); page++) {
+      const data = await jikanGet(`${JIKAN}/top/characters`, { page }, this.fetchImpl);
+      const list = ((data && data.data) || [])
+        .filter((c) => c && c.images && c.images.jpg && c.images.jpg.image_url)
+        .map((c) => ({ name: c.name, image: c.images.jpg.image_url }))
+        .filter((c) => !seen.has(c.name) && seen.add(c.name));
+      all = all.concat(list);
+      if (list.length < 25) break; // dernière page atteinte
+    }
+    if (all.length === 0) throw Object.assign(new Error('Jikan vide'), { code: 'JIKAN_BAD_RESPONSE' });
     this.source = 'Multivers';
-    const list = ((data && data.data) || [])
-      .filter((c) => c && c.images && c.images.jpg && c.images.jpg.image_url)
-      .map((c) => ({ name: c.name, image: c.images.jpg.image_url }));
-    if (list.length === 0) throw Object.assign(new Error('Jikan vide'), { code: 'JIKAN_BAD_RESPONSE' });
-    return shuffle(list).slice(0, count);
+    return shuffle(all).slice(0, count);
   }
 
   /* 📚 Manga précis via Jikan (repli). */

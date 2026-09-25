@@ -191,6 +191,61 @@ test('Xid : MULTIVERS (top personnages) fonctionne aussi', async () => {
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
 });
 
+test('Xid : jusqu’à 100 images — pagination AniList (50 + 50)', async () => {
+  const big = Array.from({ length: 120 }, (_, i) => ({ name: `Perso ${i + 1}`, image: `https://s4.anilist.co/p${i}.jpg` }));
+  global.fetch = async (url, init = {}) => {
+    const u = String(url);
+    if (u.includes('graphql.anilist.co')) {
+      const vars = (init.body && JSON.parse(init.body).variables) || {};
+      const page = vars.page || 1;
+      const per = vars.perPage || 50;
+      const slice = big.slice((page - 1) * per, page * per);
+      return makeJson({ data: { Page: { characters: slice.map((c) => ({ name: { full: c.name }, image: { large: c.image } })) } } });
+    }
+    if (u.includes('s4.anilist.co')) return makeImage();
+    throw new Error('ECONNREFUSED');
+  };
+  const { bot, adapter } = await boot();
+  clearCooldowns(bot);
+  const from = adapter.sent.length;
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xid'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'MULTIVERS'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '100'));
+  await until(() => bodies(adapter).slice(from).some((b) => /IDENTIFICATION 1\//.test(b)), 15000);
+  const session = bot.sessions.get('thread-1', 'xid');
+  assert.strictEqual(session.total, 100, '100 images chargées (2 pages AniList de 50)');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+});
+
+test('Xid : au-delà de 100 demandé → refusé puis 100 accepté', async () => {
+  const big = Array.from({ length: 150 }, (_, i) => ({ name: `Perso ${i + 1}`, image: `https://s4.anilist.co/p${i}.jpg` }));
+  global.fetch = async (url, init = {}) => {
+    const u = String(url);
+    if (u.includes('graphql.anilist.co')) {
+      const vars = (init.body && JSON.parse(init.body).variables) || {};
+      const page = vars.page || 1;
+      const per = vars.perPage || 50;
+      const slice = big.slice((page - 1) * per, page * per);
+      return makeJson({ data: { Page: { characters: slice.map((c) => ({ name: { full: c.name }, image: { large: c.image } })) } } });
+    }
+    if (u.includes('s4.anilist.co')) return makeImage();
+    throw new Error('ECONNREFUSED');
+  };
+  const { bot, adapter } = await boot();
+  clearCooldowns(bot);
+  const from = adapter.sent.length;
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xid'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'MULTIVERS'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '150'));
+  const refused = await until(() => bodies(adapter).slice(from).some((b) => b.includes('Choisis :')), 5000);
+  assert.ok(refused, '150 refusé → invitation à choisir dans la limite');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '100'));
+  await until(() => bodies(adapter).slice(from).some((b) => /IDENTIFICATION 1\//.test(b)), 15000);
+  const session = bot.sessions.get('thread-1', 'xid');
+  assert.strictEqual(session.total, 100, '100 accepté au maximum');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+});
+
 test('Xid : temps écoulé → réponse révélée → question suivante', async () => {
   stubFetch();
   const { bot, adapter } = await boot();
