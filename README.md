@@ -213,7 +213,7 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 | Commande | Description |
 |---|---|
 | `Xquiz` | Quiz de GROUPE à réponses LIBRES : ID (indices) · MULTIVERS (manga indiqué À LA FIN de chaque question 📚) · CG (thème 🏷️ affiché) · CAPITALE · DRAPEAU. ~1100 questions regroupées par manga/thème, vérificateur strict, +10 pts au premier bon, classement final |
-| `Xid` | Quiz manga (AniList + repli Jikan — sans clé) : identifie le personnage sur l'image — prénom OU nom OU nom complet, variantes de traduction (Gojo/Goujou). 5 à 100 images (5/10/15…100), vérificateur strict (une autre réponse = faux), tableau des scores à la fin |
+| `Xid` | Quiz manga — CHAÎNE 4 sources : AniList (Referer fixé) → Kitsu → Jikan → banque locale de secours (109 persos, indices). 5 à 100 images (5/10/15…100), vérificateur strict (une autre réponse = faux), tableau final |
 | `Xduel` | Duel 1v1 avec mise en XCoins |
 | `Xbet` | Paris football RÉELS : 10 affrontements/manche (puissances /100) — `Xbet <n°> <a|b> <v|n|d> <mise>`, min 100 XCoins, 1 pari/match, résultat 30 s, duos jamais répétés, nouvelle manche quand tout est joué |
 | `Xrps` | Pierre 🪨 Feuille 📄 Ciseaux ✂️ contre MeR~NeL |

@@ -2,7 +2,7 @@
 const { test, after } = require('node:test');
 const assert = require('node:assert');
 const { boot, until, makeMsg, lastBody, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
-const { matchAnswer, loose } = require('../systems/mangaQuiz');
+const { matchAnswer, loose, resetSourceHealth } = require('../systems/mangaQuiz');
 
 const BOT_ID = 'BOT_MOCK_000000';
 const realFetch = global.fetch;
@@ -37,6 +37,7 @@ function makeImage() {
 }
 
 function stubFetch(overrides = {}) {
+  resetSourceHealth(); // santé des sources = état global → remis à zéro par test
   global.fetch = async (url) => {
     const u = String(url);
     /* ── AniList (primaire) ── */
@@ -55,6 +56,30 @@ function stubFetch(overrides = {}) {
         },
       });
     }
+    /* ── Kitsu (3e source) ── */
+    if (u.includes('kitsu.io')) {
+      if (!overrides.kitsuOk) throw new Error('ECONNREFUSED kitsu'); // OFF par défaut
+      if (overrides.kitsuFail) throw new Error('ECONNREFUSED kitsu');
+      if (overrides.kitsu429) return { ok: false, status: 429, headers: { get: () => 'application/json' }, json: async () => ({}) };
+      if (u.includes('/anime?') && u.includes('filter[text]')) {
+        return makeJson({ data: [{ id: '1', attributes: { canonicalTitle: 'Naruto' } }] });
+      }
+      if (u.includes('/characters?include=character')) {
+        return makeJson({
+          data: CHARACTERS.map((c, i) => ({
+            id: String(i),
+            type: 'mediaCharacters',
+            attributes: { role: i < 2 ? 'main' : 'supporting' },
+            relationships: { character: { data: { type: 'characters', id: String(i) } } },
+          })),
+          included: CHARACTERS.map((c, i) => ({
+            id: String(i),
+            type: 'characters',
+            attributes: { canonicalName: c.name, otherNames: [], image: { original: 'https://media.kitsu.app/characters/images/' + i + '/original.jpg' } },
+          })),
+        });
+      }
+    }
     /* ── Jikan (repli) ── */
     if (u.includes('api.jikan.moe')) {
       if (overrides.jikanFail) throw new Error('ECONNREFUSED jikan');
@@ -68,7 +93,7 @@ function stubFetch(overrides = {}) {
       }
     }
     /* ── CDN images ── */
-    if (u.includes('s4.anilist.co') || u.includes('cdn.myanimelist.net')) return makeImage();
+    if (u.includes('s4.anilist.co') || u.includes('cdn.myanimelist.net') || u.includes('media.kitsu.app')) return makeImage();
     throw new Error('ECONNREFUSED ' + u.slice(0, 60));
   };
 }
@@ -321,28 +346,71 @@ test('Xid : AniList 429 → Jikan répond (rotation), quiz lancé quand même', 
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
 });
 
-test('Xid : AniList ET Jikan en panne → message honnête, jamais de crash', async () => {
-  stubFetch({ anilistFail: true, jikanFail: true });
+test('Xid : AniList + Kitsu + Jikan en panne → BANQUE LOCALE de secours, quiz JOUABLE aux indices', async () => {
+  stubFetch({ anilistFail: true, jikanFail: true }); // kitsu.tombe aussi (URL inconnue du stub)
   const { bot, adapter } = await boot();
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xid'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'naruto'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
-  const down = await until(() => bodies(adapter).some((b) => b.includes('SOURCES INDISPONIBLES')), 10000);
-  assert.ok(down, 'sources indisponibles annoncé');
-  assert.ok(bodies(adapter).some((b) => b.includes('QUIZ_SOURCES_DOWN')), 'code typé affiché');
-  assert.strictEqual(bot.sessions.get('thread-1', 'xid'), null, 'session nettoyée');
+  const ok = await until(() => bodies(adapter).some((b) => /banque locale/i.test(unbold(b))), 10000);
+  assert.ok(ok, 'quiz lancé via la banque locale (jamais bloqué)');
+  const session = bot.sessions.get('thread-1', 'xid');
+  assert.ok(session, 'session vivante');
+  assert.strictEqual(session.total, 5);
+  await until(() => bodies(adapter).some((b) => /IDENTIFICATION 1\//.test(b)), 10000);
+  const qFrame = unbold(bodies(adapter).find((b) => /IDENTIFICATION 1\//.test(b)));
+  assert.ok(qFrame.includes('📖'), 'indice affiché à la place de l\'image');
+  // Une bonne réponse (indice → nom de la banque) marque des points.
+  const localBank = require('../systems/questions/xid-bank.json');
+  const hint = qFrame.split('\n').find((l) => l.includes('📖'));
+  const match = localBank.find((c) => hint.includes(c.hint));
+  assert.ok(match, 'indice retrouvé dans la banque locale');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, match.name));
+  const scored = await until(() => bodies(adapter).some((b) => b.includes('@Paul') && b.includes('prend le point')), 15000);
+  assert.ok(scored, 'bonne réponse acceptée en mode secours');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
 });
 
-test('Xid : AniList ET Jikan en 429 → « sources en pause »', async () => {
-  stubFetch({ anilist429: true, jikan429: true });
+test('Xid : toutes les sources en 429 → banque locale quand même', async () => {
+  stubFetch({ anilist429: true, jikan429: true, kitsu429: true });
   const { bot, adapter } = await boot();
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xid'));
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'naruto'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'MULTIVERS'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
-  const paused = await until(() => bodies(adapter).some((b) => b.includes('SOURCES EN PAUSE')), 10000);
-  assert.ok(paused, 'sources en pause annoncé');
-  assert.ok(bodies(adapter).some((b) => b.includes('RATE_LIMITED')), 'rate limit annoncé');
-  assert.strictEqual(bot.sessions.get('thread-1', 'xid'), null, 'session nettoyée');
+  const ok = await until(() => bodies(adapter).some((b) => /banque locale/i.test(unbold(b))), 10000);
+  assert.ok(ok, 'quiz lancé via la banque locale après 429 globaux');
+  const session = bot.sessions.get('thread-1', 'xid');
+  assert.ok(session && session.total === 5);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+});
+
+test('Xid : AniList + Jikan DOWN → KITSU prend le relais (3e source indépendante)', async () => {
+  stubFetch({ anilistFail: true, jikanFail: true, kitsuOk: true });
+  const { bot, adapter } = await boot();
+  clearCooldowns(bot);
+  const from = await launch(bot, adapter, 'naruto', '2');
+  const session = bot.sessions.get('thread-1', 'xid');
+  assert.ok(session, 'session via Kitsu');
+  assert.strictEqual(session.source, 'Naruto', 'titre Kitsu utilisé');
+  assert.strictEqual(session.total, 2);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+});
+
+test('Xid : santé des sources — une source tombée est mise au repos 5 min', async () => {
+  stubFetch({ anilistFail: true, jikanFail: true, kitsuOk: true });
+  const { bot, adapter } = await boot();
+  clearCooldowns(bot);
+  // 1er lancement : anilist échoue → marqué en repos ; kitsu répond.
+  await launch(bot, adapter, 'naruto', '2');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+  stubFetch({ kitsuOk: true, anilist429: true, jikan429: true });
+  // 2e lancement : anilist doit être SAUTÉ (repos) → kitsu direct, jamais de 429 anilist.
+  clearCooldowns(bot);
+  const from = await launch(bot, adapter, 'naruto', '2');
+  const session = bot.sessions.get('thread-1', 'xid');
+  assert.ok(session, '2e session lancée');
+  assert.strictEqual(session.source, 'Naruto');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
 });

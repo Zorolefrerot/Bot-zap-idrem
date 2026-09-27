@@ -25,6 +25,7 @@ const { safeInt } = require('../utils/sanitize');
 
 const JIKAN = 'https://api.jikan.moe/v4';
 const ANILIST = 'https://graphql.anilist.co';
+const LOCAL_BANK = require('./questions/xid-bank.json');
 
 /* Requête GraphQL AniList (POST JSON, sans clé) → data ou erreur typée. */
 async function anilistQuery(query, variables, fetchImpl) {
@@ -33,7 +34,15 @@ async function anilistQuery(query, variables, fetchImpl) {
   try {
     res = await f(ANILIST, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        // ⚠️ AniList refuse toute requête SANS Referer ni Authorization (HTTP 403
+        // « disabled due to severe stability issues ») — le Referer suffit.
+        Referer: 'https://anilist.co/',
+        Origin: 'https://anilist.co',
+        'User-Agent': 'MeRNeL-Bot/4 (+https://github.com/Zorolefrerot/Bot-zap-idrem)',
+      },
       body: JSON.stringify({ query, variables: variables || {} }),
       signal: AbortSignal.timeout(15000),
     });
@@ -52,15 +61,99 @@ async function anilistQuery(query, variables, fetchImpl) {
   return body.data || {};
 }
 
-/* Les DEUX sources sont tombées → erreur combinée honnête.
- * Si les deux sont en limite de débit → code dédié (message adapté). */
-function sourcesDown(errA, errB) {
-  const bothRate = /RATE_LIMIT/.test(String(errA.code || '')) && /RATE_LIMIT/.test(String(errB.code || ''));
-  return Object.assign(
-    new Error(`AniList (${errA.code || errA.message}) + Jikan (${errB.code || errB.message}) indisponibles`),
-    { code: bothRate ? 'QUIZ_RATE_LIMITED' : 'QUIZ_SOURCES_DOWN' }
-  );
+/* ═══ SANTÉ DES SOURCES ═══
+ * Une source qui vient d'échouer est mise au repos 5 min (on ne retente pas
+ * à chaque lancement) — la chaîne passe automatiquement à la suivante. */
+const SOURCE_COOLDOWN_MS = 5 * 60 * 1000;
+const sourceFailAt = { anilist: 0, kitsu: 0, jikan: 0 };
+const isCoolingDown = (src) => Date.now() - sourceFailAt[src] < SOURCE_COOLDOWN_MS;
+const markFail = (src) => {
+  sourceFailAt[src] = Date.now();
+};
+const markOk = (src) => {
+  sourceFailAt[src] = 0;
+};
+/* Reset de la santé des sources (tests / redémarrage). */
+function resetSourceHealth() {
+  sourceFailAt.anilist = 0;
+  sourceFailAt.kitsu = 0;
+  sourceFailAt.jikan = 0;
 }
+
+/* TOUTES les sources sont tombées → erreur combinée honnête (avant banque). */
+function sourcesDown(errors) {
+  const anyRate = errors.some((e) => /RATE_LIMIT/.test(e));
+  return Object.assign(new Error(`Sources indisponibles (${errors.join(', ')})`), {
+    code: anyRate ? 'QUIZ_RATE_LIMITED' : 'QUIZ_SOURCES_DOWN',
+  });
+}
+
+/* ═══ KITSU — 3e source INDÉPENDANTE (ni AniList, ni MyAnimeList) ═══ */
+const KITSU = 'https://kitsu.io/api/edge';
+
+async function kitsuGet(url, fetchImpl) {
+  const f = fetchImpl || global.fetch;
+  let res;
+  try {
+    res = await f(url, {
+      headers: { Accept: 'application/vnd.api+json', 'User-Agent': 'MeRNeL-Bot/4' },
+      signal: AbortSignal.timeout(15000),
+    });
+  } catch (err) {
+    if (err && (err.name === 'TimeoutError' || err.name === 'AbortError')) {
+      throw Object.assign(new Error('Kitsu timeout'), { code: 'KITSU_TIMEOUT' });
+    }
+    throw Object.assign(new Error('Kitsu injoignable'), { code: 'KITSU_UNREACHABLE' });
+  }
+  if (res.status === 429) throw Object.assign(new Error('Kitsu 429'), { code: 'KITSU_RATE_LIMIT' });
+  if (!res.ok) throw Object.assign(new Error(`Kitsu HTTP ${res.status}`), { code: 'KITSU_ERROR' });
+  const ctype = ((res.headers && res.headers.get && res.headers.get('content-type')) || '').toLowerCase();
+  if (!ctype.includes('json')) throw Object.assign(new Error('Kitsu HTML'), { code: 'KITSU_BAD_RESPONSE' });
+  const body = await res.json().catch(() => null);
+  if (!body || !Array.isArray(body.data)) throw Object.assign(new Error('Kitsu vide'), { code: 'KITSU_BAD_RESPONSE' });
+  return body;
+}
+
+/* Anime le plus proche d'un nom → { id, titre } */
+async function kitsuFindAnime(name, fetchImpl) {
+  const url = `${KITSU}/anime?filter[text]=${encodeURIComponent(name)}&page[limit]=1`;
+  const body = await kitsuGet(url, fetchImpl);
+  const item = body.data[0];
+  if (!item) throw Object.assign(new Error('anime introuvable sur Kitsu'), { code: 'KITSU_NOT_FOUND' });
+  const t = (item.attributes && (item.attributes.canonicalTitle || (item.attributes.titles && (item.attributes.titles.en || item.attributes.titles.en_jp)))) || name;
+  return { id: item.id, titre: t };
+}
+
+/* Personnages (avec portrait) d'un animé Kitsu, priorité aux RÔLES PRINCIPAUX. */
+async function kitsuCharactersOf(animeId, max, fetchImpl) {
+  const url = `${KITSU}/anime/${animeId}/characters?include=character&page[limit]=20`;
+  const body = await kitsuGet(url, fetchImpl);
+  const byId = new Map();
+  for (const inc of body.included || []) {
+    if (inc.type === 'characters') byId.set(inc.id, inc.attributes || {}); // Kitsu : type PLURIEL
+  }
+  const rows = (body.data || [])
+    .map((row) => {
+      const ref = ((row.relationships || {}).character || {}).data;
+      const attr = ref ? byId.get(ref.id) : null;
+      if (!attr || !attr.canonicalName) return null;
+      const img = attr.image && (attr.image.original || attr.image.large || attr.image.medium);
+      if (!img) return null;
+      const alts = ((attr.otherNames || [])).filter(Boolean).slice(0, 3);
+      return { name: attr.canonicalName, image: img, alts, role: (row.attributes && row.attributes.role) || '' };
+    })
+    .filter(Boolean);
+  rows.sort((a, b) => (a.role === 'main' ? -1 : 0) - (b.role === 'main' ? -1 : 0));
+  return rows.slice(0, max);
+}
+
+/* Animes vedettes pour le mode MULTIVERS Kitsu. */
+const KITSU_POPULAR = [
+  'Naruto', 'One Piece', 'Dragon Ball', 'Attack on Titan', 'Bleach', 'Death Note',
+  'Fullmetal Alchemist', 'Hunter x Hunter', 'My Hero Academia', 'Demon Slayer',
+  'Jujutsu Kaisen', 'One Punch Man', 'Fairy Tail', 'Haikyu', 'Cowboy Bebop',
+  'Steins;Gate', 'Code Geass', 'Vinland Saga',
+];
 
 /* Requête Jikan (repli) → data ou erreur typée. */
 const CANCEL_WORDS = new Set(['cancel', 'annuler', 'stop', 'quit', 'quitter', 'exit', '!stop']);
@@ -436,6 +529,7 @@ class MangaQuizSession {
         '',
         '📢 ' + fmt.bold('Tout le monde peut jouer !'),
         '⚡ ' + fmt.bold('Première bonne réponse = +10 points (prénom OU nom suffit).'),
+        ...(this._bankMode ? ['', '📭 ' + fmt.bold('Images indisponibles (sources en panne) — réponds avec les indices !')] : []),
       ])
     );
     await this._askQuestion();
@@ -443,30 +537,82 @@ class MangaQuizSession {
   }
 
   /*
-   * Charge les personnages — AniList d'abord, Jikan en repli automatique.
-   * Une seule source suffit pour lancer le quiz.
+   * Charge les personnages — CHAÎNE DE SECOURS à 4 niveaux :
+   *   AniList → Kitsu (indépendant) → Jikan → banque locale (toujours dispo).
+   * Une source récemment tombée est mise au repos 5 min (pas de retentée inutile).
    */
   async _loadCharacters(count) {
-    if (this.manga === 'multivers') {
+    const chain = this.manga === 'multivers'
+      ? [['_multiversAniList', 'anilist'], ['_multiversKitsu', 'kitsu'], ['_multiversJikan', 'jikan']]
+      : [['_mangaAniList', 'anilist'], ['_mangaKitsu', 'kitsu'], ['_mangaJikan', 'jikan']];
+    const errors = [];
+    for (const [method, src] of chain) {
+      if (isCoolingDown(src)) {
+        errors.push(`${src}:repos`);
+        continue;
+      }
       try {
-        return await this._multiversAniList(count);
-      } catch (errA) {
-        try {
-          return await this._multiversJikan(count);
-        } catch (errB) {
-          throw sourcesDown(errA, errB);
-        }
+        const result = await this[method](count);
+        markOk(src);
+        return result;
+      } catch (err) {
+        markFail(src);
+        errors.push(`${src}:${err.code || err.message}`);
       }
     }
+    // 🛟 Dernier rempart : banque locale (quiz JOUABLE même internet coupé).
     try {
-      return await this._mangaAniList(count);
-    } catch (errA) {
+      return await this._localBank(count);
+    } catch (bankErr) {
+      throw sourcesDown(errors);
+    }
+  }
+
+  /* 🛟 Mode secours — 109 personnages célèbres embarqués, questions À INDICES. */
+  async _localBank(count) {
+    const n = Math.min(count, LOCAL_BANK.length);
+    if (n <= 0) throw Object.assign(new Error('banque locale vide'), { code: 'QUIZ_SOURCES_DOWN' });
+    this.source = 'Banque locale (mode secours)';
+    this._bankMode = true;
+    return shuffle(LOCAL_BANK).slice(0, n).map((c) => ({
+      name: c.name,
+      image: null, // pas d'image → indices à la place
+      hint: c.hint,
+      alts: c.alts || [],
+    }));
+  }
+
+  /* 🌌 Multivers via Kitsu (3e source indépendante). */
+  async _multiversKitsu(count) {
+    const seen = new Set();
+    const all = [];
+    for (const animeName of shuffle(KITSU_POPULAR)) {
+      if (all.length >= count + 4) break;
       try {
-        return await this._mangaJikan(count);
-      } catch (errB) {
-        throw sourcesDown(errA, errB);
+        const anime = await kitsuFindAnime(animeName, this.fetchImpl);
+        const chars = await kitsuCharactersOf(anime.id, 8, this.fetchImpl);
+        for (const c of chars) {
+          if (!seen.has(c.name)) {
+            seen.add(c.name);
+            all.push({ name: c.name, image: c.image, alts: c.alts });
+          }
+        }
+      } catch (_) {
+        /* anime suivant — un seul anime suffit à faire vivre la source */
       }
     }
+    if (all.length === 0) throw Object.assign(new Error('Kitsu multivers vide'), { code: 'KITSU_BAD_RESPONSE' });
+    this.source = 'Multivers';
+    return shuffle(all).slice(0, count);
+  }
+
+  /* 📚 Manga précis via Kitsu (3e source indépendante). */
+  async _mangaKitsu(count) {
+    const anime = await kitsuFindAnime(this.manga, this.fetchImpl);
+    const rows = await kitsuCharactersOf(anime.id, Math.max(count, 12), this.fetchImpl);
+    if (rows.length === 0) throw Object.assign(new Error('Kitsu sans personnages'), { code: 'KITSU_BAD_RESPONSE' });
+    this.source = anime.titre;
+    return shuffle(rows.map((c) => ({ name: c.name, image: c.image, alts: c.alts }))).slice(0, count);
   }
 
   /* 🌌 Multivers — top personnages (par popularité) via AniList.
@@ -579,19 +725,23 @@ class MangaQuizSession {
     const lines = [
       `🖼️ ${fmt.boldNum(this.index + 1)}/${fmt.boldNum(this.total)}  —  📚 ${fmt.bold(this.source)}`,
       '',
-      '❓ ' + fmt.bold('QUI EST-CE ?'),
-      '',
-      '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`),
     ];
+    if (!c.image && c.hint) {
+      lines.push(`📖 ${fmt.bold('Indice')} : ${fmt.bold(c.hint)}`);
+      lines.push('');
+    }
+    lines.push('❓ ' + fmt.bold('QUI EST-CE ?'));
+    lines.push('');
+    lines.push('⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`));
     payload.body = fmt.frame(`🎌 IDENTIFICATION ${this.index + 1}/${this.total}`, lines);
 
-    const img = await downloadImage(c.image, this.bot.config.tmpDir, this.fetchImpl);
-    if (img) payload.attachment = img; // sinon : question sans image (dégradé honnête)
+    const img = c.image ? await downloadImage(c.image, this.bot.config.tmpDir, this.fetchImpl) : null;
+    if (img) payload.attachment = img; // sinon : question aux indices (mode secours)
 
     // ⚖️ Vérificateur STRICT : les AUTRES personnages de la manche servent de
     // garde-fou — répondre un autre nom (même mal orthographié) = faux.
-    const others = this.characters.filter((x) => x !== c).map((x) => x.name);
-    this._checker = makeChecker([c.name], others);
+    const others = this.characters.filter((x) => x !== c).flatMap((x) => [x.name, ...(x.alts || [])]);
+    this._checker = makeChecker([c.name, ...(c.alts || [])], others);
 
     // La question devient « live » AVANT l'envoi.
     this.awaitingAnswer = true;
@@ -709,4 +859,4 @@ class MangaQuizSession {
   }
 }
 
-module.exports = { MangaQuizSession, matchAnswer, makeChecker, canonical, loose, lev, downloadImage };
+module.exports = { MangaQuizSession, matchAnswer, makeChecker, canonical, loose, lev, downloadImage, resetSourceHealth };
