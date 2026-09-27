@@ -74,6 +74,16 @@ class Database {
       warningsIssued: 0,
       botStarts: 0,
     });
+    this.bets = new JsonStore(path.join(dataDir, 'bets.json'), {}); // paris Xbet par groupe
+  }
+
+  /* ── Paris Xbet ── */
+  betState(groupID) {
+    const key = String(groupID);
+    if (!this.bets.data[key]) {
+      this.bets.data[key] = { pairs: [], card: null, bets: {} };
+    }
+    return this.bets.data[key];
   }
 
   /* ── Utilisateurs ── */

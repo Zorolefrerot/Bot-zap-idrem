@@ -43,6 +43,12 @@ function createAiPool(logger, opts = {}) {
     if (data.data && typeof data.data === 'object' && typeof data.data.content === 'string') {
       return data.data.content.trim();
     }
+    // Format OpenAI : { choices: [{ message: { content } }] }
+    if (Array.isArray(data.choices) && data.choices[0]) {
+      const m = data.choices[0].message || data.choices[0].delta || {};
+      if (typeof m.content === 'string' && m.content.trim()) return m.content.trim();
+      if (typeof data.choices[0].text === 'string' && data.choices[0].text.trim()) return data.choices[0].text.trim();
+    }
     return null;
   }
 
@@ -120,6 +126,23 @@ function createAiPool(logger, opts = {}) {
       label: 'Ryzendesu',
       ask: (full) =>
         httpText(`https://api.ryzendesu.vip/api/ai/gpt?text=${encodeURIComponent(full)}`, { timeoutMs: 30000 }),
+    },
+    {
+      // Endpoint OpenAI-compatible SANS clé (text.pollinations.ai/openai).
+      name: 'openai',
+      label: 'OpenAI (pollinations)',
+      ask: (full) =>
+        httpText('https://text.pollinations.ai/openai', {
+          method: 'POST',
+          body: {
+            model: 'openai',
+            messages: [
+              { role: 'system', content: 'Tu es un assistant bref et naturel en français.' },
+              { role: 'user', content: full },
+            ],
+          },
+          timeoutMs: 30000,
+        }),
     },
   ];
 

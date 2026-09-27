@@ -185,15 +185,21 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 | `Xai <demande>` | IA avancée : analyse, rédaction, code |
 | `Xinfo` | La fiche d'identité officielle de MeR~NEL |
 | `Xchat on/off/status` | Discussion automatique sans préfixe (admins groupe/bot) |
+| `Xanime <nom>` | Fiche wiki d'un animé : image + studio, épisodes, note AniList, genres, synopsis |
+| `Xpolice <style> <texte>` | Transforme ton texte (20 polices Unicode) — `Xpolice` seul = la liste |
+| `Xupt` | Temps d'activité du bot + toutes ses capacités |
+| `Xstop` | (Admins) Stoppe/relance le bot dans le groupe — alias de Xoff/Xon |
 
-> ♻️ **Pool IA 5 fournisseurs SANS clé** (gemini-proxy2 → Pollinations → Shizo
-> → Paxsenix → Ryzendesu) avec **rotation automatique** : panne, timeout, 429
-> ou page HTML → fournisseur suivant, sans interruption. Les réponses HTML des
-> APIs ne sont **jamais** renvoyées dans le chat (message « cerveau en pause »).
+> ♻️ **Pool IA 6 fournisseurs SANS clé** (gemini-proxy2 → Pollinations → Shizo
+> → Paxsenix → Ryzendesu → OpenAI/pollinations) avec **rotation automatique** :
+> panne, timeout, 429 ou page HTML → fournisseur suivant, sans interruption.
+> Format OpenAI JSON supporté. Les réponses HTML des APIs ne sont **jamais**
+> renvoyées dans le chat (message « cerveau en pause »).
 
-> 😏 **Personnalité** : MeR~NEL n'est PAS ChatGPT — sarcastique, intelligent,
-> piquant mais attachant, réponses courtes. **Auto-réponse** : réponds à un
-> message du bot ou tague `@MeR~NeL` → il répond direct, sans préfixe.
+> 😏 **Personnalité** : MeR~NEL n'est PAS ChatGPT — drôle, intelligent,
+> empathique, s'énerve vite, fait des blagues et rigole avec le groupe,
+> réponses courtes. **Auto-réponse** : réponds à un message du bot ou tague
+> `@MeR~NeL` → il répond direct, sans préfixe.
 
 ### 💰 Économie
 | Commande | Description |
@@ -206,9 +212,12 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 ### 🎮 Jeux
 | Commande | Description |
 |---|---|
-| `Xquiz` | Quiz de GROUPE à réponses LIBRES (plus de QCM) : ID (indices de personnages) · MULTIVERS (anime) · CG (foot, basket, voitures, animaux, célébrités…) · CAPITALE (pays → capitale) · DRAPEAU (emoji → pays). ~1100 questions, tolérance fautes/variantes, +10 pts au premier bon répondeur, classement final |
-| `Xid` | Quiz manga (AniList + repli Jikan/MyAnimeList — sans clé) : identifie le personnage sur l'image — prénom OU nom OU nom complet, tolérant aux variantes de traduction (Gojo/Goujou) et aux petites fautes. 5/10/15 images (max 20), tableau des scores à la fin |
+| `Xquiz` | Quiz de GROUPE à réponses LIBRES : ID (indices) · MULTIVERS (manga indiqué À LA FIN de chaque question 📚) · CG (thème 🏷️ affiché) · CAPITALE · DRAPEAU. ~1100 questions regroupées par manga/thème, vérificateur strict, +10 pts au premier bon, classement final |
+| `Xid` | Quiz manga (AniList + repli Jikan — sans clé) : identifie le personnage sur l'image — prénom OU nom OU nom complet, variantes de traduction (Gojo/Goujou). 5 à 100 images (5/10/15…100), vérificateur strict (une autre réponse = faux), tableau des scores à la fin |
 | `Xduel` | Duel 1v1 avec mise en XCoins |
+| `Xbet` | Paris football RÉELS : 10 affrontements/manche (puissances /100) — `Xbet <n°> <a|b> <v|n|d> <mise>`, min 100 XCoins, 1 pari/match, résultat 30 s, duos jamais répétés, nouvelle manche quand tout est joué |
+| `Xrps` | Pierre 🪨 Feuille 📄 Ciseaux ✂️ contre MeR~NeL |
+| `Xlove` | Toi + un membre au hasard = amour parfait : vos photos de profil collées avec un cœur ❤️ |
 | `Xgame` | Catalogue des jeux |
 
 ### 🖼️ Médias
@@ -221,7 +230,7 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 ### 👤 Profil
 | Commande | Description |
 |---|---|
-| `Xprofil [@membre]` | Carte de profil (photo, XP, coins, UID) |
+| `Xprofil [@membre]` | Carte de profil + photo de profil (XP, coins, UID) |
 | `Xpseudo <nom>` / `Xpseudo @Paul <nom>` / `Xpseudo reset` | Gestion du pseudo |
 
 ### 📢 Groupe

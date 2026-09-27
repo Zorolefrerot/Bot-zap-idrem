@@ -2,6 +2,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert');
 const { boot, until, makeMsg, lastBody, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
+const { loose } = require('../systems/mangaQuiz');
 const cgBank = require('../systems/questions/cg.json');
 const capitaleBank = require('../systems/questions/capitale.json');
 const drapeauBank = require('../systems/questions/drapeau.json');
@@ -94,12 +95,14 @@ test('TOLÉRANCE : accent, variante (alts) et petite faute acceptés', async () 
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
   await nextFrame(adapter, /QUESTION 1\/5/, 15000, from);
   const session = bot.sessions.get('thread-1', 'quiz');
-  const item = session.questions[0];
+  // Faute générée sur la forme LOOSE (normalisée ou→o, accents…) pour ne pas
+  // cumuler deux transformations : le vérificateur tolère 1 faute sur un mot ≥5.
+  const longLoose = (a) => loose(a).split(' ').filter((w) => w.length >= 5)[0];
+  const item = session.questions.find((q) => longLoose(q.a));
+  assert.ok(item, 'au moins une réponse a un mot ≥5 en forme normalisée');
 
-  // 1) faute de frappe : retirer une lettre au dernier mot
-  const words = item.a.replace(/[^a-zA-Z0-9 ]/g, '').split(' ').filter(Boolean);
-  let last = words[words.length - 1];
-  const typo = last.length > 3 ? last.slice(0, -1) : last + 'x';
+  // 1) faute de frappe : retirer une lettre au mot long
+  const typo = longLoose(item.a).slice(0, -1);
   await bot.handleMessage(makeMsg('thread-1', UIDS.paul, typo));
   const t1 = await nextFrame(adapter, /prend le point|CLASSEMENT|TEMPS/, 15000, from);
   if (t1 && t1.includes('prend le point')) {

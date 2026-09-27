@@ -12,6 +12,7 @@ const { Cooldowns, humanDelay } = require('../utils/cooldown');
 const { Economy } = require('../systems/economy');
 const { XpSystem, thresholdForLevel } = require('../systems/xp');
 const { AntiSpam } = require('../systems/antiSpam');
+const { BetEngine } = require('../systems/xbet');
 const { SessionManager } = require('../systems/sessions');
 const { IdleMonitor } = require('../systems/idle');
 const fmt = require('../utils/formatter');
@@ -40,6 +41,7 @@ class Bot {
     this.economy = new Economy(this.db, this.config, this.logger);
     this.xp = new XpSystem(this.db, this.config);
     this.antiSpam = new AntiSpam(this.db, this.config, this.logger);
+    this.bets = new BetEngine(this);
     this.sessions = new SessionManager(this.config, this.logger);
 
     /* 🌙 Mode veille automatique (après IDLE_STANDBY_MINUTES d'inactivité) */
@@ -212,7 +214,7 @@ class Bot {
        * ADMIN est traitée — tout le reste est ignoré, même pour un admin. */
       if (disabledGroup) {
         const t = String(commandName || '');
-        const toggle = ['xoff', 'xon', 'xshutdown', 'xeteindre', 'xpoweroff'].includes(t);
+        const toggle = ['xoff', 'xon', 'xstop', 'xshutdown', 'xeteindre', 'xpoweroff'].includes(t);
         if (!(toggle && this.config.isAdmin(senderID))) return; // 🔇 silence
         return this._runCommand(this.commands.get('xoff'), ctx);
       }

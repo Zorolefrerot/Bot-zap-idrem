@@ -8,11 +8,11 @@
  * L'état est persisté sur disque : le bot reste éteint même après redémarrage.
  */
 
-const TOGGLE_TOKENS = ['xoff', 'xon', 'xshutdown', 'xeteindre', 'xpoweroff'];
+const TOGGLE_TOKENS = ['xoff', 'xon', 'xstop', 'xshutdown', 'xeteindre', 'xpoweroff'];
 
 module.exports = {
   name: 'xoff',
-  description: 'Éteint / rallume MeR~NeL dans CE groupe (admins) — interrupteur',
+  description: 'Stoppe / relance MeR~NeL dans CE groupe (admins) — Xstop / Xoff',
   usage: 'Xoff (éteindre) · Xoff ou Xon (rallumer)',
   category: 'admin',
   aliases: TOGGLE_TOKENS.filter((t) => t !== 'xoff'),

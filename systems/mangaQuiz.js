@@ -118,6 +118,73 @@ function lev(a, b, max) {
  * ✅ petites fautes de frappe (1 lettre — 2 pour les noms longs)
  * ❌ trop court (« sa »), autre personnage
  */
+/*
+ * ⚖️ makeChecker — vérificateur STRICT partagé (Xid + tous les quiz).
+ * correctList  : bonnes réponses de LA question (réponse + alts).
+ * otherAnswers : TOUTES les autres réponses de la banque → garde-fou :
+ *                répondre une AUTRE réponse (même mal orthographiée) = FAUX.
+ * Tolérance : variantes phonétiques connues (ou/oo→o, uu/aa/ee→1), accents,
+ * prénom OU nom OU nom complet ; fautes seulement sur les mots ≥5 lettres.
+ */
+function makeChecker(correctList, otherAnswers = []) {
+  const correct = correctList.filter(Boolean).map(canonical);
+  const correctLoose = correct.map(loose);
+  const othersLoose = [...new Set(otherAnswers.filter(Boolean).map(canonical))]
+    .filter((o) => o && !correct.includes(o))
+    .map(loose);
+  const sortTok = (t) => t.split(' ').filter(Boolean).sort().join(' ');
+
+  return function check(raw) {
+    const aCanon = canonical(raw);
+    if (!aCanon || aCanon.length < 2) return false;
+    const aLoose = loose(raw);
+    const aTok = aCanon.split(' ').filter((t) => t.length >= 2);
+
+    // 1) correspondance directe (canonique, variante, mots triés, prénom/nom)
+    for (let i = 0; i < correct.length; i++) {
+      const c = correct[i];
+      if (aCanon === c) return true;
+      if (aLoose === correctLoose[i]) return true;
+      if (aTok.length > 1 && sortTok(aCanon) === sortTok(c)) return true;
+      // prénom OU nom seul : mot ENTIER exact ou variante (pas de flou ici)
+      if (aTok.length === 1 && c.split(' ').length > 1) {
+        if (c.split(' ').some((w) => w === aCanon || loose(w) === aLoose)) return true;
+      }
+    }
+
+    // 2) faute sur UN mot de la réponse (prénom/nom mal tapé) — AVANT la
+    //    comparaison aux autres : « Dwyan » ≈ « Dwyane », pas « Durant ».
+    const tol = (w) => (w.length >= 10 ? 2 : w.length >= 5 ? 1 : 0);
+    if (aTok.length === 1) {
+      for (const cl of correctLoose) {
+        for (const w of cl.split(' ')) {
+          const tw = tol(w);
+          if (tw && lev(aTok[0], w, tw) <= tw) return true;
+        }
+      }
+    }
+
+    // 3) distance à la bonne réponse vs aux AUTRES réponses :
+    //    si plus proche d'une autre → FAUSSE (c'est probablement cette autre réponse).
+    let best = Infinity;
+    for (const cl of correctLoose) best = Math.min(best, lev(aLoose, cl, 3));
+    for (const ol of othersLoose) {
+      const d = lev(aLoose, ol, 3);
+      if (d < best) return false; // autre réponse STRICTEMENT plus proche → mauvaise réponse
+    }
+
+    // 4) fautes de frappe sur la réponse ENTIÈRE (mots longs uniquement)
+    for (let i = 0; i < correctLoose.length; i++) {
+      const cl = correctLoose[i];
+      if (aLoose === cl) return true;
+      const t = tol(cl);
+      if (t && lev(aLoose, cl, t) <= t) return true;
+    }
+    return false;
+  };
+}
+
+/* Rétro-compat : ancienne signature (réponse simple, aucun garde-fou). */
 function matchAnswer(answer, name) {
   const a = loose(answer);
   const n = loose(name);
@@ -521,6 +588,11 @@ class MangaQuizSession {
     const img = await downloadImage(c.image, this.bot.config.tmpDir, this.fetchImpl);
     if (img) payload.attachment = img; // sinon : question sans image (dégradé honnête)
 
+    // ⚖️ Vérificateur STRICT : les AUTRES personnages de la manche servent de
+    // garde-fou — répondre un autre nom (même mal orthographié) = faux.
+    const others = this.characters.filter((x) => x !== c).map((x) => x.name);
+    this._checker = makeChecker([c.name], others);
+
     // La question devient « live » AVANT l'envoi.
     this.awaitingAnswer = true;
     await this.send(payload);
@@ -559,8 +631,8 @@ class MangaQuizSession {
     // Question déjà remportée → réponses tardives ignorées.
     if (!this.firstCorrectPending) return true;
 
-    // Tolérance : prénom / nom / nom complet / variantes romaji / petites fautes.
-    if (!matchAnswer(raw, c.name)) return true; // silencieux — réessaie !
+    // Vérification STRICTE (autres personnages = garde-fou anti faux-positifs).
+    if (!this._checker || !this._checker(raw)) return true; // silencieux — réessaie !
 
     this.firstCorrectPending = false;
     this.awaitingAnswer = false;
@@ -637,4 +709,4 @@ class MangaQuizSession {
   }
 }
 
-module.exports = { MangaQuizSession, matchAnswer, canonical, loose, lev };
+module.exports = { MangaQuizSession, matchAnswer, makeChecker, canonical, loose, lev, downloadImage };

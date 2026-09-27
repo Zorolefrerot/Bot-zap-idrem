@@ -74,6 +74,7 @@ function loadBank(categoryKey) {
         q: String(q.q),
         a: String(q.a),
         alts: Array.isArray(q.alts) ? q.alts.map(String) : [],
+        tag: q.tag ? String(q.tag) : '', // manga (MULTIVERS) / thème (CG)
       }));
   } catch (_) {
     bank = []; // banque absente/corrompue → catégorie indisponible, bot stable

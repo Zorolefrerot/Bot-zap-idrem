@@ -4,6 +4,8 @@
  * Carte de profil futuriste + photo du membre si l'API la fournit.
  */
 
+const { downloadImage } = require('../../systems/mangaQuiz');
+
 module.exports = {
   name: 'xprofil',
   description: 'Affiche ta carte de profil',
@@ -33,7 +35,9 @@ module.exports = {
 
     const payload = { body: ctx.fmt.frame('👤 𝗣𝗥𝗢𝗙𝗜𝗟', lines) };
     if (info.thumbSrc && /^https?:\/\//.test(info.thumbSrc)) {
-      payload.attachment = info.thumbSrc; // si l'API ne fournit pas la photo → fallback texte propre
+      // Photo téléchargée localement (fiable) — sinon URL — sinon carte seule.
+      const file = await downloadImage(info.thumbSrc, ctx.config.tmpDir);
+      payload.attachment = file || info.thumbSrc;
     }
     await ctx.send(payload);
   },

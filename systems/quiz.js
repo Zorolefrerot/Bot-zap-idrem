@@ -15,7 +15,7 @@
  */
 
 const { CATEGORIES, loadBank, resolveCategory, shuffle } = require('./questions');
-const { matchAnswer } = require('./mangaQuiz');
+const { makeChecker } = require('./mangaQuiz');
 const fmt = require('../utils/formatter');
 const { safeInt } = require('../utils/sanitize');
 
@@ -186,7 +186,17 @@ class GroupQuizSession {
     }
     const bank = loadBank(this.category);
     this.count = Math.min(n, bank.length);
-    this.questions = shuffle(bank).slice(0, this.count);
+    // Classement : on regroupe les questions PAR MANGA / PAR THÈME
+    // (ordre des groupes aléatoire, questions mélangées à l'intérieur).
+    const picked = shuffle(bank).slice(0, this.count);
+    const groups = new Map();
+    for (const q of picked) {
+      const t = q.tag || '';
+      if (!groups.has(t)) groups.set(t, []);
+      groups.get(t).push(q);
+    }
+    this.questions = [];
+    for (const list of groups.values()) this.questions.push(...list);
     this.index = 0;
     this.state = 'RUNNING';
 
@@ -225,7 +235,20 @@ class GroupQuizSession {
     } else {
       lines.push('🧩 ' + fmt.bold(q.q), '', '❓ ' + fmt.bold('Qui ou quoi ?'));
     }
+    // Le manga / le thème est précisé À LA FIN de la question.
+    if (q.tag) {
+      if (this.category === 'multivers') lines.push(`📚 ${fmt.bold('Manga')} : ${fmt.bold(q.tag)}`);
+      else lines.push(`🏷️ ${fmt.bold('Thème')} : ${fmt.bold(q.tag)}`);
+    }
     lines.push('', '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`));
+
+    // ⚖️ Vérificateur STRICT : toutes les autres réponses de la banque
+    // servent de garde-fou contre les fausses réponses mal orthographiées.
+    const allBank = loadBank(this.category);
+    this._checker = makeChecker(
+      [q.a, ...(q.alts || [])],
+      allBank.filter((x) => x !== q).flatMap((x) => [x.a, ...(x.alts || [])])
+    );
 
     const payload = { body: fmt.frame(header, lines) };
 
@@ -268,10 +291,8 @@ class GroupQuizSession {
     // Question déjà remportée → réponses tardives ignorées (silencieux).
     if (!this.firstCorrectPending) return true;
 
-    // Tolérance : réponse exacte, prénom/nom seul, variantes (alts), petites fautes.
-    const candidates = [q.a, ...(q.alts || [])];
-    const correct = candidates.some((c) => matchAnswer(raw, c));
-    if (!correct) return true; // silencieux — réessaie !
+    // Vérification STRICTE (autres réponses = garde-fou anti faux-positifs).
+    if (!this._checker || !this._checker(raw)) return true; // silencieux — réessaie !
 
     this.firstCorrectPending = false;
     this.awaitingAnswer = false;

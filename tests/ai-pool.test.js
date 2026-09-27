@@ -29,8 +29,9 @@ function stubFetch(routes) {
 test('aiPool : le 1er fournisseur en panne → rotation vers le suivant', async () => {
   const calls = [];
   const fetchImpl = stubFetch([
+    ['text.pollinations.ai/openai', () => { calls.push('openai'); throw new Error('down'); }],
     ['gemini-proxy2', () => { calls.push('gemini'); throw new Error('down'); }],
-    ['pollinations', () => { calls.push('pollinations'); return jsonRes({ response: 'salut !' }); }],
+    ['text.pollinations.ai', () => { calls.push('pollinations'); return jsonRes({ response: 'salut !' }); }],
   ]);
   const pool = createAiPool(noopLogger, { fetchImpl, timeoutMs: 500 });
   const res = await pool.ask('bonjour');
@@ -42,8 +43,9 @@ test('aiPool : le 1er fournisseur en panne → rotation vers le suivant', async 
 test('aiPool : rotation round-robin — la charge est répartie entre fournisseurs', async () => {
   const hits = [];
   const fetchImpl = stubFetch([
+    ['text.pollinations.ai/openai', () => { throw new Error('down'); }],
     ['gemini-proxy2', () => { hits.push('gemini'); return jsonRes({ content: 'G' }); }],
-    ['pollinations', () => { hits.push('poll'); return jsonRes({ response: 'P' }); }],
+    ['text.pollinations.ai', () => { hits.push('poll'); return jsonRes({ response: 'P' }); }],
   ]);
   const pool = createAiPool(noopLogger, { fetchImpl, timeoutMs: 500 });
   const r1 = await pool.ask('un');
@@ -67,15 +69,17 @@ test('aiPool : réponse 429 partout → AI_ALL_PROVIDERS_DOWN (rate limit géré
     ['shizo', () => jsonRes({}, 429)],
     ['paxsenix', () => jsonRes({}, 429)],
     ['ryzendesu', () => jsonRes({}, 429)],
+    ['pollinations.ai', () => jsonRes({}, 429)],
   ]);
   const pool = createAiPool(noopLogger, { fetchImpl, timeoutMs: 300 });
   await assert.rejects(() => pool.ask('test'), (err) => err.code === 'AI_ALL_PROVIDERS_DOWN');
 });
 
-test('aiPool : 5 fournisseurs déclarés (gemini-proxy + pollinations + shizo + paxsenix + ryzendesu)', () => {
+test('aiPool : 6 fournisseurs déclarés (gemini-proxy + pollinations + shizo + paxsenix + ryzendesu + openai)', () => {
   const pool = createAiPool(noopLogger, { fetchImpl: stubFetch([]), timeoutMs: 100 });
   const list = pool.providersList();
-  assert.strictEqual(list.length, 5);
+  assert.strictEqual(list.length, 6);
+  assert.ok(list.some((p) => /OpenAI/i.test(p)), 'provider OpenAI (pollinations) présent');
   assert.ok(list.some((p) => /Gemini/i.test(p)));
   assert.ok(list.some((p) => /Pollinations/i.test(p)));
   assert.ok(list.some((p) => /Shizo/i.test(p)));
