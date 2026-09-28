@@ -42,6 +42,14 @@ class Bot {
     this.xp = new XpSystem(this.db, this.config);
     this.antiSpam = new AntiSpam(this.db, this.config, this.logger);
     this.bets = new BetEngine(this);
+    // 💾 Autosave : toutes les 5 min, tout est écrit sur disque
+    // (crash, extinction forcée, redéploiement → rien ne se perd).
+    this._autosaveTimer = setInterval(() => {
+      try {
+        this.db.saveAll();
+      } catch (_) { /* jamais bloquer le bot */ }
+    }, 5 * 60 * 1000);
+    if (this._autosaveTimer.unref) this._autosaveTimer.unref();
     this.sessions = new SessionManager(this.config, this.logger);
 
     /* 🌙 Mode veille automatique (après IDLE_STANDBY_MINUTES d'inactivité) */
@@ -597,6 +605,10 @@ class Bot {
 
   /* ── Extinction propre ── */
   async shutdown() {
+    if (this._autosaveTimer) clearInterval(this._autosaveTimer);
+    try {
+      this.db.saveAll(); // 💾 flush final garanti
+    } catch (_) { /* */ }
     this.idle.destroy();
     this.sessions.destroyAll();
     this.db.saveAll();

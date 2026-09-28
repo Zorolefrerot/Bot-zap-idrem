@@ -23,9 +23,11 @@ test('Xmenu : organisation officielle complète', async () => {
   }
   for (const cmd of ['Xchat', 'Xask', 'Xai', 'Xdaily', 'Xcoins', 'Xp', 'Xrank', 'Xquiz', 'Xduel',
     'Xgame', 'Ximg', 'Xplay', 'Xvideo', 'Xprofil', 'Xpseudo', 'Xtag all', 'Xannonce',
-    'Xban', 'Xwarn', 'Xkick', 'Xclear']) {
+    'Xban', 'Xkick', 'Xclear', 'Xid', 'Xfoot', 'Xbet', 'Xslots', 'Xpile', 'Xcourse',
+    'Xrps', 'Xanime', 'Xpolice', 'Xlove', 'Xupt', 'Xrestart', 'Xstop']) {
     assert.ok(body.includes(cmd), `commande manquante au menu: ${cmd}`);
   }
+  assert.ok(!body.includes('Xwarn'), 'Xwarn retiré du menu');
 });
 
 test('casse indifférente : xCoInS fonctionne', async () => {

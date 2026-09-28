@@ -166,6 +166,7 @@ class Database {
     this.users.saveNow();
     this.groups.saveNow();
     this.stats.saveNow();
+    this.bets.saveNow(); // paris Xbet — rien ne se perd, même après extinction
   }
 }
 

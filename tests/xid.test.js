@@ -2,7 +2,7 @@
 const { test, after } = require('node:test');
 const assert = require('node:assert');
 const { boot, until, makeMsg, lastBody, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
-const { matchAnswer, loose, resetSourceHealth } = require('../systems/mangaQuiz');
+const { matchAnswer, loose, resetSourceHealth, resetSourceCache } = require('../systems/mangaQuiz');
 
 const BOT_ID = 'BOT_MOCK_000000';
 const realFetch = global.fetch;
@@ -38,6 +38,7 @@ function makeImage() {
 
 function stubFetch(overrides = {}) {
   resetSourceHealth(); // santé des sources = état global → remis à zéro par test
+  resetSourceCache(); // cache des réussites = état global → idem
   global.fetch = async (url) => {
     const u = String(url);
     /* ── AniList (primaire) ── */

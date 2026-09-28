@@ -124,6 +124,37 @@ function bindingsToPlayers(bindings) {
   return out;
 }
 
+/* ═══ FIABILITÉ : réessais + cache des réussites ═══ */
+const NOT_FOUND_CODES = new Set(['WIKIDATA_NOT_FOUND']);
+
+async function withRetry(fn, tries = 2, delayMs = 1200) {
+  let lastErr;
+  for (let i = 0; i < tries; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (NOT_FOUND_CODES.has(err.code)) throw err;
+      lastErr = err;
+      if (i < tries - 1) await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+  throw lastErr;
+}
+
+const CACHE_FRESH_MS = 10 * 60 * 1000;
+const CACHE_STALE_MS = 6 * 60 * 60 * 1000;
+const successCache = new Map();
+function cacheGet(key) {
+  return successCache.get(key) || null;
+}
+function cacheSet(key, source, players) {
+  successCache.set(key, { at: Date.now(), source, players });
+}
+/* Reset du cache (tests / redémarrage). */
+function resetSourceCache() {
+  successCache.clear();
+}
+
 /* ── Santé des sources (source tombée = repos 5 min) ── */
 const SOURCE_COOLDOWN_MS = 5 * 60 * 1000;
 const sourceFailAt = { wikidata: 0 };
@@ -333,14 +364,35 @@ class FootQuizSession {
    * JAMAIS de quiz aux indices.
    */
   async _loadPlayers(count) {
+    const key = `xfoot:${fmt.normalizeAnswer(this.filter || '')}`;
+    // 0) Cache FRAIS (< 10 min) → aucune requête.
+    const fresh = cacheGet(key);
+    if (fresh && Date.now() - fresh.at < CACHE_FRESH_MS && fresh.players.length >= count) {
+      this.source = fresh.source;
+      return shuffle(fresh.players).slice(0, count);
+    }
+    // 1) Repos post-panne ? → cache périmé possible, sinon échec direct.
     if (isCoolingDown('wikidata')) {
+      const stale = cacheGet(key);
+      if (stale && Date.now() - stale.at < CACHE_STALE_MS && stale.players.length > 0) {
+        this.source = `${stale.source} (cache)`;
+        return shuffle(stale.players).slice(0, count);
+      }
       throw Object.assign(new Error('source en repos'), { code: 'QUIZ_SOURCES_DOWN' });
     }
     try {
-      return await this._wikidata(count);
+      const result = await withRetry(() => this._wikidata(count));
+      cacheSet(key, this.source, result);
+      return result;
     } catch (err) {
       if (err.code === 'WIKIDATA_NOT_FOUND') throw err; // mauvais filtre ≠ panne
       markFail('wikidata');
+      // 2) Cache PÉRIMÉ mais < 6 h → vraies photos plutôt qu'un refus.
+      const stale = cacheGet(key);
+      if (stale && Date.now() - stale.at < CACHE_STALE_MS && stale.players.length > 0) {
+        this.source = `${stale.source} (cache)`;
+        return shuffle(stale.players).slice(0, count);
+      }
       throw Object.assign(new Error('Wikidata indisponible'), {
         code: err.code === 'WIKIDATA_RATE_LIMIT' ? 'QUIZ_RATE_LIMITED' : 'QUIZ_SOURCES_DOWN',
       });
@@ -518,4 +570,4 @@ function shuffle(arr) {
   return a;
 }
 
-module.exports = { FootQuizSession, resetSourceHealth, TEAM_ALIASES, bindingsToPlayers };
+module.exports = { FootQuizSession, resetSourceHealth, resetSourceCache, TEAM_ALIASES, bindingsToPlayers };

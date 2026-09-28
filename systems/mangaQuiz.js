@@ -87,6 +87,42 @@ function sourcesDown(errors) {
   });
 }
 
+/* ═══ FIABILITÉ : réessais + cache des réussites ═══
+ * Transient (timeout, 429, 5xx) → 2ᵉ tentative après 1,2 s.
+ * Chaque chargement réussi est mis en cache 10 min : un 2ᵉ quiz sur le
+ * même manga ne refait AUCUNE requête. En cas de panne totale, le cache
+ * reste utilisable jusqu'à 6 h (vraies images, pas d'indices). */
+const NOT_FOUND_CODES = new Set(['ANILIST_NOT_FOUND', 'KITSU_NOT_FOUND', 'JIKAN_NOT_FOUND']);
+
+async function withRetry(fn, tries = 2, delayMs = 1200) {
+  let lastErr;
+  for (let i = 0; i < tries; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (NOT_FOUND_CODES.has(err.code)) throw err; // inutile de réessayer
+      lastErr = err;
+      if (i < tries - 1) await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+  throw lastErr;
+}
+
+const CACHE_FRESH_MS = 10 * 60 * 1000; // frais : réutilisé sans réseau
+const CACHE_STALE_MS = 6 * 60 * 60 * 1000; // périmé : secours si panne totale
+const successCache = new Map(); // key → { at, source, players }
+function cacheGet(key) {
+  const hit = successCache.get(key);
+  return hit || null;
+}
+function cacheSet(key, source, players) {
+  successCache.set(key, { at: Date.now(), source, players });
+}
+/* Reset du cache (tests / redémarrage). */
+function resetSourceCache() {
+  successCache.clear();
+}
+
 /* ═══ KITSU — 3e source INDÉPENDANTE (ni AniList, ni MyAnimeList) ═══ */
 const KITSU = 'https://kitsu.io/api/edge';
 
@@ -540,6 +576,14 @@ class MangaQuizSession {
    * Une source récemment tombée est mise au repos 5 min (pas de retentée inutile).
    */
   async _loadCharacters(count) {
+    const key = `xid:${fmt.normalizeAnswer(this.manga)}`;
+    // 0) Cache FRAIS (< 10 min) → aucune requête, réponse immédiate.
+    const fresh = cacheGet(key);
+    if (fresh && Date.now() - fresh.at < CACHE_FRESH_MS && fresh.players.length >= count) {
+      this.source = fresh.source;
+      return shuffle(fresh.players).slice(0, count);
+    }
+
     const chain = this.manga === 'multivers'
       ? [['_multiversAniList', 'anilist'], ['_multiversKitsu', 'kitsu'], ['_multiversJikan', 'jikan']]
       : [['_mangaAniList', 'anilist'], ['_mangaKitsu', 'kitsu'], ['_mangaJikan', 'jikan']];
@@ -550,13 +594,21 @@ class MangaQuizSession {
         continue;
       }
       try {
-        const result = await this[method](count);
+        // Chaque source a droit à 2 tentatives (pannes transient fréquentes).
+        const result = await withRetry(() => this[method](count));
         markOk(src);
+        cacheSet(key, this.source, result);
         return result;
       } catch (err) {
         markFail(src);
         errors.push(`${src}:${err.code || err.message}`);
       }
+    }
+    // 2) Cache PÉRIMÉ mais < 6 h → vraies images, meilleure issue qu'un refus.
+    const stale = cacheGet(key);
+    if (stale && Date.now() - stale.at < CACHE_STALE_MS && stale.players.length > 0) {
+      this.source = `${stale.source} (cache)`;
+      return shuffle(stale.players).slice(0, count);
     }
     // Xid = IMAGES uniquement : aucune source dispo → message propre,
     // JAMAIS de quiz aux indices.
@@ -844,4 +896,4 @@ class MangaQuizSession {
   }
 }
 
-module.exports = { MangaQuizSession, matchAnswer, makeChecker, canonical, loose, lev, downloadImage, resetSourceHealth };
+module.exports = { MangaQuizSession, matchAnswer, makeChecker, canonical, loose, lev, downloadImage, resetSourceHealth, resetSourceCache };

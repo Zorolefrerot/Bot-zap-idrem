@@ -2,7 +2,7 @@
 const { test, after } = require('node:test');
 const assert = require('node:assert');
 const { boot, until, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
-const { resetSourceHealth, bindingsToPlayers, TEAM_ALIASES } = require('../systems/footQuiz');
+const { resetSourceHealth, resetSourceCache, bindingsToPlayers, TEAM_ALIASES } = require('../systems/footQuiz');
 
 const realFetch = global.fetch;
 
@@ -30,7 +30,8 @@ function sparqlBindings(players) {
 }
 
 function stubFetch(overrides = {}) {
-  resetSourceHealth(); // santé des sources = état global → remis à zéro par test
+  resetSourceHealth();
+  resetSourceCache(); // cache des réussites = état global → remis à zéro par test
   global.fetch = async (url) => {
     const u = String(url);
     if (u.includes('query.wikidata.org')) {

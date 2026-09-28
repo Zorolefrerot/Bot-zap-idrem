@@ -174,6 +174,11 @@ automatique).
 
 ---
 
+> 💾 **Persistance totale** : XCoins, XP, niveaux, rangs, pseudos, avertissements
+> et paris sont écrits sur disque (JSON atomique + debounce), avec **autosave
+> toutes les 5 minutes** et **flush garanti à l'extinction/redémarrage**
+> (SIGTERM, Xstop, Xrestart). Rien ne se perd, même après un redéploiement.
+
 ## 📋 Liste complète des commandes
 
 Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent).
@@ -189,6 +194,7 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 | `Xpolice <style> <texte>` | Transforme ton texte (20 polices Unicode) — `Xpolice` seul = la liste |
 | `Xupt` | Temps d'activité du bot + toutes ses capacités |
 | `Xstop` | (Admins) Stoppe/relance le bot dans le groupe — alias de Xoff/Xon |
+| `Xrestart` | (Admins) Redémarre le bot — sauvegarde TOUTES les données avant |
 
 > ♻️ **Pool IA 6 fournisseurs SANS clé** (gemini-proxy2 → Pollinations → Shizo
 > → Paxsenix → Ryzendesu → OpenAI/pollinations) avec **rotation automatique** :
@@ -217,6 +223,9 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 | `Xduel` | Duel 1v1 avec mise en XCoins |
 | `Xbet` | Paris football RÉELS : 10 affrontements/manche (puissances /100) — `Xbet <n°> <a|b> <v|n|d> <mise>`, min 100 XCoins, 1 pari/match, résultat 30 s, duos jamais répétés, nouvelle manche quand tout est joué |
 | `Xrps` | Pierre 🪨 Feuille 📄 Ciseaux ✂️ contre MeR~NeL |
+| `Xslots <mise>` | Machine à sous 🎰 — min 50 XCoins, 3 identiques jusqu'à ×25, paire ×2 |
+| `Xpile <pile\|face> <mise>` | Pile ou face 🪙 — double ou rien (×2) |
+| `Xcourse <n° 1-4> <mise>` | Course de chevaux 🏇 — pari sur 1 des 4, gain ×3.5 |
 | `Xlove` | Toi + un membre au hasard = amour parfait : vos photos de profil collées avec un cœur ❤️ |
 | `Xfoot` | Quiz football PHOTOS UNIQUEMENT (Wikidata, sans clé) — filtre MULTIVERS (top 200 pros) ou club/sélection (PSG, Real, RDC, Argentine…). Photo indisponible → joueur sauté ; panne → message propre, JAMAIS de questions sans photo |
 | `Xgame` | Catalogue des jeux |
