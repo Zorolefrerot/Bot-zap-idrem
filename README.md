@@ -30,7 +30,7 @@ MeR-NeL/
 │
 ├── core/
 │   ├── config.js             # Configuration centralisée (lit .env)
-│   ├── bot.js                # Cerveau : routage, sessions, XP, anti-spam, accueil
+│   ├── bot.js                # Cerveau : routage, sessions, XP, accueil
 │   ├── commandLoader.js      # Chargement auto de commands/**
 │   └── keepAlive.js          # Serveur HTTP santé pour Render (/healthz)
 │
@@ -60,7 +60,6 @@ MeR-NeL/
 │   ├── xp.js                 # XP & niveaux (courbe configurable)
 │   ├── quiz.js               # Machine d'état du quiz
 │   ├── duel.js               # Machine d'état du duel (mises sécurisées)
-│   ├── antiSpam.js           # Détection de spam + sanctions
 │   ├── sessions.js           # Gestionnaire de conversations multi-étapes
 │   └── questions/            # Banques de questions JSON (éditables)
 │
@@ -372,7 +371,7 @@ npm test
 La suite exécute le bot en **mode mock** (aucune connexion Facebook) et couvre :
 formateur, permissions, économie (daily/double claim), XP, quiz complet
 (catégorie → nombre → réponses), duel (mise insuffisante, victoire, remboursement),
-anti-spam, sessions simultanées dans plusieurs groupes, persistance après
+sessions simultanées dans plusieurs groupes, persistance après
 redémarrage, refus d'admin pour les non-autorisés, et limites des capacités API.
 
 ---

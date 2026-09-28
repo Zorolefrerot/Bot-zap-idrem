@@ -71,7 +71,6 @@ class Database {
       quizzesPlayed: 0,
       duelsPlayed: 0,
       imagesGenerated: 0,
-      warningsIssued: 0,
       botStarts: 0,
     });
     this.bets = new JsonStore(path.join(dataDir, 'bets.json'), {}); // paris Xbet par groupe
@@ -104,7 +103,6 @@ class Database {
         xp: 0,
         level: 1,
         dailyClaim: 0,
-        warnings: 0,
         mutedUntil: 0,
         stats: {
           messages: 0,

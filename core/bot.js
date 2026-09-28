@@ -1,7 +1,7 @@
 'use strict';
 /*
  * 🧬 MeR~NeL — core/bot.js
- * Cerveau du bot : routage des messages, sessions, XP, anti-spam,
+ * Cerveau du bot : routage des messages, sessions, XP,
  * exécution des commandes, accueil des nouveaux membres.
  */
 
@@ -11,7 +11,6 @@ const { loadCommands } = require('./commandLoader');
 const { Cooldowns, humanDelay } = require('../utils/cooldown');
 const { Economy } = require('../systems/economy');
 const { XpSystem, thresholdForLevel } = require('../systems/xp');
-const { AntiSpam } = require('../systems/antiSpam');
 const { BetEngine } = require('../systems/xbet');
 const { SessionManager } = require('../systems/sessions');
 const { IdleMonitor } = require('../systems/idle');
@@ -40,7 +39,6 @@ class Bot {
     this.cooldowns = new Cooldowns();
     this.economy = new Economy(this.db, this.config, this.logger);
     this.xp = new XpSystem(this.db, this.config);
-    this.antiSpam = new AntiSpam(this.db, this.config, this.logger);
     this.bets = new BetEngine(this);
     // 💾 Autosave : toutes les 5 min, tout est écrit sur disque
     // (crash, extinction forcée, redéploiement → rien ne se perd).
@@ -153,27 +151,6 @@ class Bot {
         }
       }
 
-      /* ── Mute actif ? (anti-spam) — silencieux si groupe éteint ── */
-      if (!disabledGroup && this.antiSpam.isMuted(senderID)) {
-        const gate = this.cooldowns.check(`mute-notice:${senderID}`, 60_000);
-        if (gate.ok) {
-          await this.send(
-            fmt.frame('🔇 MODE SILENCE', [
-              '⏳ ' + fmt.bold('Tu es encore en mode silence.'),
-              `⏱️ ${fmt.bold('Fin')} : ${fmt.bold(humanDelay(this.antiSpam && this._remainingMute(senderID)))}`,
-            ]),
-            threadID
-          );
-        }
-        return;
-      }
-
-      /* ── Anti-spam (groupes, non-admins) — inactif si groupe éteint ── */
-      if (!disabledGroup && isGroup && body && !this.config.isAdmin(senderID)) {
-        const violation = this.antiSpam.observe(threadID, senderID, body);
-        if (violation) return this._handleSpamViolation(threadID, senderID, violation);
-      }
-
       /* ── Parsing de commande (#37 — casse indifférente, préfixe inclus) ── */
       const lower = body.toLowerCase();
       const prefixLower = this.config.prefix.toLowerCase();
@@ -206,7 +183,6 @@ class Bot {
         fmt,
         economy: this.economy,
         xp: this.xp,
-        antiSpam: this.antiSpam,
         sessions: this.sessions,
         cooldowns: this.cooldowns,
         services: this.services,
@@ -337,61 +313,6 @@ class Bot {
     } catch (err) {
       this.logger.error('[bot] handleMessage:', err);
     }
-  }
-
-  _remainingMute(senderID) {
-    const user = this.db.getUser(senderID);
-    return user && user.mutedUntil ? Math.max(0, user.mutedUntil - Date.now()) : 0;
-  }
-
-  async _handleSpamViolation(threadID, senderID, violation) {
-    const name = await this.getUserName(senderID);
-    const safeName = (name || 'Membre').split(/\s+/)[0];
-
-    if (violation.action === 'ban') {
-      // 💀 Ban automatique après warnLimit avertissements.
-      const user = this.db.ensureUser(senderID);
-      user.banned = true;
-      user.bannedReason = 'spam';
-      user.bannedAt = Date.now();
-      this.db.users.save();
-
-      let kickedNote = '🔇 ' + fmt.bold('Sanction appliquée côté bot : ses messages seront ignorés.');
-      if (this.capabilities.removeUser) {
-        try {
-          await this.adapter.removeUser(senderID, threadID);
-          kickedNote = '🚫 ' + fmt.bold('Le membre a été retiré du groupe par l’API.');
-        } catch (_) {
-          /* l'API refuse → on l'annonce honnêtement */
-        }
-      }
-      const mentionTag = `@${safeName}`;
-      const body =
-        fmt.frame('💀 SPAM — EXCLUSION', [
-          `💀 ${fmt.bold(`Ton spam t'a conduit à ta perte, ${mentionTag}. Bye bye.`)}`,
-          '☠️ ' + fmt.bold(`Avertissements : ${fmt.boldNum(this.config.spam.warnLimit)}/${fmt.boldNum(this.config.spam.warnLimit)}`),
-          kickedNote,
-        ]) || '';
-      const payload = { body };
-      const tagIndex = payload.body.indexOf(mentionTag);
-      if (tagIndex >= 0) payload.mentions = { [senderID]: { tag: mentionTag, from: tagIndex } };
-      await this.send(payload, threadID);
-      this.db.bumpStat('spamAutoBans');
-      return;
-    }
-
-    // ⚠️ Simple avertissement (avec mention du fautif).
-    const mentionTag = `@${safeName}`;
-    const payload = {
-      body: fmt.frame('⚠️ ANTI-SPAM', [
-        `⚠️ ${mentionTag}, ${fmt.bold('stop le spam.')}`,
-        `🚨 ${fmt.bold('Avertissement')} ${fmt.boldNum(violation.warnings)}/${fmt.boldNum(violation.warnLimit)}`,
-        '💀 ' + fmt.bold(`À ${fmt.boldNum(violation.warnLimit)} : exclusion automatique.`),
-      ]),
-    };
-    const tagIndex = payload.body.indexOf(mentionTag);
-    if (tagIndex >= 0) payload.mentions = { [senderID]: { tag: mentionTag, from: tagIndex } };
-    await this.send(payload, threadID);
   }
 
   async _runCommand(cmd, ctx) {
@@ -703,7 +624,7 @@ class Bot {
         '💰 ' + fmt.bold('Économie & XP'),
         '🎮 ' + fmt.bold('Quiz, duels & jeux'),
         '🖼️ ' + fmt.bold('Génération d’images, audio, vidéo'),
-        '🛡️ ' + fmt.bold('Administration & anti-spam'),
+        '🛡️ ' + fmt.bold('Administration'),
         '',
         '📋 ' + fmt.bold('Tape Xmenu pour tout découvrir.'),
         `🖋️ ${fmt.bold('Signé')} : ${fmt.bold(this.config.signature)}`,

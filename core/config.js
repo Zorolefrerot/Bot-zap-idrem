@@ -138,16 +138,6 @@ const config = {
     duelAllowedCounts: [10, 20, 30],
   },
 
-  /* Anti-spam : 5 identiques OU 5 messages en 10 s → warn ; à 2 warns → ban auto */
-  spam: {
-    duplicateLimit: int(env.SPAM_DUPLICATE_LIMIT, 5),
-    timeWindowMs: int(env.SPAM_TIME_WINDOW_MS, 30000),
-    floodWindowMs: int(env.SPAM_FLOOD_WINDOW_MS, 10000),
-    warnLimit: int(env.SPAM_WARN_LIMIT, 2),
-    autoBan: (env.SPAM_AUTO_BAN || 'true') !== 'false',
-    muteMinutes: int(env.SPAM_MUTE_MINUTES, 10),
-  },
-
   /* Chat automatique */
   chat: {
     minIntervalMs: int(env.CHAT_MIN_INTERVAL_MS, 3000),

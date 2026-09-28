@@ -31,7 +31,8 @@ module.exports = {
     target.banned = false;
     target.bannedBy = null;
     target.bannedAt = null;
-    ctx.antiSpam.unmute(targetID);
+    target.mutedUntil = 0;
+    target.warnings = 0;
     ctx.db.users.save();
     const name = await ctx.getUserName(targetID);
     await ctx.send(

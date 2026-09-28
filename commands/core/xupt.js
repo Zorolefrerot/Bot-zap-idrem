@@ -47,7 +47,6 @@ module.exports = {
       `⚽ ${b('Quiz foot (Xfoot)')} : ${b('Wikidata — 200 joueurs')} — clubs & sélections`,
       `⚽ ${b('Paris sportifs (Xbet)')} : ${b('10 matchs par manche')}`,
       `🖼️ ${b('Images (Ximg)')} : ${b('génération IA sans clé')} — max ${b(ctx.config.media.maxImages)}`,
-      `🔐 ${b('Sécurité')} : ${b('anti-spam auto')} (warns ${b('1/2')} puis exclusion)`,
       `🌙 ${b('Veille auto')} : ${b('30 min')} d’inactivité`,
       '',
       `📊 ${b('VITALITÉ')}`,

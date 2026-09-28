@@ -93,15 +93,6 @@ async function boot(opts = {}) {
   config.chat.minIntervalMs = 0;
   config.idle.sweepMs = 0; // pas de timer de veille en tests (sweep manuel)
   config.xp.messageCooldownMs = 0;
-  // Anti-spam DÉSACTIVÉ par défaut en tests (les flux rapides des autres suites
-  // ne doivent pas déclencher de warnings) — activé seulement via opts.spam.
-  config.spam.duplicateLimit = 9999;
-  config.spam.floodWindowMs = 0;
-  config.spam.warnLimit = 2;
-  config.spam.autoBan = true;
-  if (opts.spam) {
-    Object.assign(config.spam, opts.spam);
-  }
   if (opts.adminUids) config.adminUids = opts.adminUids.slice();
 
   const logger = new Logger({ logDir: config.logDir, logFile: false });
