@@ -29,14 +29,34 @@ query ($search: String) {
 }`;
 
 async function fetchInfo(search, fetchImpl) {
-  const res = await fetchImpl(ANILIST, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify({ query: QUERY, variables: { search } }),
-  });
-  if (!res.ok) throw new Error(`AniList HTTP ${res.status}`);
-  const json = await res.json();
-  return (json.data && json.data.Media) || null;
+  const f = fetchImpl || global.fetch;
+  let lastErr = null;
+  // 2 tentatives : AniList refuse toute requête sans Referer (403) et
+  // renvoie parfois des erreurs transient (429/5xx) → on réessaie.
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await f(ANILIST, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Referer: 'https://anilist.co/',
+          Origin: 'https://anilist.co',
+          'User-Agent': 'MeRNeL-Bot/4 (+https://github.com/Zorolefrerot/Bot-zap-idrem)',
+        },
+        body: JSON.stringify({ query: QUERY, variables: { search } }),
+        signal: AbortSignal.timeout(15000),
+      });
+      if (res.status === 429 || res.status >= 500) throw new Error(`AniList HTTP ${res.status}`);
+      if (!res.ok) throw new Error(`AniList HTTP ${res.status}`);
+      const json = await res.json().catch(() => null);
+      return (json && json.data && json.data.Media) || null;
+    } catch (err) {
+      lastErr = err;
+      if (attempt === 0) await new Promise((r) => setTimeout(r, 1200));
+    }
+  }
+  throw lastErr || new Error('AniList indisponible');
 }
 
 function stripHtml(s) {

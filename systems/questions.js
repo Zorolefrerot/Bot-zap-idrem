@@ -56,6 +56,7 @@ const DUEL_CATEGORIES = {
   cg: { short: 'CG', aliases: ['cg', 'culture'], file: 'duel-cg.json' },
   multivers: { short: 'MULTIVERS', aliases: ['multivers', 'anime', 'mu', 'mv'], file: 'duel-multivers.json' },
   id: { short: 'ID', aliases: ['id', 'identification', 'photo'], file: 'duel-id.json' },
+  drapeau: { short: 'DRAPEAU', aliases: ['drapeau', 'flag', 'pays'], file: 'duel-drapeau.json' },
 };
 
 const cache = new Map();

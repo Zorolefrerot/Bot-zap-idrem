@@ -20,7 +20,7 @@ test('makeChecker STRICT : une autre réponse du quiz = FAUX même bien orthogra
   assert.equal(ck('Sasuke Uchiha'), true, 'exact accepté');
   assert.equal(ck('sasuke'), true, 'nom seul accepté');
   assert.equal(ck('sasuké'), true, 'accent toléré');
-  assert.equal(ck('sasuk'), true, 'petite faute tolérée (mot ≥5)');
+  assert.equal(ck('sasuk'), false, 'mot 6 lettres : AUCUNE faute tolérée (strict)');
   assert.equal(ck('Sakura Haruno'), false, 'autre réponse = faux');
   assert.equal(ck('Sakoura'), false, 'autre réponse MAL ORTHOGRAPHIÉE = faux (le strict anti-triche)');
   assert.equal(ck('Narouto'), false, 'autre réponse avec faute = faux');
@@ -37,11 +37,20 @@ test('makeChecker : mot court → tolérance de faute désactivée (variantes OK
   assert.equal(ck('geto'), false, 'autre réponse = faux');
 });
 
-test('makeChecker : banque vide (Xid solo) reste permissive sur les fautes', () => {
+test('makeChecker : banque vide (Xid solo) — fautes sur mots ≥7 uniquement', () => {
   const ck = makeChecker(['Kinshasa'], []);
   assert.equal(ck('kinshasa'), true);
-  assert.equal(ck('kinchasa'), true, '1 faute sur mot long');
-  assert.equal(ck('kin'), false);
+  assert.equal(ck('kinchasa'), true, '1 faute sur mot 8 lettres (≥7) OK');
+  assert.equal(ck('sakura'), false, 'mot 6 lettres : fautes refusées');
+  const ck2 = makeChecker(['Wakanda Forever'], []);
+  assert.equal(ck2('Wakanda Foreve'), false, 'mot 6 lettres : pas de flou');
+  assert.equal(ck2('Wakanda Forrver'), true, 'mot 7 lettres : 1 substitution acceptée');
+  assert.equal(ck2('Wakanda Forrvex'), false, '2 fautes refusées');
+  assert.equal(ck2('Wakanda Forrrever'), false);
+  assert.equal(ck2('Wakanda Fornever'), true, 'mot 8 lettres : 1 faute acceptée');
+  assert.equal(ck2('wakanda forever'), true);
+  assert.equal(ck2('Wakanda'), true, 'mot clé seul');
+  assert.equal(ck2('Forever Wakanda'), true, 'mots inversés');
 });
 
 /* ═══════════ XQUIZ : TAGS À LA FIN + REGROUPEMENT ═══════════ */

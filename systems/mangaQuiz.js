@@ -282,12 +282,21 @@ function makeChecker(correctList, otherAnswers = []) {
 
     // 2) faute sur UN mot de la réponse (prénom/nom mal tapé) — AVANT la
     //    comparaison aux autres : « Dwyan » ≈ « Dwyane », pas « Durant ».
-    const tol = (w) => (w.length >= 10 ? 2 : w.length >= 5 ? 1 : 0);
-    if (aTok.length === 1) {
+    // STRICT : 1 faute seulement sur les mots ≥7 (2 fautes à partir de 11).
+    const tol = (w) => (w.length >= 11 ? 2 : w.length >= 7 ? 1 : 0);
+    // Faute acceptée = substitution/transposition légère. Une TRONCATURE
+    // (le mot tapé est le début du mot attendu) = réponse incomplète → refus.
+    const isTypo = (typed, ans) => {
+      if (typed === ans) return true;
+      const t = tol(ans);
+      return t > 0 && lev(typed, ans, t) <= t && !ans.startsWith(typed);
+    };
+    // Mot tapé seul : tolérance de faute UNIQUEMENT si le mot tapé est lui
+    // même long (≥5) et vise un mot long — jamais sur les mots courts.
+    if (aTok.length === 1 && aTok[0].length >= 5) {
       for (const cl of correctLoose) {
         for (const w of cl.split(' ')) {
-          const tw = tol(w);
-          if (tw && lev(aTok[0], w, tw) <= tw) return true;
+          if (isTypo(aTok[0], w)) return true;
         }
       }
     }
@@ -301,12 +310,15 @@ function makeChecker(correctList, otherAnswers = []) {
       if (d < best) return false; // autre réponse STRICTEMENT plus proche → mauvaise réponse
     }
 
-    // 4) fautes de frappe sur la réponse ENTIÈRE (mots longs uniquement)
-    for (let i = 0; i < correctLoose.length; i++) {
-      const cl = correctLoose[i];
-      if (aLoose === cl) return true;
-      const t = tol(cl);
-      if (t && lev(aLoose, cl, t) <= t) return true;
+    // 4) fautes de frappe sur la réponse ENTIÈRE : mot À MOT uniquement —
+    //    même nombre de mots, tolérance par mot (≥7 : 1 faute ; <7 : 0).
+    {
+      const aw = aLoose.split(' ');
+      for (let i = 0; i < correctLoose.length; i++) {
+        const cw = correctLoose[i].split(' ');
+        if (aw.length !== cw.length || aw.length < 1) continue;
+        if (aw.every((w, k) => isTypo(w, cw[k]))) return true;
+      }
     }
     return false;
   };

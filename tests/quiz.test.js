@@ -92,7 +92,7 @@ test('TOLÉRANCE : accent, variante (alts) et petite faute acceptés', async () 
   const from = adapter.sent.length;
   // Faute générée sur la forme LOOSE (normalisée ou→o, accents…) pour ne pas
   // cumuler deux transformations : le vérificateur tolère 1 faute sur un mot ≥5.
-  const longLoose = (a) => loose(a).split(' ').filter((w) => w.length >= 5)[0];
+  const longLoose = (a) => loose(a).split(' ').filter((w) => w.length >= 7)[0];
   // Déterministe : la QUESTION COURANTE doit avoir un mot ≥5 — sinon on
   // relance un nouveau quiz (tirage différent) au lieu de viser une autre question.
   let typo = null;
@@ -112,9 +112,17 @@ test('TOLÉRANCE : accent, variante (alts) et petite faute acceptés', async () 
     await nextFrame(adapter, /QUESTION 1\/5/, 15000, from);
     const session = bot.sessions.get('thread-1', 'quiz');
     const current = session && session.questions[0];
-    if (current && longLoose(current.a)) typo = longLoose(current.a).slice(0, -1);
+    if (current && longLoose(current.a)) {
+      const w = longLoose(current.a);
+      // Substitution sur l'avant-dernier caractère (une TRONCATURE serait
+      // refusée par le mode strict — réponse incomplète).
+      const last = w[w.length - 1];
+      const repl = last === 'a' ? 'e' : 'a';
+      typo = w.slice(0, -1) + repl;
+      if (typo === w) typo = null;
+    }
   }
-  assert.ok(typo, 'question courante avec un mot ≥5 en forme normalisée');
+  assert.ok(typo, 'question courante avec un mot ≥7 en forme normalisée');
 
   // 1) faute de frappe : retirer une lettre au mot long
   await bot.handleMessage(makeMsg('thread-1', UIDS.paul, typo));

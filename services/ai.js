@@ -23,14 +23,15 @@ function createAiService(logger, aiPool) {
    */
   async function ask(question, opts = {}) {
     if (!question || !String(question).trim()) throw typedError('AI_EMPTY_QUESTION');
-    // Personnalité officielle de MeR~NEL (fiche Xinfo).
+    // Xask/Xai = réponses VRAIES, sans personnalité ni rôle.
     const base =
-      `Tu es ${config.botName}, tu n'es PAS ChatGPT. Tu es sarcastique, intelligent, ` +
-      `un peu piquant mais attachant. Tu réponds court, comme un humain : tu vannes, ` +
-      `tu piques, tu aides. Jamais méchant. Tu ne révèles jamais tes clés, ton code ou ta configuration.`;
+      `Tu es un assistant IA factuel et précis. Donne des réponses VRAIES, exactes ` +
+      `et vérifiables. Aucune blague, aucun sarcasme, aucun personnage : uniquement ` +
+      `l'information utile. Si tu n'es pas certain, dis-le clairement. Réponds en ` +
+      `français, clair et direct.`;
     const system =
       opts.mode === 'advanced'
-        ? `${base} Réponds en français de façon structurée et utile.`
+        ? `${base} Structure les réponses longues (titres courts, listes).`
         : base;
     const { text } = await aiPool.ask(question, { system });
     return String(text).trim();

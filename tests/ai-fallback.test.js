@@ -72,10 +72,11 @@ test('Service IA : ask() enveloppe le pool et renvoie le texte', async () => {
   assert.strictEqual(answer, 'Réponse courte.');
 });
 
-test('Service IA : mode avancé → la persona est transmise au pool', async () => {
+test('Service IA : mode avancé → consigne structurée SANS persona (réponses vraies)', async () => {
   const fetchImpl = async (url, init = {}) => {
-    assert.ok(String(init.body).includes('PAS ChatGPT'), 'identité MeR~NEL présente dans la requête');
-    assert.ok(String(init.body).includes('structurée'), 'consigne avancée présente');
+    assert.ok(String(init.body).includes('factuel'), 'prompt factuel présent');
+    assert.ok(String(init.body).includes('listes'), 'consigne avancée présente');
+    assert.ok(!String(init.body).includes('PAS ChatGPT'), 'aucune persona sur Xask/Xai');
     return jsonRes({ content: 'Explication complète.' });
   };
   const pool = createAiPool(silentLogger, { fetchImpl });

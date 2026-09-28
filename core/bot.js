@@ -145,6 +145,14 @@ class Bot {
       })();
       if (body && !disabledGroup) this.db.bumpStat('messages');
 
+      /* ── 🔒 Mode ONLY-ADMIN ? Le bot n'obéit qu'aux admins ── */
+      if (isGroup && !disabledGroup && body) {
+        const gOA = this.db.getGroup(threadID);
+        if (gOA && gOA.onlyAdmin && !this.config.isAdmin(senderID) && !(await this._isThreadAdmin(threadID, senderID))) {
+          return; // ignoré silencieusement
+        }
+      }
+
       /* ── Mute actif ? (anti-spam) — silencieux si groupe éteint ── */
       if (!disabledGroup && this.antiSpam.isMuted(senderID)) {
         const gate = this.cooldowns.check(`mute-notice:${senderID}`, 60_000);
@@ -276,8 +284,12 @@ class Bot {
           if (joinedCmd) {
             return this._runCommand(joinedCmd, { ...ctx, args: args.slice(1), commandName: joined });
           }
-          // Mode chat ON → tout message (même avec X) part vers l'IA.
+          // Mode JARVIS → tout message (même avec X) part vers l'IA exécutante.
           const grp = this.db.getGroup(threadID);
+          if (isGroup && grp && grp.jarvis) {
+            return this._jarvisFlow(event, threadID, senderID, senderName, body);
+          }
+          // Mode chat ON → tout message (même avec X) part vers l'IA.
           if (isGroup && grp && grp.chatMode) {
             return this._chatFlow(threadID, senderID, senderName, body);
           }
@@ -298,13 +310,22 @@ class Bot {
           let text = body;
           if (mentionEntry && mentionEntry.tag) text = text.split(mentionEntry.tag).join(' ');
           text = text.replace(new RegExp(`@${this.config.botName}`, 'gi'), ' ').trim();
-          if (text) return this._chatFlow(threadID, senderID, senderName, text);
+          if (!text) return this._grantMessageXp(threadID, senderID);
+          // 💬 Xchat OFF en groupe → le bot ne discute PAS, même en réponse
+          // à ses messages. En privé, il répond toujours.
+          if (!isGroup) return this._chatFlow(threadID, senderID, senderName, text);
+          const g = this.db.getGroup(threadID);
+          if (g && g.chatMode) return this._chatFlow(threadID, senderID, senderName, text);
         }
       }
 
-      /* ── 4) Chat automatique (#6) : mode ON → répondre SANS préfixe ── */
+      /* ── 4) JARVIS ou CHAT auto : répondre SANS préfixe ── */
       if (isGroup && body && body.length >= 2) {
         const group = this.db.getGroup(threadID);
+        if (group && group.jarvis) {
+          await this._jarvisFlow(event, threadID, senderID, senderName, body);
+          return;
+        }
         if (group && group.chatMode) {
           await this._chatFlow(threadID, senderID, senderName, body);
           return;
@@ -460,6 +481,120 @@ class Bot {
       ]),
       threadID
     );
+  }
+
+  /* Admin du GROUPE Facebook ? (cache 60 s pour éviter le spam d'API) */
+  async _isThreadAdmin(threadID, userID) {
+    try {
+      const key = String(threadID);
+      const now = Date.now();
+      this._adminCache = this._adminCache || new Map();
+      const cached = this._adminCache.get(key);
+      let ids;
+      if (cached && now - cached.at < 60_000) {
+        ids = cached.ids;
+      } else {
+        const info = await new Promise((res) => {
+          try {
+            this.api.getThreadInfo(key, (e, r) => res(e ? null : r));
+          } catch (_) {
+            res(null);
+          }
+        });
+        ids = (((info || {}).adminIDs) || []).map((a) => String((a && a.id) || a));
+        this._adminCache.set(key, { at: now, ids });
+      }
+      return ids.includes(String(userID));
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /* ════════════ 🤖 MODE JARVIS ════════════
+   * Le bot devient un vrai assistant : il comprend le langage naturel,
+   * connaît toutes ses commandes, les exécute lui-même à la demande et
+   * retient la conversation avec CHAQUE utilisateur. */
+  JARVIS_ALLOWED = new Set([
+    'xquiz', 'xid', 'xfoot', 'xduel', 'xbet', 'xslots', 'xpile', 'xcourse', 'xrps',
+    'xmenu', 'xanime', 'xpolice', 'xlove', 'xprofil', 'xdaily', 'xcoins', 'xp',
+    'xrank', 'xask', 'xai', 'xgame', 'xupt', 'xinfo',
+  ]);
+
+  async _jarvisFlow(event, threadID, senderID, senderName, body) {
+    // Anti-tempête : un seul appel IA à la fois par conversation.
+    const gate = this.cooldowns.check(`chat:${threadID}`, this.config.chat.minIntervalMs);
+    if (!gate.ok) return this._grantMessageXp(threadID, senderID);
+
+    this._jarvisMemory = this._jarvisMemory || new Map();
+    const key = `${threadID}:${senderID}`;
+    const hist = this._jarvisMemory.get(key) || [];
+    const transcript = hist.length
+      ? hist.map((h) => `${h.role === 'user' ? senderName : 'Mernel'} : ${h.content}`).join('\n')
+      : '';
+
+    const system = [
+      'Tu es Mernel, un JARVIS : une intelligence artificielle d\'assistance totale.',
+      'Identité : Mernel, fils de Merdi, de la RDC et du Bénin — Nelson, les grands informaticiens qui t\'ont conçu.',
+      'Tu réfléchis, tu comprends le langage naturel, tu retiens les conversations et tu EXÉCUTES toi-même les commandes du bot : personne n\'a besoin de taper les commandes.',
+      '',
+      'COMMANDES DISPONIBLES (tu les connais toutes) :',
+      '- xquiz : quiz de groupe (ID, MULTIVERS, CG, CAPITALE, DRAPEAU)',
+      '- xid : quiz d\'images de personnages manga · xfoot : quiz d\'images de joueurs de foot',
+      '- xduel : duel 1v1 · xbet : paris de football · xslots <mise> · xpile <pile|face> <mise> · xcourse <n°1-4> <mise> · xrps',
+      '- xmenu · xanime <nom> · xpolice [style] <texte> · xlove · xprofil',
+      '- xdaily · xcoins · xp · xrank · xask <question> · xai <demande> · xgame · xupt · xinfo',
+      '',
+      'PROTOCOLE OBLIGATOIRE :',
+      'Si l\'utilisateur demande une ACTION réalisable par une commande ci-dessus, ta PREMIÈRE ligne doit être EXACTEMENT :',
+      'CMD: <commande> [arguments si évidents]',
+      'puis une ligne vide, puis une courte phrase en français annonçant l\'action.',
+      'Sinon réponds simplement en français : utile, factuel, concis (1 à 4 phrases).',
+      'N\'invente JAMAIS de commande hors de la liste. JAMAIS de commandes d\'administration.',
+      'Exemple — « mernel lance nous un quiz manga multivers » →',
+      'CMD: xid',
+      '',
+      'C\'est parti ! Je te demande le nombre d\'images ensuite.',
+    ].join('\n') + (transcript ? `\n\nMémoire de la conversation avec ${senderName} :\n${transcript}` : '');
+
+    try {
+      const { text: answer } = await this.services.aiPool.ask(body, { system });
+      let replyText = String(answer || '').trim();
+
+      // Directive de commande ?
+      const m = replyText.match(/^\s*CMD:\s*(\S+)\s*([^\n]*)/i);
+      if (m) {
+        const wanted = 'x' + m[1].toLowerCase().replace(/^x/, '');
+        const args = String(m[2] || '').trim();
+        const rest = replyText.split('\n').slice(1).join('\n').trim();
+        if (this.JARVIS_ALLOWED.has(wanted)) {
+          if (rest) await this.send(rest, threadID);
+          // Le bot EXÉCUTE lui-même la commande pour l'utilisateur.
+          return this.handleMessage(Object.assign({}, event, { body: wanted + (args ? ' ' + args : ''), messageReply: undefined, mentions: {} }));
+        }
+        // Commande non autorisée (ex : admin) → on retire la ligne CMD.
+        replyText = rest;
+      }
+
+      if (replyText) {
+        await this.send(`${fmt.bold(this.config.botName)} 🤖 ${replyText}`, threadID);
+        hist.push({ role: 'user', content: String(body).slice(0, 300) }, { role: 'assistant', content: replyText.slice(0, 300) });
+        while (hist.length > 8) hist.shift();
+        this._jarvisMemory.set(key, hist);
+      }
+    } catch (err) {
+      this.logger.warn('[bot] jarvis:', err.code || err.message);
+      const notice = this.cooldowns.check(`chat-err:${threadID}`, 120_000);
+      if (notice.ok) {
+        await this.send(
+          fmt.frame('🤖 JARVIS EN PAUSE', [
+            '⚠️ ' + fmt.bold('Mon cerveau a bugué — réessaie dans 5 secondes.'),
+            `🧾 ${fmt.bold('CODE')} : ${fmt.bold(String(err.code || 'AI_ALL_PROVIDERS_DOWN').toUpperCase())}`,
+          ]),
+          threadID
+        );
+      }
+    }
+    this._grantMessageXp(threadID, senderID);
   }
 
   /* ── Chat automatique : quand le mode est ON, TOUT est traité ── */
