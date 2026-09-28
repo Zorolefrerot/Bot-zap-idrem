@@ -218,6 +218,7 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 | `Xbet` | Paris football RÉELS : 10 affrontements/manche (puissances /100) — `Xbet <n°> <a|b> <v|n|d> <mise>`, min 100 XCoins, 1 pari/match, résultat 30 s, duos jamais répétés, nouvelle manche quand tout est joué |
 | `Xrps` | Pierre 🪨 Feuille 📄 Ciseaux ✂️ contre MeR~NeL |
 | `Xlove` | Toi + un membre au hasard = amour parfait : vos photos de profil collées avec un cœur ❤️ |
+| `Xfoot` | Quiz football : identifie les joueurs (Wikidata, sans clé) — filtre MULTIVERS (top 200 pros) ou club/sélection (PSG, Real, RDC, Argentine…). Photos ou indices, vérificateur strict, +10 pts, classement final |
 | `Xgame` | Catalogue des jeux |
 
 ### 🖼️ Médias
@@ -243,7 +244,6 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 | Commande | Description |
 |---|---|
 | `Xban` (en réponse à un message) | Bannit le membre (API si possible, sinon côté bot) |
-| `Xwarn` (en réponse) / `Xwarn list` | Avertissement |
 | `Xkick` (en réponse) | Expulsion si l'API le permet |
 | `Xclear` / `Xclear 3` | Supprime les derniers messages DU BOT uniquement (limite Messenger) |
 | `Xoff` / `Xon` | Éteint / rallume le bot dans CE groupe (silence total, persistant) |

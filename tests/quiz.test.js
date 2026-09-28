@@ -90,19 +90,33 @@ test('TOLÉRANCE : accent, variante (alts) et petite faute acceptés', async () 
   const { bot, adapter } = await boot();
   clearCooldowns(bot);
   const from = adapter.sent.length;
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'CG'));
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
-  await nextFrame(adapter, /QUESTION 1\/5/, 15000, from);
-  const session = bot.sessions.get('thread-1', 'quiz');
   // Faute générée sur la forme LOOSE (normalisée ou→o, accents…) pour ne pas
   // cumuler deux transformations : le vérificateur tolère 1 faute sur un mot ≥5.
   const longLoose = (a) => loose(a).split(' ').filter((w) => w.length >= 5)[0];
-  const item = session.questions.find((q) => longLoose(q.a));
-  assert.ok(item, 'au moins une réponse a un mot ≥5 en forme normalisée');
+  // Déterministe : la QUESTION COURANTE doit avoir un mot ≥5 — sinon on
+  // relance un nouveau quiz (tirage différent) au lieu de viser une autre question.
+  let typo = null;
+  for (let attempt = 0; attempt < 6 && !typo; attempt++) {
+    if (attempt > 0) {
+      await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cancel'));
+      await new Promise((r) => setTimeout(r, 100));
+      clearCooldowns(bot);
+      await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
+      await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'CG'));
+      await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
+    } else {
+      await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
+      await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'CG'));
+      await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
+    }
+    await nextFrame(adapter, /QUESTION 1\/5/, 15000, from);
+    const session = bot.sessions.get('thread-1', 'quiz');
+    const current = session && session.questions[0];
+    if (current && longLoose(current.a)) typo = longLoose(current.a).slice(0, -1);
+  }
+  assert.ok(typo, 'question courante avec un mot ≥5 en forme normalisée');
 
   // 1) faute de frappe : retirer une lettre au mot long
-  const typo = longLoose(item.a).slice(0, -1);
   await bot.handleMessage(makeMsg('thread-1', UIDS.paul, typo));
   const t1 = await nextFrame(adapter, /prend le point|CLASSEMENT|TEMPS/, 15000, from);
   if (t1 && t1.includes('prend le point')) {

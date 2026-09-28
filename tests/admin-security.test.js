@@ -221,32 +221,6 @@ test('Xoff : les bienvenues sont coupées dans un groupe éteint', async () => {
   assert.strictEqual(adapter.sent.length, before, 'aucune bienvenue envoyée');
 });
 
-test('Xwarn : 1/2 puis 2/2 → exclusion automatique', async () => {
-  const { bot, adapter, db } = await boot();
-  const reply = makeMsg('thread-1', UIDS.shadow, 'insulte');
-  await bot.handleMessage(reply);
-
-  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xwarn', {
-    messageReply: { senderID: UIDS.shadow, messageID: reply.messageID },
-  }));
-  assert.ok(lastBody(adapter).includes('avertissement 1/2'));
-  assert.strictEqual(db.getUser(UIDS.shadow).warnings, 1);
-
-  const r2 = makeMsg('thread-1', UIDS.shadow, 'encore');
-  await bot.handleMessage(r2);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xwarn', {
-    messageReply: { senderID: UIDS.shadow, messageID: r2.messageID },
-  }));
-  assert.ok(lastBody(adapter).includes('EXCLUSION'));
-  assert.ok(lastBody(adapter).includes('Bye bye'));
-  assert.strictEqual(db.getUser(UIDS.shadow).banned, true, 'exclu à 2 avertissements');
-
-  // Le membre exclu est ignoré
-  const before = adapter.sent.length;
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcoins'));
-  assert.strictEqual(adapter.sent.length, before);
-});
-
 test('Xadd : UID invalide rejeté, UID valide transmis à l’API', async () => {
   const { bot, adapter } = await boot();
   await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xadd abc!!'));
