@@ -41,7 +41,11 @@ function stubFetch(overrides = {}) {
       if (u.includes('P54')) return makeJson({ results: { bindings: sparqlBindings(PLAYERS.slice(0, 2)) } });
       return makeJson({ results: { bindings: sparqlBindings(PLAYERS) } });
     }
-    if (u.includes('commons.wikimedia.org') || u.includes('upload.wikimedia.org')) return makeImage();
+    if (u.includes('commons.wikimedia.org') || u.includes('upload.wikimedia.org')) {
+      if (overrides.imageFail) return { ok: false, status: 404, headers: { get: () => '' } };
+      if (overrides.imageFailFor && u.includes(overrides.imageFailFor)) return { ok: false, status: 404, headers: { get: () => '' } };
+      return makeImage();
+    }
     throw new Error('ECONNREFUSED ' + u.slice(0, 60));
   };
 }
@@ -119,40 +123,72 @@ test('Xfoot : club inconnu → message propre (PAS de banque locale en cas de ma
   assert.strictEqual(bot.sessions.get('thread-1', 'xfoot'), null, 'session nettoyée');
 });
 
-test('Xfoot : Wikidata DOWN → BANQUE LOCALE de secours, quiz JOUABLE aux indices', async () => {
+test('Xfoot : Wikidata DOWN → SOURCES INDISPONIBLES, JAMAIS de quiz aux indices', async () => {
   stubFetch({ wikidataFail: true });
   const { bot, adapter } = await boot();
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xfoot'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'MULTIVERS'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
-  const ok = await until(() => bodies(adapter).some((b) => /banque locale/i.test(unbold(b))), 15000);
-  assert.ok(ok, 'quiz lancé via la banque locale');
-  await until(() => bodies(adapter).some((b) => /FOOTBALL 1\//.test(b)), 15000);
-  const qFrame = unbold(bodies(adapter).find((b) => /FOOTBALL 1\//.test(b)));
-  assert.ok(qFrame.includes('📖'), 'indice affiché à la place de la photo');
-  const bank = require('../systems/questions/xfoot-bank.json');
-  const hint = qFrame.split('\n').find((l) => l.includes('📖'));
-  const match = bank.find((c) => hint.includes(c.hint));
-  assert.ok(match, 'indice retrouvé dans la banque locale');
-  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, match.name));
-  const scored = await until(() => bodies(adapter).some((b) => b.includes('prend le point')), 15000);
-  assert.ok(scored, 'bonne réponse acceptée en mode secours');
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+  const down = await until(() => bodies(adapter).some((b) => b.includes('SOURCES INDISPONIBLES')), 15000);
+  assert.ok(down, 'sources indisponibles annoncé');
+  assert.ok(bodies(adapter).some((b) => b.includes('QUIZ_SOURCES_DOWN')), 'code typé affiché');
+  assert.strictEqual(bot.sessions.get('thread-1', 'xfoot'), null, 'session nettoyée');
+  assert.ok(!bodies(adapter).some((b) => b.includes('📖')), 'AUCUN indice — Xfoot = photos uniquement');
+  assert.ok(!bodies(adapter).some((b) => /FOOTBALL \d\//.test(b)), 'aucune question sans photo');
 });
 
-test('Xfoot : Wikidata 429 → banque locale quand même', async () => {
+test('Xfoot : Wikidata 429 → SOURCES EN PAUSE', async () => {
   stubFetch({ wikidata429: true });
   const { bot, adapter } = await boot();
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xfoot'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'MULTIVERS'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
-  const ok = await until(() => bodies(adapter).some((b) => /banque locale/i.test(unbold(b))), 15000);
-  assert.ok(ok, 'quiz lancé après 429');
-  const session = bot.sessions.get('thread-1', 'xfoot');
-  assert.ok(session && session.total === 5);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+  const paused = await until(() => bodies(adapter).some((b) => b.includes('SOURCES EN PAUSE')), 15000);
+  assert.ok(paused, 'sources en pause annoncé');
+  assert.ok(bodies(adapter).some((b) => b.includes('RATE_LIMITED')), 'rate limit annoncé');
+  assert.strictEqual(bot.sessions.get('thread-1', 'xfoot'), null, 'session nettoyée');
+});
+
+test('Xfoot : photo impossible à charger → joueur SAUTÉ (jamais de question sans photo)', async () => {
+  stubFetch({ imageFailFor: 'cr7' });
+  const { bot, adapter } = await boot();
+  const { FootQuizSession } = require('../systems/footQuiz');
+  const s = new FootQuizSession(bot, { threadID: 'thread-1', ownerID: UIDS.shadow, ownerName: 'Shadow', send: (p) => adapter.sent.push(p) });
+  s.players = [
+    { name: 'Cristiano Ronaldo', image: 'http://commons.wikimedia.org/wiki/Special:FilePath/cr7.jpg?width=600' },
+    { name: 'Lionel Messi', image: 'http://commons.wikimedia.org/wiki/Special:FilePath/messi.jpg?width=600' },
+  ];
+  s.total = 2;
+  s.index = 0;
+  s.state = 'RUNNING';
+  await s._askQuestion(); // CR7 (photo cassée) sauté → Messi 1/1
+  const frames = adapter.sent.filter((p) => /FOOTBALL \d\//.test(unbold(String(p.body || ''))));
+  assert.equal(frames.length, 1, 'une seule question posée (CR7 sauté)');
+  assert.ok(unbold(String(frames[0].body)).includes('1/1'), 'numérotation recalculée');
+  assert.ok(frames[0].attachment, 'la question posée A une photo');
+  assert.ok(s._checker('messi'), 'question courante = Messi');
+  s.dispose();
+});
+
+test('Xfoot : TOUTES les photos échouent → quiz arrêté proprement', async () => {
+  stubFetch({ imageFail: true });
+  const { bot, adapter } = await boot();
+  const { FootQuizSession } = require('../systems/footQuiz');
+  const s = new FootQuizSession(bot, { threadID: 'thread-1', ownerID: UIDS.shadow, ownerName: 'Shadow', send: (p) => adapter.sent.push(p) });
+  s.players = [
+    { name: 'Cristiano Ronaldo', image: 'http://commons.wikimedia.org/wiki/Special:FilePath/cr7.jpg?width=600' },
+    { name: 'Lionel Messi', image: 'http://commons.wikimedia.org/wiki/Special:FilePath/messi.jpg?width=600' },
+  ];
+  s.total = 2;
+  s.index = 0;
+  s.state = 'RUNNING';
+  await s._askQuestion();
+  assert.ok(s.finished, 'session terminée');
+  const last = adapter.sent[adapter.sent.length - 1];
+  const lastBody = unbold(String(typeof last === 'string' ? last : last.body || ''));
+  assert.ok(lastBody.includes('Photos indisponibles'), 'message « Photos indisponibles »');
 });
 
 test('Xwarn : la commande warn est RETIRÉE', async () => {

@@ -213,12 +213,12 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 | Commande | Description |
 |---|---|
 | `Xquiz` | Quiz de GROUPE à réponses LIBRES : ID (indices) · MULTIVERS (manga indiqué À LA FIN de chaque question 📚) · CG (thème 🏷️ affiché) · CAPITALE · DRAPEAU. ~1100 questions regroupées par manga/thème, vérificateur strict, +10 pts au premier bon, classement final |
-| `Xid` | Quiz manga — CHAÎNE 4 sources : AniList (Referer fixé) → Kitsu → Jikan → banque locale de secours (109 persos, indices). 5 à 100 images (5/10/15…100), vérificateur strict (une autre réponse = faux), tableau final |
+| `Xid` | Quiz manga IMAGES UNIQUEMENT — chaîne 4 sources (AniList Referer-fixé → Kitsu → Jikan), 5 à 100 images, vérificateur strict (une autre réponse = faux). Image indisponible → personnage sauté ; sources en panne → message propre, JAMAIS de questions sans image |
 | `Xduel` | Duel 1v1 avec mise en XCoins |
 | `Xbet` | Paris football RÉELS : 10 affrontements/manche (puissances /100) — `Xbet <n°> <a|b> <v|n|d> <mise>`, min 100 XCoins, 1 pari/match, résultat 30 s, duos jamais répétés, nouvelle manche quand tout est joué |
 | `Xrps` | Pierre 🪨 Feuille 📄 Ciseaux ✂️ contre MeR~NeL |
 | `Xlove` | Toi + un membre au hasard = amour parfait : vos photos de profil collées avec un cœur ❤️ |
-| `Xfoot` | Quiz football : identifie les joueurs (Wikidata, sans clé) — filtre MULTIVERS (top 200 pros) ou club/sélection (PSG, Real, RDC, Argentine…). Photos ou indices, vérificateur strict, +10 pts, classement final |
+| `Xfoot` | Quiz football PHOTOS UNIQUEMENT (Wikidata, sans clé) — filtre MULTIVERS (top 200 pros) ou club/sélection (PSG, Real, RDC, Argentine…). Photo indisponible → joueur sauté ; panne → message propre, JAMAIS de questions sans photo |
 | `Xgame` | Catalogue des jeux |
 
 ### 🖼️ Médias

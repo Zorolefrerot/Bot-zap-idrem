@@ -93,7 +93,11 @@ function stubFetch(overrides = {}) {
       }
     }
     /* ── CDN images ── */
-    if (u.includes('s4.anilist.co') || u.includes('cdn.myanimelist.net') || u.includes('media.kitsu.app')) return makeImage();
+    if (u.includes('s4.anilist.co') || u.includes('cdn.myanimelist.net') || u.includes('media.kitsu.app')) {
+      if (overrides.imageFail) return { ok: false, status: 404, headers: { get: () => '' } };
+      if (overrides.imageFailFor && u.includes(overrides.imageFailFor)) return { ok: false, status: 404, headers: { get: () => '' } };
+      return makeImage();
+    }
     throw new Error('ECONNREFUSED ' + u.slice(0, 60));
   };
 }
@@ -346,44 +350,75 @@ test('Xid : AniList 429 → Jikan répond (rotation), quiz lancé quand même', 
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
 });
 
-test('Xid : AniList + Kitsu + Jikan en panne → BANQUE LOCALE de secours, quiz JOUABLE aux indices', async () => {
-  stubFetch({ anilistFail: true, jikanFail: true }); // kitsu.tombe aussi (URL inconnue du stub)
+test('Xid : TOUTES les sources en panne → SOURCES INDISPONIBLES, JAMAIS de quiz aux indices', async () => {
+  stubFetch({ anilistFail: true, jikanFail: true }); // kitsu OFF par défaut → tout est down
   const { bot, adapter } = await boot();
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xid'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'naruto'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
-  const ok = await until(() => bodies(adapter).some((b) => /banque locale/i.test(unbold(b))), 10000);
-  assert.ok(ok, 'quiz lancé via la banque locale (jamais bloqué)');
-  const session = bot.sessions.get('thread-1', 'xid');
-  assert.ok(session, 'session vivante');
-  assert.strictEqual(session.total, 5);
-  await until(() => bodies(adapter).some((b) => /IDENTIFICATION 1\//.test(b)), 10000);
-  const qFrame = unbold(bodies(adapter).find((b) => /IDENTIFICATION 1\//.test(b)));
-  assert.ok(qFrame.includes('📖'), 'indice affiché à la place de l\'image');
-  // Une bonne réponse (indice → nom de la banque) marque des points.
-  const localBank = require('../systems/questions/xid-bank.json');
-  const hint = qFrame.split('\n').find((l) => l.includes('📖'));
-  const match = localBank.find((c) => hint.includes(c.hint));
-  assert.ok(match, 'indice retrouvé dans la banque locale');
-  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, match.name));
-  const scored = await until(() => bodies(adapter).some((b) => b.includes('@Paul') && b.includes('prend le point')), 15000);
-  assert.ok(scored, 'bonne réponse acceptée en mode secours');
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+  const down = await until(() => bodies(adapter).some((b) => b.includes('SOURCES INDISPONIBLES')), 10000);
+  assert.ok(down, 'sources indisponibles annoncé');
+  assert.ok(bodies(adapter).some((b) => b.includes('QUIZ_SOURCES_DOWN')), 'code typé affiché');
+  assert.strictEqual(bot.sessions.get('thread-1', 'xid'), null, 'session nettoyée');
+  assert.ok(!bodies(adapter).some((b) => b.includes('📖')), 'AUCUN indice envoyé — Xid = images uniquement');
+  assert.ok(!bodies(adapter).some((b) => /IDENTIFICATION \d\//.test(b)), 'aucune question posée sans image');
 });
 
-test('Xid : toutes les sources en 429 → banque locale quand même', async () => {
+test('Xid : toutes les sources en 429 → SOURCES EN PAUSE (jamais d\'indices)', async () => {
   stubFetch({ anilist429: true, jikan429: true, kitsu429: true });
   const { bot, adapter } = await boot();
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xid'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'MULTIVERS'));
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
-  const ok = await until(() => bodies(adapter).some((b) => /banque locale/i.test(unbold(b))), 10000);
-  assert.ok(ok, 'quiz lancé via la banque locale après 429 globaux');
-  const session = bot.sessions.get('thread-1', 'xid');
-  assert.ok(session && session.total === 5);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+  const paused = await until(() => bodies(adapter).some((b) => b.includes('SOURCES EN PAUSE')), 10000);
+  assert.ok(paused, 'sources en pause annoncé');
+  assert.ok(bodies(adapter).some((b) => b.includes('RATE_LIMITED')), 'rate limit annoncé');
+  assert.strictEqual(bot.sessions.get('thread-1', 'xid'), null, 'session nettoyée');
+  assert.ok(!bodies(adapter).some((b) => b.includes('📖')), 'AUCUN indice envoyé');
+});
+
+test('Xid : image impossible à charger → personnage SAUTÉ (jamais de question sans image)', async () => {
+  stubFetch({ imageFailFor: 'gojo' }); // l'image de Gojo échoue, les autres OK
+  const { bot, adapter } = await boot();
+  const { MangaQuizSession } = require('../systems/mangaQuiz');
+  const s = new MangaQuizSession(bot, { threadID: 'thread-1', ownerID: UIDS.shadow, ownerName: 'Shadow', send: (p) => adapter.sent.push(p) });
+  s.characters = [
+    { name: 'Satoru Gojo', image: 'https://s4.anilist.co/gojo.jpg' },
+    { name: 'Naruto Uzumaki', image: 'https://s4.anilist.co/naruto.jpg' },
+  ];
+  s.total = 2;
+  s.index = 0;
+  s.state = 'RUNNING';
+  await s._askQuestion(); // Gojo (image cassée) doit être sauté → Naruto 1/1
+  const frames = adapter.sent.filter((p) => /IDENTIFICATION \d\//.test(unbold(String(p.body || ''))));
+  assert.equal(frames.length, 1, 'une seule question posée (Gojo sauté)');
+  assert.ok(unbold(String(frames[0].body)).includes('1/1'), 'numérotation recalculée après saut');
+  assert.ok(frames[0].attachment, 'la question posée A une image');
+  // La question est bien sur Naruto.
+  assert.ok(s._checker('naruto'), 'question courante = Naruto');
+  s.dispose();
+});
+
+test('Xid : TOUTES les images échouent → quiz arrêté proprement (Images indisponibles)', async () => {
+  stubFetch({ imageFail: true });
+  const { bot, adapter } = await boot();
+  const { MangaQuizSession } = require('../systems/mangaQuiz');
+  const s = new MangaQuizSession(bot, { threadID: 'thread-1', ownerID: UIDS.shadow, ownerName: 'Shadow', send: (p) => adapter.sent.push(p) });
+  s.characters = [
+    { name: 'Satoru Gojo', image: 'https://s4.anilist.co/gojo.jpg' },
+    { name: 'Naruto Uzumaki', image: 'https://s4.anilist.co/naruto.jpg' },
+  ];
+  s.total = 2;
+  s.index = 0;
+  s.state = 'RUNNING';
+  await s._askQuestion(); // les 2 images échouent → arrêt propre
+  assert.ok(s.finished, 'session terminée');
+  const last = adapter.sent[adapter.sent.length - 1];
+  const lastBody = unbold(String(typeof last === 'string' ? last : last.body || ''));
+  assert.ok(lastBody.includes('Images indisponibles'), 'message « Images indisponibles »');
+  assert.ok(!adapter.sent.some((p) => /IDENTIFICATION \d\//.test(unbold(String(p.body || '')))), 'aucune question posée');
 });
 
 test('Xid : AniList + Jikan DOWN → KITSU prend le relais (3e source indépendante)', async () => {

@@ -25,7 +25,6 @@ const { safeInt } = require('../utils/sanitize');
 
 const JIKAN = 'https://api.jikan.moe/v4';
 const ANILIST = 'https://graphql.anilist.co';
-const LOCAL_BANK = require('./questions/xid-bank.json');
 
 /* Requête GraphQL AniList (POST JSON, sans clé) → data ou erreur typée. */
 async function anilistQuery(query, variables, fetchImpl) {
@@ -529,7 +528,6 @@ class MangaQuizSession {
         '',
         '📢 ' + fmt.bold('Tout le monde peut jouer !'),
         '⚡ ' + fmt.bold('Première bonne réponse = +10 points (prénom OU nom suffit).'),
-        ...(this._bankMode ? ['', '📭 ' + fmt.bold('Images indisponibles (sources en panne) — réponds avec les indices !')] : []),
       ])
     );
     await this._askQuestion();
@@ -560,26 +558,9 @@ class MangaQuizSession {
         errors.push(`${src}:${err.code || err.message}`);
       }
     }
-    // 🛟 Dernier rempart : banque locale (quiz JOUABLE même internet coupé).
-    try {
-      return await this._localBank(count);
-    } catch (bankErr) {
-      throw sourcesDown(errors);
-    }
-  }
-
-  /* 🛟 Mode secours — 109 personnages célèbres embarqués, questions À INDICES. */
-  async _localBank(count) {
-    const n = Math.min(count, LOCAL_BANK.length);
-    if (n <= 0) throw Object.assign(new Error('banque locale vide'), { code: 'QUIZ_SOURCES_DOWN' });
-    this.source = 'Banque locale (mode secours)';
-    this._bankMode = true;
-    return shuffle(LOCAL_BANK).slice(0, n).map((c) => ({
-      name: c.name,
-      image: null, // pas d'image → indices à la place
-      hint: c.hint,
-      alts: c.alts || [],
-    }));
+    // Xid = IMAGES uniquement : aucune source dispo → message propre,
+    // JAMAIS de quiz aux indices.
+    throw sourcesDown(errors);
   }
 
   /* 🌌 Multivers via Kitsu (3e source indépendante). */
@@ -722,21 +703,25 @@ class MangaQuizSession {
     const payload = { body: null };
     /* Question en GRAND — les règles sont annoncées une seule fois au
      * lancement : pas d'instructions répétées sous chaque image. */
+    // Xid = IMAGES uniquement : image non chargeable → personnage SAUTÉ
+    // (jamais de question sans image, jamais d'indice).
+    const img = await downloadImage(c.image, this.bot.config.tmpDir, this.fetchImpl);
+    if (!img) {
+      this.characters.splice(this.index, 1);
+      this.total = this.characters.length;
+      if (this.total === 0) return this._finish('⚠️ ' + fmt.bold('Images indisponibles — quiz arrêté.'));
+      return this._askQuestion();
+    }
+    payload.attachment = img;
+
     const lines = [
       `🖼️ ${fmt.boldNum(this.index + 1)}/${fmt.boldNum(this.total)}  —  📚 ${fmt.bold(this.source)}`,
       '',
+      '❓ ' + fmt.bold('QUI EST-CE ?'),
+      '',
+      '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`),
     ];
-    if (!c.image && c.hint) {
-      lines.push(`📖 ${fmt.bold('Indice')} : ${fmt.bold(c.hint)}`);
-      lines.push('');
-    }
-    lines.push('❓ ' + fmt.bold('QUI EST-CE ?'));
-    lines.push('');
-    lines.push('⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`));
     payload.body = fmt.frame(`🎌 IDENTIFICATION ${this.index + 1}/${this.total}`, lines);
-
-    const img = c.image ? await downloadImage(c.image, this.bot.config.tmpDir, this.fetchImpl) : null;
-    if (img) payload.attachment = img; // sinon : question aux indices (mode secours)
 
     // ⚖️ Vérificateur STRICT : les AUTRES personnages de la manche servent de
     // garde-fou — répondre un autre nom (même mal orthographié) = faux.

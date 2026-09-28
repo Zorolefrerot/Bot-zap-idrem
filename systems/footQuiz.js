@@ -20,7 +20,6 @@
 const { safeInt } = require('../utils/sanitize');
 const { makeChecker } = require('./mangaQuiz');
 const { downloadImage } = require('./mangaQuiz');
-const LOCAL_BANK = require('./questions/xfoot-bank.json');
 
 const WD_SPARQL = 'https://query.wikidata.org/sparql';
 const MAX_IMAGES = 100;
@@ -168,7 +167,6 @@ class FootQuizSession {
     /** Map<uid, {name, score}> — +10 par bonne réponse. */
     this.scores = new Map();
     this.firstCorrectPending = false;
-    this._bankMode = false;
 
     this.tries = 0;
     this.questionTimer = null;
@@ -322,7 +320,6 @@ class FootQuizSession {
         '',
         '📢 ' + fmt.bold('Tout le monde peut jouer !'),
         '⚡ ' + fmt.bold('Première bonne réponse = +10 points (prénom OU nom suffit).'),
-        ...(this._bankMode ? ['', '📭 ' + fmt.bold('Photos indisponibles (sources en panne) — réponds avec les indices !')] : []),
       ])
     );
     await this._askQuestion();
@@ -330,22 +327,24 @@ class FootQuizSession {
   }
 
   /*
-   * Charge les joueurs — chaîne : Wikidata → banque locale (toujours dispo).
+   * Charge les joueurs — Xfoot = PHOTOS uniquement.
+   * Mauvais filtre → WIKIDATA_NOT_FOUND (message propre) ;
+   * panne/429/repos → QUIZ_SOURCES_DOWN / QUIZ_RATE_LIMITED.
+   * JAMAIS de quiz aux indices.
    */
   async _loadPlayers(count) {
-    if (!isCoolingDown('wikidata')) {
-      try {
-        return await this._wikidata(count);
-      } catch (err) {
-        markFail('wikidata');
-        if (err.code === 'WIKIDATA_NOT_FOUND') {
-          // Filtre inconnu → réponse propre, PAS de banque locale (mauvais filtre ≠ panne).
-          throw err;
-        }
-      }
+    if (isCoolingDown('wikidata')) {
+      throw Object.assign(new Error('source en repos'), { code: 'QUIZ_SOURCES_DOWN' });
     }
-    // 🛟 Dernier rempart : banque locale (quiz JOUABLE même internet coupé).
-    return this._localBank(count);
+    try {
+      return await this._wikidata(count);
+    } catch (err) {
+      if (err.code === 'WIKIDATA_NOT_FOUND') throw err; // mauvais filtre ≠ panne
+      markFail('wikidata');
+      throw Object.assign(new Error('Wikidata indisponible'), {
+        code: err.code === 'WIKIDATA_RATE_LIMIT' ? 'QUIZ_RATE_LIMITED' : 'QUIZ_SOURCES_DOWN',
+      });
+    }
   }
 
   /* 🌍 Wikidata SPARQL — top 200 pros (MULTIVERS) ou filtre club/sélection. */
@@ -363,20 +362,6 @@ class FootQuizSession {
     return shuffle(players).slice(0, count);
   }
 
-  /* 🛟 Mode secours — 71 joueurs célèbres embarqués, questions À INDICES. */
-  async _localBank(count) {
-    const n = Math.min(count, LOCAL_BANK.length);
-    if (n <= 0) throw Object.assign(new Error('banque locale vide'), { code: 'QUIZ_SOURCES_DOWN' });
-    this.source = 'Banque locale (mode secours)';
-    this._bankMode = true;
-    return shuffle(LOCAL_BANK).slice(0, n).map((c) => ({
-      name: c.name,
-      image: null, // pas de photo → indices à la place
-      hint: c.hint,
-      alts: c.alts || [],
-    }));
-  }
-
   /* ── Pose la question courante (photo du joueur) ── */
   async _askQuestion() {
     if (this.finished) return;
@@ -387,21 +372,25 @@ class FootQuizSession {
     this.firstCorrectPending = true;
 
     const payload = { body: null };
+    // Xfoot = PHOTOS uniquement : photo non chargeable → joueur SAUTÉ
+    // (jamais de question sans photo, jamais d'indice).
+    const img = await downloadImage(c.image, this.bot.config.tmpDir, this.fetchImpl);
+    if (!img) {
+      this.players.splice(this.index, 1);
+      this.total = this.players.length;
+      if (this.total === 0) return this._finish('⚠️ ' + fmt.bold('Photos indisponibles — quiz arrêté.'));
+      return this._askQuestion();
+    }
+    payload.attachment = img;
+
     const lines = [
       `🖼️ ${fmt.boldNum(this.index + 1)}/${fmt.boldNum(this.total)}  —  📚 ${fmt.bold(this.source)}`,
       '',
+      '❓ ' + fmt.bold('QUI EST CE JOUEUR ?'),
+      '',
+      '⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`),
     ];
-    if (!c.image && c.hint) {
-      lines.push(`📖 ${fmt.bold('Indice')} : ${fmt.bold(c.hint)}`);
-      lines.push('');
-    }
-    lines.push('❓ ' + fmt.bold('QUI EST CE JOUEUR ?'));
-    lines.push('');
-    lines.push('⏱️ ' + fmt.bold(`${Math.round(this.bot.config.games.quizTimeoutMs / 1000)}s`));
     payload.body = fmt.frame(`⚽ FOOTBALL ${this.index + 1}/${this.total}`, lines);
-
-    const img = c.image ? await downloadImage(c.image, this.bot.config.tmpDir, this.fetchImpl) : null;
-    if (img) payload.attachment = img; // sinon : question aux indices (mode secours)
 
     // ⚖️ Vérificateur STRICT : les AUTRES joueurs de la manche servent de
     // garde-fou — répondre un autre nom (même mal orthographié) = faux.
