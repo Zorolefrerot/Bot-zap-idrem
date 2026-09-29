@@ -34,5 +34,20 @@ module.exports = {
     );
     ctx.db.bumpStat('quizzesStarted');
     await session.start();
+    // Pré-sélection (JARVIS ou « Xquiz cg 5 ») : catégorie puis nombre.
+    const tokens = (ctx.args || [])
+      .map((a) => String(a || '').trim().toLowerCase())
+      .filter(Boolean)
+      .slice(0, 2);
+    for (const token of tokens) {
+      if (session.state !== 'WAITING_CATEGORY' && session.state !== 'WAITING_COUNT') break;
+      const before = session.state;
+      try {
+        await session.handle({ senderID: ctx.senderID, senderName: ctx.senderName, text: token });
+      } catch (_) {
+        break;
+      }
+      if (session.state === before) break; // jeton refusé → le bot garde la main
+    }
   },
 };

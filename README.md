@@ -60,6 +60,7 @@ MeR-NeL/
 │   ├── xp.js                 # XP & niveaux (courbe configurable)
 │   ├── quiz.js               # Machine d'état du quiz
 │   ├── duel.js               # Machine d'état du duel (mises sécurisées)
+│   ├── jarvisBrain.js        # 🧠 CERVEAU JARVIS local : compréhension, réflexion, mémoire
 │   ├── sessions.js           # Gestionnaire de conversations multi-étapes
 │   └── questions/            # Banques de questions JSON (éditables)
 │
@@ -195,7 +196,7 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 | `Xstop` | (Admins) Stoppe/relance le bot dans le groupe — alias de Xoff/Xon |
 | `Xrestart` | (Admins) Redémarre le bot — sauvegarde TOUTES les données avant |
 | `Xonlyadmin on/off` | Mode « admins uniquement » : le bot ignore les non-admins |
-| `Xjarvis on/off` | (Admins bot) Mode JARVIS : plus besoin de commandes — le bot comprend, réfléchit et exécute tout à la demande (mémoire par utilisateur) |
+| `Xjarvis on/off` | (Admins bot) Mode JARVIS : cerveau 100 % LOCAL (aucune API) — le bot comprend le français, réfléchit, retient chaque personne et exécute tout à la demande |
 
 > ♻️ **Pool IA 6 fournisseurs SANS clé** (gemini-proxy2 → Pollinations → Shizo
 > → Paxsenix → Ryzendesu → OpenAI/pollinations) avec **rotation automatique** :

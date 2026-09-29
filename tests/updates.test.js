@@ -112,56 +112,52 @@ test('Xonlyadmin ON : non-admins ignorés silencieusement — OFF : tout revient
   assert.ok(await until(() => adapter.sent.length > marked, 3000), 'non-admins servis à nouveau');
 });
 
-test('Xjarvis ON : langage naturel → exécution automatique via protocole CMD:', async () => {
+test('Xjarvis : CERVEAU 100 % LOCAL — « shifumi » exécute Xrps SANS AUCUNE API', async () => {
   const { bot, adapter } = await bootGroup();
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xjarvis on'));
   assert.ok(await until(() => bodies(adapter).some((b) => /JARVIS — ACTIV[ÉE]/.test(b)), 3000), 'mode activé');
 
-  bot.services.aiPool.ask = async (question, opts = {}) => {
-    void question;
-    const sys = String(opts.system || '');
-    assert.ok(/Mernel/.test(sys), 'identité dans le prompt');
-    assert.ok(sys.includes('CMD:'), 'protocole expliqué');
-    return { text: "CMD: xrps\n\nC'est parti, à toi de jouer !", provider: 'test' };
+  bot.services.aiPool.ask = async () => {
+    throw new Error('API EXTERNE INTERDITE EN MODE JARVIS');
   };
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'lance nous un shifumi'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'mernel on joue au shifumi'));
   const all = bodies(adapter);
-  assert.ok(all.some((b) => /C'est parti, à toi de jouer/.test(b)), 'annonce JARVIS diffusée');
-  assert.ok(all.some((b) => /PIERRE-FEUILLE-CISEAUX/.test(b) || /Choisis ton arme/.test(b)), 'Xrps exécuté automatiquement');
+  assert.ok(all.some((b) => /Pierre, feuille, ciseaux/.test(b)), 'annonce du cerveau local');
+  assert.ok(all.some((b) => /PIERRE-FEUILLE-CISEAUX|Choisis ton arme/.test(b)), 'Xrps exécuté automatiquement');
+  assert.ok(!all.some((b) => b.includes('API EXTERNE INTERDITE')), 'aucune API appelée');
 });
 
-test('Xjarvis : mémoire par utilisateur (le prénom est retenu)', async () => {
-  const { bot, adapter } = await bootGroup();
-  clearCooldowns(bot);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xjarvis on'));
-  await until(() => bodies(adapter).some((b) => /JARVIS — ACTIV/.test(b)), 3000);
-
-  let lastSystem = '';
-  bot.services.aiPool.ask = async (question, opts = {}) => {
-    void question;
-    lastSystem = String((opts && opts.system) || '');
-    return { text: 'Bien noté !', provider: 'test' };
-  };
-  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, 'je m appelle Paul'));
-  assert.ok(await until(() => bodies(adapter).some((b) => b.includes('Bien noté')), 3000), '1re réponse');
-
-  clearCooldowns(bot);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, 'qui suis-je ?'));
-  assert.ok(/Paul/.test(lastSystem), 'le prénom est dans la mémoire du 2e appel');
-});
-
-test('Xjarvis : commandes ADMIN jamais auto-exécutées (ligne CMD retirée)', async () => {
+test('Xjarvis : mémoire des prénoms PERSISTÉE en base (le cerveau se souvient)', async () => {
   const { bot, adapter, db } = await bootGroup();
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xjarvis on'));
   await until(() => bodies(adapter).some((b) => /JARVIS — ACTIV/.test(b)), 3000);
 
-  bot.services.aiPool.ask = async () => ({ text: 'CMD: xban @Paul\n\nJe ne peux pas faire ça.', provider: 'test' });
+  bot.services.aiPool.ask = async () => {
+    throw new Error('API EXTERNE INTERDITE EN MODE JARVIS');
+  };
+  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, "je m'appelle Paul"));
+  assert.ok(await until(() => bodies(adapter).some((b) => /Enchanté Paul/.test(b)), 3000), 'prénom appris');
+  assert.equal(db.getUser(UIDS.paul).jarvisName, 'Paul', 'prénom persisté en base');
+
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, 'qui suis-je ?'));
+  assert.ok(await until(() => bodies(adapter).some((b) => /Tu es Paul/.test(b)), 3000), 'le cerveau se souvient');
+});
+
+test('Xjarvis : commandes ADMIN jamais exécutées (refus du cerveau local)', async () => {
+  const { bot, adapter, db } = await bootGroup();
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xjarvis on'));
+  await until(() => bodies(adapter).some((b) => /JARVIS — ACTIV/.test(b)), 3000);
+
+  bot.services.aiPool.ask = async () => {
+    throw new Error('API EXTERNE INTERDITE EN MODE JARVIS');
+  };
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'banne Paul'));
   const all = bodies(adapter);
-  assert.ok(all.some((b) => /Je ne peux pas faire ça/.test(b)), 'réponse sans la ligne CMD');
-  assert.ok(!all.some((b) => /CMD:/.test(b)), 'directive jamais montrée');
+  assert.ok(all.some((b) => /administration/.test(b)), 'refus expliqué par le cerveau');
   assert.ok(!db.ensureUser(UIDS.paul).banned, 'aucun ban appliqué');
 });
 

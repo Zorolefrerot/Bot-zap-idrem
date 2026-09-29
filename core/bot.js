@@ -13,6 +13,7 @@ const { Economy } = require('../systems/economy');
 const { XpSystem, thresholdForLevel } = require('../systems/xp');
 const { BetEngine } = require('../systems/xbet');
 const { SessionManager } = require('../systems/sessions');
+const { createJarvisBrain } = require('../systems/jarvisBrain');
 const { IdleMonitor } = require('../systems/idle');
 const fmt = require('../utils/formatter');
 
@@ -442,79 +443,43 @@ class Bot {
   ]);
 
   async _jarvisFlow(event, threadID, senderID, senderName, body) {
-    // Anti-tempête : un seul appel IA à la fois par conversation.
+    // 🧠 CERVEAU 100 % LOCAL (systems/jarvisBrain.js) — AUCUNE API externe.
+    // Compréhension, réflexion, mémoire et décisions : tout est codé dedans.
     const gate = this.cooldowns.check(`chat:${threadID}`, this.config.chat.minIntervalMs);
     if (!gate.ok) return this._grantMessageXp(threadID, senderID);
 
-    this._jarvisMemory = this._jarvisMemory || new Map();
-    const key = `${threadID}:${senderID}`;
-    const hist = this._jarvisMemory.get(key) || [];
-    const transcript = hist.length
-      ? hist.map((h) => `${h.role === 'user' ? senderName : 'Mernel'} : ${h.content}`).join('\n')
-      : '';
-
-    const system = [
-      'Tu es Mernel, un JARVIS : une intelligence artificielle d\'assistance totale.',
-      'Identité : Mernel, fils de Merdi, de la RDC et du Bénin — Nelson, les grands informaticiens qui t\'ont conçu.',
-      'Tu réfléchis, tu comprends le langage naturel, tu retiens les conversations et tu EXÉCUTES toi-même les commandes du bot : personne n\'a besoin de taper les commandes.',
-      '',
-      'COMMANDES DISPONIBLES (tu les connais toutes) :',
-      '- xquiz : quiz de groupe (ID, MULTIVERS, CG, CAPITALE, DRAPEAU)',
-      '- xid : quiz d\'images de personnages manga · xfoot : quiz d\'images de joueurs de foot',
-      '- xduel : duel 1v1 · xbet : paris de football · xslots <mise> · xpile <pile|face> <mise> · xcourse <n°1-4> <mise> · xrps',
-      '- xmenu · xanime <nom> · xpolice [style] <texte> · xlove · xprofil',
-      '- xdaily · xcoins · xp · xrank · xask <question> · xai <demande> · xgame · xupt · xinfo',
-      '',
-      'PROTOCOLE OBLIGATOIRE :',
-      'Si l\'utilisateur demande une ACTION réalisable par une commande ci-dessus, ta PREMIÈRE ligne doit être EXACTEMENT :',
-      'CMD: <commande> [arguments si évidents]',
-      'puis une ligne vide, puis une courte phrase en français annonçant l\'action.',
-      'Sinon réponds simplement en français : utile, factuel, concis (1 à 4 phrases).',
-      'N\'invente JAMAIS de commande hors de la liste. JAMAIS de commandes d\'administration.',
-      'Exemple — « mernel lance nous un quiz manga multivers » →',
-      'CMD: xid',
-      '',
-      'C\'est parti ! Je te demande le nombre d\'images ensuite.',
-    ].join('\n') + (transcript ? `\n\nMémoire de la conversation avec ${senderName} :\n${transcript}` : '');
-
-    try {
-      const { text: answer } = await this.services.aiPool.ask(body, { system });
-      let replyText = String(answer || '').trim();
-
-      // Directive de commande ?
-      const m = replyText.match(/^\s*CMD:\s*(\S+)\s*([^\n]*)/i);
-      if (m) {
-        const wanted = 'x' + m[1].toLowerCase().replace(/^x/, '');
-        const args = String(m[2] || '').trim();
-        const rest = replyText.split('\n').slice(1).join('\n').trim();
-        if (this.JARVIS_ALLOWED.has(wanted)) {
-          if (rest) await this.send(rest, threadID);
-          // Le bot EXÉCUTE lui-même la commande pour l'utilisateur.
-          return this.handleMessage(Object.assign({}, event, { body: wanted + (args ? ' ' + args : ''), messageReply: undefined, mentions: {} }));
+    this.jarvisBrain = this.jarvisBrain || createJarvisBrain(this.config, {
+      getName: (uid) => {
+        const u = this.db.getUser(uid);
+        return (u && u.jarvisName) || '';
+      },
+      setName: (uid, name) => {
+        const u = this.db.ensureUser(uid);
+        u.jarvisName = name;
+        this.db.users.save();
+      },
+      forget: (uid) => {
+        const u = this.db.getUser(uid);
+        if (u && u.jarvisName) {
+          u.jarvisName = '';
+          this.db.users.save();
         }
-        // Commande non autorisée (ex : admin) → on retire la ligne CMD.
-        replyText = rest;
-      }
+      },
+    });
 
-      if (replyText) {
-        await this.send(`${fmt.bold(this.config.botName)} 🤖 ${replyText}`, threadID);
-        hist.push({ role: 'user', content: String(body).slice(0, 300) }, { role: 'assistant', content: replyText.slice(0, 300) });
-        while (hist.length > 8) hist.shift();
-        this._jarvisMemory.set(key, hist);
-      }
-    } catch (err) {
-      this.logger.warn('[bot] jarvis:', err.code || err.message);
-      const notice = this.cooldowns.check(`chat-err:${threadID}`, 120_000);
-      if (notice.ok) {
-        await this.send(
-          fmt.frame('🤖 JARVIS EN PAUSE', [
-            '⚠️ ' + fmt.bold('Mon cerveau a bugué — réessaie dans 5 secondes.'),
-            `🧾 ${fmt.bold('CODE')} : ${fmt.bold(String(err.code || 'AI_ALL_PROVIDERS_DOWN').toUpperCase())}`,
-          ]),
-          threadID
-        );
-      }
+    const verdict = this.jarvisBrain.think({ threadID, senderID, senderName, text: body });
+
+    if (verdict.command && this.JARVIS_ALLOWED.has(verdict.command)) {
+      if (verdict.text) await this.send(`${fmt.bold(this.config.botName)} 🤖 ${verdict.text}`, threadID);
+      // Le bot EXÉCUTE lui-même la commande (mentions conservées pour les cibles).
+      return this.handleMessage(
+        Object.assign({}, event, {
+          body: verdict.command + (verdict.args ? ` ${verdict.args}` : ''),
+          messageReply: undefined,
+        })
+      );
     }
+    if (verdict.text) await this.send(`${fmt.bold(this.config.botName)} 🤖 ${verdict.text}`, threadID);
     this._grantMessageXp(threadID, senderID);
   }
 
