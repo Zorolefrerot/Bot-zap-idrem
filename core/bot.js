@@ -42,10 +42,12 @@ class Bot {
     this.xp = new XpSystem(this.db, this.config);
     this.bets = new BetEngine(this);
     // 💾 Autosave : toutes les 5 min, tout est écrit sur disque
-    // (crash, extinction forcée, redéploiement → rien ne se perd).
+    // (crash, extinction forcée, redéploiement → rien ne se perd)
+    // puis envoyé vers le cloud Neon si configuré.
+    this.cloud = p.cloud || null;
     this._autosaveTimer = setInterval(() => {
       try {
-        this.db.saveAll();
+        this._autosave();
       } catch (_) { /* jamais bloquer le bot */ }
     }, 5 * 60 * 1000);
     if (this._autosaveTimer.unref) this._autosaveTimer.unref();
@@ -624,12 +626,23 @@ class Bot {
     }
   }
 
+  /* 💾 Autosave disque + push cloud (Neon). */
+  _autosave() {
+    this.db.saveAll();
+    if (this.cloud && this.cloud.enabled) this.cloud.push('autosave').catch(() => {});
+  }
+
   /* ── Extinction propre ── */
   async shutdown() {
     if (this._autosaveTimer) clearInterval(this._autosaveTimer);
     try {
       this.db.saveAll(); // 💾 flush final garanti
     } catch (_) { /* */ }
+    if (this.cloud && this.cloud.enabled) {
+      try {
+        await this.cloud.flush(); // ☁️ dernière sauvegarde vers Neon
+      } catch (_) { /* */ }
+    }
     this.idle.destroy();
     this.sessions.destroyAll();
     this.db.saveAll();

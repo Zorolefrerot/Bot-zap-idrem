@@ -123,7 +123,7 @@ async function boot(opts = {}) {
     bot.handleRawEvent(ev).catch(() => {});
   };
   const adapter = await facebook.connect(config, logger, connectHooks);
-  bot = new Bot({ config, logger, db, adapter, services });
+  bot = new Bot({ config, logger, db, adapter, services, cloud: opts.cloud || null });
   return { config, logger, db, adapter, bot, services, dataDir };
 }
 

@@ -60,6 +60,7 @@ MeR-NeL/
 │   ├── xp.js                 # XP & niveaux (courbe configurable)
 │   ├── quiz.js               # Machine d'état du quiz
 │   ├── duel.js               # Machine d'état du duel (mises sécurisées)
+│   ├── cloudSync.js          # ☁️ Sauvegarde persistante Neon (PostgreSQL)
 │   ├── jarvisBrain.js        # 🧠 CERVEAU JARVIS local : compréhension, réflexion, mémoire
 │   ├── sessions.js           # Gestionnaire de conversations multi-étapes
 │   └── questions/            # Banques de questions JSON (éditables)
@@ -368,6 +369,21 @@ pour passer sur une vraie BDD (Mongo, Postgres…), réimplémentez cette couche
 ```bash
 npm test
 ```
+
+## ☁️ Sauvegarde persistante (Neon — PostgreSQL)
+
+Les XCoins, XP, niveaux, paris, stats et réglages de groupes **survivent à tout** :
+redémarrage, redéploiement, changement de machine. Le bot reflète ses données
+(`users.json`, `groups.json`, `stats.json`, `bets.json`) dans une base **Neon** :
+
+1. Crée une base gratuite sur [neon.tech](https://neon.tech) et copie la **Connection string** ;
+2. Renseigne-la dans la variable d'environnement `DATABASE_URL` (Render → Environment) ;
+3. C'est tout — au démarrage le bot **restaure** tout depuis le cloud, puis
+   **sauvegarde** toutes les 5 minutes et à chaque extinction propre.
+
+Sans `DATABASE_URL`, le bot tourne normalement sur les JSON locaux.
+
+---
 
 La suite exécute le bot en **mode mock** (aucune connexion Facebook) et couvre :
 formateur, permissions, économie (daily/double claim), XP, quiz complet

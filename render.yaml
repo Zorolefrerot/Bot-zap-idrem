@@ -25,6 +25,10 @@ services:
       - key: PREFIX
         value: X
 
+      # ── ☁️ Sauvegarde persistante Neon (à remplir dans le dashboard) ──
+      - key: DATABASE_URL
+        sync: false
+
       # ── Administrateurs (défauts intégrés — surcharger si besoin) ──
       # - key: ADMIN_UIDS
       #   sync: false

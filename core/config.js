@@ -145,6 +145,13 @@ const config = {
   },
 
   /* 🌙 Mode veille automatique (#40) */
+  /* ☁️ Sauvegarde persistante Neon (PostgreSQL) — DATABASE_URL dans l'env.
+     Sans URL : désactivé, le bot tourne sur les JSON locaux. */
+  cloud: {
+    url: (env.DATABASE_URL || env.NEON_DATABASE_URL || '').trim(),
+    syncMs: int(env.CLOUD_SYNC_MS, 300000), // push cloud toutes les 5 min
+  },
+
   idle: {
     standbyMs: int(env.IDLE_STANDBY_MINUTES, 30) * 60 * 1000, // 30 min par défaut
     sweepMs: int(env.IDLE_SWEEP_MS, 60000), // vérification chaque minute
@@ -163,7 +170,7 @@ const config = {
   },
 
   /* Secrets à masquer dans les logs/erreurs */
-  secrets: [agnesKey, shizoKey].filter((s) => s && s.length > 3),
+  secrets: [agnesKey, shizoKey, (env.DATABASE_URL || env.NEON_DATABASE_URL || '').trim()].filter((s) => s && s.length > 8),
 };
 
 /* Retourne true si l'UID fourni appartient à la liste des administrateurs. */

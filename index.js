@@ -25,6 +25,7 @@ const { createVideoService } = require('./services/video');
 const { createVideoGenerator } = require('./services/videoGenerator');
 const { Bot } = require('./core/bot');
 const { startKeepAlive } = require('./core/keepAlive');
+const { createCloudSync } = require('./systems/cloudSync');
 
 /* ── Logger (avec masquage des secrets) ── */
 const logger = new Logger({ logDir: config.logDir, level: config.nodeEnv === 'development' ? 'debug' : 'info' });
@@ -75,6 +76,20 @@ async function main() {
   banner();
   cleanTmp();
 
+  /* ☁️ Sauvegarde persistante Neon — restauration AVANT l'ouverture des JSON :
+     les XCoins, XP, paris et réglages survivent aux redéploiements Render. */
+  const cloud = createCloudSync(logger, {
+    url: config.cloud.url,
+    syncMs: config.cloud.syncMs,
+    files: [
+      { key: 'users', file: path.join(config.dataDir, 'users.json') },
+      { key: 'groups', file: path.join(config.dataDir, 'groups.json') },
+      { key: 'stats', file: path.join(config.dataDir, 'stats.json') },
+      { key: 'bets', file: path.join(config.dataDir, 'bets.json') },
+    ],
+  });
+  await cloud.pull();
+
   const db = new Database(config.dataDir, config);
   db.bumpStat('botStarts');
 
@@ -93,7 +108,7 @@ async function main() {
 
   /* Connexion Messenger */
   const adapter = await connectWithRetry(logger, 3);
-  const bot = new Bot({ config, logger, db, adapter, services });
+  const bot = new Bot({ config, logger, db, adapter, services, cloud });
   botRef = bot;
 
   if (adapter.mode !== 'mock') {
@@ -106,6 +121,9 @@ async function main() {
   /* Keep-alive Render */
   await startKeepAlive(config, logger);
 
+  /* ☁️ Cycle de sauvegarde Neon (push périodique) */
+  cloud.start();
+
   /* Extinction propre : persistance garantie */
   let shuttingDown = false;
   const shutdown = async (signal) => {
@@ -114,6 +132,9 @@ async function main() {
     logger.info(`[bot] arrêt (${signal}) — sauvegarde des données…`);
     try {
       await bot.shutdown();
+    } catch (_) { /* */ }
+    try {
+      await cloud.close();
     } catch (_) { /* */ }
     process.exit(0);
   };
