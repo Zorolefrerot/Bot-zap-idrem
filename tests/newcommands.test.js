@@ -417,3 +417,199 @@ test('aiPool : format OpenAI JSON parsé (choices[].message.content) + 6 fournis
   assert.ok(r.text.includes('Réponse OpenAI-format'));
   assert.ok(/ollinations/i.test(r.provider), `fournisseur pollinations (${r.provider})`);
 });
+
+/* ════════ NOUVELLES RUBRIQUES : EMOJI, ZIK, MÉMORIAL, LOGO ════════ */
+
+const { CATEGORIES, loadBank, resolveCategory, resolveDuelCategory, loadDuelBank } = require('../systems/questions');
+
+test('NOUVELLES BANQUES : emoji ≥200, zik ≥200, memorial ≥200, logo ≥200, multivers & cg ≥500', () => {
+  assert.ok(loadBank('emoji').length >= 200, `emoji: ${loadBank('emoji').length}`);
+  assert.ok(loadBank('zik').length >= 200, `zik: ${loadBank('zik').length}`);
+  assert.ok(loadBank('memorial').length >= 200, `memorial: ${loadBank('memorial').length}`);
+  assert.ok(loadBank('logo').length >= 200, `logo: ${loadBank('logo').length}`);
+  assert.ok(loadBank('multivers').length >= 500, `multivers: ${loadBank('multivers').length}`);
+  assert.ok(loadBank('cg').length >= 500, `cg: ${loadBank('cg').length}`);
+});
+
+test('EMOJI : jamais de visage émotionnel, réponses courtes uniques', () => {
+  const bank = loadBank('emoji');
+  const faceRe = /[\u{1F600}-\u{1F64F}]/u; // bloc des visages/émotions
+  for (const q of bank) {
+    assert.ok(!faceRe.test(q.q), `pas d\u2019emoji visage : ${q.q}`);
+    assert.ok(q.a && q.a.length >= 2, 'réponse présente');
+  }
+  assert.equal(new Set(bank.map((q) => q.q)).size, bank.length, 'chaque emoji = UNE seule question');
+});
+
+test('ZIK : chaque question relie artiste ↔ titre', () => {
+  const bank = loadBank('zik');
+  const artists = new Set(bank.map((q) => q.a.toLowerCase()));
+  assert.ok(artists.has('fally ipupa'), 'Fally Ipupa présent');
+  assert.ok(artists.has('aya nakamura'), 'Aya Nakamura présente');
+  assert.ok(bank.some((q) => /Jerusalema/i.test(q.q)), 'Jerusalema dans la banque');
+});
+
+test('resolveCategory : emoji, zik, memorial (monument), logo (marque)', () => {
+  assert.equal(resolveCategory('emoji'), 'emoji');
+  assert.equal(resolveCategory('emoticone'), 'emoji');
+  assert.equal(resolveCategory('zik'), 'zik');
+  assert.equal(resolveCategory('musique'), 'zik');
+  assert.equal(resolveCategory('memorial'), 'memorial');
+  assert.equal(resolveCategory('monument'), 'memorial');
+  assert.equal(resolveCategory('logo'), 'logo');
+  assert.equal(resolveCategory('marque'), 'logo');
+  // DUEL : emoji ajouté
+  assert.equal(resolveDuelCategory('emoji'), 'emoji');
+  const dbank = loadDuelBank('emoji');
+  assert.ok(dbank.length >= 150, `duel emoji: ${dbank.length}`);
+  assert.ok(dbank.every((q) => q.options && q.options.length === 4 && q.options.includes(q.answer)), 'QCM 4 options valides');
+});
+
+test('Xquiz EMOJI : l\u2019emoji s\u2019affiche en question et la réponse est acceptée', async () => {
+  const { boot, until, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
+  const { bot, adapter } = await boot({});
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'emoji'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cinq'));
+  assert.ok(await until(() => bodies(adapter).some((b) => /QUESTION 1\/5/.test(b)), 5000), 'quiz emoji 3 questions');
+  const session = bot.sessions.get('thread-1', 'quiz');
+  assert.ok(session && session.category === 'emoji', 'catégorie emoji');
+  const q0 = session.questions[0];
+  assert.ok(bodies(adapter).some((b) => b.includes(q0.q)), 'l\u2019emoji est affiché');
+  const before = adapter.sent.length;
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, q0.a));
+  assert.ok(await until(() => adapter.sent.length > before && /BONNE R[ÉE]PONSE/.test(unbold(adapter.sent[adapter.sent.length - 1].payload.body || '')), 3000), 'réponse acceptée');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'met fin'));
+  await until(() => !bot.sessions.get('thread-1', 'quiz'), 3000);
+});
+
+test('Xquiz ZIK : le tube est demandé et l\u2019artiste accepté', async () => {
+  const { boot, until, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
+  const { bot, adapter } = await boot({});
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'zik'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cinq'));
+  assert.ok(await until(() => bodies(adapter).some((b) => /QUESTION 1\/5/.test(b)), 5000), 'quiz zik lancé');
+  const session = bot.sessions.get('thread-1', 'quiz');
+  const q0 = session.questions[0];
+  const before = adapter.sent.length;
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, q0.a));
+  assert.ok(await until(() => adapter.sent.length > before && /BONNE R[ÉE]PONSE/.test(unbold(adapter.sent[adapter.sent.length - 1].payload.body || '')), 3000), `réponse « ${q0.a} » acceptée`);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'met fin'));
+  await until(() => !bot.sessions.get('thread-1', 'quiz'), 3000);
+});
+
+test('Xquiz MÉMORIAL : l\u2019image Wikipedia est téléchargée et envoyée', async () => {
+  const { boot, until, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
+  const { resetWikiCache } = require('../systems/wikiImage');
+  resetWikiCache();
+  const { bot, adapter } = await boot({});
+  // stub fetch : summary Wikipedia → image ; téléchargement → buffer
+  global.fetch = async (url) => {
+    const u = String(url);
+    if (/page\/summary/.test(u)) {
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ originalimage: { source: 'https://upload.wikimedia.org/test/eiffel.jpg' } }),
+      };
+    }
+    return {
+      ok: true,
+      status: 200,
+      headers: { get: () => 'image/jpeg' },
+      arrayBuffer: async () => new ArrayBuffer(2000),
+    };
+  };
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'memorial'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cinq'));
+  assert.ok(await until(() => bodies(adapter).some((b) => /Quel est ce lieu c[ée]l[è]bre/.test(b)), 8000), 'question mémorial posée');
+  assert.ok(adapter.sent.some((s) => s.payload && s.payload.attachment), 'IMAGE envoyée avec la question');
+  const session = bot.sessions.get('thread-1', 'quiz');
+  const q0 = session.questions[0];
+  const before = adapter.sent.length;
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, q0.a));
+  assert.ok(await until(() => adapter.sent.length > before && /BONNE R[ÉE]PONSE/.test(unbold(adapter.sent[adapter.sent.length - 1].payload.body || '')), 3000), `« ${q0.a} » accepté`);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'met fin'));
+  await until(() => !bot.sessions.get('thread-1', 'quiz'), 3000);
+});
+
+test('Xquiz MÉMORIAL : image indisponible → item SAUTÉ, quiz continue', async () => {
+  const { boot, until, makeMsg, bodies, UIDS, clearCooldowns } = require('./helpers');
+  const { resetWikiCache } = require('../systems/wikiImage');
+  resetWikiCache();
+  const { bot, adapter } = await boot({});
+  global.fetch = async () => ({ ok: false, status: 503 }); // tout en panne
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'memorial'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cinq'));
+  await until(() => bodies(adapter).some((b) => /INDISPONIBLES/.test(b)), 20000);
+  assert.ok(bodies(adapter).some((b) => /INDISPONIBLES/.test(b)), 'quiz arrêté proprement quand TOUT échoue');
+  await until(() => !bot.sessions.get('thread-1', 'quiz'), 3000);
+});
+
+test('Xquiz LOGO : la question demande le logo et le thème est affiché', async () => {
+  const { boot, until, makeMsg, bodies, UIDS, clearCooldowns } = require('./helpers');
+  const { resetWikiCache } = require('../systems/wikiImage');
+  resetWikiCache();
+  const { bot, adapter } = await boot({});
+  global.fetch = async (url) => {
+    const u = String(url);
+    if (/page\/summary/.test(u)) {
+      return { ok: true, status: 200, json: async () => ({ thumbnail: { source: 'https://upload.wikimedia.org/test/logo.png' } }) };
+    }
+    return { ok: true, status: 200, headers: { get: () => 'image/png' }, arrayBuffer: async () => new ArrayBuffer(2000) };
+  };
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'logo'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cinq'));
+  assert.ok(await until(() => bodies(adapter).some((b) => /Quel est ce logo/.test(b)), 8000), 'question logo posée');
+  assert.ok(await until(() => bodies(adapter).some((b) => /Th[èe]me/.test(b)), 3000), 'thème affiché (Football, Auto, Tech…)');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'met fin'));
+  await until(() => !bot.sessions.get('thread-1', 'quiz'), 3000);
+});
+
+test('Xduel : la catégorie EMOJI est acceptée dans le flux du duel', async () => {
+  const { boot, until, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
+  const { bot, adapter } = await boot({});
+  bot.adapter.getThreadInfo = async () => ({ threadName: 'G', adminIDs: [{ id: UIDS.admin }], userInfo: [{ id: UIDS.paul, name: 'Paul' }], participantIDs: [UIDS.shadow, UIDS.paul, UIDS.admin] });
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xduel'));
+  assert.ok(await until(() => bodies(adapter).some((b) => /DUEL/.test(b)), 5000), 'duel ouvert');
+  // Choix du dueliste 1 (soi-même) puis adversaire via mention de Paul
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'moi'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, `@Paul`, { mentions: { [UIDS.paul]: { tag: '@Paul', from: 0 } } }));
+  // Catégorie EMOJI → acceptée : le duel passe directement au NOMBRE DE QUESTIONS
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'emoji'));
+  assert.ok(await until(() => bodies(adapter).some((b) => /NOMBRE DE QUESTIONS/.test(b)), 3000), 'emoji accepté → choix du nombre de questions');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '10'));
+  assert.ok(await until(() => bodies(adapter).some((b) => /MISE|1v1/.test(unbold(b))), 3000), 'puis la mise');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'met fin'));
+  await until(() => !bot.sessions.get('thread-1', 'duel'), 3000);
+});
+
+test('Xteam : 9 rubriques × 5 questions = 45 au total', async () => {
+  const { boot, until, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
+  const { bot, adapter } = await boot({});
+  bot.adapter.getThreadInfo = async () => ({ threadName: 'G', adminIDs: [{ id: UIDS.admin }], userInfo: [{ id: UIDS.paul, name: 'Paul' }, { id: UIDS.fortiche, name: 'Fortiche' }], participantIDs: [UIDS.paul, UIDS.fortiche, UIDS.admin] });
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xteam'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, '2'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, '1'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'x1' } }));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.fortiche, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'x1' } }));
+  assert.ok(await until(() => bodies(adapter).some((b) => /XTEAM LANC/.test(b)), 5000), 'lancé dès que les groupes sont pleins');
+  assert.ok(await until(() => bodies(adapter).some((b) => /1\/45/.test(unbold(b))), 5000), '45 questions (9 rubriques × 5)');
+  const session = bot.sessions.get('thread-1', 'xteam');
+  assert.ok(session && session.total === 45, `total = 45 (reçu : ${session && session.total})`);
+  const cats = new Set(session.questions.map((q) => q.cat));
+  assert.equal(cats.size, 9, 'les 9 rubriques sont représentées');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'stop'));
+  await until(() => !bot.sessions.get('thread-1', 'xteam'), 3000);
+});

@@ -42,6 +42,34 @@ const CATEGORIES = {
     file: 'capitale.json',
     style: 'capitale',
   },
+  emoji: {
+    label: '❓ 𝗘𝗠𝗢𝗝𝗜 — Devine l’emoji',
+    short: 'EMOJI',
+    aliases: ['emoji', 'emojis', 'emote', 'emotes', 'emoticone', 'emoticones'],
+    file: 'emoji.json',
+    style: 'emoji',
+  },
+  zik: {
+    label: '🎵 𝗭𝗜𝗞 — Artistes & titres',
+    short: 'ZIK',
+    aliases: ['zik', 'musique', 'musics', 'chanson', 'chansons', 'artiste', 'artistes'],
+    file: 'zik.json',
+    style: 'zik',
+  },
+  memorial: {
+    label: '🗺️ 𝗠É𝗠𝗢𝗥𝗜𝗔𝗟 — Lieux célèbres (images)',
+    short: 'MÉMORIAL',
+    aliases: ['memorial', 'memoriau', 'monument', 'monuments', 'lieux', 'lieu'],
+    file: 'memorial.json',
+    style: 'image',
+  },
+  logo: {
+    label: '🏷️ 𝗟𝗢𝗚𝗢 — Marques & équipes (images)',
+    short: 'LOGO',
+    aliases: ['logo', 'logos', 'marque', 'marques', 'equipe', 'equipes'],
+    file: 'logo.json',
+    style: 'image',
+  },
   drapeau: {
     label: '🚩 𝗗𝗥𝗔𝗣𝗘𝗔𝗨 — Trouve le pays',
     short: 'DRAPEAU',
@@ -57,6 +85,7 @@ const DUEL_CATEGORIES = {
   multivers: { short: 'MULTIVERS', aliases: ['multivers', 'anime', 'mu', 'mv'], file: 'duel-multivers.json' },
   id: { short: 'ID', aliases: ['id', 'identification', 'photo'], file: 'duel-id.json' },
   drapeau: { short: 'DRAPEAU', aliases: ['drapeau', 'flag', 'pays'], file: 'duel-drapeau.json' },
+  emoji: { short: 'EMOJI', aliases: ['emoji', 'emojis', 'emote', 'emoticone'], file: 'duel-emoji.json' },
 };
 
 const cache = new Map();
@@ -76,6 +105,7 @@ function loadBank(categoryKey) {
         a: String(q.a),
         alts: Array.isArray(q.alts) ? q.alts.map(String) : [],
         tag: q.tag ? String(q.tag) : '', // manga (MULTIVERS) / thème (CG)
+        wiki: q.wiki ? String(q.wiki) : '', // page Wikipedia (MÉMORIAL / LOGO)
       }));
   } catch (_) {
     bank = []; // banque absente/corrompue → catégorie indisponible, bot stable

@@ -185,7 +185,7 @@ test('Xteam : flux complet — refus non-admin, 2 groupes, recrutement par reply
   // Fortiche rejoint le groupe 2 → DERNIER groupe rempli = lancement direct
   await bot.handleMessage(replyTo('x1', UIDS.fortiche, 'thread-1', 'présent'));
   assert.ok(await until(() => bodies(adapter).some((b) => /XTEAM LANC[ÉE]/.test(b)), 5000), 'groupes pleins → quiz lancé');
-  assert.ok(await until(() => bodies(adapter).some((b) => /1\/50/.test(unbold(b))), 5000), '50 questions (5 rubriques × 10)');
+  assert.ok(await until(() => bodies(adapter).some((b) => /1\/45/.test(unbold(b))), 5000), '45 questions (9 rubriques × 5)');
 
   // Bonne réponse de Paul (Groupe 1)
   const session = bot.sessions.get('thread-1', 'xteam');

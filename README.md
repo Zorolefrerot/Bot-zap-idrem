@@ -221,12 +221,12 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 ### 🎮 Jeux
 | Commande | Description |
 |---|---|
-| `Xquiz` | Quiz de GROUPE à réponses LIBRES : ID (indices) · MULTIVERS (manga indiqué À LA FIN de chaque question 📚) · CG (thème 🏷️ affiché) · CAPITALE · DRAPEAU. ~1100 questions regroupées par manga/thème, vérificateur strict, +10 pts au premier bon, classement final |
+| `Xquiz` | Quiz de GROUPE à réponses LIBRES : ID (indices) · MULTIVERS (manga 📚) · CG (thème 🏷️) · CAPITALE · DRAPEAU · EMOJI (devine l'objet 🎯) · ZIK (titre ↔ artiste 🎵) · MÉMORIAL (photo du lieu 🏛️) · LOGO (devine la marque 🏷️). ~2900 questions, vérificateur strict, +10 pts au premier bon, classement final — images indisponibles → item sauté |
 | `Xid` | Quiz manga IMAGES UNIQUEMENT — chaîne 4 sources (AniList Referer-fixé → Kitsu → Jikan), 5 à 100 images, vérificateur strict (une autre réponse = faux). Image indisponible → personnage sauté ; sources en panne → message propre, JAMAIS de questions sans image |
-| `Xduel` | Duel 1v1 avec mise en XCoins — catégories CG, MULTIVERS, ID et DRAPEAU (drapeau → pays) |
+| `Xduel` | Duel 1v1 avec mise en XCoins — catégories CG, MULTIVERS, ID, DRAPEAU et EMOJI (drapeau → pays, emoji → objet/animal) |
 | `Xbet` | Paris football RÉELS : 10 affrontements/manche (puissances /100) — `Xbet <n°> <a|b> <v|n|d> <mise>`, min 100 XCoins, 1 pari/match, résultat 30 s, duos jamais répétés, nouvelle manche quand tout est joué |
 | `Xrps` | Pierre 🪨 Feuille 📄 Ciseaux ✂️ contre MeR~NeL |
-| `Xteam` | (Admins bot) Quiz INTER-ÉQUIPES : groupes (max 4) → recrutement par réponse au message → 10 questions par rubrique (ID/MULTIVERS/CG/CAPITALE/DRAPEAU) → équipe gagnante +200 XCoins/membre, meilleur buteur +600 |
+| `Xteam` | (Admins bot) Quiz INTER-ÉQUIPES : groupes (max 4) → recrutement par réponse au message → 5 questions par rubrique × 9 rubriques (ID/MULTIVERS/CG/CAPITALE/DRAPEAU/EMOJI/ZIK/MÉMORIAL/LOGO = 45 questions) → équipe gagnante +200 XCoins/membre, meilleur buteur +600 |
 | `Xslots <mise>` | Machine à sous 🎰 — min 50 XCoins, 3 identiques jusqu'à ×25, paire ×2 |
 | `Xpile <pile\|face> <mise>` | Pile ou face 🪙 — double ou rien (×2) |
 | `Xcourse <n° 1-4> <mise>` | Course de chevaux 🏇 — pari sur 1 des 4, gain ×3.5 |

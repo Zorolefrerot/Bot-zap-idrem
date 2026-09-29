@@ -8,7 +8,7 @@ const { GroupQuizSession } = require('../../systems/quiz');
 
 module.exports = {
   name: 'xquiz',
-  description: 'Quiz de groupe : première bonne réponse marque (ID / MULTIVERS / CG)',
+  description: 'Quiz de groupe : 9 rubriques (ID, MULTIVERS, CG, CAPITALE, DRAPEAU, EMOJI, ZIK, MÉMORIAL, LOGO)',
   usage: 'Xquiz',
   category: 'games',
   aliases: ['xq'],

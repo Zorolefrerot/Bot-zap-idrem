@@ -23,10 +23,11 @@ const { CATEGORIES, loadBank, shuffle } = require('./questions');
 const fmt = require('../utils/formatter');
 
 const { isCancelIntent, parseCount } = require('./natural');
+const { getQuizImage } = require('./wikiImage');
 const MAX_GROUPS = 4;
 const MAX_MEMBERS = 15;
-const QUESTIONS_PER_CATEGORY = 10;
-const CATEGORY_ORDER = ['id', 'multivers', 'cg', 'capitale', 'drapeau'];
+const QUESTIONS_PER_CATEGORY = 5;
+const CATEGORY_ORDER = ['id', 'multivers', 'cg', 'capitale', 'drapeau', 'emoji', 'zik', 'memorial', 'logo'];
 const REWARD_MEMBER = 200;
 const REWARD_MVP = 600;
 
@@ -259,7 +260,7 @@ class TeamQuizSession {
       if (!bank.length) continue;
       const picked = shuffle(bank).slice(0, Math.min(QUESTIONS_PER_CATEGORY, bank.length));
       for (const q of picked) {
-        questions.push({ q: q.q, a: q.a, alts: q.alts || [], cat, tag: q.tag || '' });
+        questions.push({ q: q.q, a: q.a, alts: q.alts || [], cat, tag: q.tag || '', wiki: q.wiki || '' });
       }
     }
     if (questions.length === 0) {
@@ -290,16 +291,23 @@ class TeamQuizSession {
     const q = this.questions[this.qIndex];
     if (!q) return this._finish();
 
+    const style = CATEGORIES[q.cat] ? CATEGORIES[q.cat].style : '';
     const catLabel = CATEGORIES[q.cat] ? CATEGORIES[q.cat].short || q.cat.toUpperCase() : q.cat.toUpperCase();
     const lines = [];
     if (q.cat === 'drapeau') {
       lines.push(q.q, '', '❓ ' + fmt.bold('Quel pays ?'));
     } else if (q.cat === 'capitale') {
       lines.push('🌍 ' + fmt.bold('Pays') + ' : ' + fmt.bold(q.q), '', '❓ ' + fmt.bold('Capitale ?'));
+    } else if (style === 'emoji') {
+      lines.push(q.q, '', '❓ ' + fmt.bold('Qu\u2019est-ce que c\u2019est ?'));
+    } else if (style === 'zik') {
+      lines.push('🎵 ' + fmt.bold(q.q), '', '❓ ' + fmt.bold('Qui ou quel titre ?'));
+    } else if (style === 'image') {
+      lines.push(q.cat === 'memorial' ? '❓ ' + fmt.bold('Quel est ce lieu célèbre ?') : '❓ ' + fmt.bold('Quel est ce logo ?'));
     } else {
       lines.push('🧩 ' + fmt.bold(q.q), '', '❓ ' + fmt.bold(q.cat === 'id' ? 'Qui est-ce ?' : 'Qui ou quoi ?'));
     }
-    if (q.tag) {
+    if (q.tag && q.cat !== 'memorial') {
       if (q.cat === 'multivers') lines.push(`📚 ${fmt.bold('Manga')} : ${fmt.bold(q.tag)}`);
       else lines.push(`🏷️ ${fmt.bold('Thème')} : ${fmt.bold(q.tag)}`);
     }
@@ -309,8 +317,25 @@ class TeamQuizSession {
     const bank = loadBank(q.cat);
     this._checker = makeChecker([q.a, ...(q.alts || [])], bank.filter((x) => x.a !== q.a).flatMap((x) => [x.a, ...(x.alts || [])]));
 
+    const payload = { body: fmt.frame(`👥 XTEAM — ${catLabel} ${this.qIndex + 1}/${this.total}`, lines) };
+    // 🖼️ Rubriques images (MÉMORIAL / LOGO) : item SAUTÉ si image indisponible.
+    if (style === 'image') {
+      this._imgSkips = this._imgSkips || 0;
+      const imgPath = await getQuizImage(q, this.bot.config.tmpDir);
+      if (!imgPath) {
+        this._imgSkips++;
+        if (this._imgSkips >= this.questions.length) {
+          await this.send(fmt.frame('🖼️ IMAGES INDISPONIBLES', ['⚠️ ' + fmt.bold('Aucune image accessible pour cette rubrique — quiz arrêté.'), '🔁 ' + fmt.bold('Réessaie plus tard ou choisis une autre catégorie.')]));
+          return this._finish();
+        }
+        this.qIndex++;
+        return this._askQuestion();
+      }
+      payload.attachment = imgPath;
+    }
+
     this.awaitingAnswer = true;
-    await this.send({ body: fmt.frame(`👥 XTEAM — ${catLabel} ${this.qIndex + 1}/${this.total}`, lines) });
+    await this.send(payload);
 
     this.questionTimer = setTimeout(() => {
       this.questionTimer = null;

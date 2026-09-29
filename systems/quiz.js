@@ -20,6 +20,7 @@ const fmt = require('../utils/formatter');
 const { safeInt } = require('../utils/sanitize');
 
 const { isCancelIntent, parseCount } = require('./natural');
+const { getQuizImage } = require('./wikiImage');
 
 class GroupQuizSession {
   /**
@@ -88,15 +89,15 @@ class GroupQuizSession {
   }
 
   async start() {
+    // Le menu est GÉNÉRÉ depuis les catégories réelles (jamais obsolète).
+    const catLines = Object.values(CATEGORIES).map((c) =>
+      `${(c.label || c.short).split(' — ')[0]} — ${fmt.bold((c.label || c.short).split(' — ')[1] || '')}`
+    );
     await this.send(
       fmt.frame('🎮 XQUIZ', [
         '「' + fmt.bold('PLEASE CHOOSE YOUR CATEGORY') + '」',
         '',
-        '🪪 ' + fmt.bold('ID') + ' — ' + fmt.bold('Indices de personnages'),
-        '🌌 ' + fmt.bold('MULTIVERS') + ' — ' + fmt.bold('Anime & mangas'),
-        '🧠 ' + fmt.bold('CG') + ' — ' + fmt.bold('Culture générale'),
-        '🌍 ' + fmt.bold('CAPITALE') + ' — ' + fmt.bold('Trouve la capitale du pays'),
-        '🚩 ' + fmt.bold('DRAPEAU') + ' — ' + fmt.bold('Trouve le pays du drapeau'),
+        ...catLines,
         '',
         '⚠️ ' + fmt.bold('Réponses LIBRES : tape directement la réponse.'),
         '🛑 ' + fmt.bold('Tape « cancel » pour annuler.'),
@@ -232,11 +233,22 @@ class GroupQuizSession {
       lines.push(q.q, '', '❓ ' + fmt.bold('Quel pays ?'));
     } else if (style === 'capitale') {
       lines.push('🌍 ' + fmt.bold('Pays') + ' : ' + fmt.bold(q.q), '', '❓ ' + fmt.bold('Capitale ?'));
+    } else if (style === 'emoji') {
+      lines.push(q.q, '', '❓ ' + fmt.bold('Qu\u2019est-ce que c\u2019est ?'));
+    } else if (style === 'zik') {
+      lines.push('🎵 ' + fmt.bold(q.q), '', '❓ ' + fmt.bold('Qui ou quel titre ?'));
+    } else if (style === 'image') {
+      lines.push(
+        this.category === 'memorial'
+          ? '❓ ' + fmt.bold('Quel est ce lieu célèbre ?')
+          : '❓ ' + fmt.bold('Quel est ce logo ?')
+      );
     } else {
       lines.push('🧩 ' + fmt.bold(q.q), '', '❓ ' + fmt.bold('Qui ou quoi ?'));
     }
     // Le manga / le thème est précisé À LA FIN de la question.
-    if (q.tag) {
+    // (MÉMORIAL : le tag = pays → trop d'indice, on ne l'affiche pas.)
+    if (q.tag && this.category !== 'memorial') {
       if (this.category === 'multivers') lines.push(`📚 ${fmt.bold('Manga')} : ${fmt.bold(q.tag)}`);
       else lines.push(`🏷️ ${fmt.bold('Thème')} : ${fmt.bold(q.tag)}`);
     }
@@ -251,6 +263,23 @@ class GroupQuizSession {
     );
 
     const payload = { body: fmt.frame(header, lines) };
+
+    // 🖼️ Quiz images (MÉMORIAL / LOGO) : on télécharge l'image ; si elle
+    // est indisponible, l'item est SAUTÉ (règle permanente des quiz images).
+    if (style === 'image') {
+      this._imgSkips = this._imgSkips || 0;
+      const imgPath = await getQuizImage(q, this.bot.config.tmpDir);
+      if (!imgPath) {
+        this._imgSkips++;
+        if (this._imgSkips >= this.questions.length) {
+          await this.send(fmt.frame('🖼️ IMAGES INDISPONIBLES', ['⚠️ ' + fmt.bold('Aucune image accessible pour cette rubrique — quiz arrêté.'), '🔁 ' + fmt.bold('Réessaie plus tard ou choisis une autre catégorie.')]));
+          return this._finish();
+        }
+        this.index++;
+        return this._askQuestion();
+      }
+      payload.attachment = imgPath;
+    }
 
     // La question devient « live » AVANT l'envoi (pas de course avec le client).
     this.awaitingAnswer = true;

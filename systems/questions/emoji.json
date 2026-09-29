@@ -1,0 +1,2301 @@
+[
+ {
+  "q": "🦁",
+  "a": "lion",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐯",
+  "a": "tigre",
+  "alts": [
+   "tigresse"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐘",
+  "a": "éléphant",
+  "alts": [
+   "elephant"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦒",
+  "a": "girafe",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦓",
+  "a": "zèbre",
+  "alts": [
+   "zebre"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦍",
+  "a": "gorille",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐵",
+  "a": "singe",
+  "alts": [
+   "macaque"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐺",
+  "a": "loup",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦊",
+  "a": "renard",
+  "alts": [
+   "renar"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐻",
+  "a": "ours",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐼",
+  "a": "panda",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐨",
+  "a": "koala",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐸",
+  "a": "grenouille",
+  "alts": [
+   "crapaud"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐢",
+  "a": "tortue",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐍",
+  "a": "serpent",
+  "alts": [
+   "vipere"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐊",
+  "a": "crocodile",
+  "alts": [
+   "caiman",
+   "alligator"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦎",
+  "a": "lézard",
+  "alts": [
+   "lezard"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦕",
+  "a": "dinosaure",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐰",
+  "a": "lapin",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦔",
+  "a": "hérisson",
+  "alts": [
+   "herisson"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦇",
+  "a": "chauve-souris",
+  "alts": [
+   "chauve souris"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐴",
+  "a": "cheval",
+  "alts": [
+   "jument"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦄",
+  "a": "licorne",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐮",
+  "a": "vache",
+  "alts": [
+   "boeuf",
+   "taureau"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐷",
+  "a": "cochon",
+  "alts": [
+   "porc"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐗",
+  "a": "sanglier",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐑",
+  "a": "mouton",
+  "alts": [
+   "brebis",
+   "agneau",
+   "mouttons"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐐",
+  "a": "chèvre",
+  "alts": [
+   "chevre",
+   "bouc"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐔",
+  "a": "poule",
+  "alts": [
+   "poulet",
+   "coq"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐤",
+  "a": "poussin",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦅",
+  "a": "aigle",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦉",
+  "a": "hibou",
+  "alts": [
+   "chouette"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦆",
+  "a": "canard",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦢",
+  "a": "cygne",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦚",
+  "a": "paon",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐧",
+  "a": "pingouin",
+  "alts": [
+   "manchot",
+   "pingouins"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦃",
+  "a": "dinde",
+  "alts": [
+   "dindon"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐙",
+  "a": "poulpe",
+  "alts": [
+   "pieuvre",
+   "octopus"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦑",
+  "a": "calmar",
+  "alts": [
+   "calamar",
+   "squid"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦐",
+  "a": "crevette",
+  "alts": [
+   "gambas"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦀",
+  "a": "crabe",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐬",
+  "a": "dauphin",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐳",
+  "a": "baleine",
+  "alts": [
+   "baleine bleue"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦈",
+  "a": "requin",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐠",
+  "a": "poisson tropical",
+  "alts": [
+   "poisson"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐡",
+  "a": "poisson-globe",
+  "alts": [
+   "fugu"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐝",
+  "a": "abeille",
+  "alts": [
+   "abeilles"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐛",
+  "a": "chenille",
+  "alts": [
+   "ver de terre"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦋",
+  "a": "papillon",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐞",
+  "a": "coccinelle",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐜",
+  "a": "fourmi",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🕷️",
+  "a": "araignée",
+  "alts": [
+   "araignee"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦂",
+  "a": "scorpion",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐌",
+  "a": "escargot",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦗",
+  "a": "grillon",
+  "alts": [
+   "sauterelle",
+   "criquet"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐭",
+  "a": "souris",
+  "alts": [
+   "rat"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐹",
+  "a": "hamster",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦘",
+  "a": "kangourou",
+  "alts": [
+   "kangaroo"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦥",
+  "a": "paresseux",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦦",
+  "a": "loutre",
+  "alts": [],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦨",
+  "a": "moufette",
+  "alts": [
+   "putois"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🐫",
+  "a": "chameau",
+  "alts": [
+   "dromadaire"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦏",
+  "a": "rhinocéros",
+  "alts": [
+   "rhinoceros",
+   "rhino"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "🦛",
+  "a": "hippopotame",
+  "alts": [
+   "hippo"
+  ],
+  "tag": "Animaux"
+ },
+ {
+  "q": "👨‍🚀",
+  "a": "astronaute",
+  "alts": [
+   "spationaute",
+   "cosmonaute"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧑‍🚒",
+  "a": "pompier",
+  "alts": [
+   "pompiers"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧑‍⚕️",
+  "a": "médecin",
+  "alts": [
+   "docteur",
+   "medecin",
+   "infirmier"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "👮",
+  "a": "policier",
+  "alts": [
+   "police",
+   "gendarme"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧑‍🍳",
+  "a": "cuisinier",
+  "alts": [
+   "chef cuistot",
+   "cuisiniere"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧑‍🌾",
+  "a": "agriculteur",
+  "alts": [
+   "paysan",
+   "fermier",
+   "agricultrice"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🕵️",
+  "a": "détective",
+  "alts": [
+   "detective",
+   "enquêteur"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧙",
+  "a": "sorcier",
+  "alts": [
+   "magicien",
+   "sorciers"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧚",
+  "a": "fée",
+  "alts": [
+   "fee",
+   "fees"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧛",
+  "a": "vampire",
+  "alts": [
+   "vampires"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧟",
+  "a": "zombie",
+  "alts": [
+   "zombies"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "👸",
+  "a": "princesse",
+  "alts": [
+   "reine"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🤴",
+  "a": "prince",
+  "alts": [
+   "roi"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🦸",
+  "a": "super-héros",
+  "alts": [
+   "superhéros",
+   "super heros",
+   "superman"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧑‍✈️",
+  "a": "pilote",
+  "alts": [
+   "pilotes",
+   "aviateur"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "👷",
+  "a": "ouvrier",
+  "alts": [
+   "maçon",
+   "macon",
+   "chantier"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧑‍🔧",
+  "a": "mécanicien",
+  "alts": [
+   "mecanicien",
+   "plombier"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "💂",
+  "a": "gardien royal",
+  "alts": [
+   "garde royal",
+   "soldat britannique"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧜‍♀️",
+  "a": "sirène",
+  "alts": [
+   "sirene",
+   "sirenes"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧝",
+  "a": "elfe",
+  "alts": [
+   "elfes",
+   "elfique"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🧑‍⚖️",
+  "a": "juge",
+  "alts": [
+   "juges",
+   "tribunal"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🎅",
+  "a": "Père Noël",
+  "alts": [
+   "pere noel",
+   "santa"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🦹",
+  "a": "super-vilain",
+  "alts": [
+   "supervilain",
+   "mechant"
+  ],
+  "tag": "Métiers"
+ },
+ {
+  "q": "🍕",
+  "a": "pizza",
+  "alts": [
+   "pizzas"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍔",
+  "a": "hamburger",
+  "alts": [
+   "burger",
+   "hamburgers"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🌮",
+  "a": "tacos",
+  "alts": [
+   "taco"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍣",
+  "a": "sushi",
+  "alts": [
+   "sushis",
+   "sushit"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥐",
+  "a": "croissant",
+  "alts": [
+   "croissants"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍦",
+  "a": "glace",
+  "alts": [
+   "cornet de glace",
+   "esquimau"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🎂",
+  "a": "gâteau d’anniversaire",
+  "alts": [
+   "gateau",
+   "anniversaire",
+   "gateau danniversaire"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍩",
+  "a": "beignet",
+  "alts": [
+   "donut",
+   "donuts",
+   "beignets"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍪",
+  "a": "cookie",
+  "alts": [
+   "biscuit",
+   "cookies"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍫",
+  "a": "chocolat",
+  "alts": [
+   "chocolatine",
+   "tablette"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍿",
+  "a": "pop-corn",
+  "alts": [
+   "popcorn",
+   "pops corn"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥨",
+  "a": "bretzel",
+  "alts": [
+   "bretzels"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🧀",
+  "a": "fromage",
+  "alts": [
+   "fromages"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥩",
+  "a": "steak",
+  "alts": [
+   "viande",
+   "bifteck"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍗",
+  "a": "poulet rôti",
+  "alts": [
+   "poulet",
+   "poulet roti"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🌭",
+  "a": "hot-dog",
+  "alts": [
+   "hot dog",
+   "hotdogs"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍞",
+  "a": "pain",
+  "alts": [
+   "pains",
+   "baguette"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥖",
+  "a": "baguette de pain",
+  "alts": [
+   "baguette de francaise",
+   "baguettes"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍝",
+  "a": "spaghetti",
+  "alts": [
+   "pates",
+   "pâtes",
+   "spagetti"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍜",
+  "a": "ramen",
+  "alts": [
+   "nouilles",
+   "ramens",
+   "ramin"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍱",
+  "a": "bento",
+  "alts": [
+   "bentos"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥘",
+  "a": "paella",
+  "alts": [
+   "paellas",
+   "poêlée"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍛",
+  "a": "curry",
+  "alts": [
+   "carri",
+   "cari"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🧁",
+  "a": "cupcake",
+  "alts": [
+   "petit gateau",
+   "muffin"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥞",
+  "a": "crêpes",
+  "alts": [
+   "crepe",
+   "pancake",
+   "pancakes"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🧆",
+  "a": "falafel",
+  "alts": [
+   "falafels",
+   "boulette"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍳",
+  "a": "omelette",
+  "alts": [
+   "omelete",
+   "oeufs au plat"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥗",
+  "a": "salade",
+  "alts": [
+   "salades",
+   "salade verte"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍟",
+  "a": "frites",
+  "alts": [
+   "frite",
+   "patates frites"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥙",
+  "a": "kebab",
+  "alts": [
+   "kabab",
+   "kefta",
+   "gatoo"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍄",
+  "a": "champignon",
+  "alts": [
+   "champignons",
+   "mushroom"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🌶️",
+  "a": "piment",
+  "alts": [
+   "piments",
+   "chili",
+   "pepper"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🌽",
+  "a": "maïs",
+  "alts": [
+   "mais",
+   "corncob"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥜",
+  "a": "cacahuète",
+  "alts": [
+   "arachide",
+   "cacahuettes"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍉",
+  "a": "pastèque",
+  "alts": [
+   "pasteque",
+   "melon deau"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍌",
+  "a": "banane",
+  "alts": [
+   "bananes",
+   "bananes plantain"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍎",
+  "a": "pomme",
+  "alts": [
+   "pommes",
+   "apple"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍍",
+  "a": "ananas",
+  "alts": [],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥑",
+  "a": "avocat",
+  "alts": [
+   "avocats",
+   "avocato"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍇",
+  "a": "raisin",
+  "alts": [
+   "raisins",
+   "grape"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍒",
+  "a": "cerise",
+  "alts": [
+   "cerises",
+   "cheries"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥭",
+  "a": "mangue",
+  "alts": [
+   "mango",
+   "mangues"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍑",
+  "a": "pêche",
+  "alts": [
+   "peche",
+   "peaches"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥥",
+  "a": "noix de coco",
+  "alts": [
+   "coco",
+   "coco fruit",
+   "coconut"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍅",
+  "a": "tomate",
+  "alts": [
+   "tomates",
+   "tomato"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥕",
+  "a": "carotte",
+  "alts": [
+   "carottes"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "☕",
+  "a": "café",
+  "alts": [
+   "cafe",
+   "cafes"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🧃",
+  "a": "jus de fruit",
+  "alts": [
+   "jus",
+   "boisson jus",
+   "jus de pomme"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥛",
+  "a": "lait",
+  "alts": [
+   "laits",
+   "milk"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍵",
+  "a": "thé vert",
+  "alts": [
+   "the",
+   "the vert",
+   "thé"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🍯",
+  "a": "miel",
+  "alts": [
+   "miels",
+   "honey"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🧂",
+  "a": "sel",
+  "alts": [
+   "sels",
+   "salt"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🫑",
+  "a": "poivron",
+  "alts": [
+   "poivrons",
+   "pepper vegetal"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🥦",
+  "a": "brocoli",
+  "alts": [
+   "brocolis"
+  ],
+  "tag": "Nourriture"
+ },
+ {
+  "q": "🚀",
+  "a": "fusée",
+  "alts": [
+   "fusee",
+   "rocket",
+   "navette"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🚁",
+  "a": "hélicoptère",
+  "alts": [
+   "helicoptere",
+   "heli"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "⛵",
+  "a": "voilier",
+  "alts": [
+   "bateau à voile",
+   "sailboat"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🛸",
+  "a": "OVNI",
+  "alts": [
+   "soucoupe volante",
+   "ufos"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🛴",
+  "a": "trottinette",
+  "alts": [
+   "trottinettes",
+   "scooter pouce"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🚂",
+  "a": "train",
+  "alts": [
+   "locomotive",
+   "trains"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🚲",
+  "a": "vélo",
+  "alts": [
+   "bicyclette",
+   "velo",
+   "bicycle"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🏍️",
+  "a": "moto",
+  "alts": [
+   "motocyclette",
+   "motos",
+   "motorcycle"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🚕",
+  "a": "taxi",
+  "alts": [
+   "taxis",
+   "cab"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🚜",
+  "a": "tracteur",
+  "alts": [
+   "tracteurs",
+   "tractor"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🚑",
+  "a": "ambulance",
+  "alts": [],
+  "tag": "Objets"
+ },
+ {
+  "q": "🚒",
+  "a": "camion de pompiers",
+  "alts": [
+   "camion pompiers",
+   "fire truck"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🚓",
+  "a": "voiture de police",
+  "alts": [
+   "police voiture",
+   "voiture policier"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🛻",
+  "a": "pickup",
+  "alts": [
+   "pick-up",
+   "camionnette"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🚛",
+  "a": "camion",
+  "alts": [
+   "camions",
+   "truck"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🛵",
+  "a": "scooter",
+  "alts": [
+   "scooters",
+   "mobylette"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🏰",
+  "a": "château",
+  "alts": [
+   "chateau",
+   "castles",
+   "chateaux"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🏝️",
+  "a": "île déserte",
+  "alts": [
+   "ile",
+   "île",
+   "island"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🌋",
+  "a": "volcan",
+  "alts": [
+   "volcans",
+   "volcanos"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🏔️",
+  "a": "montagne",
+  "alts": [
+   "montagnes",
+   "mountain",
+   "sommet"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🏜️",
+  "a": "désert",
+  "alts": [
+   "desert",
+   "deserts"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🎪",
+  "a": "cirque",
+  "alts": [
+   "circus",
+   "grand chapiteau"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🎡",
+  "a": "grande roue",
+  "alts": [
+   "grande roues",
+   "ferris"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🎢",
+  "a": "montagnes russes",
+  "alts": [
+   "montagnes russe",
+   "roller coaster",
+   "grand huit"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "⛺",
+  "a": "tente",
+  "alts": [
+   "tentes",
+   "camping"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🏠",
+  "a": "maison",
+  "alts": [
+   "maisons",
+   "house"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🏫",
+  "a": "école",
+  "alts": [
+   "ecole",
+   "ecoles",
+   "school"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🏥",
+  "a": "hôpital",
+  "alts": [
+   "hopital",
+   "hopitaux",
+   "hospital"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🏛️",
+  "a": "musée",
+  "alts": [
+   "musee",
+   "musees",
+   "museum"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "⛪",
+  "a": "église",
+  "alts": [
+   "eglise",
+   "eglises",
+   "church"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🕌",
+  "a": "mosquée",
+  "alts": [
+   "mosquee",
+   "mosquees",
+   "mosque"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🛕",
+  "a": "temple hindou",
+  "alts": [
+   "temple",
+   "temples",
+   "mandir"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🕍",
+  "a": "synagogue",
+  "alts": [
+   "synagogues",
+   "juif temple"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "⛩️",
+  "a": "torii",
+  "alts": [
+   "portail japonais",
+   "shinto"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🛤️",
+  "a": "voie ferrée",
+  "alts": [
+   "rails",
+   "chemin de fer"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🌉",
+  "a": "pont de nuit",
+  "alts": [
+   "pont",
+   "bridge",
+   "ponts"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🗼",
+  "a": "Tour de Tokyo",
+  "alts": [
+   "tour tokyo",
+   "tokyo tower"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🗽",
+  "a": "Statue de la Liberté",
+  "alts": [
+   "statue liberte",
+   "liberty"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "⛲",
+  "a": "fontaine",
+  "alts": [
+   "fontaines",
+   "fountain"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🌅",
+  "a": "lever de soleil",
+  "alts": [
+   "aube",
+   "sunrise"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🌄",
+  "a": "lever du soleil en montagne",
+  "alts": [
+   "levers",
+   "montagne aube"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🌠",
+  "a": "étoile filante",
+  "alts": [
+   "etoile filante",
+   "shooting star"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🌌",
+  "a": "galaxie",
+  "alts": [
+   "galaxies",
+   "voie lactee"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🌍",
+  "a": "planète Terre",
+  "alts": [
+   "terre",
+   "earth",
+   "monde"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🌙",
+  "a": "lune",
+  "alts": [
+   "moon",
+   "croissant de lune"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "⭐",
+  "a": "étoile",
+  "alts": [
+   "etoile",
+   "etoiles",
+   "star"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "☀️",
+  "a": "soleil",
+  "alts": [
+   "sun",
+   "soleils"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "☁️",
+  "a": "nuage",
+  "alts": [
+   "nuages",
+   "cloud"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🌈",
+  "a": "arc-en-ciel",
+  "alts": [
+   "arc en ciel",
+   "rainbow"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "⚡",
+  "a": "éclair",
+  "alts": [
+   "eclair",
+   "foudre",
+   "lightning"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🔥",
+  "a": "feu",
+  "alts": [
+   "flamme",
+   "flames",
+   "fire"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "❄️",
+  "a": "flocon de neige",
+  "alts": [
+   "neige",
+   "snow",
+   "flocons"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "💧",
+  "a": "goutte d’eau",
+  "alts": [
+   "goutte",
+   "water",
+   "eau"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "💣",
+  "a": "bombe",
+  "alts": [
+   "bombes",
+   "bomb"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🎁",
+  "a": "cadeau",
+  "alts": [
+   "cadeaux",
+   "present",
+   "paquet cadeau"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🎈",
+  "a": "ballon",
+  "alts": [
+   "ballons",
+   "balloon"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🎉",
+  "a": "confettis",
+  "alts": [
+   "fete",
+   "party",
+   "celebration"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🔔",
+  "a": "cloche",
+  "alts": [
+   "cloches",
+   "bell",
+   "carillon"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "📚",
+  "a": "livres",
+  "alts": [
+   "livre",
+   "books",
+   "roman"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "📖",
+  "a": "livre ouvert",
+  "alts": [
+   "lecture",
+   "reading"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "✏️",
+  "a": "crayon",
+  "alts": [
+   "crayons",
+   "pencil"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🖌️",
+  "a": "pinceau",
+  "alts": [
+   "pinceaux",
+   "brosh"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "📷",
+  "a": "appareil photo",
+  "alts": [
+   "photo",
+   "camera",
+   "photographie"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🔒",
+  "a": "cadenas",
+  "alts": [
+   "cadenas fermé",
+   "lock",
+   "serrure"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🔑",
+  "a": "clé",
+  "alts": [
+   "cle",
+   "cles",
+   "key"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "💎",
+  "a": "diamant",
+  "alts": [
+   "gemme",
+   "joyau",
+   "diamants"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "👑",
+  "a": "couronne",
+  "alts": [
+   "couronnes",
+   "crown"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "⌚",
+  "a": "montre",
+  "alts": [
+   "montre-bracelet",
+   "watch",
+   "montres"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "👓",
+  "a": "lunettes",
+  "alts": [
+   "lunettes de vue",
+   "glasses"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🕶️",
+  "a": "lunettes de soleil",
+  "alts": [
+   "lunettes soleil",
+   "sunglasses"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🎒",
+  "a": "sac à dos",
+  "alts": [
+   "sac dos",
+   "backpack",
+   "cartable"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "👜",
+  "a": "sac à main",
+  "alts": [
+   "sac main",
+   "handbag"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "👟",
+  "a": "basket",
+  "alts": [
+   "baskets",
+   "sneakers",
+   "tennis"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🥾",
+  "a": "botte de randonnée",
+  "alts": [
+   "bottes",
+   "boot"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "👠",
+  "a": "talon",
+  "alts": [
+   "talons aiguille",
+   "escarpin"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🧢",
+  "a": "casquette",
+  "alts": [
+   "casquettes",
+   "cap"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🎩",
+  "a": "haut-de-forme",
+  "alts": [
+   "chapeau haut de forme",
+   "chapeaux"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "👒",
+  "a": "chapeau de soleil",
+  "alts": [
+   "chapeau",
+   "hats"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "👔",
+  "a": "cravate",
+  "alts": [
+   "cravates",
+   "tie"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "💍",
+  "a": "bague",
+  "alts": [
+   "alliance",
+   "ring",
+   "bagues"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🥇",
+  "a": "médaille d’or",
+  "alts": [
+   "medaille or",
+   "medailles",
+   "gold"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🏆",
+  "a": "trophée",
+  "alts": [
+   "trophy",
+   "coupe championnat"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🎯",
+  "a": "cible",
+  "alts": [
+   "darts",
+   "flechettes"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🎲",
+  "a": "dé",
+  "alts": [
+   "des",
+   "dice"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🧩",
+  "a": "puzzle",
+  "alts": [
+   "puzzles",
+   "puzle"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🎮",
+  "a": "manette de jeu",
+  "alts": [
+   "manette",
+   "gamepad",
+   "controller"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🕹️",
+  "a": "borne d’arcade",
+  "alts": [
+   "joystick",
+   "arcade"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🃏",
+  "a": "joker",
+  "alts": [
+   "carte joker",
+   "jokers"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "🎴",
+  "a": "cartes japonaises",
+  "alts": [
+   "cartes a jouer",
+   "hanafuda"
+  ],
+  "tag": "Objets"
+ },
+ {
+  "q": "⚽",
+  "a": "football",
+  "alts": [
+   "foot",
+   "soccer",
+   "football balls"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🏀",
+  "a": "basketball",
+  "alts": [
+   "basket",
+   "basket-ball",
+   "basket balls"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🏈",
+  "a": "football américain",
+  "alts": [
+   "foot us",
+   "american football"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "⚾",
+  "a": "baseball",
+  "alts": [
+   "base-ball",
+   "baseballs"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🎾",
+  "a": "tennis",
+  "alts": [
+   "tennis balls",
+   "balle de tennis"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🏐",
+  "a": "volleyball",
+  "alts": [
+   "volley",
+   "volley-ball"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🏉",
+  "a": "rugby",
+  "alts": [
+   "rugbys",
+   "rugby balls"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🎱",
+  "a": "billard",
+  "alts": [
+   "billards",
+   "pool"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🏓",
+  "a": "ping-pong",
+  "alts": [
+   "tennis de table",
+   "ping pong",
+   "pingpong"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🏸",
+  "a": "badminton",
+  "alts": [
+   "badmintons",
+   "volant"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🥊",
+  "a": "boxe",
+  "alts": [
+   "gant de boxe",
+   "boxing"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🥋",
+  "a": "judo",
+  "alts": [
+   "karate",
+   "arts martiaux",
+   "kimono combat"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "⛳",
+  "a": "golf",
+  "alts": [
+   "golfs",
+   "trou de golf"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🏹",
+  "a": "tir à l’arc",
+  "alts": [
+   "arc",
+   "archer",
+   "tir arc"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🎣",
+  "a": "pêche",
+  "alts": [
+   "peche",
+   "pecheur",
+   "fishing"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🛹",
+  "a": "skateboard",
+  "alts": [
+   "skate",
+   "skates"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🎿",
+  "a": "ski",
+  "alts": [
+   "skis",
+   "skiing"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🛷",
+  "a": "luge",
+  "alts": [
+   "luges",
+   "sledge"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🥌",
+  "a": "curling",
+  "alts": [
+   "pierre curling",
+   "stone glisse"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🎸",
+  "a": "guitare",
+  "alts": [
+   "guitares",
+   "guitar"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🎹",
+  "a": "piano",
+  "alts": [
+   "pianos",
+   "pianoforte"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🥁",
+  "a": "tambour",
+  "alts": [
+   "batterie",
+   "drums",
+   "tambours"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🎺",
+  "a": "trompette",
+  "alts": [
+   "trompettes",
+   "trumpet"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🎻",
+  "a": "violon",
+  "alts": [
+   "violons",
+   "violin",
+   "violoncelle"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🪕",
+  "a": "banjo",
+  "alts": [
+   "banjos",
+   "banjoo"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🎤",
+  "a": "micro",
+  "alts": [
+   "microphone",
+   "karaoke"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🎧",
+  "a": "casque audio",
+  "alts": [
+   "casque",
+   "headphones"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "📻",
+  "a": "radio",
+  "alts": [
+   "radios",
+   "radio poste"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🪙",
+  "a": "pièce",
+  "alts": [
+   "piece",
+   "pieces",
+   "coin",
+   "pieces de monnaie"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "💰",
+  "a": "bourse d’or",
+  "alts": [
+   "argent",
+   "money",
+   "sacoche or",
+   "sac or"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🛒",
+  "a": "caddie",
+  "alts": [
+   "chariot de courses",
+   "panier courses"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🕯️",
+  "a": "bougie",
+  "alts": [
+   "bougies",
+   "candle"
+  ],
+  "tag": "Sports & Musique"
+ },
+ {
+  "q": "🧨",
+  "a": "pétard",
+  "alts": [
+   "petards",
+   "firecracker"
+  ],
+  "tag": "Sports & Musique"
+ }
+]
