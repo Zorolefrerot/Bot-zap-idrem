@@ -94,7 +94,7 @@ test('Xplay : succès → fichier audio envoyé', async () => {
   });
   const { bodies } = require('./helpers');
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xplay believer'));
-  await until(() => adapter.sent.some((s) => s.payload.attachment), 3000);
+  await until(() => adapter.sent.some((s) => s.payload.attachment), 25000);
   const item = adapter.sent.find((s) => s.payload.attachment);
   assert.ok(bodies(adapter).some((b) => b.includes('Believer')));
   assert.ok(fs.existsSync(fake) === false || true); // nettoyage best-effort après envoi

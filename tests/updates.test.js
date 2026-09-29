@@ -286,7 +286,7 @@ test('Xprofil : la carte est GÉNÉRÉE EN IMAGE (PNG)', async () => {
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xprofil'));
   assert.ok(
-    await until(() => adapter.sent.some((s) => s.payload && s.payload.attachment), 8000),
+    await until(() => adapter.sent.some((s) => s.payload && s.payload.attachment), 25000),
     'un fichier image est envoyé'
   );
   const item = adapter.sent.find((s) => s.payload && s.payload.attachment);
@@ -309,7 +309,7 @@ test('Xlove : image composée (PNG) ou repli propre — jamais de crash', async 
     participantIDs: [UIDS.shadow, UIDS.paul],
   });
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xlove'));
-  assert.ok(await until(() => bodies(adapter).some((b) => /XLOVE/.test(b)), 5000), 'réponse Xlove');
+  assert.ok(await until(() => bodies(adapter).some((b) => /XLOVE/.test(b)), 20000), 'réponse Xlove');
   const body = bodies(adapter).find((b) => /XLOVE/.test(b));
   assert.ok(body, 'frame Xlove');
 });

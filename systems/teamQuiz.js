@@ -22,7 +22,7 @@ const { makeChecker } = require('./mangaQuiz');
 const { CATEGORIES, loadBank, shuffle } = require('./questions');
 const fmt = require('../utils/formatter');
 
-const CANCEL_WORDS = new Set(['cancel', 'annuler', 'stop', 'quit', 'quitter', 'exit', '!stop']);
+const { isCancelIntent, parseCount } = require('./natural');
 const MAX_GROUPS = 4;
 const MAX_MEMBERS = 15;
 const QUESTIONS_PER_CATEGORY = 10;
@@ -114,7 +114,7 @@ class TeamQuizSession {
       return true;
     }
 
-    if (CANCEL_WORDS.has(fmt.normalizeAnswer(raw))) {
+    if (isCancelIntent(raw)) {
       if (String(ctx.senderID) !== this.ownerID && !this._isAdmin(ctx.senderID)) {
         await this.send(fmt.frame('👥 XTEAM', '⛔ ' + fmt.bold(`Seul l'admin lanceur peut arrêter.`)));
         return true;
@@ -141,7 +141,7 @@ class TeamQuizSession {
   async _onGroups(ctx, raw) {
     const uidCfg = String(ctx.senderID);
     if (uidCfg !== this.ownerID && !this._isAdmin(uidCfg)) return true;
-    const n = safeInt(raw, { min: 1, max: MAX_GROUPS });
+    const n = parseCount(raw, { min: 1, max: MAX_GROUPS });
     if (!n) {
       this.tries++;
       if (this.tries >= 3) {
@@ -167,7 +167,7 @@ class TeamQuizSession {
   async _onSize(ctx, raw) {
     const uidSz = String(ctx.senderID);
     if (uidSz !== this.ownerID && !this._isAdmin(uidSz)) return true;
-    const m = safeInt(raw, { min: 1, max: MAX_MEMBERS });
+    const m = parseCount(raw, { min: 1, max: MAX_MEMBERS });
     if (!m) {
       this.tries++;
       if (this.tries >= 3) {

@@ -19,7 +19,7 @@ const { makeChecker } = require('./mangaQuiz');
 const fmt = require('../utils/formatter');
 const { safeInt } = require('../utils/sanitize');
 
-const CANCEL_WORDS = new Set(['cancel', 'annuler', 'stop', 'quit', 'quitter', 'exit', '!stop']);
+const { isCancelIntent, parseCount } = require('./natural');
 
 class GroupQuizSession {
   /**
@@ -115,7 +115,7 @@ class GroupQuizSession {
       await this.send(fmt.frame('🎮 XQUIZ', '⚠️ ' + fmt.bold('Un quiz est déjà en cours dans ce groupe.') + '\n🛑 ' + fmt.bold('Le lanceur peut taper « cancel ».')));
       return true;
     }
-    if (CANCEL_WORDS.has(fmt.normalizeAnswer(raw))) {
+    if (isCancelIntent(raw)) {
       const isAdmin = this.bot.config.isAdmin(ctx.senderID);
       if (this.state === 'RUNNING' && String(ctx.senderID) !== this.ownerID && !isAdmin) {
         await this.send(fmt.frame('🎮 XQUIZ', '⛔ ' + fmt.bold('Seul le lanceur (ou un admin) peut annuler un quiz en cours.')));
@@ -172,7 +172,7 @@ class GroupQuizSession {
   }
 
   async _onCount(raw) {
-    const n = safeInt(raw, { min: 1, max: 50 });
+    const n = parseCount(raw, { min: 1, max: 50 });
     const allowed = this.bot.config.games.quizAllowedCounts;
     if (!n || !allowed.includes(n)) {
       this.tries++;

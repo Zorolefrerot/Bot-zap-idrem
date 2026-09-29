@@ -13,7 +13,7 @@ const fmt = require('../utils/formatter');
 const { safeInt } = require('../utils/sanitize');
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
-const CANCEL_WORDS = new Set(['cancel', 'annuler', 'stop', 'quit', 'quitter', 'exit']);
+const { isCancelIntent } = require('./natural');
 
 class DuelSession {
   /**
@@ -114,7 +114,7 @@ class DuelSession {
       await this.send(fmt.frame('⚔️ XDUEL', '⚠️ ' + fmt.bold('Un duel est déjà en préparation dans ce groupe.')));
       return true;
     }
-    if (CANCEL_WORDS.has(fmt.normalizeAnswer(raw))) {
+    if (isCancelIntent(raw)) {
       if (this.betLocked) return this._abort('🛑 Duel annulé — mises remboursées.');
       this.dispose();
       await this.send(fmt.frame('⚔️ XDUEL', '🛑 ' + fmt.bold('Duel annulé.')));

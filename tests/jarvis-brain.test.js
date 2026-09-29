@@ -176,3 +176,108 @@ test('INTÉGRATION : « banne-le » → refus du cerveau, aucun ban', async () =
   assert.ok(await until(() => bodies(adapter).some((b) => /administration/.test(b)), 3000), 'refus expliqué');
   assert.ok(!db.ensureUser(UIDS.paul).banned, 'personne banni');
 });
+
+/* ════════ CERVEAU v2 — CONSCIENCE DU CONTEXTE, MATHS, PROBAS, WEB ════════ */
+
+test('CONTEXTE : « met fin » pendant un quiz → la session s\u2019arrête', () => {
+  const brain = createJarvisBrain({ botName: 'MeR~NeL' }, { getSessionInfo: () => ({ scope: 'quiz', state: 'RUNNING', total: 10, index: 3, scores: [{ name: 'Paul', score: 20 }] }) });
+  for (const phrase of ['met fin', 'arrête le quiz', 'annule tout', 'termine le quiz']) {
+    const r = brain.think({ threadID: 't', senderID: 'u1', senderName: 'P', text: phrase });
+    assert.equal(r.session, 'cancel', `« ${phrase} » → annulation`);
+    assert.ok(/arrête|j'arrête/i.test(r.text), 'annonce l\u2019arrêt');
+  }
+});
+
+test('CONTEXTE : « qui gagne ? » → le tableau des scores en direct', () => {
+  const brain = createJarvisBrain({ botName: 'MeR~NeL' }, { getSessionInfo: () => ({ scope: 'quiz', state: 'RUNNING', scores: [{ name: 'Paul', score: 20 }, { name: 'Shadow', score: 10 }] }) });
+  const r = brain.think({ threadID: 't', senderID: 'u1', senderName: 'P', text: 'qui gagne ?' });
+  assert.ok(/Paul/.test(r.text) && /20/.test(r.text), 'meneur + score');
+  assert.ok(!r.command && !r.session, 'réponse informative');
+});
+
+test('CONTEXTE : « on en est où ? » → progression de la partie', () => {
+  const brain = createJarvisBrain({ botName: 'MeR~NeL' }, { getSessionInfo: () => ({ scope: 'quiz', state: 'RUNNING', total: 15, index: 4 }) });
+  const r = brain.think({ threadID: 't', senderID: 'u1', senderName: 'P', text: 'on en est où ?' });
+  assert.ok(/5 sur 15/.test(r.text), 'question 5 sur 15');
+});
+
+test('MATHS : puissance, racine, pourcentage via le langage naturel', () => {
+  const brain = createJarvisBrain({ botName: 'MeR~NeL' });
+  assert.ok(brain.think({ threadID: 't', senderID: 'u', text: 'combien font 2 puissance 8 ?' }).text.includes('256'));
+  assert.ok(brain.think({ threadID: 't', senderID: 'u', text: 'racine carrée de 81' }).text.includes('9'));
+  assert.ok(brain.think({ threadID: 't', senderID: 'u', text: 'c est quoi 20 % de 300 ?' }).text.includes('60'));
+  assert.ok(brain.think({ threadID: 't', senderID: 'u', text: 'moyenne de 8 12 10' }).text.includes('10'));
+});
+
+test('PROBABILITÉS : dé, pièce, cartes, deux dés — tout est calculé localement', () => {
+  const brain = createJarvisBrain({ botName: 'MeR~NeL' });
+  const r6 = brain.think({ threadID: 't', senderID: 'u', text: 'probabilité de faire 6 au dé ?' });
+  assert.ok(/1 chance sur 6/.test(r6.text) && /16,67/.test(r6.text), 'dé : 1/6 = 16,67 %');
+  assert.ok(/50 %/.test(brain.think({ threadID: 't', senderID: 'u', text: 'probabilité de pile ?' }).text));
+  assert.ok(/7,7 %/.test(brain.think({ threadID: 't', senderID: 'u', text: 'probabilité de tirer un as ?' }).text));
+  assert.ok(/36 combinaisons/.test(brain.think({ threadID: 't', senderID: 'u', text: 'probabilité avec deux dés ?' }).text));
+  assert.ok(/Donne-moi le contexte/.test(brain.think({ threadID: 't', senderID: 'u', text: 'probabilité de réussir sa vie ?' }).text));
+});
+
+test('RELANCE : « encore » répète la dernière commande', () => {
+  const brain = createJarvisBrain({ botName: 'MeR~NeL' });
+  brain.think({ threadID: 't', senderID: 'u1', senderName: 'P', text: 'lance un quiz multivers' });
+  const r = brain.think({ threadID: 't', senderID: 'u1', senderName: 'P', text: 'encore' });
+  assert.equal(r.command, 'xquiz');
+  assert.equal(r.args, 'multivers');
+  const r2 = brain.think({ threadID: 't', senderID: 'u2', senderName: 'Q', text: 'relance' });
+  assert.ok(!r2.command, 'rien à relancer → suggestion');
+});
+
+test('MODULES WEB : image, musique, vidéo — routés vers les bons services', () => {
+  const brain = createJarvisBrain({ botName: 'MeR~NeL' });
+  const img = brain.think({ threadID: 't', senderID: 'u', text: 'génère une image de chat astronaute' });
+  assert.equal(img.command, 'ximg');
+  assert.ok(/chat astronaute/.test(img.args));
+  const song = brain.think({ threadID: 't', senderID: 'u', text: 'mets la chanson de dadju' });
+  assert.equal(song.command, 'xplay');
+  assert.ok(/dadju/i.test(song.args));
+  const vid = brain.think({ threadID: 't', senderID: 'u', text: 'vidéo de chat drôle' });
+  assert.equal(vid.command, 'xvideo');
+  assert.ok(/chat dr/i.test(vid.args), 'sujet extrait (sans accents)');
+});
+
+test('CRÉATEURS & NATURE : Merdi, Nelson, robot, tag au milieu de phrase', () => {
+  const brain = createJarvisBrain({ botName: 'MeR~NeL' });
+  assert.ok(/père|informaticien/i.test(brain.think({ threadID: 't', senderID: 'u', text: 'qui est Merdi ?' }).text));
+  assert.ok(/Nelson/.test(brain.think({ threadID: 't', senderID: 'u', text: 'qui est Nelson ?' }).text));
+  assert.ok(/intelligence artificielle MAISON|cerveau/i.test(brain.think({ threadID: 't', senderID: 'u', text: 'tu es un robot ?' }).text));
+  const tag = brain.think({ threadID: 't', senderID: 'u', senderName: 'Paul', text: 'salut @MeR~NeL tu es là ?' });
+  assert.ok(/Salut/.test(tag.text), 'tag au milieu → conversation normale');
+});
+
+test('INTÉGRATION : Xquiz lancé → « met fin » ANNULE la session (sans jarvis)', async () => {
+  const { boot, until, makeMsg, bodies, UIDS, clearCooldowns } = require('./helpers');
+  const { bot, adapter } = await boot({});
+  bot.adapter.getThreadInfo = async () => ({ threadName: 'G', adminIDs: [{ id: UIDS.admin }], userInfo: [{ id: UIDS.shadow, name: 'Shadow' }], participantIDs: [UIDS.shadow, UIDS.admin] });
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cg'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'cinq'));
+  assert.ok(await until(() => bodies(adapter).some((b) => /QUESTION 1\/5/.test(b)), 5000), '« cinq » accepté : quiz 5 questions');
+  assert.ok(bot.sessions.get('thread-1', 'quiz'), 'session active');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'met fin'));
+  assert.ok(await until(() => !bot.sessions.get('thread-1', 'quiz'), 3000), '« met fin » → session arrêtée');
+  assert.ok(bodies(adapter).some((b) => /annul/i.test(b)), 'annonce d\u2019annulation');
+});
+
+test('INTÉGRATION : Xjarvis + quiz en cours → « Jarvis mets fin » annule aussi', async () => {
+  const { boot, until, makeMsg, bodies, UIDS, clearCooldowns } = require('./helpers');
+  const { bot, adapter } = await boot({});
+  bot.adapter.getThreadInfo = async () => ({ threadName: 'G', adminIDs: [{ id: UIDS.admin }], userInfo: [{ id: UIDS.shadow, name: 'Shadow' }], participantIDs: [UIDS.shadow, UIDS.admin] });
+  bot.services.aiPool.ask = async () => { throw new Error('API INTERDITE'); };
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'Xjarvis on'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xquiz'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'multivers'));
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, '5'));
+  assert.ok(await until(() => bot.sessions.get('thread-1', 'quiz'), 3000), 'quiz lancé');
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'jarvis mets fin au quiz'));
+  assert.ok(await until(() => !bot.sessions.get('thread-1', 'quiz'), 3000), 'annulé via le cerveau');
+});

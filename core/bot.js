@@ -446,11 +446,40 @@ class Bot {
 
   async _jarvisFlow(event, threadID, senderID, senderName, body) {
     // 🧠 CERVEAU 100 % LOCAL (systems/jarvisBrain.js) — AUCUNE API externe.
-    // Compréhension, réflexion, mémoire et décisions : tout est codé dedans.
-    const gate = this.cooldowns.check(`chat:${threadID}`, this.config.chat.minIntervalMs);
+    // Compréhension, réflexion, mémoire, CONSCIENCE DU CONTEXTE (sessions
+    // en cours) et décisions : tout est codé dans le cerveau.
+    // Gate PAR UTILISATEUR : une personne bavarde vite n'ignore pas les autres.
+    const gate = this.cooldowns.check(
+      `jarvis:${threadID}:${senderID}`,
+      Math.min(2000, this.config.chat.minIntervalMs || 0)
+    );
     if (!gate.ok) return this._grantMessageXp(threadID, senderID);
 
     this.jarvisBrain = this.jarvisBrain || createJarvisBrain(this.config, {
+      /* Le cerveau « voit » la session active du groupe (quiz, duel…). */
+      getSessionInfo: (tid) => {
+        const prefix = `${String(tid)}::`;
+        for (const [skey, sess] of this.sessions.sessions) {
+          if (!skey.startsWith(prefix)) continue;
+          const info = { scope: sess.scope, state: sess.state || '', ownerID: String(sess.ownerID || ''), awaiting: Boolean(sess.awaitingAnswer) };
+          try {
+            if (sess.scores instanceof Map) info.scores = [...sess.scores.values()].map((v) => ({ name: v.name, score: v.score || 0 }));
+            else if (typeof sess.players === 'function') info.scores = sess.players().map((pl) => ({ name: pl.name, score: pl.score || 0 }));
+            if (Array.isArray(sess.teams)) {
+              info.teams = sess.teams.map((tm) => {
+                let total = 0;
+                if (tm.members instanceof Map) for (const mm of tm.members.values()) total += mm.score || 0;
+                return { name: tm.name, total };
+              });
+            }
+            if (Array.isArray(sess.questions)) info.total = sess.questions.length;
+            if (typeof sess.index === 'number') info.index = sess.index;
+            else if (typeof sess.qIndex === 'number') info.index = sess.qIndex;
+          } catch (_) { /* résumé best effort */ }
+          return info;
+        }
+        return null;
+      },
       getName: (uid) => {
         const u = this.db.getUser(uid);
         return (u && u.jarvisName) || '';
@@ -480,6 +509,18 @@ class Bot {
           messageReply: undefined,
         })
       );
+    }
+    /* Le cerveau veut agir sur la session en cours (« met fin »…). */
+    if (verdict.session === 'cancel') {
+      if (verdict.text) await this.send(`${fmt.bold(this.config.botName)} 🤖 ${verdict.text}`, threadID);
+      await this.sessions.route(threadID, senderID, {
+        text: 'stop',
+        commandName: null,
+        senderID,
+        senderName,
+        event: {},
+      });
+      return this._grantMessageXp(threadID, senderID);
     }
     if (verdict.text) await this.send(`${fmt.bold(this.config.botName)} 🤖 ${verdict.text}`, threadID);
     this._grantMessageXp(threadID, senderID);

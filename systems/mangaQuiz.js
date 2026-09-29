@@ -191,7 +191,7 @@ const KITSU_POPULAR = [
 ];
 
 /* Requête Jikan (repli) → data ou erreur typée. */
-const CANCEL_WORDS = new Set(['cancel', 'annuler', 'stop', 'quit', 'quitter', 'exit', '!stop']);
+const { isCancelIntent, parseCount } = require('./natural');
 const MAX_IMAGES = 100;
 
 /* ── Comparaison de noms (rapide, 100 % local — aucun appel externe) ── */
@@ -495,7 +495,7 @@ class MangaQuizSession {
       await this.send(fmt.frame('🎌 XID', '⚠️ ' + fmt.bold('Un quiz manga est déjà en cours.') + '\n🛑 ' + fmt.bold('Le lanceur peut taper « stop ».')));
       return true;
     }
-    if (CANCEL_WORDS.has(fmt.normalizeAnswer(raw))) {
+    if (isCancelIntent(raw)) {
       const isAdmin = this.bot.config.isAdmin(ctx.senderID);
       if (this.state === 'RUNNING' && String(ctx.senderID) !== this.ownerID && !isAdmin) {
         await this.send(fmt.frame('🎌 XID', '⛔ ' + fmt.bold('Seul le lanceur (ou un admin) peut arrêter un quiz en cours.')));
@@ -535,7 +535,7 @@ class MangaQuizSession {
   }
 
   async _onCount(raw) {
-    const n = safeInt(raw, { min: 1, max: MAX_IMAGES });
+    const n = parseCount(raw, { min: 1, max: MAX_IMAGES });
     if (!n) {
       this.tries++;
       if (this.tries >= 3) {

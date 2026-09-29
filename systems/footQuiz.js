@@ -23,7 +23,7 @@ const { downloadImage } = require('./mangaQuiz');
 
 const WD_SPARQL = 'https://query.wikidata.org/sparql';
 const MAX_IMAGES = 100;
-const CANCEL_WORDS = new Set(['cancel', 'annuler', 'stop', 'quit', 'quitter', 'exit', '!stop']);
+const { isCancelIntent, parseCount } = require('./natural');
 
 const fmt = require('../utils/formatter');
 
@@ -264,7 +264,7 @@ class FootQuizSession {
       await this.send(fmt.frame('⚽ XFOOT', '⚠️ ' + fmt.bold('Un quiz foot est déjà en cours.') + '\n🛑 ' + fmt.bold('Le lanceur peut taper « stop ».')));
       return true;
     }
-    if (CANCEL_WORDS.has(fmt.normalizeAnswer(raw))) {
+    if (isCancelIntent(raw)) {
       const isAdmin = this.bot.config.isAdmin(ctx.senderID);
       if (this.state === 'RUNNING' && String(ctx.senderID) !== this.ownerID && !isAdmin) {
         await this.send(fmt.frame('⚽ XFOOT', '⛔ ' + fmt.bold('Seul le lanceur (ou un admin) peut arrêter un quiz en cours.')));
@@ -306,7 +306,7 @@ class FootQuizSession {
   }
 
   async _onCount(raw) {
-    const n = safeInt(raw, { min: 1, max: MAX_IMAGES });
+    const n = parseCount(raw, { min: 1, max: 100 });
     if (!n) {
       this.tries++;
       if (this.tries >= 3) {
