@@ -123,6 +123,38 @@ test('Xvideo : disponibilité + limite', async () => {
   assert.ok(lastBody(adapter).includes('LIMITE DE 2 MINUTES'));
 });
 
+test('Carte profil : design MeR~NEL 1500×700 (fond circuits, barre capsule, icônes dessinées)', async () => {
+  const { buildProfileCard } = require('../systems/profileCard');
+  const f = await buildProfileCard(
+    {
+      name: 'Merdi Madimba',
+      level: 5,
+      intoLevel: 1161,
+      progress: 0.83,
+      xcoins: 1430,
+      quiz: 3,
+      duels: 2,
+      duelWins: 1,
+      uidShort: '401614',
+      photoPath: 'assets/quiz/id/naruto.jpg',
+    },
+    '/tmp/testcard'
+  );
+  const Jimp = require('jimp');
+  const img = await Jimp.read(f);
+  assert.equal(img.bitmap.width, 1500, 'largeur design');
+  assert.equal(img.bitmap.height, 700, 'hauteur design');
+  // La zone de la marque contient du texte clair (pas une image vide)
+  let bright = 0;
+  for (let x = 560; x < 940; x += 4) {
+    for (let y = 30; y < 95; y += 4) {
+      const px = img.getPixelColor(x, y);
+      if (((px >> 24) & 0xff) > 180 && ((px >> 16) & 0xff) > 140) bright++;
+    }
+  }
+  assert.ok(bright > 40, `marque MeR~NEL visible en haut (pixels clairs : ${bright})`);
+});
+
 test('Xprofil : carte avec pseudo, XP, coins et UID', async () => {
   const { bot, adapter, db } = await boot();
   const u = db.ensureUser(UIDS.shadow);

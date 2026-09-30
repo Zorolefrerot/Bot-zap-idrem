@@ -244,7 +244,7 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 ### 👤 Profil
 | Commande | Description |
 |---|---|
-| `Xprofil [@membre]` | Carte de profil + photo de profil (XP, coins, UID) |
+| `Xprofil [@membre]` | CARTE DE PROFIL design MeR~NEL (image 1500×700) : fond violet circuits, ambiance photo floue, avatar à anneaux lumineux, niveau + barre d'XP capsule, XCoins en grand, stats à icônes — + photo de profil ; repli texte si l'image échoue |
 | `Xpseudo <nom>` / `Xpseudo @Paul <nom>` / `Xpseudo reset` | Gestion du pseudo |
 
 ### 📢 Groupe
