@@ -118,6 +118,11 @@ class Bot {
     }
   }
 
+  /* 🛡️ Admin = SUPRÊME (config, intouchable) OU NOMMÉ via Xadmin. */
+  _isAdminAny(uid) {
+    return this.config.isAdmin(uid) || this.db.isNamedAdmin(uid);
+  }
+
   /* ══════════════════  MESSAGES  ══════════════════ */
 
   async handleMessage(event) {
@@ -149,7 +154,7 @@ class Bot {
       /* ── 🔒 Mode ONLY-ADMIN ? Le bot n'obéit qu'aux admins ── */
       if (isGroup && !disabledGroup && body) {
         const gOA = this.db.getGroup(threadID);
-        if (gOA && gOA.onlyAdmin && !this.config.isAdmin(senderID) && !(await this._isThreadAdmin(threadID, senderID))) {
+        if (gOA && gOA.onlyAdmin && !this._isAdminAny(senderID) && !(await this._isThreadAdmin(threadID, senderID))) {
           return; // ignoré silencieusement
         }
       }
@@ -190,7 +195,9 @@ class Bot {
         cooldowns: this.cooldowns,
         services: this.services,
         commands: this.commands,
-        isAdmin: (uid) => this.config.isAdmin(uid),
+        isAdmin: (uid) => this._isAdminAny(uid),
+        isSuperAdmin: (uid) => this.config.isAdmin(uid),
+        isNamedAdmin: (uid) => this.db.isNamedAdmin(uid),
         event,
         threadID,
         senderID,
@@ -210,7 +217,7 @@ class Bot {
       if (disabledGroup) {
         const t = String(commandName || '');
         const toggle = ['xoff', 'xon', 'xstop', 'xshutdown', 'xeteindre', 'xpoweroff'].includes(t);
-        if (!(toggle && this.config.isAdmin(senderID))) return; // 🔇 silence
+        if (!(toggle && this._isAdminAny(senderID))) return; // 🔇 silence
         return this._runCommand(this.commands.get('xoff'), ctx);
       }
 
@@ -222,7 +229,7 @@ class Bot {
         const firstWord = fmt.normalizeAnswer(body.split(/\s+/)[0] || '');
         const wakePhrase = ['reveil', 'reveille', 'eveille', 'wake', 'wakeup', 'debout'].includes(firstWord);
         const sessionAccepts = this.sessions.hasSessionFor(threadID, senderID);
-        const wakeWorthy = isCommand || commandName || this.config.isAdmin(senderID) || botMentioned || replyToBot || wakePhrase || sessionAccepts;
+        const wakeWorthy = isCommand || commandName || this._isAdminAny(senderID) || botMentioned || replyToBot || wakePhrase || sessionAccepts || !isGroup;
         if (!wakeWorthy) return; // 💤 messages ordinaires ignorés pendant la veille
         const silentWake = Boolean(isCommand || sessionAccepts || replyToBot || botMentioned);
         const woke = this.idle.wake(threadID);
@@ -272,6 +279,13 @@ class Bot {
           if (isGroup && grp && grp.chatMode) {
             return this._chatFlow(threadID, senderID, senderName, body);
           }
+          // 📥 PV : une commande inconnue part dans le cerveau (local → IA).
+          if (!isGroup) {
+            const stripped = body.slice(this.config.prefix.length).trim() || body;
+            const handled = await this._privateFlow(event, threadID, senderID, senderName, stripped);
+            if (!handled) return this._sendUnknown(threadID, rawToken || commandName);
+            return;
+          }
           return this._sendUnknown(threadID, rawToken || commandName);
         }
         return this._runCommand(cmd, ctx);
@@ -292,6 +306,7 @@ class Bot {
           if (!text) return this._grantMessageXp(threadID, senderID);
           // 💬 Xchat OFF en groupe → le bot ne discute PAS, même en réponse
           // à ses messages. En privé, il répond toujours.
+          // 💬 En PV, une réponse au bot = intention de discuter → IA directe.
           if (!isGroup) return this._chatFlow(threadID, senderID, senderName, text);
           const g = this.db.getGroup(threadID);
           if (g && g.chatMode) return this._chatFlow(threadID, senderID, senderName, text);
@@ -311,6 +326,13 @@ class Bot {
         }
       }
 
+      /* ── 4b) 📥 PV (inbox) : le bot répond TOUJOURS en privé ──
+       * D'abord le cerveau LOCAL (Jarvis : maths, probas, contexte, identité),
+       * puis l'IA en repli. Aucun message privé ne reste sans réponse. */
+      if (!isGroup && body && body.length >= 2) {
+        return this._privateFlow(event, threadID, senderID, senderName, body);
+      }
+
       /* ── 5) XP des messages simples ── */
       this._grantMessageXp(threadID, senderID);
     } catch (err) {
@@ -321,11 +343,17 @@ class Bot {
   async _runCommand(cmd, ctx) {
     const { threadID, senderID } = ctx;
     try {
-      /* Permissions */
-      if (cmd.adminOnly && !this.config.isAdmin(senderID)) {
+      /* Permissions — SUPRÊMES (config) & NOMMÉS (Xadmin).
+       * Les nommés ont tous les pouvoirs SAUF les commandes superOnly
+       * (Xadmin/Xremove) : la hiérarchie ne se délègue pas. */
+      const isSuper = this.config.isAdmin(senderID);
+      const isNamed = !isSuper && this.db.isNamedAdmin(senderID);
+      if ((cmd.adminOnly || cmd.superOnly) && !(isSuper || (isNamed && !cmd.superOnly))) {
         return this.send(
           fmt.frame('⛔ ACCÈS REFUSÉ', [
-            '🛡️ ' + fmt.bold('Commande réservée aux administrateurs.'),
+            cmd.superOnly
+              ? '🛡️ ' + fmt.bold('Commande réservée aux administrateurs SUPRÊMES du bot.')
+              : '🛡️ ' + fmt.bold('Commande réservée aux administrateurs.'),
             '🤖 ' + fmt.pick(['Le système te regarde passer…', 'Nice try. Presque impressionnant.', 'Cette porte est verrouillée. 🔒']),
           ]),
           threadID
@@ -334,7 +362,7 @@ class Bot {
 
       /* Cooldown par utilisateur (les admins passent) */
       const cdMs = cmd.cooldownMs != null ? cmd.cooldownMs : 3000;
-      if (cdMs > 0 && !this.config.isAdmin(senderID)) {
+      if (cdMs > 0 && !(isSuper || isNamed)) {
         const gate = this.cooldowns.check(`${cmd.name}:${senderID}`, cdMs);
         if (!gate.ok) {
           return this.send(fmt.frame('⏳ PATIENCE', `⏱️ ${fmt.bold('Cooldown')} : ${fmt.bold(humanDelay(gate.remainingMs))}`), threadID);
@@ -444,7 +472,7 @@ class Bot {
     'xrank', 'xask', 'xai', 'xgame', 'xupt', 'xinfo',
   ]);
 
-  async _jarvisFlow(event, threadID, senderID, senderName, body) {
+  async _jarvisFlow(event, threadID, senderID, senderName, body, opts = {}) {
     // 🧠 CERVEAU 100 % LOCAL (systems/jarvisBrain.js) — AUCUNE API externe.
     // Compréhension, réflexion, mémoire, CONSCIENCE DU CONTEXTE (sessions
     // en cours) et décisions : tout est codé dans le cerveau.
@@ -453,7 +481,10 @@ class Bot {
       `jarvis:${threadID}:${senderID}`,
       Math.min(2000, this.config.chat.minIntervalMs || 0)
     );
-    if (!gate.ok) return this._grantMessageXp(threadID, senderID);
+    if (!gate.ok) {
+      this._grantMessageXp(threadID, senderID);
+      return 'gate';
+    }
 
     this.jarvisBrain = this.jarvisBrain || createJarvisBrain(this.config, {
       /* Le cerveau « voit » la session active du groupe (quiz, duel…). */
@@ -503,12 +534,13 @@ class Bot {
     if (verdict.command && this.JARVIS_ALLOWED.has(verdict.command)) {
       if (verdict.text) await this.send(`${fmt.bold(this.config.botName)} 🤖 ${verdict.text}`, threadID);
       // Le bot EXÉCUTE lui-même la commande (mentions conservées pour les cibles).
-      return this.handleMessage(
+      await this.handleMessage(
         Object.assign({}, event, {
           body: verdict.command + (verdict.args ? ` ${verdict.args}` : ''),
           messageReply: undefined,
         })
       );
+      return true;
     }
     /* Le cerveau veut agir sur la session en cours (« met fin »…). */
     if (verdict.session === 'cancel') {
@@ -520,20 +552,35 @@ class Bot {
         senderName,
         event: {},
       });
-      return this._grantMessageXp(threadID, senderID);
+      this._grantMessageXp(threadID, senderID);
+      return true;
     }
-    if (verdict.text) await this.send(`${fmt.bold(this.config.botName)} 🤖 ${verdict.text}`, threadID);
-    this._grantMessageXp(threadID, senderID);
+    if (verdict.text) {
+      /* 📥 En PV : si le cerveau LOCAL n'a aucune compétence pour ça
+       * (réponse « fallback »), l'IA prend le relais ; si l'IA est en
+       * panne, le cerveau donne sa piste — un PV n'est jamais ignoré. */
+      if (opts.fallbackToChat && verdict.fallback) {
+        const answered = await this._chatFlow(threadID, senderID, senderName, body);
+        if (answered) return true;
+      }
+      await this.send(`${fmt.bold(this.config.botName)} 🤖 ${verdict.text}`, threadID);
+      this._grantMessageXp(threadID, senderID);
+      return true;
+    }
+    return false;
   }
 
   /* ── Chat automatique : quand le mode est ON, TOUT est traité ── */
   async _chatFlow(threadID, senderID, senderName, body) {
     const trimmed = String(body || '').trim();
-    if (trimmed.length < 1) return;
+    if (trimmed.length < 1) return false;
 
     // Anti-tempête : un seul appel IA à la fois par conversation.
     const gate = this.cooldowns.check(`chat:${threadID}`, this.config.chat.minIntervalMs);
-    if (!gate.ok) return this._grantMessageXp(threadID, senderID);
+    if (!gate.ok) {
+      this._grantMessageXp(threadID, senderID);
+      return false;
+    }
 
     try {
       const answer = await this.services.chat.reply({ threadID, userID: senderID, userName: senderName, text: trimmed });
@@ -546,7 +593,10 @@ class Bot {
           ]),
           threadID
         );
+        this._grantMessageXp(threadID, senderID);
+        return true;
       }
+      return false;
     } catch (err) {
       this.logger.warn('[bot] chat:', err.code || err.message);
       // Erreur annoncée avec parcimonie (1 fois/2 min max par conversation).
@@ -562,6 +612,16 @@ class Bot {
       }
     }
     this._grantMessageXp(threadID, senderID);
+    return false;
+  }
+
+  /* ── 📥 FLUX PRIVÉ (inbox) : cerveau LOCAL d'abord, IA en repli ──
+   * En PV, chaque message reçoit une réponse : Jarvis (gratuit, instantané)
+   * traite maths/probas/contexte/identité, l'IA prend le reste.
+   * Retour : true si le bot a répondu. */
+  async _privateFlow(event, threadID, senderID, senderName, body) {
+    const handled = await this._jarvisFlow(event, threadID, senderID, senderName, body, { fallbackToChat: true });
+    return handled === true;
   }
 
   /* ══════════════════  ÉVÉNEMENTS GROUPE  ══════════════════ */

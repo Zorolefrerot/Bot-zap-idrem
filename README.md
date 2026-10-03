@@ -256,6 +256,8 @@ Préfixe : **`X`** (casse indifférente : `xquiz`, `XQUIZ`, `XQuiz` fonctionnent
 ### 🛡️ Admin (réservé aux `ADMIN_UIDS`)
 | Commande | Description |
 |---|---|
+| `Xadmin @membre` | (Admins SUPRÊMES) Nomme un admin — pouvoirs complets mais SANS Xadmin/Xremove (la hiérarchie ne se délègue pas). `Xadmin liste` · persistant (JSON + Neon) |
+| `Xremove @membre` | (Admins SUPRÊMES) Retire le rôle admin — suprêmes intouchables · `Xremove tout` vide la liste |
 | `Xban` (en réponse à un message) | Bannit le membre (API si possible, sinon côté bot) |
 | `Xkick` (en réponse) | Expulsion si l'API le permet |
 | `Xclear` / `Xclear 3` | Supprime les derniers messages DU BOT uniquement (limite Messenger) |
@@ -289,6 +291,19 @@ Le bot comprend les réponses successives **sans préfixe** pendant une session 
 - `cancel` annule à tout moment ; les mises de duel sont remboursées.
 
 ---
+
+## 📥 Réponses en PV (inbox)
+
+Le bot répond **TOUJOURS aux messages privés** — personne n'est ignoré en DM :
+
+- **Commandes préfixées** (`Xmenu`, `Xquiz`…) : comme en groupe ;
+- **Message libre** : le cerveau LOCAL **Jarvis** répond d'abord (maths
+  `√144`, probabilités, contexte, identité — gratuit et instantané), et
+  l'**IA** prend le relais pour le reste. IA en panne ? Jarvis donne sa
+  piste — un PV n'est **jamais** resté sans réponse ;
+- **Réponse à un message du bot** : conversation directe ;
+- **Commande inconnue en PV** (`Xblorp`) : part dans le cerveau au lieu
+  du message « commande inconnue ».
 
 ## 🌙 Mode veille automatique
 

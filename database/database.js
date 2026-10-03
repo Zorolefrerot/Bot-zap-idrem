@@ -74,6 +74,8 @@ class Database {
       botStarts: 0,
     });
     this.bets = new JsonStore(path.join(dataDir, 'bets.json'), {}); // paris Xbet par groupe
+    /* 🛡️ Admins NOMMÉS par les admins suprêmes (Xadmin) — persistant. */
+    this.admins = new JsonStore(path.join(dataDir, 'admins.json'), { list: [] });
   }
 
   /* ── Paris Xbet ── */
@@ -153,6 +155,35 @@ class Database {
     return group;
   }
 
+  /* ── 🛡️ Admins nommés (Xadmin / Xremove) ── */
+  isNamedAdmin(uid) {
+    const k = String(uid);
+    return this.admins.data.list.some((e) => e && e.uid === k);
+  }
+
+  addNamedAdmin(uid, by, name = '') {
+    const k = String(uid);
+    if (this.isNamedAdmin(k)) return false;
+    this.admins.data.list.push({ uid: k, by: String(by || ''), name: String(name || ''), at: Date.now() });
+    this.admins.save();
+    return true;
+  }
+
+  removeNamedAdmin(uid) {
+    const k = String(uid);
+    const before = this.admins.data.list.length;
+    this.admins.data.list = this.admins.data.list.filter((e) => e && e.uid !== k);
+    if (this.admins.data.list.length !== before) {
+      this.admins.save();
+      return true;
+    }
+    return false;
+  }
+
+  namedAdmins() {
+    return this.admins.data.list.slice();
+  }
+
   /* ── Stats globales ── */
   bumpStat(key, amount = 1) {
     if (!(key in this.stats.data)) this.stats.data[key] = 0;
@@ -165,6 +196,7 @@ class Database {
     this.groups.saveNow();
     this.stats.saveNow();
     this.bets.saveNow(); // paris Xbet — rien ne se perd, même après extinction
+    this.admins.saveNow(); // 🛡️ admins nommés — persistants
   }
 }
 

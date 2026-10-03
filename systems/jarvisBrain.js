@@ -102,7 +102,8 @@ function safeCalc(t) {
 
 /* Renvoie une phrase (ou null) pour racine, puissance, %, moyenne, proba. */
 function mathAnswer(t) {
-  let m = t.match(/racine\s*(?:carree\s*)?(?:de\s*|du\s*)?(\d+(?:[.,]\d+)?)/);
+  let m = t.match(/\u221a\s*(\d+(?:[.,]\d+)?)/);
+  if (!m) m = t.match(/racine\s*(?:carree\s*)?(?:de\s*|du\s*)?(\d+(?:[.,]\d+)?)/);
   if (m) {
     const v = Math.sqrt(Number(String(m[1]).replace(',', '.')));
     return `√${fmtNum(Number(String(m[1]).replace(',', '.')))} = ${fmtNum(v)}`;
@@ -283,7 +284,8 @@ function createJarvisBrain(config, hooks = {}) {
     if (/(tu m'aimes|tu maimes|tu aime quelqu)/.test(t)) return `Bien sûr${who ? ` ${who}` : ''}, tu fais partie de mon groupe 💜`;
 
     /* ══ 5) Mathématiques & probabilités ══ */
-    const math = mathAnswer(t);
+    /* norm() retire les symboles (√…) → on tente aussi le texte brut. */
+    const math = mathAnswer(t) || mathAnswer(String(raw).toLowerCase());
     if (math) return say(`🧮 ${math}`);
     const c = safeCalc(t);
     if (c === 'ZERO') return say('Diviser par zéro ? 😵 Même mon cerveau local refuse ce pari.');
@@ -474,7 +476,7 @@ function createJarvisBrain(config, hooks = {}) {
       `Hmm, un mot-clé m'aiderait, ${who} 🤔. Essaie : quiz, duel, solde, daily, profil, slots, shifumi, blague, heure, image, musique…`,
       `Je préfère être honnête plutôt que d'inventer, ${who} 🧠. Je sais lancer des quiz et des jeux, calculer, donner les probabilités, chercher des images, des musiques, des animes… demande !`,
     ];
-    return say(hints[Math.floor(Math.random() * hints.length)]);
+    return say(hints[Math.floor(Math.random() * hints.length)], { fallback: true });
   }
 
   return { think };
