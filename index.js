@@ -87,6 +87,7 @@ async function main() {
       { key: 'stats', file: path.join(config.dataDir, 'stats.json') },
       { key: 'bets', file: path.join(config.dataDir, 'bets.json') },
       { key: 'admins', file: path.join(config.dataDir, 'admins.json') },
+      { key: 'ucpairs', file: path.join(config.dataDir, 'ucpairs.json') },
     ],
   });
   await cloud.pull();

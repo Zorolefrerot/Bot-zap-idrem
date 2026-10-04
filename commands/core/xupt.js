@@ -44,6 +44,7 @@ module.exports = {
       `     ${ctx.services.aiPool.providersList().join(' · ')}`,
       `🎌 ${b('Quiz manga (Xid)')} : ${b('AniList + Jikan')} — 100 images max`,
       `🎮 ${b('Quiz (Xquiz)')} : ${b('9 catégories')} — ID · MULTIVERS · CG · CAPITALE · DRAPEAU · EMOJI · ZIK · MÉMORIAL · LOGO`,
+      `🎭 ${b('Xundercover')} : ${b('Civils vs Infiltrés vs Mr. White')} — rôles en PV, 20 cartes (Xucards), rang (Xucrank)`,
       `⚽ ${b('Quiz foot (Xfoot)')} : ${b('Wikidata — 200 joueurs')} — clubs & sélections`,
       `⚽ ${b('Paris sportifs (Xbet)')} : ${b('10 matchs par manche')}`,
       `🖼️ ${b('Images (Ximg)')} : ${b('génération IA sans clé')} — max ${b(ctx.config.media.maxImages)}`,

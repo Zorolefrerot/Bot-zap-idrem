@@ -76,6 +76,8 @@ class Database {
     this.bets = new JsonStore(path.join(dataDir, 'bets.json'), {}); // paris Xbet par groupe
     /* 🛡️ Admins NOMMÉS par les admins suprêmes (Xadmin) — persistant. */
     this.admins = new JsonStore(path.join(dataDir, 'admins.json'), { list: [] });
+    /* 🎭 Undercover : historique des couples de mots (anti-répétition). */
+    this.ucpairs = new JsonStore(path.join(dataDir, 'ucpairs.json'), { history: {}, recent: [] });
   }
 
   /* ── Paris Xbet ── */
@@ -121,6 +123,19 @@ class Database {
         lastSeen: 0,
       };
       this.users.data[key] = user;
+      this.users.save();
+    }
+    /* 🎭 Undercover : stats + inventaire de cartes (créés pour TOUS). */
+    if (!user.uc) {
+      user.uc = { games: 0, wins: 0, mvp: 0, clues: 0, votesOK: 0 };
+      this.users.save();
+    }
+    if (!user.cards || typeof user.cards !== 'object') {
+      user.cards = {};
+      this.users.save();
+    }
+    if (!user.name && name) {
+      user.name = name;
       this.users.save();
     } else if (name && !user.name) {
       user.name = name;
@@ -197,6 +212,7 @@ class Database {
     this.stats.saveNow();
     this.bets.saveNow(); // paris Xbet — rien ne se perd, même après extinction
     this.admins.saveNow(); // 🛡️ admins nommés — persistants
+    this.ucpairs.saveNow(); // 🎭 couples de mots undercover
   }
 }
 
