@@ -208,7 +208,7 @@ test('Xundercover : indice par réponse au bot, liste accumulée, PAS de double 
   await t.mock.timers.reset();
 });
 
-test('Xundercover : 15 s par indice (timeout → « — » et tour suivant)', async () => {
+test('Xundercover : 20 s par indice (timeout → « — » et tour suivant)', async () => {
   const h = harness();
   const { boot, makeMsg, bodies, unbold, UIDS, clearCooldowns, flush } = h;
   const t = require('node:test');
@@ -488,7 +488,9 @@ test('Xundercover : l\u2019élimination affiche une PHRASE DRÔLE avec le nom du
   assert.ok(elim.includes(uc.name), 'le nom du joueur est DANS la phrase');
   assert.ok(/FIN DES VOTES/.test(elim), 'titre « fin des votes »');
   assert.ok(/Il était|était :/i.test(elim), 'rôle révélé après la phrase');
-  assert.ok(/Décompte/.test(elim), 'décompte final en liste');
+  // Message ÉPURÉ : ni décompte, ni liste d'indices en dessous
+  assert.ok(!/Décompte|ÉTAT DES VOTES/i.test(elim), 'pas de décompte dans l\u2019élimination');
+  assert.ok(!/🪦/.test(elim), 'pas de liste d\u2019indices dans l\u2019élimination');
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
   await t.mock.timers.reset();
 });
@@ -504,4 +506,70 @@ test('Xtest : le bot envoie « Je suis présent ✅ » EN PV, sans erreur', asyn
   assert.ok(/Je suis présent/.test(b), 'le message contient « Je suis présent »');
   assert.ok(/✅/.test(b), 'avec la coche ✅');
   assert.ok(b.length < 300, 'message court');
+});
+
+/* ════════ GO ANTICIPÉ + FIN DIRECTE DU VOTE ════════ */
+
+test('Xundercover : Go anticipé du lanceur — démarrage sans attendre 90 s', async () => {
+  const t = require('node:test');
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const { boot, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
+  const { bot, adapter } = await boot({});
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xundercover'));
+  for (const uid of [UIDS.shadow, UIDS.paul, UIDS.fortiche]) {
+    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
+  }
+  // Go d'un NON-lanceur → ignoré
+  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, 'Go'));
+  await flushN();
+  let session = bot.sessions.get('thread-1', 'xundercover');
+  assert.equal(session.state, 'RECRUIT', 'Go refusé aux non-lanceurs');
+  // Go du lanceur avec TROP PEU de joueurs (3 = OK ici, donc on teste à 2)
+  // → 3 joueurs suffisent : le Go passe direct à la distribution
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Go'));
+  await flushN();
+  session = bot.sessions.get('thread-1', 'xundercover');
+  assert.equal(session.state, 'WAITING_TID', 'Go anticipé → distribution (sans attendre 90 s)');
+  assert.ok(bodies(adapter).some((b) => /Go anticip[ée]/i.test(unbold(b))), 'annonce du Go anticipé');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+  // Cas « pas assez » : nouvelle partie à 2 joueurs
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xundercover'));
+  for (const uid of [UIDS.shadow, UIDS.paul]) {
+    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit2' } }));
+  }
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Go'));
+  await flushN();
+  session = bot.sessions.get('thread-1', 'xundercover');
+  assert.equal(session.state, 'RECRUIT', '2 joueurs → Go refusé');
+  assert.ok(bodies(adapter).some((b) => /Pas assez de joueurs/.test(unbold(b))), 'message pas assez de joueurs');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+  await t.mock.timers.reset();
+});
+
+test('Xundercover : vote terminé DÈS QUE tous ont voté (pas d\u2019attente des 75 s)', async () => {
+  const t = require('node:test');
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const { boot, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
+  const { bot, adapter } = await boot({});
+  clearCooldowns(bot);
+  const uids = [UIDS.shadow, UIDS.paul, UIDS.fortiche, UIDS.spammer, UIDS.owner];
+  const session = await startGame(t, bot, UIDS.shadow, uids);
+  // Indices muets → vote
+  for (let i = 0; i < 120 && session.state === 'TURNS'; i++) { await t.mock.timers.tick(5_000); await flushN(); }
+  assert.equal(session.state, 'VOTE');
+  const uc = [...session.players.values()].find((p) => p.role === 'uc');
+  // Les 5 vivants votent (chacun pour quelqu'un d'autre) → fin IMMÉDIATE
+  for (const v of uids) {
+    const tgt = v === uc.uid ? uids.find((u) => u !== v) : uc.uid;
+    await bot.handleMessage(makeMsg('thread-1', v, 'vote @cible', { mentions: { [tgt]: { tag: '@cible', from: 5 } } }));
+  }
+  await flushN();
+  // Sans avoir avancé les 75 s : le vote est DÉJÀ résolu (pause prochain tour)
+  assert.equal(session.state, 'WAITING_GO', 'vote résolu immédiatement → pause du prochain tour');
+  assert.ok(!session.players.get(uc.uid).alive, 'l\u2019UC (majorité) est bien éliminé');
+  assert.ok(bodies(adapter).some((b) => /Tout le monde a vot[ée]/i.test(unbold(b))), 'annonce « tout le monde a voté »');
+  assert.ok(bodies(adapter).some((b) => /FIN DES VOTES/i.test(unbold(b))), 'annonce d\u2019élimination directe');
+  await t.mock.timers.reset();
 });

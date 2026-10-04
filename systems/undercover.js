@@ -4,13 +4,15 @@
  * 🎭 XUNDERCOVER — Civils 🏛️ · Undercover 🕵️ · Mr. White ⚪
  *
  * DÉROULEMENT :
- *   1. ENRÔLEMENT 90 s — on répond « moi » au message du bot (3-8 joueurs).
+ *   1. ENRÔLEMENT 90 s — on répond « moi » ; le lanceur peut faire « Go »
+ *      dès qu'il veut (min 3 joueurs) pour démarrer sans attendre.
  *   2. Le lanceur colle le TID d'un groupe QG (commande Xtid) → le bot y
  *      dépose les rôles de CHACUN ; il les redistribue en PV lui-même.
- *   3. TOURS D'INDICE — chaque joueur a 15 s (réponse au message du bot).
+ *   3. TOURS D'INDICE — chaque joueur a 20 s (réponse au message du bot).
  *      Un joueur ne peut ni doubler ni modifier son indice. La LISTE
  *      s'allonge à chaque indice (« Merdi : c'est chaud, brûlant »).
- *   4. VOTE 75 s — « vote @pseudo ». Le plus voté sort :
+ *   4. VOTE 75 s MAX — « vote @pseudo » ; fin DIRECTE quand tous ont voté.
+ *      Le plus voté sort :
  *      🕵️ UC démasqué → ÉLIMINÉ DIRECT · ⚪ MW démasqué → il tente de
  *      deviner le mot des civils (75 s) : bon → il VOLE la victoire.
  *   5. Victoire : civils vs infiltrés — annonce des gagnants, du PLUS
@@ -25,7 +27,7 @@ const { pickDeathPhrase } = require('./ucPhrases');
 const { CARDS, cardById, shopLine } = require('./ucCards');
 
 const REGISTRATION_MS = 90 * 1000; // enregistrement
-const CLUE_MS = 15 * 1000; // 15 s par joueur
+const CLUE_MS = 20 * 1000; // 20 s par joueur
 const VOTE_MS = 75 * 1000; // vote
 const GUESS_MS = 75 * 1000; // devinette de Mr. White
 const MIN_PLAYERS = 3;
@@ -199,6 +201,21 @@ class UCSession {
       await this.send(fmt.frame('🎭 XUNDERCOVER', '🛑 ' + fmt.bold('Enrôlement annulé.')));
       return true;
     }
+    /* ▶️ Go ANTICIPÉ : le lanceur démarre sans attendre les 90 s. */
+    if (['go', 'start', 'lancer', 'c parti'].includes(fmt.normalizeAnswer(raw))) {
+      if (uid !== this.ownerID && !this.bot._isAdminAny(uid)) return false;
+      if (this.order.length < MIN_PLAYERS) {
+        await this.send(
+          fmt.frame('🎭 XUNDERCOVER', `⚠️ ${fmt.bold(`Pas assez de joueurs (${this.order.length}/${MIN_PLAYERS}).`)}`)
+        );
+        return true;
+      }
+      await this.send(
+        fmt.frame('🎭 XUNDERCOVER', `▶️ ${fmt.bold('Go anticipé !')} ${fmt.bold(String(this.order.length) + ' joueurs')} — place à la distribution.`)
+      );
+      return this._closeRegistration();
+    }
+
     if (!isReplyToBot) return false;
     if (!/^moi$/i.test(fmt.normalizeAnswer(raw))) return true;
     if (this.players.has(uid)) return true;
@@ -248,12 +265,9 @@ class UCSession {
     this.state = 'WAITING_TID';
     await this.send(
       fmt.frame('🎭 XUNDERCOVER — DISTRIBUER LES RÔLES', [
-        '👥 ' + fmt.bold('Joueurs enregistrés :'),
+        '👥 ' + fmt.bold('Joueurs :'),
         ...this._namesList(),
-        '',
-        '📩 ' + fmt.bold('Le lanceur : colle le TID du groupe QG') + ' où j’envoie les rôles de chacun.',
-        '💡 Tape ' + fmt.bold('Xtid') + ' dans un autre groupe pour obtenir son TID.',
-        '⏱️ ' + fmt.bold('90 s') + ' — sans TID, la partie est annulée.',
+        '📩 Lanceur : colle le TID du QG ' + fmt.bold('(Xtid') + ' dans un autre groupe' + fmt.bold(')') + ' — ⏱️ 90 s',
       ])
     );
     this._timer(async () => {
@@ -341,21 +355,17 @@ class UCSession {
 
     await this.send(
       fmt.frame('🎭 XUNDERCOVER — RÔLES ENVOYÉS', [
-        `📨 ${fmt.bold('Rôles déposés au QG')} : ${fmt.bold(this.distributionTID)}`,
-        '🧹 ' + fmt.bold('Le message du QG s’efface tout seul dans 10 s.'),
-        '🤫 ' + fmt.bold('Redistribue chaque rôle en PV à son propriétaire.'),
-        '',
-        `▶️ ${fmt.bold('Tape « Go » ici')} quand tout le monde a son rôle — le jeu démarre !`,
+        `📨 QG : ${fmt.bold(this.distributionTID)} — 🧹 auto-effacé dans ${fmt.bold('10 s')}`,
+        '🤫 Redistribue chaque rôle en PV.',
+        '▶️ ' + fmt.bold('Tape « Go » ici') + ' quand tout le monde a son rôle !',
       ])
     );
     return this._waitGo(
       async () => {
         await this.send(
           fmt.frame('🎭 XUNDERCOVER — LA PARTIE COMMENCE', [
-            `👥 ${fmt.bold('JOUEURS')} (${this.order.length}) :`,
-            ...this._namesList(),
-            '',
-            `🗣️ ${fmt.bold('Tour 1')} — ${fmt.bold('15 s par joueur')} pour donner UN indice (réponds au message du bot).`,
+            `👥 ${fmt.bold(String(this.order.length) + ' joueurs')} — 🗣️ Tour 1 : ${fmt.bold('20 s')} par indice`,
+            '💬 Réponds au message du bot pour donner ton indice.',
           ])
         );
         await this._startTurn();
@@ -436,8 +446,8 @@ class UCSession {
       this.speakerIdx++;
       return this._promptSpeaker();
     }
-    lines.push(`🎤 ${fmt.bold(sp.name)} — À TOI !`);
-    lines.push(`💬 ${fmt.bold('Réponds à CE message')} avec ton indice (${fmt.bold('15 s')}) — sans dire ton mot !`);
+    lines.push(`🎤 ${fmt.bold(sp.name)} — à toi ! (${fmt.bold('20 s')})`);
+    lines.push('💬 Réponds à CE message avec ton indice.');
     lines.push('', ...this._ledgerLines(true));
     await this.send(fmt.frame(`🎭 TOUR ${this.round} — INDICE`, lines));
 
@@ -490,7 +500,7 @@ class UCSession {
     const next = this._currentSpeaker();
     const lines = [`✅ ${fmt.bold(sp.name)} : « ${clue} »`, '', ...this._ledgerLines(true)];
     if (next) {
-      lines.push('', `🎤 ${fmt.bold('Au tour de ' + next.name)} — réponds au prochain message !`);
+      lines.push('', `🎤 Au tour de ${fmt.bold(next.name)} (${fmt.bold('20 s')})`);
       await this.send(fmt.frame(`🎭 TOUR ${this.round} — INDICE`, lines));
       await this._promptSpeaker();
     } else {
@@ -508,10 +518,9 @@ class UCSession {
     this.voteDeadline = Date.now() + VOTE_MS;
     this.voteReopened = false; // « Cri du peuple »
     await this.send(
-      fmt.frame(`🎭 VOTE — TOUR ${this.round}`, [
-        `🗳️ ${fmt.bold('Tape')} : vote @pseudo  —  ou ${fmt.bold('réponds à un message du joueur')} avec ${fmt.bold('xvote')}  (${fmt.bold('75 s')})`,
-        '💀 ' + fmt.bold('Le plus voté est éliminé') + ' — égalité : personne ne sort.',
-        '⚠️ Vote interdit pour soi-même · le dernier vote compte.',
+      fmt.frame(`🗳️ VOTE — TOUR ${this.round}`, [
+        `vote @pseudo — ou réponds à son message avec ${fmt.bold('xvote')} (${fmt.bold('75 s max')})`,
+        '💀 Le plus voté sort · ⚖️ égalité = personne · ✅ fin directe si tous ont voté',
         '',
         ...this._ledgerLines(true),
       ])
@@ -579,6 +588,12 @@ class UCSession {
         ...tallyLines,
       ])
     );
+    /* ✅ FIN DIRECTE : tous les vivants (non gelés) ont voté → on résout NOW. */
+    const mustVote = this.alivePlayers().filter((p) => !p.frozen).length;
+    if (this.votes.size >= mustVote) {
+      await this.send(fmt.frame('🎭 VOTE', `✅ ${fmt.bold('Tout le monde a voté')} — on compte !`));
+      return this._resolveVote();
+    }
     return true;
   }
 
@@ -639,27 +654,22 @@ class UCSession {
       .join(' · ');
 
     const cast = this._voteCast.slice();
-    const tallySnapshot = this.order
-      .filter((u) => this.players.get(u).alive)
-      .map((u, i) => `${i + 1}. ${fmt.bold(this.players.get(u).name)} — ${fmt.bold(String(totals.get(u) || 0))}`);
     this.votes.clear();
     this._voteCast = [];
 
     if (!best || tie) {
       await this.send(
-        fmt.frame(`🎭 VOTE — TOUR ${this.round}`, [
+        fmt.frame(`🗳️ VOTE — TOUR ${this.round}`, [
           '⚖️ ' + fmt.bold('Égalité — personne n\u2019est éliminé !'),
           tally ? `🧾 ${tally}` : '🧾 Aucun vote.',
-          '',
-          ...this._ledgerLines(true),
         ])
       );
-      return this._waitGo(() => this._startTurn(), 'Personne n\u2019est éliminé — prêt pour le prochain tour ?');
+      return this._waitGo(() => this._startTurn(), 'Prêt pour le prochain tour ?');
     }
 
     const firstVoter = cast.find((v) => v.target === best);
     const voterName = firstVoter ? this.players.get(firstVoter.voter).name : '';
-    await this._eliminate(best, `🗳️ ${fmt.bold('Décompte final')} :`, { voterName, tallyLines: tallySnapshot });
+    await this._eliminate(best, '', { voterName });
   }
 
   /* ════════════════ ÉLIMINATION ════════════════ */
@@ -712,6 +722,7 @@ class UCSession {
       word: pl.word,
       civ: this.pair ? this.pair.civil : '',
     });
+    /* 💀 Message ÉPURÉ : la phrase drôle + qui + son rôle — c'est tout. */
     const lines = [
       '❌ ' + fmt.bold('FIN DES VOTES'),
       '',
@@ -719,10 +730,9 @@ class UCSession {
       '',
       `🎭 ${fmt.bold(pl.name)} était : ${fmt.bold(reveal)}`,
       ...extra,
-      '',
-      ...(extraData.tallyLines && extraData.tallyLines.length ? [context || fmt.bold('Décompte'), ...extraData.tallyLines, ''] : context ? [context, ...((extraData.tallyLines || []))] : []),
-      ...this._ledgerLines(true),
     ];
+    void context;
+    void extraData;
     await this.send(fmt.frame('💀 XUNDERCOVER — ÉLIMINATION', lines));
 
     /* ⚪ Mr. White démasqué → tentative de devinette (75 s). */
