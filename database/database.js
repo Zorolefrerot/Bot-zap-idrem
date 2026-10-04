@@ -78,6 +78,14 @@ class Database {
     this.admins = new JsonStore(path.join(dataDir, 'admins.json'), { list: [] });
     /* 🎭 Undercover : historique des couples de mots (anti-répétition). */
     this.ucpairs = new JsonStore(path.join(dataDir, 'ucpairs.json'), { history: {}, recent: [] });
+    /* 🏙️ Xcity : villes des joueurs, marché, traités, chroniques, barbares. */
+    this.cities = new JsonStore(path.join(dataDir, 'cities.json'), {
+      cities: {},
+      market: { prices: {}, lastUpdate: 0, shortage: null },
+      pending: [],
+      news: [],
+      barbarians: [],
+    });
   }
 
   /* ── Paris Xbet ── */
