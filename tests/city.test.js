@@ -11,6 +11,7 @@ const assert = require('node:assert');
 
 const { boot, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
 const { CityGame, RES } = require('../systems/city');
+const { CURE_PRICE, DEATH_BOUNTY, DEATH_RATE } = require('../systems/city');
 const { BETRAY_RATE, LOOT_RATE, SEND_TAX } = require('../systems/city');
 
 const FLUSH = async (n = 10) => { for (let i = 0; i < n; i++) await new Promise((r) => setImmediate(r)); };
@@ -371,6 +372,229 @@ describe('Xcity — marché & barbares', () => {
     assert.ok(g.raid(UIDS.shadow, target.id).err.includes('détruit'));
     const camps2 = g.ensureBarbs();
     assert.equal(camps2.length, 3); // pas de doublon avant respawn
+  });
+});
+
+describe('Xcity — rename (USA → RUSSIE)', () => {
+  test('rename : sa ville, ville d’autre (admin), unicité, préfixe', async () => {
+    const { bot } = await freshBot();
+    const g = game(bot);
+    g.create(UIDS.shadow, 'USA 🇺🇸', 'S');
+    g.create(UIDS.paul, 'Canada', 'P');
+    // sans argument → sa propre ville
+    const r = g.rename(UIDS.shadow, '', 'RUSSIE', {});
+    assert.equal(r.ok, true);
+    assert.equal(g.cityOf(UIDS.shadow).name, 'RUSSIE');
+    // nom déjà pris
+    assert.ok(g.rename(UIDS.shadow, '', 'Canada', {}).err.includes('déjà pris'));
+    // ville d'un autre SANS admin → refus ; AVEC admin → OK (préfixe 'usa' suffit)
+    assert.ok(g.rename(UIDS.fortiche, 'Canada', 'Québec', { isAdmin: false }).err.includes('ADMIN'));
+    assert.equal(g.rename(UIDS.fortiche, 'Canada', 'Québec', { isAdmin: true }).ok, true);
+    assert.equal(g.cityOf(UIDS.paul).name, 'Québec');
+    // préfixe unique
+    const r2 = g.rename(UIDS.owner, 'russ', 'URSS', { isAdmin: true });
+    assert.equal(r2.ok, true);
+    assert.equal(g.cityOf(UIDS.shadow).name, 'URSS');
+    // chronique du renommage
+    assert.ok(g.store.data.news.some((n) => n.txt.includes('URSS')));
+  });
+});
+
+describe('Xcity — laboratoire, scientifiques, éléments', () => {
+  test('hire : labo requis, capacité 3/lab, coût', async () => {
+    const { bot } = await freshBot();
+    const g = game(bot);
+    g.create(UIDS.shadow, 'Alpha', 'S');
+    assert.ok(g.hire(UIDS.shadow, 2).err.includes('laboratoire'));
+    const c = g.cityOf(UIDS.shadow);
+    c.gold = 9999; g.build(UIDS.shadow, 'lab'); // 1 labo = 3 places
+    assert.ok(g.hire(UIDS.shadow, 4).err.includes('plein'));
+    const r = g.hire(UIDS.shadow, 2);
+    assert.equal(r.ok, true);
+    assert.equal(c.scientists, 2);
+    assert.equal(c.gold, 9999 - 3000 - 1600);
+  });
+
+  test('research : cooldown, coût, éléments découverts (rng chanceux)', async () => {
+    const { bot } = await freshBot();
+    const g = game(bot);
+    g.create(UIDS.shadow, 'Alpha', 'S');
+    assert.ok(g.research(UIDS.shadow).err.includes('laboratoire'));
+    const c = g.cityOf(UIDS.shadow);
+    c.gold = 9999; g.build(UIDS.shadow, 'lab'); g.hire(UIDS.shadow, 2);
+    g.rng = () => 0.01; // trouve à chaque roll
+    c.gold = 9999;
+    const r = g.research(UIDS.shadow);
+    assert.equal(r.ok, true);
+    assert.ok(r.found.length >= 1);
+    const total = Object.values(r.elements).reduce((x, y) => x + y, 0);
+    assert.ok(total >= 1);
+    assert.ok(g.research(UIDS.shadow).err.includes('Recherches'));
+  });
+});
+
+describe('Xcity — synthèse de virus ☣️', () => {
+  function lab(bot) {
+    const g = game(bot);
+    g.create(UIDS.shadow, 'Labville', 'S');
+    const c = g.cityOf(UIDS.shadow);
+    c.gold = 999999; g.build(UIDS.shadow, 'lab');
+    return { g, c };
+  }
+  test('garde-fous : nom unique, pas un nom de ville, cooldown, stock', async () => {
+    const { bot } = await freshBot();
+    const { g, c } = lab(bot);
+    c.scientists = 2;
+    c.elements = { carbone: 1, oxygene: 1, azote: 1 };
+    assert.ok(g.synth(UIDS.shadow, 'Kovi', ['carbone', 'oxygene', 'pierre'], null).err.includes('inconnus'));
+    assert.ok(g.synth(UIDS.shadow, 'Kovi', ['carbone', 'carbone', 'azote'], null).err.includes('DISTINCTS'));
+    assert.equal(g.synth(UIDS.shadow, 'Labville', ['carbone', 'oxygene', 'azote'], null).ok, false); // nom = ville
+    const r = g.synth(UIDS.shadow, 'Kovi', ['carbone', 'oxygene', 'azote'], null);
+    assert.equal(r.ok, true);
+    assert.equal(r.tier, 'virus');
+    assert.equal(c.elements.carbone, 0);
+    assert.equal(c.gold, 999999 - 3000 - 500);
+    assert.ok(g.synth(UIDS.shadow, 'Kovi2', ['carbone', 'oxygene', 'azote'], null).err.includes('trop rapprochée'));
+    assert.ok(g.synth(UIDS.shadow, 'Kovi', ['oxygene', 'azote', 'soufre'], null).err.includes('existe déjà')); // stock vide de toute façon
+    // pas deux virus du même nom (deux villes créateurs)
+    g.create(UIDS.paul, 'Beta', 'P');
+    const c2 = g.cityOf(UIDS.paul);
+    c2.gold = 99999; g.build(UIDS.paul, 'lab'); c2.scientists = 2;
+    c2.elements = { carbone: 2, oxygene: 2, azote: 2 };
+    c2.lastSynth = 0;
+    assert.ok(g.synth(UIDS.paul, 'kovi', ['carbone', 'oxygene', 'azote'], null).err.includes('même nom'));
+  });
+
+  test('pandémie : 6 éléments dont 1 rare + 2 labos + 4 scientifiques + rançon', async () => {
+    const { bot } = await freshBot();
+    const { g, c } = lab(bot);
+    c.scientists = 4;
+    c.elements = { carbone: 1, oxygene: 1, azote: 1, soufre: 1, phosphore: 1, plutonium: 1 };
+    assert.ok(g.synth(UIDS.shadow, 'Noire', ['carbone', 'oxygene', 'azote', 'soufre', 'phosphore', 'plutonium'], null).err.includes('laboratoires'));
+    c.gold = 999999; g.build(UIDS.shadow, 'lab'); // 2ᵉ labo
+    const r = g.synth(UIDS.shadow, 'Noire', ['carbone', 'oxygene', 'azote', 'soufre', 'phosphore', 'plutonium'], 1500);
+    assert.equal(r.ok, true);
+    assert.equal(r.tier, 'pandemic');
+    assert.equal(r.virus.ransom, 1500);
+    assert.ok(r.virus.power >= 120 + 4 * 8);
+  });
+});
+
+describe('Xcity — infection, soins, morts, anonymat', () => {
+  function ready(bot) {
+    const g = game(bot);
+    g.create(UIDS.shadow, 'Wuhan', 'S'); // créateur
+    g.create(UIDS.paul, 'Cible', 'P');   // victime
+    const c = g.cityOf(UIDS.shadow);
+    c.gold = 999999; g.build(UIDS.shadow, 'lab'); c.scientists = 2;
+    c.elements = { carbone: 1, oxygene: 1, azote: 1 };
+    const v = g.synth(UIDS.shadow, 'Kovi', ['carbone', 'oxygene', 'azote'], null).virus;
+    return { g, c, v };
+  }
+  test('infect : anonymat total + cure paie le créateur (100$/habitant)', async () => {
+    const { bot } = await freshBot();
+    const { g, c, v } = ready(bot);
+    const victim = g.cityOf(UIDS.paul);
+    victim.gold = 20000;
+    const creatorGoldBefore = c.gold;
+    const newsAt = g.store.data.news.length;
+    const r = g.infect(UIDS.shadow, 'Cible', 'Kovi');
+    assert.equal(r.ok, true);
+    assert.ok(r.infected >= 1);
+    assert.ok(v.deadline > Date.now());
+    // ANONYMAT : ni la notif ni la chronique ne mentionnent le créateur
+    assert.ok(!r.dm[0].txt.includes('Wuhan'));
+    const freshNews = g.store.data.news.slice(0, g.store.data.news.length - newsAt);
+    assert.ok(freshNews.every((n) => !n.txt.includes('Wuhan')));
+    assert.ok(g.store.data.news.some((n) => n.txt.includes('Kovi')));
+    assert.ok(victim.notif.some((n) => n.includes('Kovi')));
+    // cure : 100$/habitant → chez le créateur
+    const cnt = r.infected;
+    const cu = g.cure(UIDS.paul, 'Kovi');
+    assert.equal(cu.ok, true);
+    assert.equal(cu.cost, cnt * CURE_PRICE);
+    assert.equal(c.gold, creatorGoldBefore + cnt * CURE_PRICE);
+    assert.equal(v.infected[UIDS.paul], undefined);
+    // re-cure → rien
+    assert.ok(g.cure(UIDS.paul, 'Kovi').err.includes('pas infectée'));
+  });
+
+  test('expiration : morts selon la puissance, 200$/mort au créateur, virus retiré', async () => {
+    const { bot } = await freshBot();
+    const { g, c, v } = ready(bot);
+    const victim = g.cityOf(UIDS.paul);
+    victim.gold = 0; // ne paie pas les soins
+    const popBefore = victim.pop;
+    const creatorGold = c.gold;
+    g.infect(UIDS.shadow, 'Cible', 'Kovi');
+    v.deadline = Date.now() - 1; // force l'expiration
+    assert.equal(g.sweepViruses(), true);
+    // l'infecté initial était min(pop-10, power±20%) → morts = ceil(cnt×0.6)
+    assert.ok(victim.pop < popBefore);
+    assert.ok(c.gold > creatorGold); // 200$/mort
+    assert.ok(victim.notif.some((n) => n.includes('succombé')));
+    assert.ok(g.store.data.news.some((n) => n.txt.includes('a tué')));
+    // virus consumé
+    assert.equal(g._virusByName('Kovi'), null);
+  });
+
+  test('pandémie : toutes les villes sauf le créateur + rançon via send <virus>', async () => {
+    const { bot } = await freshBot();
+    const g = game(bot);
+    g.create(UIDS.shadow, 'Empire', 'S'); // créateur
+    g.create(UIDS.paul, 'Victime1', 'P');
+    g.create(UIDS.fortiche, 'Victime2', 'P');
+    const c = g.cityOf(UIDS.shadow);
+    c.gold = 999999;
+    g.build(UIDS.shadow, 'lab'); g.build(UIDS.shadow, 'lab');
+    c.scientists = 4;
+    c.elements = { carbone: 1, oxygene: 1, azote: 1, soufre: 1, phosphore: 1, plutonium: 1 };
+    const v = g.synth(UIDS.shadow, 'Noire', ['carbone', 'oxygene', 'azote', 'soufre', 'phosphore', 'plutonium'], 1000).virus;
+    const r = g.unleash(UIDS.shadow, 'Noire');
+    assert.equal(r.ok, true);
+    assert.equal(r.hits, 2); // le créateur est épargné
+    assert.equal(v.infected[UIDS.shadow], undefined);
+    assert.ok(g.cityOf(UIDS.paul).notif.some((n) => n.includes('rançon')));
+    assert.ok(g.store.data.news.some((n) => n.txt.includes('PANDÉMIE')));
+    // Rançon insuffisante → refusée
+    assert.ok(g.send(UIDS.paul, 'Noire', 'money', 'money', 500).err.includes('rançon'));
+    // Rançon payée au NOM DU VIRUS → chez le créateur, ville sauvée
+    const g1 = g.cityOf(UIDS.paul).gold;
+    const c0 = c.gold;
+    const pay = g.send(UIDS.paul, 'Noire', 'money', 'money', 1000);
+    assert.equal(pay.ok, true);
+    assert.equal(pay.ransom, true);
+    assert.equal(c.gold, c0 + 1000); // 0 taxe, anonyme
+    assert.equal(v.infected[UIDS.paul], undefined);
+    // Ville non infectée → pas de rançon possible
+    assert.ok(g.send(UIDS.shadow, 'Noire', 'money', 'money', 1000).err.includes('pas touchée'));
+    // Expiration : Victime2 (n'a rien payé) subit des morts
+    const pop2 = g.cityOf(UIDS.fortiche).pop;
+    v.deadline = Date.now() - 1;
+    g.sweepViruses();
+    assert.ok(g.cityOf(UIDS.fortiche).pop < pop2);
+    assert.ok(g.store.data.news.some((n) => n.txt.includes('s’éteint')));
+    assert.equal(g._virusByName('Noire'), null);
+  });
+
+  test('commandes bot : Xcity lab / rename — aucun INTERNAL_ERROR', async () => {
+    const { bot, adapter } = await freshBot();
+    clearCooldowns(bot);
+    await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcity create Labs'));
+    await FLUSH();
+    clearCooldowns(bot);
+    await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcity build lab'));
+    await FLUSH();
+    clearCooldowns(bot);
+    await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcity lab'));
+    await FLUSH();
+    clearCooldowns(bot);
+    await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcity rename RUSSIE'));
+    await FLUSH();
+    const all = bodies(adapter).map(unbold);
+    assert.ok(all.every((b) => !/EN PAUSE|INTERNAL_ERROR/i.test(b)));
+    assert.ok(all.some((b) => /LABORATOIRE/i.test(b)));
+    assert.ok(all.some((b) => /VILLE RENOMMÉE/i.test(b) && /RUSSIE/i.test(b)));
   });
 });
 

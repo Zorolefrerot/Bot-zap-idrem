@@ -20,11 +20,12 @@ const RES_LABEL = {
 };
 const RANGE = { wood: [4, 9], stone: [6, 11], iron: [15, 30], copper: [12, 25], coal: [10, 20], goldOre: [35, 55] };
 
-const BUILD_COST = { house: 500, farm: 700, mine: 900, factory: 1500, bank: 2000, school: 1200, transport: 1000, barracks: 2500 };
+const BUILD_COST = { house: 500, farm: 700, mine: 900, factory: 1500, bank: 2000, school: 1200, transport: 1000, barracks: 2500, lab: 3000 };
 const BUILD_INCOME = { farm: 15, mine: 25, factory: 100, bank: 150, school: 30, transport: 20 };
 const BUILD_LABEL = {
   house: '🏠 Maisons', farm: '🌾 Fermes', mine: '⛏️ Mines', factory: '🏭 Usines',
   bank: '🏦 Banques', school: '🎓 Écoles', transport: '🚉 Transports', barracks: '🪖 Casernes',
+  lab: '🧪 Laboratoires',
 };
 
 const UNITS = {
@@ -36,6 +37,33 @@ const OFFICERS = {
   captain: { label: '🎖️ Capitaine', cost: 5000, minLvl: 2, txt: '+15 % puissance d’ATTAQUE' },
   general: { label: '🛡️ Général', cost: 8000, minLvl: 4, txt: '+20 % DÉFENSE de la ville' },
 };
+/* 🧪 Éléments chimiques (découverts en laboratoire) — 6 communs, 3 rares. */
+const ELEMENTS = {
+  carbone: { label: '⚫ Carbone', rare: false },
+  oxygene: { label: '💧 Oxygène', rare: false },
+  azote: { label: '🌫️ Azote', rare: false },
+  soufre: { label: '🟡 Soufre', rare: false },
+  phosphore: { label: '🟣 Phosphore', rare: false },
+  calcium: { label: '🦴 Calcium', rare: false },
+  mercure: { label: '🔴 Mercure', rare: true },
+  cesium: { label: '☢️ Césium', rare: true },
+  plutonium: { label: '☣️ Plutonium', rare: true },
+};
+const LAB_SCI_PER = 3;          // scientifiques par laboratoire
+const HIRE_COST = 800;          // embauche d’un scientifique
+const RESEARCH_CD = 90_000;     // campagne de recherche
+const RESEARCH_COST = 200;
+const SYNTH_CD = 5 * 60_000;    // « pas des virus à tout moment »
+const VIRUS_LAUNCH_CD = 3 * 60_000;
+const VIRUS_COST = 500;
+const PANDEMIC_COST = 2000;
+const CURE_PRICE = 100;         // soins urgents / habitant infecté
+const DEATH_BOUNTY = 200;       // $ au créateur par habitant mort
+const DEATH_RATE = 0.6;         // part des infectés qui meurt sans remède
+const VIRUS_LIFE_MIN = [20, 35];       // durée de vie d’un virus (min)
+const PANDEMIC_LIFE_MIN = [45, 60];    // durée de vie d’une pandémie (min)
+const RANSOM_MIN = 500;
+
 const TREATY_TYPES = {
   peace: { label: '🤝 Paix', hours: 48 },
   alliance: { label: '⚔️ Alliance', hours: 48 },
@@ -127,7 +155,8 @@ class CityGame {
     if (!Array.isArray(d.pending)) d.pending = [];
     if (!Array.isArray(d.news)) d.news = [];
     if (!Array.isArray(d.barbarians)) d.barbarians = [];
-    for (const c of Object.values(d.cities)) this._fixCity(c);
+    if (!Array.isArray(d.viruses)) d.viruses = [];
+    for (const [k, c] of Object.entries(d.cities)) { if (!c.uid) c.uid = String(k); this._fixCity(c); }
   }
 
   _fixCity(c) {
@@ -142,6 +171,11 @@ class CityGame {
     if (typeof c.rep !== 'number') c.rep = 0;
     if (!c.produce) c.produce = [];
     if (typeof c.shieldUntil !== 'number') c.shieldUntil = 0;
+    if (!c.elements || typeof c.elements !== 'object') c.elements = {};
+    if (typeof c.scientists !== 'number') c.scientists = 0;
+    if (typeof c.lastResearch !== 'number') c.lastResearch = 0;
+    if (typeof c.lastSynth !== 'number') c.lastSynth = 0;
+    if (typeof c.lastVirus !== 'number') c.lastVirus = 0;
   }
 
   save() { this.store.save(); }
@@ -196,6 +230,8 @@ class CityGame {
       decree: null,
       treaties: {}, notif: [],
       lastCollect: 0, lastAttack: 0, lastExpand: 0, lastTrain: 0, lastDecree: 0,
+      lastResearch: 0, lastSynth: 0, lastVirus: 0,
+      elements: {}, scientists: 0,
       shieldUntil: 0,
       wins: 0, losses: 0, betrayals: 0, barbRaids: 0, treatiesSigned: 0, sentGold: 0, touristsTotal: 0,
     };
@@ -216,6 +252,9 @@ class CityGame {
       if (other) { delete other.treaties[String(uid)]; this.notify(other, `🏚️ ${city.name} a été rasée — traité annulé.`); }
     }
     this.addNews(`🏚️ ${city.name} a été rasée.`);
+    // Ses virus non lancés s’éteignent avec leur créateur
+    const d = this.store.data;
+    d.viruses = d.viruses.filter((v) => !(String(v.creator) === String(uid) && !v.deadline));
     delete this.store.data.cities[String(uid)];
     this.save();
     return { ok: true };
@@ -635,6 +674,9 @@ class CityGame {
   send(uid, targetName, kind, key, qty) {
     const me = this.cityOf(uid);
     if (!me) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
+    /* 🗝️ Destination = nom d’un VIRUS actif → paiement de la rançon (anonyme). */
+    const vTarget = this._virusByName(targetName);
+    if (vTarget && kind === 'money') return this._ransomFlow(uid, vTarget, Math.floor(Number(qty)));
     const found = this.byName(targetName);
     if (!found) return { ok: false, err: 'Ville cible introuvable.' };
     const { uid: targetUid, city: target } = found;
@@ -801,6 +843,305 @@ class CityGame {
     return { ok: true, win: false, camp: camp.name, lostA, rollA: Math.round(rollA * 10) / 10, rollD: Math.round(rollD * 10) / 10 };
   }
 
+  /* ══════════════ LABORATOIRE & SCIENTIFIQUES ══════════════ */
+
+  labCapacity(c) { return (c.b.lab || 0) * LAB_SCI_PER; }
+
+  hire(uid, n) {
+    const c = this.cityOf(uid);
+    if (!c) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
+    n = Math.floor(Number(n));
+    if (!Number.isInteger(n) || n < 1 || n > 10) return { ok: false, err: 'Combien de scientifiques ? (1 à 10)' };
+    if (!(c.b.lab > 0)) return { ok: false, err: 'Construis d’abord un 🧪 laboratoire (Xcity build lab).' };
+    if (this.labCapacity(c) < c.scientists + n) {
+      return { ok: false, err: `Laboratoire plein (${c.scientists}/${this.labCapacity(c)}) — agrandis-le : Xcity build lab.` };
+    }
+    const cost = HIRE_COST * n;
+    if (c.gold < cost) return { ok: false, err: `Coût : ${nf(cost)}$ — fonds : ${nf(c.gold)}$.` };
+    c.gold -= cost;
+    c.scientists += n;
+    this.save();
+    return { ok: true, hired: n, scientists: c.scientists, capacity: this.labCapacity(c), cost, gold: c.gold };
+  }
+
+  research(uid) {
+    const c = this.cityOf(uid);
+    if (!c) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
+    if (!(c.b.lab > 0)) return { ok: false, err: 'Il faut un 🧪 laboratoire (Xcity build lab).' };
+    if (c.scientists < 1) return { ok: false, err: 'Embauche des scientifiques : Xcity hire <n>' };
+    const now = this.now();
+    if (now - c.lastResearch < RESEARCH_CD) {
+      return { ok: false, err: `Recherches en cours : réessaie dans ${Math.ceil((RESEARCH_CD - (now - c.lastResearch)) / 1000)} s` };
+    }
+    if (c.gold < RESEARCH_COST) return { ok: false, err: `Campagne de recherche : ${nf(RESEARCH_COST)}$ (fonds : ${nf(c.gold)}$).` };
+    c.gold -= RESEARCH_COST;
+    c.lastResearch = now;
+    // Plus il y a de scientifiques, plus les découvertes sont fréquentes
+    const findChance = Math.min(0.75, 0.30 + 0.05 * c.scientists);
+    const found = [];
+    for (let i = 0; i < c.scientists && found.length < 2; i++) {
+      if (this.rng() < findChance) {
+        const rare = this.rng() < 0.12;
+        const pool = Object.keys(ELEMENTS).filter((k) => (ELEMENTS[k].rare ? rare : !rare));
+        const key = pick(this.rng, pool);
+        c.elements[key] = (c.elements[key] || 0) + 1;
+        found.push(key);
+      }
+    }
+    this.save();
+    return { ok: true, found, elements: { ...c.elements }, gold: c.gold };
+  }
+
+  /* ══════════════ VIRUS & PANDEMIES ☣️ ══════════════ */
+
+  _virusByName(name) {
+    const n = String(name || '').trim().toLowerCase();
+    return this.store.data.viruses.find((v) => v.name.toLowerCase() === n) || null;
+  }
+
+  labView(uid) {
+    const c = this.cityOf(uid);
+    if (!c) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
+    const mine = this.store.data.viruses.filter((v) => String(v.creator) === String(uid));
+    const infectedBy = this.store.data.viruses.filter((v) => v.infected && v.infected[String(uid)]);
+    return {
+      ok: true, labs: c.b.lab || 0, scientists: c.scientists, capacity: this.labCapacity(c),
+      elements: { ...c.elements }, viruses: mine, infectedBy, stock: this.stockTxt(c),
+    };
+  }
+
+  stockTxt(c) {
+    return Object.keys(ELEMENTS).map((k) => `${ELEMENTS[k].label} ${c.elements[k] || 0}`).join(' · ') || 'vide';
+  }
+
+  synth(uid, name, eltArgs, ransomArg) {
+    const c = this.cityOf(uid);
+    if (!c) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
+    name = String(name || '').trim().replace(/\s+/g, ' ');
+    if (name.length < 2 || name.length > 24) return { ok: false, err: 'Nom du virus : 2 à 24 caractères.' };
+    if (this._virusByName(name)) return { ok: false, err: `Le virus « ${name} » existe déjà — pas deux virus du même nom.` };
+    if (this.byName(name)) return { ok: false, err: 'Ce nom est celui d’une ville — choisis-en un autre.' };
+    if (!(c.b.lab > 0)) return { ok: false, err: 'Il faut un 🧪 laboratoire (Xcity build lab).' };
+    const now = this.now();
+    if (now - c.lastSynth < SYNTH_CD) {
+      return { ok: false, err: `Synthèse trop rapprochée : réessaie dans ${Math.ceil((SYNTH_CD - (now - c.lastSynth)) / 60000)} min.` };
+    }
+    // Éléments fournis (distincts, valides, en stock)
+    const wanted = [...new Set(eltArgs.map((e) => String(e || '').toLowerCase().trim()))].filter((e) => ELEMENTS[e]);
+    const invalid = eltArgs.map((e) => String(e || '').toLowerCase().trim()).filter((e) => !ELEMENTS[e]);
+    if (invalid.length) return { ok: false, err: `Éléments inconnus : ${invalid.join(', ')} — liste : Xcity lab` };
+    if (wanted.length !== eltArgs.length) return { ok: false, err: 'Éléments DISTINCTS uniquement (pas deux fois le même).' };
+    const missing = wanted.filter((k) => (c.elements[k] || 0) < 1);
+    if (missing.length) return { ok: false, err: `Éléments manquants : ${missing.map((k) => ELEMENTS[k].label).join(', ')} — cherche : Xcity research` };
+
+    const tier = wanted.length >= 6 ? 'pandemic' : wanted.length === 3 ? 'virus' : null;
+    if (!tier) return { ok: false, err: 'Formule : 3 éléments = ☣️ VIRUS · 6 éléments (dont 1 rare) = 🦠 PANDEMIE.' };
+    const isPandemic = tier === 'pandemic';
+    if (isPandemic) {
+      if (!(c.b.lab >= 2)) return { ok: false, err: 'Pandémie : il faut 🧪 2 laboratoires (agrandis : Xcity build lab).' };
+      if (c.scientists < 4) return { ok: false, err: 'Pandémie : il faut au moins 🔬 4 scientifiques.' };
+      if (!wanted.some((k) => ELEMENTS[k].rare)) return { ok: false, err: 'Pandémie : au moins un élément RARE (🔴 Mercure, ☢️ Césium, ☣️ Plutonium).' };
+    } else if (c.scientists < 2) return { ok: false, err: 'Virus : il faut au moins 🔬 2 scientifiques.' };
+    const cost = isPandemic ? PANDEMIC_COST : VIRUS_COST;
+    if (c.gold < cost) return { ok: false, err: `Synthèse : ${nf(cost)}$ — fonds : ${nf(c.gold)}$.` };
+    let ransom = 0;
+    if (isPandemic) {
+      ransom = Math.floor(Number(ransomArg));
+      if (!Number.isFinite(ransom) || ransom < RANSOM_MIN) {
+        return { ok: false, err: `Fixe la rançon par ville (min ${nf(RANSOM_MIN)}$) : … rancon <prix>` };
+      }
+    }
+    // Tout est validé : consommation
+    for (const k of wanted) c.elements[k] -= 1;
+    c.gold -= cost;
+    c.lastSynth = now;
+    const sci = c.scientists;
+    const lifeMin = isPandemic ? randInt(this.rng, PANDEMIC_LIFE_MIN[0], PANDEMIC_LIFE_MIN[1]) : randInt(this.rng, VIRUS_LIFE_MIN[0], VIRUS_LIFE_MIN[1]);
+    const power = isPandemic ? 120 + sci * 8 + randInt(this.rng, 0, 60) : 25 + sci * 3 + randInt(this.rng, 0, 20);
+    const virus = {
+      id: `v${Math.floor(this.rng() * 1e9).toString(36)}`,
+      name, creator: String(uid), tier,
+      power, ransom, life: lifeMin * 60_000, deadline: 0, bornAt: now,
+      infected: {}, cured: {},
+    };
+    this.store.data.viruses.push(virus);
+    this.save();
+    return { ok: true, virus, cost, tier };
+  }
+
+  infect(uid, cityName, virusName) {
+    const me = this.cityOf(uid);
+    if (!me) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
+    const v = this._virusByName(virusName);
+    if (!v || String(v.creator) !== String(uid)) return { ok: false, err: `Virus « ${virusName} » introuvable dans ton laboratoire (Xcity lab).` };
+    if (v.deadline) return { ok: false, err: `« ${v.name} » a déjà été relâché — sa course est en cours.` };
+    if (v.tier !== 'virus') return { ok: false, err: 'C’est une PANDEMIE — utilise : Xcity unleash <nom>' };
+    const found = this.byName(cityName);
+    if (!found) return { ok: false, err: 'Ville cible introuvable.' };
+    if (String(found.uid) === String(uid)) return { ok: false, err: 'Pas ta propre ville 🙃' };
+    const now = this.now();
+    if (now - me.lastVirus < VIRUS_LAUNCH_CD) return { ok: false, err: 'Cooldown contamination : 3 min' };
+    me.lastVirus = now;
+    const target = found.city;
+    const cnt = Math.max(1, Math.min(target.pop - 10, v.power + randInt(this.rng, -Math.floor(v.power * 0.2), Math.floor(v.power * 0.2))));
+    v.deadline = now + v.life;
+    v.infected[String(found.uid)] = cnt;
+    const mins = Math.round(v.life / 60_000);
+    const txt = `☣️ ALERTE : le virus « ${v.name} » frappe ta ville ! ${cnt} habitants infectés — soins urgents : ${nf(CURE_PRICE)}$/habitant (${nf(cnt * CURE_PRICE)}$) → Xcity cure ${v.name} — sans remède dans ~${mins} min, des morts à déplorer…`;
+    this.notify(target, txt);
+    this.addNews(`☣️ Un virus inconnu nommé « ${v.name} » frappe ${target.name} !`);
+    this.save();
+    return { ok: true, virus: v, targetName: target.name, infected: cnt, mins, dm: [{ to: found.uid, txt }] };
+  }
+
+  unleash(uid, virusName) {
+    const me = this.cityOf(uid);
+    if (!me) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
+    const v = this._virusByName(virusName);
+    if (!v || String(v.creator) !== String(uid)) return { ok: false, err: `Pandémie « ${virusName} » introuvable dans ton laboratoire (Xcity lab).` };
+    if (v.deadline) return { ok: false, err: `« ${v.name} » sévit déjà dans le monde…` };
+    if (v.tier !== 'pandemic') return { ok: false, err: 'C’est un virus simple — utilise : Xcity infect <ville> <nom>' };
+    const now = this.now();
+    if (now - me.lastVirus < VIRUS_LAUNCH_CD) return { ok: false, err: 'Cooldown contamination : 3 min' };
+    me.lastVirus = now;
+    v.deadline = now + v.life;
+    const mins = Math.round(v.life / 60_000);
+    let hits = 0;
+    for (const [cityUid, city] of this.allCities()) {
+      if (String(cityUid) === String(uid)) continue; // le créateur est épargné
+      const cnt = Math.max(1, Math.min(city.pop - 10, Math.round(v.power * (0.8 + 0.4 * this.rng()))));
+      v.infected[String(cityUid)] = cnt;
+      hits += 1;
+      this.notify(city, `🦠 PANDÉMIE « ${v.name} » ! ${cnt} habitants infectés. Soins : ${nf(CURE_PRICE)}$/habitant (Xcity cure ${v.name}) — ou rançon : ${nf(v.ransom)}$ → Xcity send ${v.name} money ${v.ransom} (~${mins} min avant des morts)`);
+    }
+    this.addNews(`🦠 PANDÉMIE MONDIALE « ${v.name} » ! Toutes les villes sont touchées — le berger du virus exige ${nf(v.ransom)}$ par ville pour le remède.`);
+    this.save();
+    return { ok: true, virus: v, hits, mins };
+  }
+
+  cure(uid, virusName) {
+    const c = this.cityOf(uid);
+    if (!c) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
+    const v = this._virusByName(virusName);
+    if (!v || !v.infected[String(uid)]) return { ok: false, err: `Ta ville n’est pas infectée par « ${virusName} ».` };
+    const cnt = v.infected[String(uid)];
+    const cost = cnt * CURE_PRICE;
+    if (c.gold < cost) return { ok: false, err: `Soins urgents : ${nf(cost)}$ (${cnt} infectés × ${nf(CURE_PRICE)}$) — fonds : ${nf(c.gold)}$.` };
+    c.gold -= cost;
+    delete v.infected[String(uid)];
+    v.cured[String(uid)] = true;
+    const creator = this.cityOf(v.creator);
+    if (creator) {
+      creator.gold += cost;
+      this.notify(creator, `💰 +${nf(cost)}$ — soins urgents payés pour « ${v.name} » (ville anonyme).`);
+    }
+    this.save();
+    return { ok: true, virus: v, cost, cnt };
+  }
+
+  _ransomFlow(uid, v, qty) {
+    const c = this.cityOf(uid);
+    if (!c) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
+    if (!v.infected || !v.infected[String(uid)] || v.cured[String(uid)]) {
+      return { ok: false, err: `Ta ville n’est pas touchée par « ${v.name} ».` };
+    }
+    if (v.ransom > 0 && qty < v.ransom) {
+      return { ok: false, err: `🗝️ La rançon exigée par « ${v.name} » est ${nf(v.ransom)}$ par ville — Xcity send ${v.name} money ${v.ransom}` };
+    }
+    if (c.gold < qty) return { ok: false, err: `Fonds insuffisants (${nf(c.gold)}$).` };
+    c.gold -= qty;
+    delete v.infected[String(uid)];
+    v.cured[String(uid)] = true;
+    const creator = this.cityOf(v.creator);
+    if (creator) {
+      creator.gold += qty; // 0 taxe : l’argent sale va intégralement au créateur
+      this.notify(creator, `💰 +${nf(qty)}$ — rançon reçue pour « ${v.name} » (ville anonyme).`);
+    }
+    this.notify(c, `💊 Remède reçu ! Ta ville échappe au virus « ${v.name} » (−${nf(qty)}$).`);
+    this.addNews(`💊 Une ville a payé le remède de la pandémie « ${v.name} ».`);
+    this.save();
+    return { ok: true, ransom: true, paid: qty, virus: v };
+  }
+
+  /* 🧹 Résolution paresseuse : les virus dont le délai expire font des morts. */
+  sweepViruses() {
+    const d = this.store.data;
+    const now = this.now();
+    let touched = false;
+    for (const v of [...d.viruses]) {
+      if (!v.deadline || now < v.deadline) continue;
+      const creator = this.cityOf(v.creator);
+      let totalDeaths = 0;
+      for (const uidS of Object.keys(v.infected)) {
+        if (v.cured[uidS]) continue;
+        const victim = this.cityOf(uidS);
+        if (!victim) continue;
+        const cnt = v.infected[uidS];
+        const deaths = Math.max(1, Math.ceil(cnt * DEATH_RATE));
+        victim.pop = Math.max(10, victim.pop - deaths);
+        totalDeaths += deaths;
+        const deduct = Math.min(victim.gold, deaths * DEATH_BOUNTY);
+        victim.gold -= deduct;
+        this.notify(victim, `☠️ ${deaths} habitants ont succombé au virus « ${v.name} »…`);
+        if (v.tier === 'virus') this.addNews(`☠️ Le virus « ${v.name} » a tué ${deaths} habitants à ${victim.name}.`);
+      }
+      if (creator && totalDeaths > 0) {
+        const payout = totalDeaths * DEATH_BOUNTY;
+        creator.gold += payout;
+        this.notify(creator, `☣️ Votre virus « ${v.name} » a fait son œuvre : +${nf(payout)}$ (${totalDeaths} morts).`);
+      }
+      if (v.tier === 'pandemic' && totalDeaths > 0) {
+        this.addNews(`☠️ La pandémie « ${v.name} » s’éteint : ${totalDeaths} morts au total.`);
+      }
+      d.viruses.splice(d.viruses.indexOf(v), 1);
+      touched = true;
+    }
+    if (touched) this.save();
+    return touched;
+  }
+
+  infectionsOn(uid) {
+    let total = 0;
+    for (const v of this.store.data.viruses) {
+      if (v.infected && v.infected[String(uid)]) total += v.infected[String(uid)];
+    }
+    return total;
+  }
+
+  /* ══════════════ RENOMMAGE ══════════════ */
+
+  _resolveCityFlexible(name) {
+    const exact = this.byName(name);
+    if (exact) return exact;
+    const n = String(name || '').trim().toLowerCase();
+    if (!n) return null;
+    const matches = this.allCities().filter(([, c]) => String(c.name).toLowerCase().startsWith(n));
+    return matches.length === 1 ? { uid: matches[0][0], city: matches[0][1] } : null;
+  }
+
+  rename(uid, oldName, newName, opts = {}) {
+    newName = String(newName || '').trim().replace(/\s+/g, ' ');
+    if (newName.length < 2 || newName.length > 24) return { ok: false, err: 'Nouveau nom : 2 à 24 caractères.' };
+    let entry;
+    if (!oldName) {
+      const c = this.cityOf(uid);
+      if (!c) return { ok: false, err: 'Tu n’as pas de ville — ou précise : Xcity rename <ville> <nouveau nom>' };
+      entry = { uid: String(uid), city: c };
+    } else {
+      entry = this._resolveCityFlexible(oldName);
+      if (!entry) return { ok: false, err: 'Ville introuvable (le début du suffit si unique).' };
+      if (String(entry.uid) !== String(uid) && !opts.isAdmin) {
+        return { ok: false, err: 'Seul un ADMIN peut renommer la ville d’un autre.' };
+      }
+    }
+    if (this.byName(newName)) return { ok: false, err: `Le nom « ${newName} » est déjà pris.` };
+    const old = entry.city.name;
+    entry.city.name = newName;
+    this.addNews(`🏷️ ${old} devient ${newName}.`);
+    this.save();
+    return { ok: true, oldName: old, newName, mayor: entry.city.mayor };
+  }
+
   /* ══════════════ VUES ══════════════ */
 
   status(uid) {
@@ -821,6 +1162,7 @@ class CityGame {
         ress: `📦 ${ress} — spécialités : ${c.produce.map((r) => RES_LABEL[r]).join(', ')}`,
         army: `🎖️ ${this.armyRating(c)}${c.officers.captain ? ' · Capitaine' : ''}${c.officers.general ? ' · Général' : ''}`,
         decree: `📜 Décret : ${c.decree ? DECREES[c.decree].label : 'aucun'}`,
+        ...(c.b.lab > 0 ? { lab: `🧪 ${c.b.lab} labo(s) · 🔬 ${c.scientists}/${this.labCapacity(c)} scientifiques${this.infectionsOn(String(c.uid)) ? ` · ☣️ ${this.infectionsOn(String(c.uid))} infectés à soigner !` : ''}` } : {}),
         treaties: `🤝 Traités : ${treaties}`,
         rep: `⭐ Réputation ${c.rep} (${titleFor(c.rep)}) — ✅${c.wins} ❌${c.losses} 🗡️${c.betrayals}`,
       },
@@ -859,6 +1201,9 @@ module.exports = {
   CityGame,
   RES, RES_LABEL, RANGE, BUILD_COST, BUILD_INCOME, BUILD_LABEL,
   UNITS, OFFICERS, TREATY_TYPES, DECREES, EVENTS, TITLES,
+  ELEMENTS, LAB_SCI_PER, HIRE_COST, RESEARCH_CD, RESEARCH_COST, SYNTH_CD,
+  VIRUS_LAUNCH_CD, VIRUS_COST, PANDEMIC_COST, CURE_PRICE, DEATH_BOUNTY, DEATH_RATE,
+  RANSOM_MIN,
   BETRAY_RATE, BETRAY_REP, LOOT_RATE, LOOT_CAP, SEND_TAX, EXPAND_BASE,
   COLLECT_CD, ATTACK_CD, EXPAND_CD, TRAIN_CD, MARKET_MS, TREATY_MS, SHIELD_MS,
   titleFor,

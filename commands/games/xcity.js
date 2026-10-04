@@ -18,7 +18,7 @@
  *   Xcity top <or|pop|armee|rep> · news · notif · profile <ville> · delete confirm
  */
 
-const { CityGame, BUILD_COST, BUILD_LABEL, UNITS, OFFICERS, DECREES, RES, RES_LABEL, TREATY_TYPES } = require('../../systems/city');
+const { CityGame, BUILD_COST, BUILD_LABEL, UNITS, OFFICERS, DECREES, RES, RES_LABEL, TREATY_TYPES, ELEMENTS, CURE_PRICE } = require('../../systems/city');
 
 function nfc(n) { return String(Math.floor(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
 
@@ -32,6 +32,7 @@ module.exports = {
   cooldownMs: 3000,
   run: async (ctx) => {
     const game = new CityGame(ctx.db.cities);
+    game.sweepViruses(); // ☣️ les virus dont le délai a expiré font leurs morts ici
     const sub = String(ctx.args[0] || '').toLowerCase();
     const a = ctx.args.slice(1);
     const uid = ctx.senderID;
@@ -70,14 +71,27 @@ module.exports = {
       return ctx.send('🏚️ Ta ville a été rasée. Tu peux en fonder une nouvelle : Xcity create <nom>');
     }
 
+    /* ── RENAME ── */
+    if (sub === 'rename') {
+      // Xcity rename <nouveau nom>            → sa propre ville
+      // Xcity rename <ville> <nouveau nom>    → la sienne OU (admin) celle d'un autre
+      const oldName = a.length >= 2 ? a[0] : '';
+      const newName = a.length >= 2 ? a.slice(1).join(' ') : a.join(' ');
+      const res = game.rename(uid, oldName, newName, { isAdmin: ctx.isAdmin(uid) });
+      if (!res.ok) return bad(res.err);
+      return ctx.send(ctx.fmt.frame('🏷️ VILLE RENOMMÉE', [
+        `${res.oldName} ${'\u2192'} ${ctx.fmt.bold(res.newName)} (maire ${res.mayor})`,
+      ]));
+    }
+
     /* ── STATUS ── */
     if (sub === 'status') {
       const s = game.status(uid);
       if (!s) return bad('Tu n’as pas de ville — Xcity create <nom>');
       const L = s.lines;
-      return ctx.send(ctx.fmt.frame(`🏙️ ${s.city.name.toUpperCase()} — 𝗟𝘃𝗹 ${s.city.lvl}`, [
-        L.main, L.land, L.buildings, L.ress, L.army, L.decree, L.treaties, L.rep,
-      ]));
+      const rows = [L.main, L.land, L.buildings, L.ress, L.army, L.decree, L.treaties, L.rep];
+      if (L.lab) rows.splice(2, 0, L.lab);
+      return ctx.send(ctx.fmt.frame(`🏙️ ${s.city.name.toUpperCase()} — 𝗟𝘃𝗹 ${s.city.lvl}`, rows));
     }
 
     /* ── PROFILE ── */
@@ -316,6 +330,96 @@ module.exports = {
       return bad('Usage : Xcity treaty propose <ville> <peace|alliance|trade> · accept <ville> · break <ville> · list');
     }
 
+    /* ── LABORATOIRE ── */
+    if (sub === 'lab') {
+      const res = game.labView(uid);
+      if (!res.ok) return bad(res.err);
+      const lines = [
+        `🧪 ${res.labs} labo(s) · 🔬 ${res.scientists}/${res.capacity} scientifiques`,
+        `🧬 Stock : ${res.stock || 'vide'}`,
+      ];
+      if (res.viruses.length) {
+        lines.push('☣️ ' + ctx.fmt.bold('Vos organismes') + ' :');
+        for (const v of res.viruses) {
+          const mins = Math.max(0, Math.ceil((v.deadline ? v.deadline - Date.now() : v.life) / 60000));
+          lines.push(`• ${v.name} — ${v.tier === 'pandemic' ? '🦠 pandémie' : '☣️ virus'} · puissance ${v.power} · ${v.deadline ? `${mins} min restantes` : `prêt (${mins} min de vie)`}${Object.keys(v.infected).length ? ' · RELÂCHÉ' : ''}`);
+        }
+      } else lines.push('🧫 Aucun virus en réserve — Xcity synth <nom> <3 éléments>');
+      if (res.infectedBy.length) lines.push(`🚑 VILLE INFECTÉE : ${res.infectedBy.map((v) => v.name).join(', ')} — Xcity cure <nom>`);
+      return ctx.send(ctx.fmt.frame('🧪 LABORATOIRE', lines));
+    }
+    if (sub === 'hire') {
+      const res = game.hire(uid, a[0]);
+      if (!res.ok) return bad(res.err);
+      return ctx.send(ctx.fmt.frame('🔬 RECRUTEMENT SCIENTIFIQUE', [
+        `${res.hired} scientifique(s) embauché(s) — équipe : ${res.scientists}/${res.capacity}`,
+        `💰 −${nfc(res.cost)}$ → trésor ${nfc(res.gold)}$`,
+      ]));
+    }
+    if (sub === 'research') {
+      const res = game.research(uid);
+      if (!res.ok) return bad(res.err);
+      return ctx.send(ctx.fmt.frame('🔎 CAMPAGNE DE RECHERCHE', [
+        res.found.length
+          ? `🧬 Découvert : ${res.found.map((k) => ELEMENTS[k].label).join(' · ')}`
+          : '🕳️ Aucun élément découvert cette fois… (plus de scientifiques = plus de chances)',
+        `🧬 Stock : ${res.stock}`,
+        `💰 −200$ → trésor ${nfc(res.gold)}$`,
+      ]));
+    }
+    if (sub === 'synth') {
+      if (a.length < 2) {
+        return ctx.send(ctx.fmt.frame('☣️ SYNTHÈSE VIRALE', [
+          '📌 ' + ctx.fmt.bold('Virus') + ' : Xcity synth <nom> <elt1> <elt2> <elt3> — 500$',
+          '📌 ' + ctx.fmt.bold('Pandémie') + ' : Xcity synth <nom> <6 éléments dont 1 rare> rancon <prix> — 2 000$',
+          `🧬 Éléments : ${Object.keys(ELEMENTS).join(', ')}`,
+          '🔴 Rares : mercure, cesium, plutonium · 🧪 2 labos + 🔬 4 scientifiques requis pour une pandémie',
+          '⏳ La durée de vie du virus dépend de sa synthèse · créateur JAMAIS dévoilé',
+        ]));
+      }
+      const name = a[0];
+      const rest = a.slice(1).map(String);
+      let ransomArg = null;
+      const ri = rest.findIndex((x) => x.toLowerCase() === 'rancon' || x.toLowerCase() === 'rançon');
+      if (ri !== -1) { ransomArg = rest[ri + 1]; rest.splice(ri, 2); }
+      const res = game.synth(uid, name, rest, ransomArg);
+      if (!res.ok) return bad(res.err);
+      const v = res.virus;
+      return ctx.send(ctx.fmt.frame(res.tier === 'pandemic' ? '🦠 PANDEMIE SYNTHÉTISÉE' : '☣️ VIRUS SYNTHÉTISÉ', [
+        `${ctx.fmt.bold(v.name)} — puissance ${v.power} · durée de vie ~${Math.round(v.life / 60000)} min`,
+        v.tier === 'pandemic'
+          ? `🗝️ Rançon fixée : ${nfc(v.ransom)}$ par ville — un jour, tu pourras l’unleash…`
+          : '🎯 Relâche-le : Xcity infect <ville> <nom> — TA cible ne saura JAMAIS qui a frappé',
+      ]));
+    }
+    if (sub === 'infect') {
+      const res = game.infect(uid, a[0] || '', a[1] || '');
+      if (!res.ok) return bad(res.err);
+      await dmHints(res);
+      return ctx.send(ctx.fmt.frame('☣️ CONTAMINATION', [
+        `Le virus ${ctx.fmt.bold(res.virus.name)} frappe ${res.targetName} — ${res.infected} habitants infectés.`,
+        `⏳ ~${res.mins} min avant des morts · 💊 soins 100$/habitant · 🕵️ AUCUNE trace vers toi.`,
+        '📰 L’info passe aux chroniques (nom du virus seul).',
+      ]));
+    }
+    if (sub === 'unleash') {
+      const res = game.unleash(uid, a[0] || '');
+      if (!res.ok) return bad(res.err);
+      return ctx.send(ctx.fmt.frame('🦠 PANDEMIE RELÂCHÉE', [
+        `${ctx.fmt.bold(res.virus.name)} frappe ${res.hits} ville(s) — TA ville est épargnée.`,
+        `🗝️ Rançon exigée : ${nfc(res.virus.ransom)}$ par ville → elles paieront via Xcity send ${res.virus.name} money <somme>`,
+        `⏳ ~${res.mins} min · 📰 L’annonce de rançon est passée aux chroniques et aux notifs — tu restes ANONYME.`,
+      ]));
+    }
+    if (sub === 'cure') {
+      const res = game.cure(uid, a.join(' '));
+      if (!res.ok) return bad(res.err);
+      return ctx.send(ctx.fmt.frame('💊 SOINS URGENTS', [
+        `${res.cnt} habitants sauvés — facture : ${nfc(res.cost)}$ (100$/habitant)`,
+        '🛏️ Ta ville est tirée d’affaire… mais où est passé cet argent ?',
+      ]));
+    }
+
     /* ── BARBARIANS / RAID ── */
     if (sub === 'barbarians') {
       const camps = game.ensureBarbs();
@@ -377,12 +481,18 @@ module.exports = {
       '🏗️ 𝗠𝗔 𝗩𝗜𝗟𝗟𝗘',
       '• create <nom> — fonder sa ville (or interne)',
       '• status · profile <ville> — fiches détaillées',
-      '• build <type> · collect · upgrade · delete confirm',
+      '• build <type> · collect · upgrade · rename <nouveau nom>',
+      '• delete confirm — raser sa ville',
       '📐 𝗧𝗘𝗥𝗥𝗜𝗧𝗢𝗜𝗥𝗘',
       '• expand — +1 km² → touristes → or 💰',
       '🪖 𝗔𝗥𝗠𝗘́𝗘',
       '• train <type> · officer <type> · army',
       '• decree <conscription|festival|tax|none>',
+      '🧪 𝗟𝗔𝗕𝗢𝗥𝗔𝗧𝗢𝗜𝗥𝗘 ☣️',
+      '• build lab · hire <n> · research — éléments chimiques',
+      '• synth <nom> <3 élts> = VIRUS · <6 élts> rancon <prix> = PANDEMIE',
+      '• infect <ville> <nom> — ANONYME · cure <nom> — soins 100$/habitant',
+      '• unleash <nom> — pandémie mondiale + rançon (envoi au NOM DU VIRUS)',
       '💱 𝗘́𝗖𝗢𝗡𝗢𝗠𝗜𝗘',
       '• market · buy <res> <qté> · sell <res> <qté>',
       '• send <ville> money <somme> — ou send <ville> <res> <qté>',
