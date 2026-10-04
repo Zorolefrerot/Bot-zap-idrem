@@ -613,3 +613,80 @@ test('Xteam : 9 rubriques × 5 questions = 45 au total', async () => {
   await bot.handleMessage(makeMsg('thread-1', UIDS.admin, 'stop'));
   await until(() => !bot.sessions.get('thread-1', 'xteam'), 3000);
 });
+
+/* ════════ XBET : carte propre, cotes haussées, résultat poussé à 30 s ════════ */
+
+test('Xbet : carte TRIÉE (grosses affiches d’abord), sans puissance affichée', () => {
+  const bot = fakeBot();
+  const engine = new BetEngine(bot);
+  const card = engine.newRound('g1');
+  for (let i = 1; i < card.length; i++) {
+    const prev = card[i - 1].a[1] + card[i - 1].b[1];
+    const cur = card[i].a[1] + card[i].b[1];
+    assert.ok(prev >= cur, `carte triée par affiche (${i})`);
+  }
+});
+
+test('Xbet : cotes un peu plus hausses, SANS exagération', () => {
+  const { oddsFor } = require('../systems/xbet');
+  const top = oddsFor(['Real Madrid', 95], ['Modeste', 70]);
+  const mid = oddsFor(['Moyenne', 75], ['Moyenne B', 74]);
+  // Favori : ×1.25 (avant ×1.2) — mieux payé mais pas gifté
+  assert.ok(top.vA >= 1.25 && top.vA <= 1.35, `favori ≈×1.25 (reçu ×${top.vA})`);
+  // Nul passé de ×3.2 à ×3.8 (plafonné loin de l'exagération)
+  assert.equal(top.nul, 3.8);
+  // Défaites mieux payées (×1.9–3.4) mais plafonnées à ×5
+  assert.ok(top.dA >= 3.0 && top.dA <= 3.6, `défaite du favori ≈×3.4 (reçu ×${top.dA})`);
+  assert.ok(mid.vA >= 1.5 && mid.vA <= 1.7, `équilibre ≈×1.6 (reçu ×${mid.vA})`);
+  // Plafonds absolus
+  assert.ok(top.vA <= 4.5 && top.dA <= 5.0, 'jamais de cote mirobolante');
+});
+
+test('Xbet : le résultat part TOUT SEUL 30 s après le pari (somme + nouveau solde)', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const bot = fakeBot();
+  const sent = [];
+  bot.send = async (payload, tid) => {
+    sent.push({ tid, body: payload.body });
+  };
+  const engine = new BetEngine(bot);
+  engine.newRound('g1');
+  const bet = engine.placeBet('g1', 'u1', '1', 'a', 'v', 500);
+  assert.equal(bet.ok, true);
+  assert.equal(sent.length, 0, 'rien avant 30 s');
+  t.mock.timers.tick(30_000);
+  for (let i = 0; i < 6; i++) await new Promise((r) => setImmediate(r)); // flush des promesses
+  assert.equal(sent.length, 1, 'le résultat est poussé automatiquement');
+  assert.equal(sent[0].tid, 'g1', 'dans la bonne conversation');
+  const b = unbold(sent[0].body);
+  assert.ok(/XBET — R[ÉE]SULTAT/.test(b), 'cadre résultat');
+  assert.ok(/GAGN[ÉE] : \+|PERDU : −/.test(b), 'somme gagnée ou perdue explicite');
+  assert.ok(/Nouveau solde/.test(b), 'nouveau solde affiché');
+});
+
+test('Xbet (bot réel) : carte sans /100 avec cotes, résultat + solde poussés', async () => {
+  const { boot, until, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
+  const { bot, adapter } = await boot({});
+  clearCooldowns(bot);
+  const u = bot.db.ensureUser(UIDS.shadow);
+  u.xcoins = 5000;
+  bot.db.users.save();
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xbet'));
+  const cardBody = unbold(bodies(adapter).find((b) => /AFFRONTEMENTS/.test(b)) || '');
+  assert.ok(cardBody.includes('×1.'), 'cotes affichées sur la carte');
+  assert.ok(!/Puissance/.test(cardBody) && !/\/100/.test(cardBody), 'plus aucune puissance /100');
+  assert.ok(/\d\. .*🆚/.test(cardBody), 'matchs numérotés proprement');
+  // Pari (cooldown nettoyé entre chaque commande)
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xbet 1 a v 500'));
+  const st = bot.db.betState('thread-1');
+  assert.ok(st.bets && st.bets[0], 'pari enregistré');
+  // Échéance forcée → le prochain Xbet (sweep) résout ET pousse le résultat
+  st.bets[0].resolvesAt = Date.now() - 1000;
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xbet'));
+  assert.ok(
+    await until(() => bodies(adapter).some((b) => /XBET — R[ÉE]SULTAT/.test(unbold(b)) && /Nouveau solde/.test(unbold(b))), 5000),
+    'résultat + somme + nouveau solde poussés dans la conversation'
+  );
+});

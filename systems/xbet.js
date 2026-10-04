@@ -1,12 +1,15 @@
 'use strict';
 /*
  * 🧬 MeR~NeL — systems/xbet.js
- * Moteur des paris Xbet — équipes de foot RÉELLES, puissances /100 réalistes.
+ * Moteur des paris Xbet — équipes de foot RÉELLES, cotes généreuses sans excès.
+ * La carte est TRIÉE (grosses affiches en tête) et ne montre JAMAIS les puissances.
  * - Une manche = 10 affrontements (équipes réelles, jamais les mêmes duos 2×).
  * - Pari : `xbet <n°> <a|b> <v|n|d> <mise>` — 1 pari par match, 1er arrivé 1er servi.
  * - Résolution 30 s après le pari ; cotes basées sur la puissance des équipes.
  * - Les 10 matchs épuisés → prochaine commande Xbet = NOUVELLE manche.
  */
+
+const fmt = require('../utils/formatter');
 
 const BET_DELAY_MS = 30 * 1000;
 const MIN_MISE = 100;
@@ -32,16 +35,17 @@ const TEAMS = [
   ['AS Vita Club', 64], ['Diables Rouges U23', 63], ['V Club', 64],
 ];
 
-/* Cotes (multiplicateurs) — victoire favori ×1.2–1.6, nul ×3.2, défaite ×1.5–4. */
+/* Cotes (multiplicateurs) — un peu plus généreuses, sans excès :
+ * victoire ×1.25–4.5 · nul ×3.8 · défaite ×1.5–5. */
 function oddsFor(a, b) {
-  const oA = Math.min(4.0, Math.max(1.2, 110 / a[1]));
-  const oB = Math.min(4.0, Math.max(1.2, 110 / b[1]));
+  const oA = Math.min(4.5, Math.max(1.25, 118 / a[1]));
+  const oB = Math.min(4.5, Math.max(1.25, 118 / b[1]));
   return {
     vA: Math.round(oA * 100) / 100, // pari a v
     vB: Math.round(oB * 100) / 100, // pari b v
-    nul: 3.2,
-    dA: Math.round(Math.min(4.0, Math.max(1.2, 120 / (100 - a[1] + 40))) * 100) / 100,
-    dB: Math.round(Math.min(4.0, Math.max(1.2, 120 / (100 - b[1] + 40))) * 100) / 100,
+    nul: 3.8,
+    dA: Math.round(Math.min(5.0, Math.max(1.5, 135 / (135 - a[1]))) * 100) / 100,
+    dB: Math.round(Math.min(5.0, Math.max(1.5, 135 / (135 - b[1]))) * 100) / 100,
   };
 }
 
@@ -90,6 +94,8 @@ class BetEngine {
       pool.splice(Math.max(i, j), 1);
       pool.splice(Math.min(i, j), 1);
     }
+    /* Classement PROPRE : les plus grosses affiches en tête de carte. */
+    card.sort((x, y) => y.a[1] + y.b[1] - (x.a[1] + x.b[1]));
     st.card = card;
     st.bets = {};
     this.bot.db.bets.save();
@@ -194,30 +200,43 @@ class BetEngine {
     else delta = 0; // la mise était déjà débitée au placement
 
     const user = this.bot.db.ensureUser(bet.senderID);
+    /* stats : bumpStat (vraie BDD) sinon stats.add (stubs de test). */
+    const bump = (k, v) =>
+      typeof this.bot.db.bumpStat === 'function' ? this.bot.db.bumpStat(k, v) : this.bot.db.stats.add(k, v);
     if (win) {
       user.xcoins += delta;
-      this.bot.db.stats.add('betsWon', 1);
+      bump('betsWon', 1);
     } else {
-      this.bot.db.stats.add('betsLost', 1);
+      bump('betsLost', 1);
     }
     this.bot.db.users.save();
 
     const winLabel = winner === 'A' ? match.a[0] : winner === 'B' ? match.b[0] : 'MATCH NUL';
     const res = win
-      ? `🎉 ${this.bot.fmt.bold('GAGNÉ')} +${delta.toLocaleString('fr-FR')} XCoins (cote ×${bet.odds})`
-      : `💀 ${this.bot.fmt.bold('PERDU')} — mise de ${bet.mise.toLocaleString('fr-FR')} XCoins envolée`;
+      ? `🎉 ${fmt.bold('GAGNÉ')} : +${delta.toLocaleString('fr-FR')} XCoins (mise ${bet.mise.toLocaleString('fr-FR')} × ${bet.odds})`
+      : `💀 ${fmt.bold('PERDU')} : −${bet.mise.toLocaleString('fr-FR')} XCoins`;
     const lines = [
-      `⚽ ${this.bot.fmt.bold(bet.matchLabel)}`,
-      `🏁 ${this.bot.fmt.bold('Résultat')} : ${this.bot.fmt.bold(winLabel)}`,
-      `🎯 ${this.bot.fmt.bold('Ton pari')} : ${bet.team} — ${bet.outcome.toUpperCase()} (×${bet.odds})`,
+      `⚽ ${fmt.bold(bet.matchLabel)}`,
+      `🏁 ${fmt.bold('Résultat')} : ${fmt.bold(winLabel)}`,
+      `🎯 ${fmt.bold('Ton pari')} : ${bet.team} — ${bet.outcome.toUpperCase()} (×${bet.odds})`,
       '',
       res,
+      `💰 ${fmt.bold('Nouveau solde')} : ${fmt.bold(user.xcoins.toLocaleString('fr-FR') + ' XCoins')}`,
     ];
     // Match réglé → il disparaît de la carte ; carte vide = nouvelle manche au prochain Xbet.
     delete st.bets[idx];
     card.splice(idx, 1);
     this.bot.db.bets.save();
-    return { body: this.bot.fmt.frame('⚽ XBET — RÉSULTAT', lines) };
+    const payload = { body: fmt.frame('⚽ XBET — RÉSULTAT', lines) };
+    /* Le résultat part TOUT SEUL dans la conversation, 30 s après le pari. */
+    if (typeof this.bot.send === 'function') {
+      try {
+        await this.bot.send(payload, String(groupID));
+      } catch (_) {
+        /* jamais de crash d'envoi */
+      }
+    }
+    return payload;
   }
 
   /* Nettoyage des timers (arrêt du bot). */

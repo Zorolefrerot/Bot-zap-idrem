@@ -1,7 +1,9 @@
 'use strict';
 /*
  * 🧬 MeR~NeL — commands/games/xbet.js
- * Xbet — paris sur des matchs de football RÉELS (équipes + puissances /100).
+ * Xbet — paris sur des matchs de football RÉELS (carte triée, cotes affichées,
+ * puissances JAMAIS montrées). Résultat poussé TOUT SEUL 30 s après le pari :
+ * somme gagnée/perdue + nouveau solde.
  *   Xbet                                → les 10 affrontements de la manche
  *   Xbet 15 a v 50  → match n°15, équipe a, victoire, mise 50 XCoins
  *   <n°> <a|b> <v|n|d> <mise> — v victoire · n nul · d défaite
@@ -63,14 +65,16 @@ module.exports = {
       `   min ${MIN_MISE} XCoins · 1 pari/match · résultat ${BET_DELAY_MS / 1000} s`,
       '',
     ];
+    /* Carte PROPRE : numérotée, triée (grosses affiches d'abord), cotes
+     * affichées — les puissances internes ne sont JAMAIS montrées. */
     card.forEach((m, i) => {
-      const tag = m.taken ? ' ✅ parié' : '';
-      lines.push(
-        `${ctx.fmt.bold(String(i + 1) + '.')} ${ctx.fmt.bold(m.a[0])} (${ctx.fmt.bold(String(m.a[1]))}) 🆚 ${ctx.fmt.bold(m.b[0])} (${ctx.fmt.bold(String(m.b[1]))})${tag}`
-      );
+      const tag = m.taken ? ' ✅' : '';
+      lines.push(`${ctx.fmt.bold(String(i + 1) + '.')} ${ctx.fmt.bold(m.a[0])} 🆚 ${ctx.fmt.bold(m.b[0])}${tag}`);
+      lines.push(`    ${ctx.fmt.bold('×' + m.odds.vA)}   ·   nul ×${m.odds.nul}   ·   ${ctx.fmt.bold('×' + m.odds.vB)}`);
     });
     lines.push('');
-    lines.push(`💪 ${ctx.fmt.bold('Puissance /100')} — le favori gagne presque toujours, mais…`);
+    lines.push(`🎯 ${ctx.fmt.bold('Cotes')} = ton gain par XCoin misé (×1.6 → 100 ⇒ 160).`);
+    lines.push(`⚡ ${ctx.fmt.bold('Le résultat tombe TOUT SEUL 30 s après ton pari')} — gain + solde.`);
 
     await ctx.send(ctx.fmt.frame('⚽ XBET — MANCHE', lines));
   },
