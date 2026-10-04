@@ -2,7 +2,9 @@
 /*
  * 🧬 MeR~NeL — commands/games/xundercover.js
  * Xundercover — Civils 🏛️ vs Undercover 🕵️ vs Mr. White ⚪.
- * Enrôlement 90 s (réponds « moi ») → rôles EN PV → indices 15 s/joueur
+ * Enrôlement 90 s (réponds « moi ») → le lanceur colle le TID du QG (Xtid)
+ * → les rôles de chacun y sont déposés (redistribution PV manuelle)
+ * → indices 15 s/joueur
  * → vote 75 s → éliminations → victoire + « plus malin » + XCoins.
  */
 
@@ -10,7 +12,7 @@ const { UCSession } = require('../../systems/undercover');
 
 module.exports = {
   name: 'xundercover',
-  description: 'Undercover : civils vs infiltrés vs Mr. White (rôles en PV)',
+  description: 'Undercover : civils vs infiltrés vs Mr. White (rôles via QG/TID)',
   usage: 'Xundercover · Xundercover stop',
   category: 'games',
   aliases: ['xuc', 'xunder'],

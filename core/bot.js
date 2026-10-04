@@ -470,7 +470,7 @@ class Bot {
     'xquiz', 'xid', 'xfoot', 'xduel', 'xbet', 'xslots', 'xpile', 'xcourse', 'xrps',
     'xmenu', 'xanime', 'xpolice', 'xlove', 'xprofil', 'xdaily', 'xcoins', 'xp',
     'xrank', 'xask', 'xai', 'xgame', 'xupt', 'xinfo',
-    'xundercover', 'xucards', 'xucrank',
+    'xundercover', 'xucards', 'xucrank', 'xucard', 'xtid', 'xtest',
   ]);
 
   async _jarvisFlow(event, threadID, senderID, senderName, body, opts = {}) {

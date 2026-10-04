@@ -5,7 +5,8 @@
  *
  * DÉROULEMENT :
  *   1. ENRÔLEMENT 90 s — on répond « moi » au message du bot (3-8 joueurs).
- *   2. Le bot affiche la LISTE des joueurs, puis envoie les rôles EN PV.
+ *   2. Le lanceur colle le TID d'un groupe QG (commande Xtid) → le bot y
+ *      dépose les rôles de CHACUN ; il les redistribue en PV lui-même.
  *   3. TOURS D'INDICE — chaque joueur a 15 s (réponse au message du bot).
  *      Un joueur ne peut ni doubler ni modifier son indice. La LISTE
  *      s'allonge à chaque indice (« Merdi : c'est chaud, brûlant »).
@@ -38,34 +39,6 @@ const ROLE_LABEL = {
 
 function normWord(w) {
   return fmt.normalizeAnswer(w);
-}
-
-/* Écoute PV de la devinette de Mr. White (session jetable). */
-class UCGuessSession {
-  constructor(main, mwUid) {
-    this.main = main;
-    this.threadID = String(mwUid);
-    this.scope = 'ucguess';
-    this.ownerID = String(mwUid);
-  }
-
-  accepts(uid) {
-    return String(uid) === this.ownerID;
-  }
-
-  async handle(ctx) {
-    return this.main._onGuess(ctx);
-  }
-
-  expire() {
-    if (this.main) this.main._endGuess(null).catch(() => {});
-  }
-
-  _clearTimers() {} // requis par SessionManager.remove
-
-  dispose() {
-    this.main = null;
-  }
 }
 
 class UCSession {
@@ -117,10 +90,6 @@ class UCSession {
     this._clearTimers();
     this.finished = true;
     if (this.bot && this.bot.sessions) this.bot.sessions.remove(this.threadID, this.scope);
-    if (this.guessSid) {
-      this.bot.sessions.remove(this.guessUid, 'ucguess');
-      this.guessSid = null;
-    }
   }
 
   expire() {
@@ -188,6 +157,7 @@ class UCSession {
     const uid = String(ctx.senderID);
 
     if (this.state === 'RECRUIT') return this._handleRecruit(ctx, raw, uid);
+    if (this.state === 'WAITING_TID') return this._onTID(ctx, raw, uid);
 
     /* 🛑 Arrêt : lanceur ou admin */
     if (fmt.normalizeAnswer(raw) === 'stop' || (ctx.commandName === this.triggerCommand && /^stop$/i.test(raw))) {
@@ -204,6 +174,7 @@ class UCSession {
       return true;
     }
 
+    if (this.state === 'GUESS') return this._handleGuessInThread(ctx, raw, uid);
     if (this.state === 'TURNS') return this._handleClue(ctx, raw, uid);
     if (this.state === 'VOTE') return this._handleVote(ctx, raw, uid);
     return false;
@@ -265,7 +236,47 @@ class UCSession {
       );
       return;
     }
-    await this._beginGame();
+    /* 📥 Les PV automatiques ne marchent pas partout → le lanceur fournit
+     * le TID d'un groupe QG où le bot déposera les rôles de chacun. */
+    this.state = 'WAITING_TID';
+    await this.send(
+      fmt.frame('🎭 XUNDERCOVER — DISTRIBUER LES RÔLES', [
+        '👥 ' + fmt.bold('Joueurs enregistrés :'),
+        ...this._namesList(),
+        '',
+        '📩 ' + fmt.bold('Le lanceur : colle le TID du groupe QG') + ' où j’envoie les rôles de chacun.',
+        '💡 Tape ' + fmt.bold('Xtid') + ' dans un autre groupe pour obtenir son TID.',
+        '⏱️ ' + fmt.bold('90 s') + ' — sans TID, la partie est annulée.',
+      ])
+    );
+    this._timer(async () => {
+      if (this.finished || this.state !== 'WAITING_TID') return;
+      this.dispose();
+      await this.send(fmt.frame('🎭 XUNDERCOVER', '⌛ ' + fmt.bold('Aucun TID fourni — annulé.')));
+    }, REGISTRATION_MS);
+    return true;
+  }
+
+  /* Réception du TID du QG (lanceur ou admin). */
+  async _onTID(ctx, raw, uid) {
+    if (uid !== this.ownerID && !this.bot._isAdminAny(uid)) return true;
+    const tid = String(raw).trim().replace(/[^0-9]/g, '');
+    if (tid.length < 5) {
+      this.tries = (this.tries || 0) + 1;
+      if (this.tries >= 3) {
+        this.dispose();
+        return this.send(fmt.frame('🎭 XUNDERCOVER', '🛑 ' + fmt.bold('Trop de TID invalides — annulé.')));
+      }
+      return this.send(fmt.frame('🎭 XUNDERCOVER', '⚠️ ' + fmt.bold('TID invalide.') + ' Colle le NUMÉRO du groupe (Xtid).'));
+    }
+    this.distributionTID = tid;
+    await this.send(
+      fmt.frame('🎭 XUNDERCOVER', [
+        `✅ ${fmt.bold('QG enregistré')} : ${fmt.bold(tid)}`,
+        '📨 J’y envoie les rôles de CHACUN — redistribue-les en PV !',
+      ])
+    );
+    return this._beginGame();
   }
 
   /* ════════════════ DÉBUT DE PARTIE ════════════════ */
@@ -298,23 +309,24 @@ class UCSession {
       pl.word = pl.role === 'uc' ? this.pair.under : this.pair.civil;
     }
 
-    /* 🤫 Rôles EN PV — personne ne voit rien dans le groupe. */
+    /* 📨 Les rôles de CHACUN partent dans le groupe QG (distributionTID) :
+     * le lanceur les redistribue ensuite manuellement en PV. */
+    const roleLines = [`📨 ${fmt.bold('RÔLES À REDISTRIBUER EN PV')} (${this.order.length} joueurs) :`, ''];
     for (const uid of this.order) {
       const pl = this.players.get(uid);
-      const lines =
-        pl.role === 'mw'
-          ? ['⚪ ' + fmt.bold('Tu es MR. WHITE'), '🤫 Tu n\u2019as PAS de mot — écoute, bluffe, imite !']
-          : [ROLE_LABEL[pl.role], `🤫 Ton mot : ${fmt.bold(pl.word)}`, '📌 Décris-le SANS jamais l\u2019écrire.'];
-      lines.push('', `👥 ${fmt.bold(this.order.length + ' joueurs')} — ouvre le groupe, ça commence !`);
-      this.bot.send(fmt.frame('🎭 TON RÔLE', lines), uid).catch(() => {});
+      const label = pl.role === 'mw' ? '⚪ MR. WHITE — AUCUN mot (bluff !)' : `${ROLE_LABEL[pl.role]} — mot : ${fmt.bold(pl.word)}`;
+      roleLines.push(`▸ ${fmt.bold(pl.name)} : ${label}`);
     }
+    roleLines.push('', '🤫 Transmets à chacun SON rôle en message privé.');
+    this.bot.send(fmt.frame('🎭 QG — RÔLES DE LA PARTIE', roleLines), this.distributionTID).catch(() => {});
 
     await this.send(
       fmt.frame('🎭 XUNDERCOVER — LA PARTIE COMMENCE', [
         `👥 ${fmt.bold('JOUEURS')} (${this.order.length}) :`,
         ...this._namesList(),
         '',
-        '🤫 ' + fmt.bold('Rôles envoyés en PV à chacun !'),
+        `📨 ${fmt.bold('Rôles envoyés au QG')} : ${fmt.bold(this.distributionTID)}`,
+        '🤫 ' + fmt.bold('Le lanceur redistribue chaque rôle en PV !'),
         `🗣️ ${fmt.bold('Tour 1')} — ${fmt.bold('15 s par joueur')} pour donner UN indice (réponds au message du bot).`,
       ])
     );
@@ -325,6 +337,7 @@ class UCSession {
 
   async _startTurn() {
     if (this.finished) return;
+    this.state = 'TURNS'; // ⚠️ essentiel après une élimination (state = RESOLVE)
     this.round++;
     this.speakerIdx = 0;
     this._roundReset();
@@ -656,24 +669,18 @@ class UCSession {
     return this._afterElimination();
   }
 
-  /* ⚪ Devinette de Mr. White (en PV). */
+  /* ⚪ Devinette de Mr. White — À VOIX HAUTE dans le groupe (règle du jeu
+   * réel). Tout message du MW pendant 75 s = sa tentative. */
   async _startGuess(mw) {
     this.guessUid = String(mw.uid);
     this.guessDeadline = Date.now() + GUESS_MS;
-    this.bot.sessions.add(new UCGuessSession(this, mw.uid));
     this.state = 'GUESS';
-    this.bot
-      .send(
-        fmt.frame('⚪ MR. WHITE — DERNIÈRE CHANCE', [
-          '🎯 ' + fmt.bold('Devine le mot des civils !'),
-          `💬 ${fmt.bold('Réponds ICI (en PV) avec ton mot')} — ${fmt.bold('75 s')}.`,
-          '💥 Bonne réponse → tu VOLES la victoire !',
-        ]),
-        mw.uid
-      )
-      .catch(() => {});
     await this.send(
-      fmt.frame('🎭 XUNDERCOVER', `⚪ ${fmt.bold(mw.name)} tente de deviner le mot des civils en PV… (${fmt.bold('75 s')})`)
+      fmt.frame('⚪ MR. WHITE — DERNIÈRE CHANCE', [
+        `🎯 ${fmt.bold(mw.name)} (Mr. White) doit deviner le mot des civils !`,
+        `💬 ${fmt.bold('Écris ta réponse ICI dans le groupe')} — ${fmt.bold('75 s')}.`,
+        '💥 Bonne réponse → tu VOLES la victoire ! Raté → la partie continue.',
+      ])
     );
     this._timer(async () => {
       if (this.finished || this.state !== 'GUESS') return;
@@ -682,19 +689,17 @@ class UCSession {
     return true;
   }
 
-  /* Appelée par la session PV de Mr. White. */
-  async _onGuess(ctx) {
+  /* Réception de la tentative de Mr. White dans le groupe. */
+  async _handleGuessInThread(ctx, raw, uid) {
     if (this.finished || this.state !== 'GUESS') return false;
-    const raw = String(ctx.text || '').trim();
-    if (!raw) return false;
-    await this._endGuess(raw);
+    if (String(uid) !== String(this.guessUid)) return true; // seuls les mots du MW comptent
+    await this._endGuess(String(raw).trim());
     return true;
   }
 
   async _endGuess(raw) {
     if (this.finished || this.state !== 'GUESS') return;
     this.state = 'RESOLVE';
-    this.bot.sessions.remove(this.guessUid, 'ucguess');
     const mw = this.players.get(this.guessUid);
     this.guessUid = null;
 
@@ -854,11 +859,12 @@ class UCSession {
     }
 
     user.cards[card.id] = owned - 1;
-    user.cards[' '] = user.cards[' '] || 0; // garde un objet propre
-    delete user.cards[' '];
     this.bot.db.users.save();
     pl.cardRound = this.round;
-    const DM = (lines) => this.bot.send(fmt.frame(`🃏 ${card.emoji} ${card.name.toUpperCase()}`, lines), uid);
+    /* 📨 Les effets SECRETS partent dans le QG (distributionTID) — les PV
+     * ne sont pas fiables ; le lanceur transmet au joueur. */
+    const QG = this.distributionTID || uid;
+    const DM = (lines) => this.bot.send(fmt.frame(`🃏 ${card.emoji} ${card.name.toUpperCase()} — pour ${pl.name}`, lines), QG);
 
     switch (card.id) {
       case 1: {
@@ -981,6 +987,23 @@ class UCSession {
     }
     await this.send(fmt.frame('🃏 CARTES', `✨ ${fmt.bold(pl.name)} joue ${fmt.bold(card.emoji + ' ' + card.name)} !`));
     return true;
+  }
+
+  /* ════════════════ DÉCLARATION DE CARTE PAR LE LANCEUR ════════════════
+   * Le joueur dit sa carte au lanceur, qui tape : Xucard <n°> @joueur [@cible].
+   * @returns {Promise<boolean>} true si la carte a été jouée. */
+  async declareCard(cardNo, playerUid, targetUid, declaredBy) {
+    if (this.finished || !['TURNS', 'VOTE', 'GUESS'].includes(this.state)) return false;
+    if (String(declaredBy) !== String(this.ownerID) && !this.bot._isAdminAny(declaredBy)) return false;
+    const pl = this.players.get(String(playerUid));
+    if (!pl || !pl.alive) return false;
+    const fakeCtx = {
+      senderID: String(playerUid),
+      event: targetUid ? { mentions: { [String(targetUid)]: { tag: '@joueur' } } } : { mentions: {} },
+      text: `carte ${cardNo}`,
+      args: [String(cardNo)],
+    };
+    return this._useCard(fakeCtx, Number(cardNo), String(playerUid));
   }
 
   /* Boutique (utilisée par la commande Xucards). */

@@ -6,12 +6,12 @@
  * en partie : « carte <n°> @cible » (1 carte / joueur / tour).
  */
 
-const { CARDS } = require('../../systems/ucCards');
+const { CARDS, cardById } = require('../../systems/ucCards');
 
 module.exports = {
   name: 'xucards',
   description: 'Boutique des 20 cartes spéciales Undercover (XCoins)',
-  usage: 'Xucards · Xucards buy <1-20>',
+  usage: 'Xucards · Xucards buy <1-20> · Xucards info <1-20>',
   category: 'games',
   aliases: ['xcartes', 'xcards'],
   adminOnly: false,
@@ -19,6 +19,28 @@ module.exports = {
   run: async (ctx) => {
     const user = ctx.db.ensureUser(ctx.senderID);
     const arg = (ctx.args[0] || '').toLowerCase();
+
+    /* 🔍 Info : Xucards info <n°> */
+    if (['info', 'details', 'detail', 'voir'].includes(arg)) {
+      const card = cardById(ctx.args[1]);
+      if (!card) {
+        return ctx.send(ctx.fmt.frame('🃏 XCARTES', `⚠️ ${ctx.fmt.bold('Numéro de carte ?')} Entre 1 et ${CARDS.length} — tape Xucards.`));
+      }
+      const owned = (user.cards && user.cards[card.id]) || 0;
+      return ctx.send(
+        ctx.fmt.frame(`🃏 CARTE ${card.id} — ${card.emoji} ${card.name.toUpperCase()}`, [
+          `${card.emoji} ${ctx.fmt.bold(card.name)}`,
+          '',
+          `🎯 ${ctx.fmt.bold('Utilité')} : ${card.desc}`,
+          `💰 ${ctx.fmt.bold('Prix')} : ${ctx.fmt.bold(card.price.toLocaleString('fr-FR') + ' XCoins')}`,
+          `⏱️ ${ctx.fmt.bold('Quand')} : phase ${card.phase === 'vote' ? 'VOTE uniquement' : 'n’importe quel tour'}`,
+          `🎒 ${ctx.fmt.bold('Dans ton inventaire')} : ×${owned}`,
+          '',
+          `🛒 ${ctx.fmt.bold('Achat')} : Xucards buy ${card.id}`,
+          `🎮 ${ctx.fmt.bold('En partie')} : carte ${card.id} @cible — ou dis-le au lanceur (Xucard ${card.id} @toi @cible)`,
+        ])
+      );
+    }
 
     /* 🛒 Achat : Xucards buy <n°> */
     if (['buy', 'acheter', 'achat'].includes(arg)) {
@@ -75,6 +97,7 @@ module.exports = {
       }),
       '',
       owned.length ? `🎒 ${ctx.fmt.bold('Inventaire')} : ${owned.join(' · ')}` : `🎒 ${ctx.fmt.bold('Inventaire vide')} — achète avec ${ctx.fmt.bold('Xucards buy <n°>')}`,
+      '🔍 ' + ctx.fmt.bold('Détails d’une carte') + ' : Xucards info <n°>',
       '🎮 En partie : ' + ctx.fmt.bold('carte <n°> @cible') + ' (1 / joueur / tour)',
     ];
     await ctx.send(ctx.fmt.frame('🃏 XCARTES — BOUTIQUE', lines));

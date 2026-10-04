@@ -27,6 +27,24 @@ async function advanceUntil(t, cond, maxSec = 600) {
   assert.ok(cond(), 'condition atteinte dans le délai imparti');
 }
 
+const QG_TID = '99990000111122';
+
+/* Lance une partie complète : Xundercover → enrôlement → 90 s → TID du QG. */
+async function startGame(t, bot, launcher, uids) {
+  const { makeMsg } = require('./helpers');
+  const flush = async (n = 10) => { for (let i = 0; i < n; i++) await new Promise((r) => setImmediate(r)); };
+  await bot.handleMessage(makeMsg('thread-1', launcher, 'Xundercover'));
+  for (const uid of uids) {
+    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
+  }
+  await t.mock.timers.tick(90_000);
+  await flush();
+  // Le lanceur fournit le TID du QG
+  await bot.handleMessage(makeMsg('thread-1', launcher, QG_TID));
+  await flush();
+  return bot.sessions.get('thread-1', 'xundercover');
+}
+
 function harness() {
   const { boot, until, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
   return { boot, until, makeMsg, bodies, unbold, UIDS, clearCooldowns, flush: flushFactory() };
@@ -96,14 +114,26 @@ test('Xundercover : enrôlement, rôles EN PV, liste des joueurs', async () => {
   assert.ok(bodies(adapter).some((b) => /rejoint la partie/.test(unbold(b))), 'confirmations d\u2019enrôlement');
   await t.mock.timers.tick(90_000);
   await flush();
-  // La partie démarre : liste + annonce des rôles en PV
+  // Le bot DEMANDE le TID du QG (pas d'envoi PV automatique)
+  assert.ok(bodies(adapter).some((b) => /DISTRIBUER LES R[ôo]LES/i.test(unbold(b))), 'demande du TID');
+  const session0 = bot.sessions.get('thread-1', 'xundercover');
+  assert.equal(session0.state, 'WAITING_TID', 'état WAITING_TID');
+  // Le lanceur colle le TID du QG
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, QG_TID));
+  await flush();
   assert.ok(bodies(adapter).some((b) => /LA PARTIE COMMENCE/i.test(unbold(b))), 'début de partie');
-  assert.ok(bodies(adapter).some((b) => /R[ôo]les envoy[ée]s en PV/i.test(unbold(b))), 'rôles envoyés');
-  // PV : chaque joueur a reçu son rôle (messages envoyés aux threads PV = uid)
-  const dm = adapter.sent.filter((s) => /TON R[ôo]LE/i.test(unbold(s.payload.body || '')));
-  assert.equal(dm.length, 4, '4 rôles envoyés en PV');
+  assert.ok(bodies(adapter).some((b) => /R[ôo]les envoy[ée]s au QG/i.test(unbold(b))), 'annonce QG');
+  // Les rôles de CHACUN sont dans le QG (thread = TID fourni)
+  const qg = adapter.sent.find((s) => String(s.threadID) === QG_TID && /QG — R[ôo]LES DE LA PARTIE/i.test(unbold(s.payload.body || '')));
+  assert.ok(qg, 'message des rôles envoyé AU TID fourni');
+  const qgBody = unbold(qg.payload.body);
+  for (const name of ['Shadow', 'Paul', 'Fortiche', 'Spammer']) {
+    assert.ok(qgBody.includes(name), `rôle de ${name} dans le QG`);
+  }
+  assert.ok(qgBody.includes('mot :'), 'mots secrets visibles dans le QG');
   const session = bot.sessions.get('thread-1', 'xundercover');
   assert.ok(session && session.pair, 'couple de mots tiré');
+  assert.equal(session.distributionTID, QG_TID, 'TID mémorisé');
   const roles = [...session.players.values()].map((p) => p.role);
   assert.equal(roles.filter((r) => r === 'mw').length, 1, '1 Mr. White');
   assert.equal(roles.filter((r) => r === 'uc').length, 1, '1 undercover à 4 joueurs');
@@ -121,13 +151,7 @@ test('Xundercover : indice par réponse au bot, liste accumulée, PAS de double 
   t.mock.timers.enable({ apis: ['setTimeout'] });
   const { bot, adapter } = await boot({});
   clearCooldowns(bot);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xundercover'));
-  for (const uid of [UIDS.shadow, UIDS.paul, UIDS.fortiche]) {
-    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
-  }
-  await t.mock.timers.tick(90_000);
-  await flush();
-  const session = bot.sessions.get('thread-1', 'xundercover');
+  const session = await startGame(t, bot, UIDS.shadow, [UIDS.shadow, UIDS.paul, UIDS.fortiche, UIDS.spammer]);
   const order = session.order;
   // Joueur 1 donne son indice en répondant au bot
   await bot.handleMessage(
@@ -156,13 +180,7 @@ test('Xundercover : 15 s par indice (timeout → « — » et tour suivant)', as
   t.mock.timers.enable({ apis: ['setTimeout'] });
   const { bot, adapter } = await boot({});
   clearCooldowns(bot);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xundercover'));
-  for (const uid of [UIDS.shadow, UIDS.paul, UIDS.fortiche]) {
-    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
-  }
-  await t.mock.timers.tick(90_000);
-  await flush();
-  const session = bot.sessions.get('thread-1', 'xundercover');
+  const session = await startGame(t, bot, UIDS.shadow, [UIDS.shadow, UIDS.paul, UIDS.fortiche]);
   const order = session.order;
   await advanceUntil(t, () => session.players.get(order[0]).clues[0] === '—');
   assert.equal(session._currentSpeaker().uid, order[1], 'passage au joueur 2');
@@ -181,14 +199,8 @@ test('Xundercover : vote 75 s, UC démasqué → ÉLIMINÉ DIRECT (mot révélé
   t.mock.timers.enable({ apis: ['setTimeout'] });
   const { bot, adapter } = await boot({});
   clearCooldowns(bot);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xundercover'));
   const uids = [UIDS.shadow, UIDS.paul, UIDS.fortiche, UIDS.spammer, UIDS.owner];
-  for (const uid of uids) {
-    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
-  }
-  await t.mock.timers.tick(90_000);
-  await flush();
-  const session = bot.sessions.get('thread-1', 'xundercover');
+  const session = await startGame(t, bot, UIDS.shadow, uids);
   // 5 joueurs → indices muets → vote
   await advanceUntil(t, () => session.state === 'VOTE');
   const uc = [...session.players.values()].find((p) => p.role === 'uc');
@@ -212,14 +224,8 @@ test('Xundercover : Mr. White démasqué → devinette ; BONNE réponse = victoi
   t.mock.timers.enable({ apis: ['setTimeout'] });
   const { bot, adapter } = await boot({});
   clearCooldowns(bot);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xundercover'));
   const uids = [UIDS.shadow, UIDS.paul, UIDS.fortiche, UIDS.spammer, UIDS.owner];
-  for (const uid of uids) {
-    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
-  }
-  await t.mock.timers.tick(90_000);
-  await flush();
-  const session = bot.sessions.get('thread-1', 'xundercover');
+  const session = await startGame(t, bot, UIDS.shadow, uids);
   await advanceUntil(t, () => session.state === 'VOTE');
   const mw = [...session.players.values()].find((p) => p.role === 'mw');
   const civils = uids.filter((u) => session.players.get(u).role === 'civil');
@@ -228,8 +234,8 @@ test('Xundercover : Mr. White démasqué → devinette ; BONNE réponse = victoi
   }
   await advanceUntil(t, () => session.state === 'GUESS');
   assert.ok(/DERNI[èe]re chance/i.test(unbold(bodies(adapter).join('\n')) + unbold(adapter.sent.map((s) => s.payload.body || '').join('\n'))), 'devinette proposée à Mr. White');
-  // Mauvaise réponse en PV → raté, la partie continue
-  await bot.handleMessage(makeMsg(mw.uid, mw.uid, 'chaise'));
+  // Mauvaise réponse DANS LE GROUPE (à voix haute) → raté, la partie continue
+  await bot.handleMessage(makeMsg('thread-1', mw.uid, 'chaise'));
   await flush();
   assert.ok(bodies(adapter).some((b) => /Rat[ée]/.test(unbold(b))), 'mauvaise devinette → raté');
   // On relance un cycle : indices muets → vote MW à nouveau? MW est mort. On stoppe.
@@ -245,14 +251,8 @@ test('Xundercover : devinette CORRECTE de Mr. White → « VOLE LA VICTOIRE » +
   t.mock.timers.enable({ apis: ['setTimeout'] });
   const { bot, adapter } = await boot({});
   clearCooldowns(bot);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xundercover'));
   const uids = [UIDS.shadow, UIDS.paul, UIDS.fortiche, UIDS.spammer, UIDS.owner];
-  for (const uid of uids) {
-    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
-  }
-  await t.mock.timers.tick(90_000);
-  await flush();
-  const session = bot.sessions.get('thread-1', 'xundercover');
+  const session = await startGame(t, bot, UIDS.shadow, uids);
   await advanceUntil(t, () => session.state === 'VOTE');
   const mw = [...session.players.values()].find((p) => p.role === 'mw');
   const civils = uids.filter((u) => session.players.get(u).role === 'civil');
@@ -261,7 +261,8 @@ test('Xundercover : devinette CORRECTE de Mr. White → « VOLE LA VICTOIRE » +
   }
   await advanceUntil(t, () => session.state === 'GUESS');
   const civilWord = session.pair.civil;
-  await bot.handleMessage(makeMsg(mw.uid, mw.uid, civilWord));
+  // La tentative se fait DANS LE GROUPE (à voix haute)
+  await bot.handleMessage(makeMsg('thread-1', mw.uid, civilWord));
   await flush();
   const all = unbold(adapter.sent.map((s) => s.payload.body || '').join('\n'));
   assert.ok(/VOLE LA VICTOIRE/i.test(all), 'Mr. White vole la victoire');
@@ -299,28 +300,66 @@ test('Xucards : shop, achat (débit + inventaire), utilisation en partie, 1/tour
   assert.ok(/insuffisant/i.test(unbold(bodies(adapter).slice(-1)[0])), 'achat refusé sans XCoins');
   user.xcoins = 50000;
   bot.db.users.save();
-  // En partie : utilisation
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xundercover'));
-  for (const uid of [UIDS.shadow, UIDS.paul, UIDS.fortiche]) {
-    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
-  }
-  await t.mock.timers.tick(90_000);
-  await flush();
-  // Carte 5 → PV avec la première lettre
+  // Xucards info : détails d'une carte
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xucards info 20'));
+  const info20 = unbold(bodies(adapter).slice(-1)[0]);
+  assert.ok(/OEIL DE MER~NEL|ŒIL DE MER~NEL|CARTE 20/i.test(info20), 'info carte 20 affichée');
+  assert.ok(/1[\s\u00a0\u202f]000[\s\u00a0\u202f]000/.test(info20), 'prix dans info');
+  assert.ok(/Utilit[ée]/i.test(info20), 'utilité expliquée dans info');
+  // En partie (avec TID du QG)
+  const session = await startGame(t, bot, UIDS.shadow, [UIDS.shadow, UIDS.paul, UIDS.fortiche]);
+  // Carte 5 (self) → la lettre part dans le QG (PAS en PV)
   const before = adapter.sent.length;
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'carte 5'));
   await flush();
   assert.equal(user.cards[5], 0, 'carte consommée');
-  const dm = adapter.sent.slice(before).find((s) => /PREMI[èe]re lettre/i.test(unbold(s.payload.body || '')) && String(s.threadID) === UIDS.shadow);
-  assert.ok(dm, 'lettre envoyée en PV');
+  const qgMsg = adapter.sent.slice(before).find((s) => /PREMI[èe]re lettre/i.test(unbold(s.payload.body || '')) && String(s.threadID) === QG_TID);
+  assert.ok(qgMsg, 'lettre envoyée AU QG (TID fourni au lancement)');
   // 1 seule carte par tour
   user.cards[5] = 1;
   bot.db.users.save();
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'carte 5'));
   await flush();
   assert.ok(bodies(adapter).slice(-3).some((b) => /1 seule carte par tour/.test(unbold(b))), 'limite 1 carte/tour');
+  // Xucard : le LANCEUR déclare la carte d'un AUTRE joueur (au tour suivant)
+  await advanceUntil(t, () => session.round === 2);
+  user.cards[3] = 0;
+  bot.db.ensureUser(UIDS.paul).cards[3] = 1; // Paul a un bouclier
+  bot.db.users.save();
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xucard 3 @Paul', { mentions: { [UIDS.paul]: { tag: '@Paul', from: 8 } } }));
+  await flush();
+  assert.equal(bot.db.getUser(UIDS.paul).cards[3], 0, 'carte de Paul consommée via déclaration du lanceur');
+  const shield = session.players.get(UIDS.paul);
+  assert.ok(shield.shield === true || session.round !== 2, 'bouclier activé pour Paul');
+  // Déclaration par un NON-lanceur → refusée
+  bot.db.ensureUser(UIDS.paul).cards[4] = 1;
+  bot.db.users.save();
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, 'Xucard 4 @Fortiche', { mentions: { [UIDS.fortiche]: { tag: '@Fortiche', from: 8 } } }));
+  await flush();
+  assert.equal(bot.db.getUser(UIDS.paul).cards[4], 1, 'non-lanceur ne peut pas déclarer une carte');
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
   await t.mock.timers.reset();
+});
+
+test('Xtid : le bot donne le TID de la conversation (groupe et PV)', async () => {
+  const { boot, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
+  const { bot, adapter } = await boot({});
+  clearCooldowns(bot);
+  // En groupe
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xtid'));
+  let b = unbold(bodies(adapter).slice(-1)[0]);
+  assert.ok(/TID DU GROUPE/.test(b), 'titre groupe');
+  assert.ok(b.includes('thread-1'), 'le TID du groupe est affiché');
+  // En PV
+  clearCooldowns(bot);
+  const dm = UIDS.shadow;
+  await bot.handleMessage(makeMsg(dm, dm, 'Xtid'));
+  b = unbold(bodies(adapter).slice(-1)[0]);
+  assert.ok(/TID DE CE PV/.test(b), 'titre PV');
+  assert.ok(b.includes(dm), 'le TID du PV est affiché');
 });
 
 test('Xucrank : tableau des meilleurs joueurs après une partie', async () => {
@@ -370,14 +409,8 @@ test('Xundercover : vote par RÉPONSE au message du joueur avec xvote + décompt
   const flush = async (n = 10) => { for (let i = 0; i < n; i++) await new Promise((r) => setImmediate(r)); };
   const { bot, adapter } = await boot({});
   clearCooldowns(bot);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xundercover'));
   const uids = [UIDS.shadow, UIDS.paul, UIDS.fortiche, UIDS.spammer, UIDS.owner];
-  for (const uid of uids) {
-    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
-  }
-  await t.mock.timers.tick(90_000);
-  await flush();
-  const session = bot.sessions.get('thread-1', 'xundercover');
+  const session = await startGame(t, bot, UIDS.shadow, uids);
   for (let i = 0; i < 120 && session.state === 'TURNS'; i++) { await t.mock.timers.tick(5_000); await flush(); }
   assert.equal(session.state, 'VOTE');
   // Paul répond au message de Shadow (messageReply senderID = Shadow) avec « xvote »
@@ -405,14 +438,8 @@ test('Xundercover : l\u2019élimination affiche une PHRASE DRÔLE avec le nom du
   const flush = async (n = 10) => { for (let i = 0; i < n; i++) await new Promise((r) => setImmediate(r)); };
   const { bot, adapter } = await boot({});
   clearCooldowns(bot);
-  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xundercover'));
   const uids = [UIDS.shadow, UIDS.paul, UIDS.fortiche, UIDS.spammer, UIDS.owner];
-  for (const uid of uids) {
-    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
-  }
-  await t.mock.timers.tick(90_000);
-  await flush();
-  const session = bot.sessions.get('thread-1', 'xundercover');
+  const session = await startGame(t, bot, UIDS.shadow, uids);
   for (let i = 0; i < 120 && session.state === 'TURNS'; i++) { await t.mock.timers.tick(5_000); await flush(); }
   const uc = [...session.players.values()].find((p) => p.role === 'uc');
   const civils = uids.filter((u) => session.players.get(u).role === 'civil');
