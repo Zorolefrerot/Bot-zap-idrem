@@ -29,20 +29,39 @@ async function advanceUntil(t, cond, maxSec = 600) {
 
 const QG_TID = '99990000111122';
 
-/* Lance une partie complète : Xundercover → enrôlement → 90 s → TID du QG. */
+const flushN = async (n = 10) => { for (let i = 0; i < n; i++) await new Promise((r) => setImmediate(r)); };
+
+/* Lance une partie complète : Xundercover → enrôlement → 90 s → TID → Go. */
 async function startGame(t, bot, launcher, uids) {
   const { makeMsg } = require('./helpers');
-  const flush = async (n = 10) => { for (let i = 0; i < n; i++) await new Promise((r) => setImmediate(r)); };
   await bot.handleMessage(makeMsg('thread-1', launcher, 'Xundercover'));
   for (const uid of uids) {
     await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
   }
   await t.mock.timers.tick(90_000);
-  await flush();
-  // Le lanceur fournit le TID du QG
+  await flushN();
+  // Le lanceur fournit le TID du QG → rôles envoyés → pause WAITING_GO
   await bot.handleMessage(makeMsg('thread-1', launcher, QG_TID));
-  await flush();
-  return bot.sessions.get('thread-1', 'xundercover');
+  await flushN();
+  const session = bot.sessions.get('thread-1', 'xundercover');
+  // Le lanceur donne le Go → la partie démarre
+  await bot.handleMessage(makeMsg('thread-1', launcher, 'Go'));
+  await flushN();
+  return session;
+}
+
+/* Avance le temps en ré-enclenchant automatiquement les « Go » du lanceur. */
+async function advanceWithGo(t, bot, session, launcher, cond, maxLoops = 200) {
+  const { makeMsg } = require('./helpers');
+  for (let i = 0; i < maxLoops && !cond(); i++) {
+    await t.mock.timers.tick(5_000);
+    await flushN();
+    if (session.state === 'WAITING_GO' && !cond()) {
+      await bot.handleMessage(makeMsg('thread-1', launcher, 'Go'));
+      await flushN();
+    }
+  }
+  assert.ok(cond(), 'condition atteinte (avec Go)');
 }
 
 function harness() {
@@ -121,8 +140,7 @@ test('Xundercover : enrôlement, rôles EN PV, liste des joueurs', async () => {
   // Le lanceur colle le TID du QG
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, QG_TID));
   await flush();
-  assert.ok(bodies(adapter).some((b) => /LA PARTIE COMMENCE/i.test(unbold(b))), 'début de partie');
-  assert.ok(bodies(adapter).some((b) => /R[ôo]les envoy[ée]s au QG/i.test(unbold(b))), 'annonce QG');
+  assert.ok(bodies(adapter).some((b) => /R[ôo]les envoy[ée]s|R[ôo]LES DEPOS[ée]S|EN ATTENTE DU GO/i.test(unbold(b))), 'annonce QG');
   // Les rôles de CHACUN sont dans le QG (thread = TID fourni)
   const qg = adapter.sent.find((s) => String(s.threadID) === QG_TID && /QG — R[ôo]LES DE LA PARTIE/i.test(unbold(s.payload.body || '')));
   assert.ok(qg, 'message des rôles envoyé AU TID fourni');
@@ -134,12 +152,29 @@ test('Xundercover : enrôlement, rôles EN PV, liste des joueurs', async () => {
   const session = bot.sessions.get('thread-1', 'xundercover');
   assert.ok(session && session.pair, 'couple de mots tiré');
   assert.equal(session.distributionTID, QG_TID, 'TID mémorisé');
+  // ⏸️ PAUSE : le jeu attend le Go (rien ne démarre sans lui)
+  assert.equal(session.state, 'WAITING_GO', 'pause Go après envoi des rôles');
+  assert.ok(bodies(adapter).some((b) => /R[ôo]LES ENVOY[ée]S/i.test(unbold(b)) && /Go/i.test(unbold(b))), 'annonce de pause (attente du Go)');
+  const beforeGo = bodies(adapter).length;
+  // Un NON-lanceur ne peut pas donner le Go
+  await bot.handleMessage(makeMsg('thread-1', UIDS.paul, 'Go'));
+  await flushN();
+  assert.equal(session.state, 'WAITING_GO', 'Go refusé aux non-lanceurs');
+  // Le message des rôles du QG s'AUTO-DETRUIT après 10 s
+  const roleMsgId = adapter.sent.find((s2) => String(s2.threadID) === QG_TID && /QG — R[ôo]LES/i.test(unbold(s2.payload.body || ''))).id;
+  await t.mock.timers.tick(10_000);
+  await flushN();
+  assert.ok(adapter.unsent.includes(roleMsgId), 'message des rôles supprimé après 10 s');
+  // Le lanceur donne le Go → le jeu démarre
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Go'));
+  await flushN();
+  assert.equal(session.state, 'TURNS', 'Go du lanceur → le tour 1 démarre');
+  assert.ok(bodies(adapter).slice(beforeGo).some((b) => /LA PARTIE COMMENCE/i.test(unbold(b))), 'annonce après le Go');
+  assert.ok(bodies(adapter).slice(beforeGo).some((b) => /À TOI !/i.test(unbold(b))), 'premier prompt après le Go');
   const roles = [...session.players.values()].map((p) => p.role);
   assert.equal(roles.filter((r) => r === 'mw').length, 1, '1 Mr. White');
   assert.equal(roles.filter((r) => r === 'uc').length, 1, '1 undercover à 4 joueurs');
   assert.ok(/1\. .*Shadow/.test(unbold(bodies(adapter).join('\n'))), 'liste numérotée des joueurs');
-  // Prompt du 1er orateur
-  assert.ok(bodies(adapter).some((b) => /À TOI !/i.test(unbold(b))), 'premier tour de parole');
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
   await t.mock.timers.reset();
 });
@@ -323,7 +358,7 @@ test('Xucards : shop, achat (débit + inventaire), utilisation en partie, 1/tour
   await flush();
   assert.ok(bodies(adapter).slice(-3).some((b) => /1 seule carte par tour/.test(unbold(b))), 'limite 1 carte/tour');
   // Xucard : le LANCEUR déclare la carte d'un AUTRE joueur (au tour suivant)
-  await advanceUntil(t, () => session.round === 2);
+  await advanceWithGo(t, bot, session, UIDS.shadow, () => session.round === 2 && session.state === 'TURNS');
   user.cards[3] = 0;
   bot.db.ensureUser(UIDS.paul).cards[3] = 1; // Paul a un bouclier
   bot.db.users.save();

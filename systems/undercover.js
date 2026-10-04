@@ -64,6 +64,7 @@ class UCSession {
 
     this._timers = [];
     this._voteCast = []; // votes du tour en cours (score « malin »)
+    this._pending = null; // action en attente du « Go » du lanceur
   }
 
   /* Tout le monde peut rejoindre et parler pendant la partie. */
@@ -97,6 +98,11 @@ class UCSession {
     if (this.state === 'RECRUIT') {
       this.dispose();
       this.send(fmt.frame('🎭 XUNDERCOVER', '⌛ ' + fmt.bold('Trop longtemps sans joueurs — annulé.'))).catch(() => {});
+      return;
+    }
+    if (this.state === 'WAITING_TID' || this.state === 'WAITING_GO') {
+      this.dispose();
+      this.send(fmt.frame('🎭 XUNDERCOVER', '⌛ ' + fmt.bold('Partie abandonnée — trop de temps en pause.'))).catch(() => {});
     }
   }
 
@@ -156,16 +162,17 @@ class UCSession {
     if (!raw) return false;
     const uid = String(ctx.senderID);
 
-    if (this.state === 'RECRUIT') return this._handleRecruit(ctx, raw, uid);
-    if (this.state === 'WAITING_TID') return this._onTID(ctx, raw, uid);
-
-    /* 🛑 Arrêt : lanceur ou admin */
+    /* 🛑 Arrêt : lanceur ou admin — vérifié D'ABORD, dans tous les états. */
     if (fmt.normalizeAnswer(raw) === 'stop' || (ctx.commandName === this.triggerCommand && /^stop$/i.test(raw))) {
       if (uid !== this.ownerID && !this.bot._isAdminAny(uid)) return true;
       this.dispose();
       await this.send(fmt.frame('🎭 XUNDERCOVER', '🛑 ' + fmt.bold('Partie annulée.')));
       return true;
     }
+
+    if (this.state === 'RECRUIT') return this._handleRecruit(ctx, raw, uid);
+    if (this.state === 'WAITING_TID') return this._onTID(ctx, raw, uid);
+    if (this.state === 'WAITING_GO') return this._handleGo(ctx, raw, uid);
 
     /* 🃏 Cartes spéciales : « carte <n°> [@cible] » ou « Xucards use … » */
     const carteM = /^(?:carte|xucards use)\s+(\d{1,2})/i.exec(raw);
@@ -318,19 +325,74 @@ class UCSession {
       roleLines.push(`▸ ${fmt.bold(pl.name)} : ${label}`);
     }
     roleLines.push('', '🤫 Transmets à chacun SON rôle en message privé.');
-    this.bot.send(fmt.frame('🎭 QG — RÔLES DE LA PARTIE', roleLines), this.distributionTID).catch(() => {});
+    const sent = await this.bot
+      .send(fmt.frame('🎭 QG — RÔLES DE LA PARTIE', roleLines), this.distributionTID)
+      .catch(() => null);
+    /* 🧹 Le message des rôles s'AUTO-DETRUIT après 10 s (secret). */
+    if (sent && sent.messageID && typeof this.bot.adapter.unsend === 'function') {
+      this._timer(async () => {
+        try {
+          await this.bot.adapter.unsend(sent.messageID);
+        } catch (_) {
+          /* déjà supprimé — pas grave */
+        }
+      }, 10 * 1000);
+    }
 
     await this.send(
-      fmt.frame('🎭 XUNDERCOVER — LA PARTIE COMMENCE', [
-        `👥 ${fmt.bold('JOUEURS')} (${this.order.length}) :`,
-        ...this._namesList(),
+      fmt.frame('🎭 XUNDERCOVER — RÔLES ENVOYÉS', [
+        `📨 ${fmt.bold('Rôles déposés au QG')} : ${fmt.bold(this.distributionTID)}`,
+        '🧹 ' + fmt.bold('Le message du QG s’efface tout seul dans 10 s.'),
+        '🤫 ' + fmt.bold('Redistribue chaque rôle en PV à son propriétaire.'),
         '',
-        `📨 ${fmt.bold('Rôles envoyés au QG')} : ${fmt.bold(this.distributionTID)}`,
-        '🤫 ' + fmt.bold('Le lanceur redistribue chaque rôle en PV !'),
-        `🗣️ ${fmt.bold('Tour 1')} — ${fmt.bold('15 s par joueur')} pour donner UN indice (réponds au message du bot).`,
+        `▶️ ${fmt.bold('Tape « Go » ici')} quand tout le monde a son rôle — le jeu démarre !`,
       ])
     );
-    await this._startTurn();
+    return this._waitGo(
+      async () => {
+        await this.send(
+          fmt.frame('🎭 XUNDERCOVER — LA PARTIE COMMENCE', [
+            `👥 ${fmt.bold('JOUEURS')} (${this.order.length}) :`,
+            ...this._namesList(),
+            '',
+            `🗣️ ${fmt.bold('Tour 1')} — ${fmt.bold('15 s par joueur')} pour donner UN indice (réponds au message du bot).`,
+          ])
+        );
+        await this._startTurn();
+      },
+      'Rôles distribués ?',
+      false
+    );
+  }
+
+  /* ⏸️ PAUSE : le jeu attend le « Go » du lanceur (distribution des rôles,
+   * fin d'un vote…). Rien n'avance sans lui. */
+  async _waitGo(pendingFn, reason, announce = true) {
+    if (this.finished) return;
+    this.state = 'WAITING_GO';
+    this._pending = pendingFn;
+    if (announce) {
+      await this.send(
+        fmt.frame('⏸️ XUNDERCOVER — PAUSE', [
+          `⏳ ${fmt.bold(reason)}`,
+          `▶️ ${fmt.bold('Le lanceur tape « Go »')} pour lancer la suite.`,
+        ])
+      );
+    }
+  }
+
+  /* ▶️ Réception du signal Go (lanceur ou admin uniquement). */
+  async _handleGo(ctx, raw, uid) {
+    const n = fmt.normalizeAnswer(raw);
+    if (!['go', 'start', 'lancer', 'c parti'].includes(n)) return false; // bavardage libre pendant la pause
+    if (uid !== this.ownerID && !this.bot._isAdminAny(uid)) {
+      await this.send(fmt.frame('🎭 XUNDERCOVER', `⏳ ${fmt.bold('Seul le lanceur')} (${fmt.bold(this.ownerName || 'créateur')}) peut donner le « Go ».`));
+      return true;
+    }
+    const fn = this._pending;
+    this._pending = null;
+    if (typeof fn === 'function') await fn();
+    return true;
   }
 
   /* ════════════════ TOURS D'INDICE ════════════════ */
@@ -592,7 +654,7 @@ class UCSession {
           ...this._ledgerLines(true),
         ])
       );
-      return this._startTurn();
+      return this._waitGo(() => this._startTurn(), 'Personne n\u2019est éliminé — prêt pour le prochain tour ?');
     }
 
     const firstVoter = cast.find((v) => v.target === best);
@@ -747,7 +809,7 @@ class UCSession {
       const winners = this.alivePlayers().filter((p) => p.role !== 'civil').map((p) => p.uid);
       return this._finishInfiltrés(winners);
     }
-    return this._startTurn();
+    return this._waitGo(() => this._startTurn(), `Tour ${this.round} terminé — prêt pour le prochain ?`);
   }
 
   async _finishCivils(winners) {
