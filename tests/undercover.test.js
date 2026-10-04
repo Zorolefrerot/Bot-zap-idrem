@@ -199,7 +199,7 @@ test('Xundercover : vote 75 s, UC démasqué → ÉLIMINÉ DIRECT (mot révélé
   }
   await advanceUntil(t, () => !session.players.get(uc.uid).alive);
   assert.ok(!session.players.get(uc.uid).alive, 'UC éliminé');
-  assert.ok(bodies(adapter).some((b) => /UNDERCOVER/.test(unbold(b)) && /est éliminé/.test(unbold(b))), 'élimination de l\u2019UC annoncée');
+  assert.ok(bodies(adapter).some((b) => /UNDERCOVER/.test(unbold(b)) && /ÉLIMINATION/.test(unbold(b))), 'élimination de l\u2019UC annoncée');
   assert.ok(bodies(adapter).some((b) => new RegExp(`Son mot : ${session.pair.under}`).test(unbold(b))), 'mot de l\u2019UC révélé');
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
   await t.mock.timers.reset();
@@ -336,4 +336,110 @@ test('Xucrank : tableau des meilleurs joueurs après une partie', async () => {
   assert.ok(/XUCRANK/.test(b), 'tableau affiché');
   assert.ok(/🥇/.test(b), 'médaille de tête');
   assert.ok(/57 pts/.test(b), `points calculés (3×10+1×15+4×3=57)`);
+});
+
+/* ════════ VOTE PAR RÉPONSE, PHRASES DE MORT, DÉCOMPTE LIVE, XTEST ════════ */
+
+test('Phrases d\u2019élimination : 200+ drôles, noms insérés, 2-4 lignes', () => {
+  const { PHRASES, pickDeathPhrase } = require('../systems/ucPhrases');
+  const total = Object.values(PHRASES).reduce((s, v) => s + v.length, 0);
+  assert.ok(total >= 200, `au moins 200 phrases (reçu : ${total})`);
+  assert.ok(PHRASES.civil.length >= 60 && PHRASES.uc.length >= 60 && PHRASES.mw.length >= 60, 'remplies pour chaque rôle');
+  for (const [role, arr] of Object.entries(PHRASES)) {
+    for (const p of arr) {
+      assert.ok(p.join('').includes('{name}'), `${role} : {name} insérable`);
+      assert.ok(p.length >= 2 && p.length <= 4, `${role} : 2-4 lignes`);
+    }
+  }
+  // Les noms sont bien remplacés
+  for (const role of ['civil', 'uc', 'mw']) {
+    const lines = pickDeathPhrase(role, { name: 'Sydmas', voter: 'Merdi', word: 'test' });
+    assert.ok(lines.join(' ').includes('Sydmas'), `${role} : nom de la victime inséré`);
+    assert.ok(!lines.join(' ').includes('{'), `${role} : plus aucun placeholder`);
+  }
+  // Deux tirages différents existent (banque variée)
+  const seen = new Set();
+  for (let i = 0; i < 50; i++) seen.add(pickDeathPhrase('civil', { name: 'X', voter: 'Y' }).join('|'));
+  assert.ok(seen.size >= 10, `banque variée (${seen.size} phrases différentes en 50 tirages)`);
+});
+
+test('Xundercover : vote par RÉPONSE au message du joueur avec xvote + décompte live', async () => {
+  const t = require('node:test');
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const { boot, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
+  const flush = async (n = 10) => { for (let i = 0; i < n; i++) await new Promise((r) => setImmediate(r)); };
+  const { bot, adapter } = await boot({});
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xundercover'));
+  const uids = [UIDS.shadow, UIDS.paul, UIDS.fortiche, UIDS.spammer, UIDS.owner];
+  for (const uid of uids) {
+    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
+  }
+  await t.mock.timers.tick(90_000);
+  await flush();
+  const session = bot.sessions.get('thread-1', 'xundercover');
+  for (let i = 0; i < 120 && session.state === 'TURNS'; i++) { await t.mock.timers.tick(5_000); await flush(); }
+  assert.equal(session.state, 'VOTE');
+  // Paul répond au message de Shadow (messageReply senderID = Shadow) avec « xvote »
+  await bot.handleMessage(
+    makeMsg('thread-1', UIDS.paul, 'xvote', { messageReply: { senderID: UIDS.shadow, messageID: 'msg-shadow' } })
+  );
+  assert.ok(session.votes.get(UIDS.paul) === UIDS.shadow, 'vote par réponse enregistré');
+  const last = unbold(bodies(adapter).slice(-1)[0]);
+  assert.ok(/Paul → Shadow/.test(last), 'confirmation du vote');
+  assert.ok(/ÉTAT DES VOTES/.test(last), 'décompte live affiché');
+  assert.ok(/1 vote/.test(last), 'compteur de votes visible');
+  // Un 2e vote → le décompte passe à 2
+  await bot.handleMessage(
+    makeMsg('thread-1', UIDS.fortiche, 'xvote', { messageReply: { senderID: UIDS.shadow, messageID: 'msg-shadow-2' } })
+  );
+  assert.ok(/2 votes/.test(unbold(bodies(adapter).slice(-1)[0])), 'décompte mis à jour (2 votes)');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+  await t.mock.timers.reset();
+});
+
+test('Xundercover : l\u2019élimination affiche une PHRASE DRÔLE avec le nom du joueur', async () => {
+  const t = require('node:test');
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const { boot, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
+  const flush = async (n = 10) => { for (let i = 0; i < n; i++) await new Promise((r) => setImmediate(r)); };
+  const { bot, adapter } = await boot({});
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xundercover'));
+  const uids = [UIDS.shadow, UIDS.paul, UIDS.fortiche, UIDS.spammer, UIDS.owner];
+  for (const uid of uids) {
+    await bot.handleMessage(makeMsg('thread-1', uid, 'moi', { messageReply: { senderID: 'BOT_MOCK_000000', messageID: 'recruit' } }));
+  }
+  await t.mock.timers.tick(90_000);
+  await flush();
+  const session = bot.sessions.get('thread-1', 'xundercover');
+  for (let i = 0; i < 120 && session.state === 'TURNS'; i++) { await t.mock.timers.tick(5_000); await flush(); }
+  const uc = [...session.players.values()].find((p) => p.role === 'uc');
+  const civils = uids.filter((u) => session.players.get(u).role === 'civil');
+  for (const v of civils) {
+    await bot.handleMessage(makeMsg('thread-1', v, `vote @uc`, { mentions: { [uc.uid]: { tag: '@uc', from: 5 } } }));
+  }
+  for (let i = 0; i < 120 && session.players.get(uc.uid).alive; i++) { await t.mock.timers.tick(5_000); await flush(); }
+  assert.ok(!session.players.get(uc.uid).alive, 'UC éliminé');
+  const elim = bodies(adapter).map((b) => unbold(b)).find((b) => /XUNDERCOVER — ÉLIMINATION/.test(b));
+  assert.ok(elim, 'message d\u2019élimination');
+  assert.ok(elim.includes(uc.name), 'le nom du joueur est DANS la phrase');
+  assert.ok(/FIN DES VOTES/.test(elim), 'titre « fin des votes »');
+  assert.ok(/Il était|était :/i.test(elim), 'rôle révélé après la phrase');
+  assert.ok(/Décompte/.test(elim), 'décompte final en liste');
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'stop'));
+  await t.mock.timers.reset();
+});
+
+test('Xtest : le bot envoie « Je suis présent ✅ » EN PV, sans erreur', async () => {
+  const { boot, makeMsg, unbold, UIDS, clearCooldowns } = require('./helpers');
+  const { bot, adapter } = await boot({});
+  clearCooldowns(bot);
+  await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xtest'));
+  const dm = adapter.sent.find((s) => String(s.threadID) === UIDS.shadow);
+  assert.ok(dm, 'un message PV a été envoyé (thread = UID du joueur)');
+  const b = unbold(dm.payload.body);
+  assert.ok(/Je suis présent/.test(b), 'le message contient « Je suis présent »');
+  assert.ok(/✅/.test(b), 'avec la coche ✅');
+  assert.ok(b.length < 300, 'message court');
 });

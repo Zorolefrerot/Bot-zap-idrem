@@ -20,6 +20,7 @@
 
 const fmt = require('../utils/formatter');
 const { pickPair } = require('./ucWords');
+const { pickDeathPhrase } = require('./ucPhrases');
 const { CARDS, cardById, shopLine } = require('./ucCards');
 
 const REGISTRATION_MS = 90 * 1000; // enregistrement
@@ -433,7 +434,7 @@ class UCSession {
     this.voteReopened = false; // « Cri du peuple »
     await this.send(
       fmt.frame(`🎭 VOTE — TOUR ${this.round}`, [
-        `🗳️ ${fmt.bold('Tape')} : vote @pseudo  (${fmt.bold('75 s')})`,
+        `🗳️ ${fmt.bold('Tape')} : vote @pseudo  —  ou ${fmt.bold('réponds à un message du joueur')} avec ${fmt.bold('xvote')}  (${fmt.bold('75 s')})`,
         '💀 ' + fmt.bold('Le plus voté est éliminé') + ' — égalité : personne ne sort.',
         '⚠️ Vote interdit pour soi-même · le dernier vote compte.',
         '',
@@ -457,15 +458,52 @@ class UCSession {
       await this.send(fmt.frame('🎭 VOTE', `🧊 ${fmt.bold(voter.name)}, ton vote est GELÉ ce tour (carte adverse) !`));
       return true;
     }
+    /* 🎯 Cible : mention @pseudo, OU réponse au message du joueur avec xvote. */
     const mentions = Object.keys(ctx.event.mentions || {}).map(String);
-    const target = mentions.find((m) => this.players.has(m) && this.players.get(m).alive && m !== uid);
+    let target = mentions.find((m) => this.players.has(m) && this.players.get(m).alive && m !== uid);
     if (!target) {
-      await this.send(fmt.frame('🎭 VOTE', '⚠️ ' + fmt.bold('Mentionne un joueur VIVANT (pas toi) :') + ' vote @pseudo'));
+      const reply = ctx.event && ctx.event.messageReply;
+      const replySender = reply && String(reply.senderID || '');
+      if (replySender && replySender !== uid && this.players.has(replySender) && this.players.get(replySender).alive) {
+        target = replySender;
+      }
+    }
+    if (!target) {
+      await this.send(
+        fmt.frame('🎭 VOTE', [
+          '⚠️ ' + fmt.bold('Deux façons de voter :'),
+          `1. ${fmt.bold('vote @pseudo')} (joueur vivant, pas toi)`,
+          `2. ${fmt.bold('Réponds à un de SES messages')} avec ${fmt.bold('xvote')}`,
+        ])
+      );
       return true;
     }
     this.votes.set(uid, target);
     const name = this.players.get(target).name;
-    await this.send(fmt.frame('🎭 VOTE', `🗳️ ${fmt.bold(voter.name)} → ${fmt.bold(name)}` + (voter.doubleVote ? ' ×2 🗳️' : '')));
+
+    /* 📊 Décompte LIVE : combien de votes a chaque joueur. */
+    const live = new Map();
+    for (const u of this.order) {
+      const pl = this.players.get(u);
+      if (pl.alive) live.set(u, 0);
+    }
+    for (const [voterUid, targetUid] of this.votes) {
+      const v = this.players.get(voterUid);
+      if (live.has(targetUid) && v) live.set(targetUid, (live.get(targetUid) || 0) + (v.doubleVote ? 2 : 1));
+    }
+    const tallyLines = [...live.entries()].map(([u, n], i) => {
+      const pl = this.players.get(u);
+      const arrow = u === target ? ' 🎯' : '';
+      return `${i + 1}. ${fmt.bold(pl.name)} — ${fmt.bold(String(n))} vote${n > 1 ? 's' : ''}${arrow}`;
+    });
+    await this.send(
+      fmt.frame('🎭 VOTE', [
+        `🗳️ ${fmt.bold(voter.name)} → ${fmt.bold(name)}` + (voter.doubleVote ? ' ×2 🗳️' : ''),
+        '',
+        fmt.bold('📊 ÉTAT DES VOTES :'),
+        ...tallyLines,
+      ])
+    );
     return true;
   }
 
@@ -525,6 +563,10 @@ class UCSession {
       .map((u) => `${this.players.get(u).name} ${totals.get(u)}`)
       .join(' · ');
 
+    const cast = this._voteCast.slice();
+    const tallySnapshot = this.order
+      .filter((u) => this.players.get(u).alive)
+      .map((u, i) => `${i + 1}. ${fmt.bold(this.players.get(u).name)} — ${fmt.bold(String(totals.get(u) || 0))}`);
     this.votes.clear();
     this._voteCast = [];
 
@@ -540,12 +582,14 @@ class UCSession {
       return this._startTurn();
     }
 
-    await this._eliminate(best, `🗳️ ${fmt.bold('Votes')} : ${tally || '—'}`);
+    const firstVoter = cast.find((v) => v.target === best);
+    const voterName = firstVoter ? this.players.get(firstVoter.voter).name : '';
+    await this._eliminate(best, `🗳️ ${fmt.bold('Décompte final')} :`, { voterName, tallyLines: tallySnapshot });
   }
 
   /* ════════════════ ÉLIMINATION ════════════════ */
 
-  async _eliminate(uid, context) {
+  async _eliminate(uid, context, extraData = {}) {
     const pl = this.players.get(uid);
     if (!pl || !pl.alive) return this._startTurn();
 
@@ -586,14 +630,25 @@ class UCSession {
     this._voteCast = [];
     this.bot.db.users.save();
 
+    /* 💀 Phrase d'accroche DRÔLE (210 variantes, noms insérés). */
+    const phrase = pickDeathPhrase(pl.role, {
+      name: pl.name,
+      voter: extraData.voterName || '',
+      word: pl.word,
+      civ: this.pair ? this.pair.civil : '',
+    });
     const lines = [
-      `💀 ${fmt.bold(pl.name)} est éliminé — ${fmt.bold(reveal)}`,
-      ...extra,
-      context || '',
+      '❌ ' + fmt.bold('FIN DES VOTES'),
       '',
+      ...phrase,
+      '',
+      `🎭 ${fmt.bold(pl.name)} était : ${fmt.bold(reveal)}`,
+      ...extra,
+      '',
+      ...(extraData.tallyLines && extraData.tallyLines.length ? [context || fmt.bold('Décompte'), ...extraData.tallyLines, ''] : context ? [context, ...((extraData.tallyLines || []))] : []),
       ...this._ledgerLines(true),
     ];
-    await this.send(fmt.frame('🎭 XUNDERCOVER — ÉLIMINATION', lines));
+    await this.send(fmt.frame('💀 XUNDERCOVER — ÉLIMINATION', lines));
 
     /* ⚪ Mr. White démasqué → tentative de devinette (75 s). */
     if (pl.role === 'mw' && !pl.masque) return this._startGuess(pl);
@@ -911,11 +966,11 @@ class UCSession {
             chosen.role === 'mw' ? '🤫 Il a le droit à sa devinette…' : '',
           ])
         );
-        return this._eliminate(chosen.uid, '☠️ Dénoncé par une carte');
+        return this._eliminate(chosen.uid, '☠️ Dénoncé par une carte', { voterName: pl.name });
       }
       case 19:
         await this.send(fmt.frame('🃏 CARTES', `⚡ ${fmt.bold(target.name)} est éliminé SANS vote par une carte de ${fmt.bold(pl.name)} !`));
-        return this._eliminate(target.uid, '⚡ Élimination directe (carte)');
+        return this._eliminate(target.uid, '⚡ Élimination directe (carte)', { voterName: pl.name });
       case 20: {
         const list = this.alivePlayers().map((p) => `${ROLE_LABEL[p.role]} — ${fmt.bold(p.name)}`);
         await DM(['👑 Rôles des vivants :', ...list]);
