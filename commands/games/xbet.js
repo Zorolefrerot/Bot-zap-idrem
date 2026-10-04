@@ -48,7 +48,7 @@ module.exports = {
       await ctx.send(
         ctx.fmt.frame('🎲 XBET — PARI ENREGISTRÉ', [
           `⚽ ${ctx.fmt.bold(b.matchLabel)}`,
-          `🎯 ${ctx.fmt.bold(b.team)} — ${ctx.fmt.bold(b.outcome.toUpperCase())} (cote ×${ctx.fmt.bold(b.odds)})`,
+          `🎯 ${ctx.fmt.bold(b.team)} — ${ctx.fmt.bold(b.outcome.toUpperCase())} (cote ×${ctx.fmt.bold(Number(b.odds).toFixed(2))})`,
           `💰 ${ctx.fmt.bold('Mise')} : ${ctx.fmt.bold(mise.toLocaleString('fr-FR') + ' XCoins')}`,
           `⏱️ ${ctx.fmt.bold('Résultat dans 30 secondes…')}`,
         ])
@@ -59,22 +59,25 @@ module.exports = {
     /* ── Sans arguments : afficher la manche ── */
     const card = ctx.bot.bets.getCard(ctx.threadID);
     const lines = [
-      `🔥 ${ctx.fmt.bold('10 AFFRONTEMENTS')} — parie sur un !`,
-      `📌 ${ctx.fmt.bold('Format')} : ${ctx.fmt.bold('Xbet <n°> <a|b> <v|n|d> <mise>')}`,
-      '   a/b = équipe · v = victoire · n = nul · d = défaite',
-      `   min ${MIN_MISE} XCoins · 1 pari/match · résultat ${BET_DELAY_MS / 1000} s`,
+      `📌 ${ctx.fmt.bold('Xbet <n°> <a|b> <v|n|d> <mise>')} — min ${MIN_MISE} XCoins`,
+      `💡 a/b = équipe · v = victoire · n = nul · d = défaite`,
       '',
     ];
-    /* Carte PROPRE : numérotée, triée (grosses affiches d'abord), cotes
-     * affichées — les puissances internes ne sont JAMAIS montrées. */
+    /* Carte AÉRÉE : chaque match dans son propre bloc, séparé par une
+     * ligne pleine — cotes étiquetées a/nul/b, puissances jamais montrées. */
     card.forEach((m, i) => {
-      const tag = m.taken ? ' ✅' : '';
-      lines.push(`${ctx.fmt.bold(String(i + 1) + '.')} ${ctx.fmt.bold(m.a[0])} 🆚 ${ctx.fmt.bold(m.b[0])}${tag}`);
-      lines.push(`    ${ctx.fmt.bold('×' + m.odds.vA)}   ·   nul ×${m.odds.nul}   ·   ${ctx.fmt.bold('×' + m.odds.vB)}`);
+      const n = String(i + 1);
+      lines.push(`── ${ctx.fmt.bold('MATCH ' + n)} ` + '─'.repeat(Math.max(2, 18 - n.length)));
+      if (m.taken) {
+        lines.push(`🏆 ${ctx.fmt.bold(m.a[0])} 🆚 ${ctx.fmt.bold(m.b[0])}`);
+        lines.push(`✅ ${ctx.fmt.bold('Pari déjà posé sur ce match')}`);
+      } else {
+        lines.push(`🏆 ${ctx.fmt.bold(m.a[0])} 🆚 ${ctx.fmt.bold(m.b[0])}`);
+        lines.push(`👉 ${ctx.fmt.bold('a')} ×${Number(m.odds.vA).toFixed(2)}  ·  nul ×${Number(m.odds.nul).toFixed(2)}  ·  ${ctx.fmt.bold('b')} ×${Number(m.odds.vB).toFixed(2)}`);
+      }
+      lines.push('');
     });
-    lines.push('');
-    lines.push(`🎯 ${ctx.fmt.bold('Cotes')} = ton gain par XCoin misé (×1.6 → 100 ⇒ 160).`);
-    lines.push(`⚡ ${ctx.fmt.bold('Le résultat tombe TOUT SEUL 30 s après ton pari')} — gain + solde.`);
+    lines.push(`⚡ ${ctx.fmt.bold('Résultat envoyé TOUT SEUL 30 s après le pari')} — gain + solde.`);
 
     await ctx.send(ctx.fmt.frame('⚽ XBET — MANCHE', lines));
   },

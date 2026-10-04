@@ -672,10 +672,15 @@ test('Xbet (bot réel) : carte sans /100 avec cotes, résultat + solde poussés'
   u.xcoins = 5000;
   bot.db.users.save();
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xbet'));
-  const cardBody = unbold(bodies(adapter).find((b) => /AFFRONTEMENTS/.test(b)) || '');
+  const cardBody = unbold(bodies(adapter).find((b) => /XBET — MANCHE/.test(b)) || '');
   assert.ok(cardBody.includes('×1.'), 'cotes affichées sur la carte');
   assert.ok(!/Puissance/.test(cardBody) && !/\/100/.test(cardBody), 'plus aucune puissance /100');
-  assert.ok(/\d\. .*🆚/.test(cardBody), 'matchs numérotés proprement');
+  // Matchs BIEN SÉPARÉS : 10 blocs « MATCH n » + lignes vides entre chaque
+  const matchCount = (cardBody.match(/MATCH \d+/g) || []).length;
+  assert.equal(matchCount, 10, '10 blocs MATCH numérotés');
+  const blankSep = (cardBody.match(/\n\s*\n/g) || []).length;
+  assert.ok(blankSep >= 9, `un saut de ligne entre chaque match (reçu : ${blankSep})`);
+  assert.ok(/👉 a ×1\.\d\d\s+·\s+nul ×3\.80\s+·\s+b ×1\.\d\d/.test(cardBody), 'cotes étiquetées a/nul/b bien alignées');
   // Pari (cooldown nettoyé entre chaque commande)
   clearCooldowns(bot);
   await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xbet 1 a v 500'));

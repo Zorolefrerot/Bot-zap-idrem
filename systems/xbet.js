@@ -213,12 +213,12 @@ class BetEngine {
 
     const winLabel = winner === 'A' ? match.a[0] : winner === 'B' ? match.b[0] : 'MATCH NUL';
     const res = win
-      ? `🎉 ${fmt.bold('GAGNÉ')} : +${delta.toLocaleString('fr-FR')} XCoins (mise ${bet.mise.toLocaleString('fr-FR')} × ${bet.odds})`
+      ? `🎉 ${fmt.bold('GAGNÉ')} : +${delta.toLocaleString('fr-FR')} XCoins (mise ${bet.mise.toLocaleString('fr-FR')} × ${Number(bet.odds).toFixed(2)})`
       : `💀 ${fmt.bold('PERDU')} : −${bet.mise.toLocaleString('fr-FR')} XCoins`;
     const lines = [
       `⚽ ${fmt.bold(bet.matchLabel)}`,
       `🏁 ${fmt.bold('Résultat')} : ${fmt.bold(winLabel)}`,
-      `🎯 ${fmt.bold('Ton pari')} : ${bet.team} — ${bet.outcome.toUpperCase()} (×${bet.odds})`,
+      `🎯 ${fmt.bold('Ton pari')} : ${bet.team} — ${bet.outcome.toUpperCase()} (×${Number(bet.odds).toFixed(2)})`,
       '',
       res,
       `💰 ${fmt.bold('Nouveau solde')} : ${fmt.bold(user.xcoins.toLocaleString('fr-FR') + ' XCoins')}`,
