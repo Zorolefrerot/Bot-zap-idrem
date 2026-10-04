@@ -18,9 +18,7 @@
  *   Xcity top <or|pop|armee|rep> · news · notif · profile <ville> · delete confirm
  */
 
-const { CityGame, BUILD_COST, UNITS, OFFICERS, DECREES, RES, RES_LABEL, TREATY_TYPES } = require('../../systems/city');
-
-const SHORT = Number.isInteger;
+const { CityGame, BUILD_COST, BUILD_LABEL, UNITS, OFFICERS, DECREES, RES, RES_LABEL, TREATY_TYPES } = require('../../systems/city');
 
 function nfc(n) { return String(Math.floor(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
 
@@ -96,6 +94,13 @@ module.exports = {
 
     /* ── BUILD ── */
     if (sub === 'build') {
+      if (!a[0]) {
+        return ctx.send(ctx.fmt.frame('🏗️ CONSTRUCTIONS DISPONIBLES', [
+          ...Object.entries(BUILD_COST).map(([t, cost]) => `${BUILD_LABEL[t]} — ${nfc(cost)}$`),
+          '📌 ' + ctx.fmt.bold('Format') + ' : Xcity build <type>',
+          '🏠 Maison = +5 habitants · 🪖 Caserne = recruter l’armée',
+        ]));
+      }
       const res = game.build(uid, String(a[0] || '').toLowerCase());
       if (!res.ok) return bad(res.err);
       const label = BUILD_LABEL[res.type] || res.type;
@@ -142,6 +147,12 @@ module.exports = {
 
     /* ── TRAIN / OFFICER ── */
     if (sub === 'train') {
+      if (!a[0]) {
+        return ctx.send(ctx.fmt.frame('🪖 UNITÉS À RECRUTER', [
+          ...Object.entries(UNITS).map(([k, u]) => `${u.label} — ${nfc(u.cost)}$ · puissance ${u.pow} · 𝗟𝘃𝗹 ${u.minLvl}+`),
+          '📌 ' + ctx.fmt.bold('Format') + ' : Xcity train <type> (caserne requise)',
+        ]));
+      }
       const res = game.train(uid, String(a[0] || '').toLowerCase());
       if (!res.ok) return bad(res.err);
       const u = UNITS[res.unit];
@@ -151,6 +162,12 @@ module.exports = {
       ]));
     }
     if (sub === 'officer') {
+      if (!a[0]) {
+        return ctx.send(ctx.fmt.frame('🎖️ OFFICIERS À RECRUTER', [
+          ...Object.entries(OFFICERS).map(([k, o]) => `${o.label} — ${nfc(o.cost)}$ · 𝗟𝘃𝗹 ${o.minLvl}+ · ${o.txt}`),
+          '📌 ' + ctx.fmt.bold('Format') + ' : Xcity officer <type>',
+        ]));
+      }
       const res = game.buyOfficer(uid, String(a[0] || '').toLowerCase());
       if (!res.ok) return bad(res.err);
       const o = OFFICERS[res.officer];
@@ -174,6 +191,13 @@ module.exports = {
 
     /* ── DECREE ── */
     if (sub === 'decree') {
+      if (!a[0]) {
+        return ctx.send(ctx.fmt.frame('📜 DÉCRETS DISPONIBLES', [
+          ...Object.entries(DECREES).map(([k, d]) => `${d.label} — ${d.txt}`),
+          '🕊️ none — abroger le décret en cours',
+          '📌 ' + ctx.fmt.bold('Changement') + ' : 1 par heure maximum',
+        ]));
+      }
       const res = game.decree(uid, String(a[0] || '').toLowerCase());
       if (!res.ok) return bad(res.err);
       if (!res.decree) return ctx.send('📜 Décret abrogé — la ville reprend son rythme normal.');
@@ -183,6 +207,14 @@ module.exports = {
 
     /* ── SEND ── */
     if (sub === 'send') {
+      if (!a[0]) {
+        return ctx.send(ctx.fmt.frame('🚚 ENVOYER À UNE VILLE', [
+          '💱 ' + ctx.fmt.bold('Or') + ' : Xcity send <ville> money <somme>',
+          '📦 ' + ctx.fmt.bold('Ressources') + ' : Xcity send <ville> <res> <qté>',
+          `📦 Liste : ${RES.join(', ')}`,
+          '🤝 Partenaire commercial (traité trade) = 0 taxe · sinon 10 %',
+        ]));
+      }
       const targetName = a[0];
       const kind = String(a[1] || '').toLowerCase() === 'money' ? 'money' : String(a[1] || '').toLowerCase();
       const res = game.send(uid, targetName, kind, kind, a[2]);
@@ -340,18 +372,31 @@ module.exports = {
       return ctx.send(ctx.fmt.frame('🔔 NOTIFICATIONS', notes.length ? notes : ['Aucune notification.']));
     }
 
-    /* ── AIDE ── */
-    return ctx.send(ctx.fmt.frame('🏙️ XCITY — CITY-BUILDER JvJ', [
-      `🧱 ${ctx.fmt.bold('Fonder')} : Xcity create <nom> — status · build <type> · collect · upgrade`,
-      `📐 ${ctx.fmt.bold('Territoire')} : Xcity expand — les km² attirent des touristes 💰`,
-      `🪖 ${ctx.fmt.bold('Armée')} : train <soldat|archer|cavalier> · officer <capitaine|general> · decree <type>`,
-      `💱 ${ctx.fmt.bold('Économie')} : market · buy <res> <qté> · sell <res> <qté> · send <ville> money <somme>`,
-      `📦 ${ctx.fmt.bold('Ressources')} : send <ville> <res> <qté> — ${RES.join(', ')}`,
-      `⚔️ ${ctx.fmt.bold('Guerre')} : attack <ville> — pillage 15 % · 🗡️ TRAHISON d’un traité = 80 % !`,
-      `📜 ${ctx.fmt.bold('Diplomatie')} : treaty propose <ville> <peace|alliance|trade> · accept · break · list`,
-      `🏕️ ${ctx.fmt.bold('PvE')} : barbarians · raid <n°>`,
-      `📊 ${ctx.fmt.bold('Monde')} : top <or|pop|armee|rep> · news · notif · profile <ville> · delete confirm`,
-      `💰 L’or city est ${ctx.fmt.bold('interne')} — vos XCoins ne sont pas touchés.`,
+    /* ── AIDE (sommaire par rubriques) ── */
+    return ctx.send(ctx.fmt.frame('🏙️ XCITY — SOMMAIRE', [
+      '🏗️ 𝗠𝗔 𝗩𝗜𝗟𝗟𝗘',
+      '• create <nom> — fonder sa ville (or interne)',
+      '• status · profile <ville> — fiches détaillées',
+      '• build <type> · collect · upgrade · delete confirm',
+      '📐 𝗧𝗘𝗥𝗥𝗜𝗧𝗢𝗜𝗥𝗘',
+      '• expand — +1 km² → touristes → or 💰',
+      '🪖 𝗔𝗥𝗠𝗘́𝗘',
+      '• train <type> · officer <type> · army',
+      '• decree <conscription|festival|tax|none>',
+      '💱 𝗘́𝗖𝗢𝗡𝗢𝗠𝗜𝗘',
+      '• market · buy <res> <qté> · sell <res> <qté>',
+      '• send <ville> money <somme> — ou send <ville> <res> <qté>',
+      '⚔️ 𝗚𝗨𝗘𝗥𝗥𝗘',
+      '• attack <ville> — pillage 15 %',
+      '• 🗡️ TRAHISON d’un traité = 80 % de l’or pillé !',
+      '📜 𝗗𝗜𝗣𝗟𝗢𝗠𝗔𝗧𝗜𝗘',
+      '• treaty propose <ville> <peace|alliance|trade>',
+      '• treaty accept <ville> · break <ville> · list',
+      '🏕️ 𝗣𝘃𝗘',
+      '• barbarians · raid <n°> — butin sans ennemi joueur',
+      '🌍 𝗠𝗢𝗡𝗗𝗘',
+      '• top <or|pop|armee|rep> · news · notif',
+      '💰 Or city INTERNE — vos XCoins ne sont jamais touchés.',
     ]));
   },
 };

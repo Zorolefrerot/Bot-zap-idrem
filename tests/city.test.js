@@ -9,7 +9,7 @@
 const { test, describe } = require('node:test');
 const assert = require('node:assert');
 
-const { boot, makeMsg, bodies, UIDS, clearCooldowns } = require('./helpers');
+const { boot, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
 const { CityGame, RES } = require('../systems/city');
 const { BETRAY_RATE, LOOT_RATE, SEND_TAX } = require('../systems/city');
 
@@ -411,6 +411,37 @@ describe('Xcity — monde, commande & XCoins intacts', () => {
     assert.ok(bodies(adapter).some((b) => /XCITY/i.test(b)));
     // monnaie interne ≠ XCoins
     assert.equal(bot.db.getUser(UIDS.shadow).xcoins, coinsBefore);
+  });
+
+  test('aucune erreur système : sweep de toutes les sous-commandes', async () => {
+    const { bot, adapter } = await freshBot();
+    clearCooldowns(bot);
+    await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcity create Sweep'));
+    await FLUSH();
+    const subs = [
+      'Xcity', 'Xcity status', 'Xcity build', 'Xcity build house', 'Xcity collect',
+      'Xcity expand', 'Xcity train', 'Xcity train soldier', 'Xcity officer', 'Xcity army',
+      'Xcity decree', 'Xcity decree none', 'Xcity market', 'Xcity buy wood 5', 'Xcity sell wood 1',
+      'Xcity send', 'Xcity attack', 'Xcity treaty', 'Xcity treaty list', 'Xcity barbarians',
+      'Xcity raid 9', 'Xcity top', 'Xcity news', 'Xcity notif', 'Xcity profile Sweep',
+    ];
+    for (const sub of subs) {
+      clearCooldowns(bot);
+      await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, sub));
+      await FLUSH();
+    }
+    const all = bodies(adapter).map(unbold);
+    const errors = all.filter((b) => /EN PAUSE|INTERNAL_ERROR/i.test(b));
+    assert.deepEqual(errors, [], `erreurs système sur : ${subs.join(' / ')}`);
+    // Les sous-aides dédiées existent et sont bien formatées
+    assert.ok(all.some((b) => /CONSTRUCTIONS DISPONIBLES/i.test(b)));
+    assert.ok(all.some((b) => /UNITÉS À RECRUTER/i.test(b)));
+    assert.ok(all.some((b) => /OFFICIERS À RECRUTER/i.test(b)));
+    assert.ok(all.some((b) => /DÉCRETS DISPONIBLES/i.test(b)));
+    assert.ok(all.some((b) => /ENVOYER À UNE VILLE/i.test(b)));
+    assert.ok(all.some((b) => /SOMMAIRE/i.test(b)));
+    // Le build réussit VRAIMENT (pas de débit sans confirmation)
+    assert.ok(all.some((b) => /CONSTRUCTION/i.test(b) && /Maisons n°2/i.test(b)));
   });
 
   test('constantes exposées : trahison 80 %, taxe 10 %, pillage 15 %', () => {
