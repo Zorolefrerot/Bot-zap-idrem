@@ -55,6 +55,7 @@ module.exports = {
         `${ctx.fmt.bold(res.city.name)} — maire ${ctx.fmt.bold(res.city.mayor)}`,
         `💰 ${nfc(res.city.gold)}${cur()} (or interne) · 👥 50 · 📐 1 km² · 😊 50/100`,
         `📦 Spécialités : ${res.city.produce.map((r) => RES_LABEL[r]).join(' · ')}`,
+        '',
         '🧭 Débute : Xcity status · Xcity collect · Xcity build house',
       ]));
     }
@@ -90,8 +91,9 @@ module.exports = {
       const s = game.status(uid);
       if (!s) return bad('Tu n’as pas de ville — Xcity create <nom>');
       const L = s.lines;
-      const rows = [L.main, L.land, L.buildings, L.ress, L.army, L.decree, L.treaties, L.rep];
-      if (L.lab) rows.splice(2, 0, L.lab);
+      const rows = [L.main, L.land];
+      if (L.lab) rows.push(L.lab);
+      rows.push('', L.buildings, L.ress, '', L.army, L.decree, '', L.treaties, L.rep);
       return ctx.send(ctx.fmt.frame(`🏙️ ${s.city.name.toUpperCase()} — 𝗟𝘃𝗹 ${s.city.lvl}`, rows));
     }
 
@@ -102,6 +104,8 @@ module.exports = {
       return ctx.send(ctx.fmt.frame(`🏛️ ${p.name.toUpperCase()}`, [
         `👑 ${p.mayor} — 𝗟𝘃𝗹 ${p.lvl} · ⭐ ${p.rep} (${p.title})`,
         `👥 ${nfc(p.pop)} hab. · 📐 ${p.km2} km² · 😊 ${p.moral}/100 · 💰 ${nfc(p.gold)}${cur()}`,
+        '',
+        '',
         `🏗️ ${p.buildings || '—'}`,
         `⚔️ Armée : ${p.army} — ✅${p.wins} ❌${p.losses}`,
       ]));
@@ -112,6 +116,7 @@ module.exports = {
       if (!a[0]) {
         return ctx.send(ctx.fmt.frame('🏗️ CONSTRUCTIONS DISPONIBLES', [
           ...Object.entries(BUILD_COST).map(([t, cost]) => `${BUILD_LABEL[t]} — ${nfc(cost)}${cur()}`),
+          '',
           '📌 ' + ctx.fmt.bold('Format') + ' : Xcity build <type>',
           '🏠 Maison = +5 habitants · 🪖 Caserne = recruter l’armée',
         ]));
@@ -133,11 +138,13 @@ module.exports = {
         `💰 +${nfc(res.income)}${cur()} (impôts) + 🧳 ${nfc(res.tourists)} touristes → +${nfc(res.tourism)}${cur()}`,
         `📦 Production : ${Object.entries(res.produced).map(([r, q]) => `${RES_LABEL[r]} +${q}`).join(' · ')}`,
       ];
+      lines.push('');
       if (res.blightNote) lines.push(res.blightNote);
       if (res.sabNote) lines.push(res.sabNote);
       if (res.decreeNote) lines.push(res.decreeNote);
       if (res.exodus) lines.push(`🏚️ Moral bas : ${res.exodus} habitants fuient la ville…`);
-      if (res.event) lines.push(`🎲 ${res.event}`);
+      if (res.event) { lines.push(''); lines.push(`🎲 ${res.event}`); }
+      lines.push('');
       lines.push(`💰 Trésor : ${nfc(res.gold)}${cur()} · 😊 moral ${res.moral}/100`);
       return ctx.send(ctx.fmt.frame('🧾 COLLECTE', lines));
     }
@@ -148,6 +155,7 @@ module.exports = {
       if (!res.ok) return bad(res.err);
       return ctx.send(ctx.fmt.frame('🏛️ NIVEAU SUPÉRIEUR', [
         `${ctx.fmt.bold(`𝗟𝘃𝗹 ${res.lvl}`)} atteint ! (−${nfc(res.cost)}${cur()})`,
+        '',
         '🎁 De nouveaux bâtiments, unités et officiers se débloquent.',
       ]));
     }
@@ -167,6 +175,7 @@ module.exports = {
       if (!a[0]) {
         return ctx.send(ctx.fmt.frame('🪖 UNITÉS À RECRUTER', [
           ...Object.entries(UNITS).map(([k, u]) => `${u.label} — ${nfc(u.cost)}${cur()} · puissance ${u.pow} · 𝗟𝘃𝗹 ${u.minLvl}+`),
+          '',
           '📌 ' + ctx.fmt.bold('Format') + ' : Xcity train <type> (caserne requise)',
         ]));
       }
@@ -182,6 +191,7 @@ module.exports = {
       if (!a[0]) {
         return ctx.send(ctx.fmt.frame('🎖️ OFFICIERS À RECRUTER', [
           ...Object.entries(OFFICERS).map(([k, o]) => `${o.label} — ${nfc(o.cost)}${cur()} · 𝗟𝘃𝗹 ${o.minLvl}+ · ${o.txt}`),
+          '',
           '📌 ' + ctx.fmt.bold('Format') + ' : Xcity officer <type>',
         ]));
       }
@@ -211,7 +221,9 @@ module.exports = {
       if (!a[0]) {
         return ctx.send(ctx.fmt.frame('📜 DÉCRETS DISPONIBLES', [
           ...Object.entries(DECREES).map(([k, d]) => `${d.label} — ${d.txt}`),
+          '',
           '🕊️ none — abroger le décret en cours',
+          '',
           '📌 ' + ctx.fmt.bold('Changement') + ' : 1 par heure maximum',
         ]));
       }
@@ -226,9 +238,11 @@ module.exports = {
     if (sub === 'send') {
       if (!a[0]) {
         return ctx.send(ctx.fmt.frame('🚚 ENVOYER À UNE VILLE', [
+          '',
           '💱 ' + ctx.fmt.bold('Or') + ' : Xcity send <ville> money <somme>',
           '📦 ' + ctx.fmt.bold('Ressources') + ' : Xcity send <ville> <res> <qté>',
           `📦 Liste : ${RES.join(', ')}`,
+          '',
           '🤝 Partenaire commercial (traité trade) = 0 taxe · sinon 10 %',
         ]));
       }
@@ -248,6 +262,8 @@ module.exports = {
       const v = game.marketView();
       return ctx.send(ctx.fmt.frame('🌐 GRAND MARCHÉ', [
         ...RES.map((r) => `${RES_LABEL[r]} : ${nfc(game.priceOf(r))}$${v.shortage === r ? ' ⚠️ PÉNURIE ×2' : ''}`),
+        '',
+        '',
         '💱 Xcity buy <res> <qté> · Xcity sell <res> <qté> — prix re-tirés chaque 24 h',
       ]));
     }
@@ -269,7 +285,9 @@ module.exports = {
         const t = TREATY_TYPES[res.treatyType];
         return ctx.send(ctx.fmt.frame('🗡️ TRAHISON !', [
           `Tu as ROMPU le traité ${t.label} — victoire automatique, portes ouvertes…`,
+          '',
           `💰 Butin : ${ctx.fmt.bold(`${nfc(res.loot)}${cur()}`)} — ${ctx.fmt.bold('80 % de son or')} !`,
+          '',
           `⭐ Réputation ${res.rep} (${res.title}) — le monde retiendra ta trahison.`,
         ]));
       }
@@ -277,6 +295,7 @@ module.exports = {
         const lines = [
           `🎌 Victoire ! Butin : ${ctx.fmt.bold(`${nfc(res.loot)}${cur()}`)} (15 %, plafonné)`,
           Object.keys(res.pillage || {}).length ? `📦 Pillage : ${Object.entries(res.pillage).map(([r, q]) => `${RES_LABEL[r]} +${q}`).join(' · ')}` : null,
+          '',
           `⚔️ Pertes : toi ${res.lostA} unité(s) — défenseur ${res.lostD}`,
           res.shareNote ? `🤝 ${res.shareNote}` : null,
         ].filter(Boolean);
@@ -284,6 +303,7 @@ module.exports = {
       }
       return ctx.send(ctx.fmt.frame('☠️ ATTAQUE — DÉFAITE', [
         `Ta puissance ${res.rollA} vs défense ${res.rollD} — repoussé !`,
+        '',
         `⚔️ Pertes : toi ${res.lostA} unité(s) — défenseur ${res.lostD} · ⭐ le défenseur gagne +2 réputation`,
       ]));
     }
@@ -308,7 +328,9 @@ module.exports = {
         const effect = { peace: 'non-agression 48 h', alliance: 'non-agression + 10 % du butin partagé', trade: 'envois d’or SANS taxe pendant 48 h' }[res.type];
         return ctx.send(ctx.fmt.frame('📜 PROPOSITION ENVOYÉE', [
           `Traité ${t.label} proposé à ${ctx.fmt.bold(res.targetName)} — ${effect}.`,
+          '',
           `⚠️ L’attaquer quand même = 🗡️ TRAHISON : 80 % de son or pillé, réputation détruite.`,
+          '',
           `📥 Il accepte : Xcity treaty accept <ton nom de ville>`,
         ]));
       }
@@ -318,6 +340,7 @@ module.exports = {
         if (!res.accepted) return ctx.send(`❌ Traité ${TREATY_TYPES[res.type].label} proposé par ${res.fromName} : REFUSÉ.`);
         return ctx.send(ctx.fmt.frame('🤝 TRAITÉ SIGNÉ', [
           `${ctx.fmt.bold(res.fromName)} × ta ville — ${TREATY_TYPES[res.type].label} pour 48 h`,
+          '',
           '⭐ +2 réputation chacun · 😊 moral +3 · le rompre coûtera cher.',
         ]));
       }
@@ -327,6 +350,7 @@ module.exports = {
         await dmHints(res);
         return ctx.send(ctx.fmt.frame('💔 TRAITÉ ROMPU', [
           `Traité ${TREATY_TYPES[res.brokenType].label} brisé — ⭐ réputation ${res.rep} (${res.title})`,
+          '',
           '🕊️ Un dirigeant avisé préfère la signature à la lame…',
         ]));
       }
@@ -340,6 +364,7 @@ module.exports = {
       const lines = [
         `🧪 ${res.labs} labo(s) · 🔬 ${res.scientists}/${res.capacity} scientifiques`,
         `🧬 Stock : ${res.stock || 'vide'}`,
+        '',
       ];
       if (res.viruses.length) {
         lines.push('☣️ ' + ctx.fmt.bold('Vos organismes') + ' :');
@@ -348,6 +373,7 @@ module.exports = {
           lines.push(`• ${v.name} — ${v.tier === 'pandemic' ? '🦠 pandémie' : '☣️ virus'} · puissance ${v.power} · ${v.deadline ? `${mins} min restantes` : `prêt (${mins} min de vie)`}${Object.keys(v.infected).length ? ' · RELÂCHÉ' : ''}`);
         }
       } else lines.push('🧫 Aucun virus en réserve — Xcity synth <nom> <3 éléments>');
+      lines.push('');
       if (res.infectedBy.length) lines.push(`🚑 VILLE INFECTÉE : ${res.infectedBy.map((v) => v.name).join(', ')} — Xcity cure <nom>`);
       return ctx.send(ctx.fmt.frame('🧪 LABORATOIRE', lines));
     }
@@ -374,9 +400,13 @@ module.exports = {
       if (a.length < 2) {
         return ctx.send(ctx.fmt.frame('☣️ SYNTHÈSE VIRALE', [
           '📌 ' + ctx.fmt.bold('Virus') + ' : Xcity synth <nom> <elt1> <elt2> <elt3> — 500$',
+          '',
           '📌 ' + ctx.fmt.bold('Pandémie') + ' : Xcity synth <nom> <6 éléments dont 1 rare> rancon <prix> — 2 000$',
+          '',
           `🧬 Éléments : ${Object.keys(ELEMENTS).join(', ')}`,
+          '',
           '🔴 Rares : mercure, cesium, plutonium · 🧪 2 labos + 🔬 4 scientifiques requis pour une pandémie',
+          '',
           '⏳ La durée de vie du virus dépend de sa synthèse · créateur JAMAIS dévoilé',
         ]));
       }
@@ -401,7 +431,9 @@ module.exports = {
       await dmHints(res);
       return ctx.send(ctx.fmt.frame('☣️ CONTAMINATION', [
         `Le virus ${ctx.fmt.bold(res.virus.name)} frappe ${res.targetName} — ${res.infected} habitants infectés.`,
+        '',
         `⏳ ~${res.mins} min avant des morts · 💊 soins 100$/habitant · 🕵️ AUCUNE trace vers toi.`,
+        '',
         '📰 L’info passe aux chroniques (nom du virus seul).',
       ]));
     }
@@ -410,7 +442,9 @@ module.exports = {
       if (!res.ok) return bad(res.err);
       return ctx.send(ctx.fmt.frame('🦠 PANDEMIE RELÂCHÉE', [
         `${ctx.fmt.bold(res.virus.name)} frappe ${res.hits} ville(s) — TA ville est épargnée.`,
+        '',
         `🗝️ Rançon exigée : ${nfc(res.virus.ransom)}${cur()} par ville → elles paieront via Xcity send ${res.virus.name} money <somme>`,
+        '',
         `⏳ ~${res.mins} min · 📰 L’annonce de rançon est passée aux chroniques et aux notifs — tu restes ANONYME.`,
       ]));
     }
@@ -419,6 +453,7 @@ module.exports = {
       if (!res.ok) return bad(res.err);
       return ctx.send(ctx.fmt.frame('💊 SOINS URGENTS', [
         `${res.cnt} habitants sauvés — facture : ${nfc(res.cost)}${cur()} (100$/habitant)`,
+        '',
         '🛏️ Ta ville est tirée d’affaire… mais où est passé cet argent ?',
       ]));
     }
@@ -430,7 +465,7 @@ module.exports = {
         if (!res.ok) return bad(res.err);
         return ctx.send(ctx.fmt.frame('🏛️ ÉLECTIONS OUVERTES', [
           '📢 CANDIDATURES ouvertes pendant 30 min',
-          `🧾 Caution : ${nfc(50000)}${cur()}{cur()} → versée au trésor de l'Assemblée`,
+          `🧾 Caution : ${nfc(50000)}${cur()} → versée au trésor de l'Assemblée`,
           '📌 Postuler : Xcity candidater',
         ]));
       }
@@ -441,8 +476,12 @@ module.exports = {
       } else if (v.phase) {
         lines.push(v.phase === 'candidacy' ? `📜 CANDIDATURES ouvertes (${v.minutesLeft} min)` : `🗳️ VOTE EN COURS (${v.minutesLeft} min)`);
       } else lines.push('🏛️ Aucun Président en exercice — Xcity assemblee ouvrir');
-      lines.push(`🏦 Trésor de l'Assemblée : ${nfc(v.treasury)}${cur()}{cur()} (+10${cur()}/min/ville) · 💱 Monnaie : ${ctx.fmt.bold(v.currency)}`);
+      lines.push('');
+
+      lines.push(`🏦 Trésor de l'Assemblée : ${nfc(v.treasury)}${cur()} (+10${cur()}/min/ville) · 💱 Monnaie : ${ctx.fmt.bold(v.currency)}`);
       if (v.candidates.length) {
+        lines.push('');
+
         lines.push('🎟️ ' + ctx.fmt.bold('Candidats (score = habitants + 20×voix − 1000×scandales) :'));
         for (const c of v.candidates) lines.push(`• ${c.name} — 👥${c.pop} + 🗳️${c.votes} → score ${c.score}${c.scandals ? ` (⚠️ ${c.scandals} scandale(s))` : ''}`);
       } else if (v.phase === 'candidacy') lines.push('Aucun candidat pour l’instant — Xcity candidater');
@@ -452,8 +491,10 @@ module.exports = {
       const res = game.candidater(uid);
       if (!res.ok) return bad(res.err);
       return ctx.send(ctx.fmt.frame('🏛️ CANDIDATURE DÉPOSÉE', [
-        `Caution payée : ${nfc(50000)}${cur()}{cur()} → trésor de l'Assemblée`,
+        `Caution payée : ${nfc(50000)}${cur()} → trésor de l'Assemblée`,
+        '',
         '🗳️ À l’ouverture du vote : ta ville reçoit ses habitants + 20 points par maire qui te vote.',
+        '',
         '⚠️ Tes scandales passés coûtent 1 000 points chacun…',
       ]));
     }
@@ -462,6 +503,7 @@ module.exports = {
       if (!res.ok) return bad(res.err);
       return ctx.send(ctx.fmt.frame('🗳️ VOTE ENREGISTRÉ', [
         `Ta ville vote pour ${ctx.fmt.bold(res.forCity)} — ta voix vaut ${res.weight} points.`,
+        '',
         '🤫 Dernier vote compte : trahir et changer est permis…',
       ]));
     }
@@ -477,23 +519,25 @@ module.exports = {
       const res = game.don(uid, a[0] || '', a[1]);
       if (!res.ok) return bad(res.err);
       return ctx.send(ctx.fmt.frame('🏛️ TRANSFERT PRÉSIDENTIEL', [
-        `${nfc(res.amount)}${cur()}{cur()} versés à ${res.city} — 🏦 trésor : ${nfc(res.treasury)}${cur()}{cur()}`,
+        `${nfc(res.amount)}${cur()} versés à ${res.city} — 🏦 trésor : ${nfc(res.treasury)}${cur()}`,
       ]));
     }
     if (sub === 'batir') {
       const res = game.buildFor(uid, a[0] || '', String(a[1] || '').toLowerCase());
       if (!res.ok) return bad(res.err);
       return ctx.send(ctx.fmt.frame('🏛️ CONSTRUCTION PUBLIQUE', [
-        `${BUILD_LABEL[res.type] || res.type} financée pour ${res.city} — −${nfc(res.cost)}${cur()}{cur()}`,
-        `🏦 Trésor de l'Assemblée : ${nfc(res.treasury)}${cur()}{cur()}`,
+        `${BUILD_LABEL[res.type] || res.type} financée pour ${res.city} — −${nfc(res.cost)}${cur()}`,
+        `🏦 Trésor de l'Assemblée : ${nfc(res.treasury)}${cur()}`,
       ]));
     }
     if (sub === 'pocket') {
       const res = game.pocket(uid, a[0]);
       if (!res.ok) return bad(res.err);
       return ctx.send(ctx.fmt.frame('🥀 DÉTOURNEMENT', [
-        `${nfc(res.amount)}${cur()}{cur()} transférés dans TON trésor personnel…`,
+        `${nfc(res.amount)}${cur()} transférés dans TON trésor personnel…`,
+        '',
         `⭐ Réputation ${res.rep} · scandales : ${res.scandals} (−1 000 points chacun aux élections)`,
+        '',
         '📰 La presse s’en empare — les maires ne l’oublieront pas.',
       ]));
     }
@@ -517,7 +561,8 @@ module.exports = {
         ]));
       }
       return ctx.send(ctx.fmt.frame('🕵️ RAPPORT D’ESPIONNAGE', [
-        `🎯 ${res.city} — 💰 ${nfc(res.gold)}${cur()}{cur()} · 😊 ${res.moral}/100`,
+        `🎯 ${res.city} — 💰 ${nfc(res.gold)}${cur()} · 😊 ${res.moral}/100`,
+        '',
         `🪖 Armée : ${res.units} · 🤝 ${res.treaties} traité(s)`,
         'Personne ne t’a vu passer.',
       ]));
@@ -527,6 +572,7 @@ module.exports = {
       if (!res.ok) return bad(res.err);
       return ctx.send(ctx.fmt.frame('🥀 BIOTOXINE DISPERSÉE', [
         `Les récoltes de ${res.city} se fanent — fermes improductives pour 3 collects.`,
+        '',
         '🕵️ Aucune trace vers toi… (sauf si elle est VACCINÉE, c’est un échec)',
       ]));
     }
@@ -535,6 +581,7 @@ module.exports = {
       if (!res.ok) return bad(res.err);
       return ctx.send(ctx.fmt.frame('📻 PROPAGANDE', [
         `${res.city} : moral -10 (désormais ${res.targetMoral}/100) — la tienne : +5 (${res.myMoral}/100)`,
+        '',
         'Moins de moral = moins de touristes chez eux…',
       ]));
     }
@@ -544,6 +591,7 @@ module.exports = {
       if (res.caught) return ctx.send(ctx.fmt.frame('🧨 SABOTAGE DÉMASQUÉ', [`Les agents ont été identifiés à ${res.city} — réputation ${res.rep}`]));
       return ctx.send(ctx.fmt.frame('🧨 SABOTAGE RÉUSSI', [
         `La production de ${res.city} est réduite de moitié pour 2 collects.`,
+        '',
         'Tu n’as pas laissé de trace.',
       ]));
     }
@@ -551,10 +599,11 @@ module.exports = {
       const res = game.counterfeit(uid);
       if (!res.ok) return bad(res.err);
       if (res.success) {
-        return ctx.send(ctx.fmt.frame('🎭 FAUSSE MONNAIE', [`Billets parfaitement imités : +${nfc(res.gain)}${cur()}{cur()} — trésor ${nfc(res.gold)}${cur()}{cur()}`]));
+        return ctx.send(ctx.fmt.frame('🎭 FAUSSE MONNAIE', [`Billets parfaitement imités : +${nfc(res.gain)}${cur()} — trésor ${nfc(res.gold)}${cur()}`]));
       }
       return ctx.send(ctx.fmt.frame('🎭 FAUX-MONNAYEUR DÉMASQUÉ', [
-        `Amende : −${nfc(res.fine)}${cur()}{cur()} · réputation ${res.rep}`,
+        `Amende : −${nfc(res.fine)}${cur()} · réputation ${res.rep}`,
+        '',
         'La presse parle d’un atelier démantelé…',
       ]));
     }
@@ -564,6 +613,7 @@ module.exports = {
       if (res.revealed) {
         return ctx.send(ctx.fmt.frame('📰 ENQUÊTE EXCLUSIVE', [
           `Le virus ${ctx.fmt.bold(res.virus)} a été créé par ${ctx.fmt.bold(res.creatorName)} (maire ${res.mayor}) !`,
+          '',
           'La chronique est publique — le masque tombe.',
         ]));
       }
@@ -583,8 +633,10 @@ module.exports = {
       const res = game.nuke(uid, a.join(' '));
       if (!res.ok) return bad(res.err);
       return ctx.send(ctx.fmt.frame('☢️ FRAPPE NUCLÉAIRE', [
-        `${res.city} : ${res.deaths} habitants morts, −${nfc(res.drained)}${cur()}{cur()} pillés, bâtiments en ruine`,
+        `${res.city} : ${res.deaths} habitants morts, −${nfc(res.drained)}${cur()} pillés, bâtiments en ruine`,
+        '',
         `⭐ Réputation ${res.rep} · ☢️ ogives restantes : ${res.nukes} · 🚧 zone en quarantaine 30 min`,
+        '',
         'Le monde entier a reçu l’alerte.',
       ]));
     }
@@ -599,7 +651,8 @@ module.exports = {
       const res = game.vaccine(uid, a[0] || '', a[1] || '');
       if (!res.ok) return bad(res.err);
       return ctx.send(ctx.fmt.frame('💉 VACCIN DU MARCHÉ NOIR', [
-        `${res.city} sauvée de « ${res.virus} » (${res.cnt} habitants × 80${cur()} = ${nfc(res.price)}${cur()}{cur()} pour toi)`,
+        `${res.city} sauvée de « ${res.virus} » (${res.cnt} habitants × 80${cur()} = ${nfc(res.price)}${cur()} pour toi)`,
+        '',
         '⭐ +2 réputation — un remède officieux, mais un remède quand même.',
       ]));
     }
@@ -611,6 +664,8 @@ module.exports = {
         ...camps.map((b) => b.power > 0
           ? `${b.id}. ${b.name} — puissance ${b.power} · butin ≈ ${nfc(b.gold)}${cur()}`
           : `${b.id}. ${b.name} — 🪦 rasé (revient dans ~24 h)`),
+        '',
+        '',
         '⚔️ Xcity raid <n°> — victoire : +3 réputation',
       ]));
     }
@@ -639,6 +694,7 @@ module.exports = {
           const val = { or: `${nfc(r.gold)}${cur()}`, pop: `${nfc(r.pop)} hab.`, rep: `${r.rep} ⭐`, armee: `${Math.round(r.army * 10) / 10} ⚔️` }[res.kind];
           return `${ctx.fmt.bold(`${i + 1}.`)} ${r.name} (${r.title}) — ${val}`;
         }),
+        '',
         res.rows.length ? `📊 Classement par ${label}` : 'Aucune ville encore — Xcity create <nom>',
       ]));
     }
@@ -667,25 +723,32 @@ module.exports = {
       '• status · profile <ville> — fiches détaillées',
       '• build <type> · collect · upgrade · rename <nouveau nom>',
       '• delete confirm — raser sa ville',
+      '',
       '📐 𝗧𝗘𝗥𝗥𝗜𝗧𝗢𝗜𝗥𝗘',
       '• expand — +1 km² → touristes → or 💰',
+      '',
       '🪖 𝗔𝗥𝗠𝗘́𝗘',
       '• train <type> · officer <type> · army',
       '• decree <conscription|festival|tax|none>',
+      '',
       '🧪 𝗟𝗔𝗕𝗢𝗥𝗔𝗧𝗢𝗜𝗥𝗘 ☣️',
       '• build lab · hire <n> · research — éléments chimiques',
       '• synth <nom> <3 élts> = VIRUS · <6 élts> rancon <prix> = PANDEMIE',
       '• infect <ville> <nom> — ANONYME · cure <nom> — soins 100$/habitant',
       '• unleash <nom> — pandémie mondiale + rançon (envoi au NOM DU VIRUS)',
+      '',
       '💱 𝗘́𝗖𝗢𝗡𝗢𝗠𝗜𝗘',
       '• market · buy <res> <qté> · sell <res> <qté>',
       '• send <ville> money <somme> — ou send <ville> <res> <qté>',
+      '',
       '⚔️ 𝗚𝗨𝗘𝗥𝗥𝗘',
       '• attack <ville> — pillage 15 %',
       '• 🗡️ TRAHISON d’un traité = 80 % de l’or pillé !',
+      '',
       '📜 𝗗𝗜𝗣𝗟𝗢𝗠𝗔𝗧𝗜𝗘',
       '• treaty propose <ville> <peace|alliance|trade>',
       '• treaty accept <ville> · break <ville> · list',
+      '',
       '🏕️ 𝗣𝘃𝗘',
       '• barbarians · raid <n°> — butin sans ennemi joueur',
       '🏛️ 𝗔𝗦𝗦𝗘𝗠𝗕𝗟𝗘́𝗘 𝗗𝗘𝗦 𝗩𝗜𝗟𝗟𝗘𝗦',
@@ -699,6 +762,7 @@ module.exports = {
       '• quarantine <ville> — confiner une ville infectée',
       '🌍 𝗠𝗢𝗡𝗗𝗘',
       '• top <or|pop|armee|rep> · news · notif',
+      '',
       '💰 Or city INTERNE — vos XCoins ne sont jamais touchés.',
     ]));
   },

@@ -1254,7 +1254,7 @@ class CityGame {
     const E = A.election;
     if (!E || E.phase !== 'candidacy') return { ok: false, err: 'Aucune candidature ouverte — Xcity assemblee ouvrir (ou attends).' };
     if (E.candidates[String(uid)]) return { ok: false, err: 'Tu es déjà candidat.' };
-    if (c.gold < CANDIDACY_FEE) return { ok: false, err: `La caution de candidature coûte ${nf(CANDIDACY_FEE)}${this.cur()}{this.cur()} (fonds : ${nf(c.gold)}).` };
+    if (c.gold < CANDIDACY_FEE) return { ok: false, err: `La caution de candidature coûte ${nf(CANDIDACY_FEE)}${this.cur()} (fonds : ${nf(c.gold)}).` };
     c.gold -= CANDIDACY_FEE;
     A.treasury += CANDIDACY_FEE;
     E.candidates[String(uid)] = true;
@@ -1318,12 +1318,12 @@ class CityGame {
     if (!found) return { ok: false, err: 'Ville bénéficiaire introuvable.' };
     amount = Math.floor(Number(amount));
     if (!Number.isFinite(amount) || amount < 100) return { ok: false, err: 'Minimum 100 par transfert.' };
-    if (A.treasury < amount) return { ok: false, err: `Trésor de l’Assemblée : ${nf(A.treasury)}${this.cur()}{this.cur()} (insuffisant).` };
+    if (A.treasury < amount) return { ok: false, err: `Trésor de l’Assemblée : ${nf(A.treasury)}${this.cur()} (insuffisant).` };
     A.treasury -= amount;
     found.city.gold += amount;
     found.city.moral = clamp(found.city.moral + 2, 0, 100);
-    this.addNews(`🏛️ Le Président a versé ${nf(amount)}${this.cur()}{this.cur()} à ${found.city.name} (fonds de l’Assemblée).`);
-    this.notify(found.city, `🏛️ Le Président de l’Assemblée t’a envoyé ${nf(amount)}${this.cur()}{this.cur()} !`);
+    this.addNews(`🏛️ Le Président a versé ${nf(amount)}${this.cur()} à ${found.city.name} (fonds de l’Assemblée).`);
+    this.notify(found.city, `🏛️ Le Président de l’Assemblée t’a envoyé ${nf(amount)}${this.cur()} !`);
     this.save();
     return { ok: true, amount, city: found.city.name, treasury: A.treasury };
   }
@@ -1336,7 +1336,7 @@ class CityGame {
     if (!found) return { ok: false, err: 'Ville bénéficiaire introuvable.' };
     if (!BUILD_COST[type]) return { ok: false, err: `Types : ${Object.keys(BUILD_COST).join(', ')}` };
     const cost = BUILD_COST[type];
-    if (A.treasury < cost) return { ok: false, err: `Trésor de l’Assemblée : ${nf(A.treasury)}${this.cur()}{this.cur()} — ce bâtiment coûte ${nf(cost)}.` };
+    if (A.treasury < cost) return { ok: false, err: `Trésor de l’Assemblée : ${nf(A.treasury)}${this.cur()} — ce bâtiment coûte ${nf(cost)}.` };
     A.treasury -= cost;
     found.city.b[type] = (found.city.b[type] || 0) + 1;
     if (type === 'house') found.city.pop += 5;
@@ -1352,14 +1352,14 @@ class CityGame {
     const A = this.assembly();
     amount = Math.floor(Number(amount));
     if (!Number.isFinite(amount) || amount < 100) return { ok: false, err: 'Minimum 100.' };
-    if (A.treasury < amount) return { ok: false, err: `Trésor de l’Assemblée : ${nf(A.treasury)}${this.cur()}{this.cur()} (insuffisant).` };
+    if (A.treasury < amount) return { ok: false, err: `Trésor de l’Assemblée : ${nf(A.treasury)}${this.cur()} (insuffisant).` };
     A.treasury -= amount;
     const me = this.cityOf(uid);
     me.gold += amount;
     me.scandals = (me.scandals || 0) + 1;
     me.rep -= 15;
-    this.addNews(`🥀 SCANDALE : le Président a détourné ${nf(amount)}${this.cur()}{this.cur()} de l’Assemblée pour son usage personnel !`);
-    for (const [, c] of this.allCities()) this.notify(c, `🥀 Rumeur : le Président aurait détourné ${nf(amount)}${this.cur()}{this.cur()}… Les maires s’en souviendront aux élections.`);
+    this.addNews(`🥀 SCANDALE : le Président a détourné ${nf(amount)}${this.cur()} de l’Assemblée pour son usage personnel !`);
+    for (const [, c] of this.allCities()) this.notify(c, `🥀 Rumeur : le Président aurait détourné ${nf(amount)}${this.cur()}… Les maires s’en souviendront aux élections.`);
     this.save();
     return { ok: true, amount, scandals: me.scandals, rep: me.rep, treasury: A.treasury };
   }
