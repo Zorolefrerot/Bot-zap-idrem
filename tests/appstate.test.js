@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const { readAppState, normalizeCookie } = require('../services/facebook');
+const { readAppState, normalizeCookie, stateSummary, explainLoginError } = require('../services/facebook');
 
 const FULL_STATE = [
   { name: 'c_user', value: '100065927401614', domain: '.facebook.com', path: '/' },
@@ -55,4 +55,28 @@ test('readAppState : erreur claire si aucun appstate fourni', () => {
     () => readAppState({ root: dir, appstateFile: 'fichier-inexistant.json', appstateJson: '' }),
     /Aucun appstate trouvé/
   );
+});
+
+
+test('stateSummary : identifie le COMPTE (c_user) au format normalisé FCA', () => {
+  const norm = readAppState({ appstateFile: '', appstateJson: JSON.stringify(FULL_STATE) });
+  const a = stateSummary(norm);
+  assert.strictEqual(a.cUser, '100065927401614');
+  assert.strictEqual(a.cookies, 3);
+  assert.strictEqual(a.hasDatr, true);
+  assert.strictEqual(stateSummary([{ key: 'xs', value: 'x' }]).cUser, null);
+});
+
+test('explainLoginError : checkpoint → indication claire', () => {
+  const hint = explainLoginError(new Error('Failed to login: Checkpt lock engaged'));
+  assert.ok(/CHECKPOINT/.test(hint));
+  assert.ok(explainLoginError(new Error('login approval required')).includes('vérification'));
+});
+
+test('explainLoginError : identifiants, compte restreint, cookies expirés, inconnu', () => {
+  assert.ok(/IDENTIFIANTS|cookies/i.test(explainLoginError(new Error('Incorrect password'))));
+  assert.ok(/RESTREINT/.test(explainLoginError(new Error('account disabled'))));
+  assert.ok(/EXPIRÉS/.test(explainLoginError(new Error('session expired'))));
+  assert.strictEqual(explainLoginError(new Error('ECONNRESET')), null);
+  assert.strictEqual(explainLoginError(null), null);
 });

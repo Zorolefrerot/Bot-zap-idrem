@@ -213,6 +213,48 @@ function readAppState(config) {
 }
 
 /*
+ * Résumé lisible de l'appstate : combien de cookies, pour QUEL compte.
+ * Permet de vérifier d'un coup d'œil dans les logs que l'on utilise bien
+ * le NOUVEAU compte (changement de compte = nouveau c_user).
+ */
+function stateSummary(state) {
+  const keys = state.map((c) => c.key);
+  const cUserCookie = state.find((c) => c.key === 'c_user');
+  return {
+    cookies: state.length,
+    cUser: cUserCookie ? String(cUserCookie.value) : null,
+    keys,
+    hasDatr: keys.includes('datr'),
+    hasFr: keys.includes('fr'),
+    hasSb: keys.includes('sb'),
+  };
+}
+
+/*
+ * Traduit une erreur de login FCA en indication ACTIONABLE.
+ * Les forks renvoient des messages hétérogènes ; on repère les familles :
+ * checkpoint/vérification, identifiants, compte restreint, cookies expirés.
+ */
+function explainLoginError(err) {
+  const raw = err && (err.message || (typeof err === 'string' ? err : ''));
+  const txt = String(raw || '');
+  const blob = `${txt} ${err && err.error ? JSON.stringify(err.error) : ''}`.toLowerCase();
+  if (/checkpoint|checkpt|approval|two[ _-]?factor|2fa|verify|verification/.test(blob)) {
+    return 'CHECKPOINT : Facebook exige une vérification pour ce compte (fréquent pour un compte récent connecté depuis un serveur). Connecte CE compte sur facebook.com dans un navigateur, complète la vérification jusqu’à voir le fil d’actualité, puis ré-exporte TOUS les cookies et redéploie.';
+  }
+  if (/incorrect|wrong|password|username|invalid credentials|bad credentials/.test(blob)) {
+    return 'IDENTIFIANTS refusés : les cookies ne correspondent à aucun compte actif — réexporte-les depuis une session OUVERTE du compte bot.';
+  }
+  if (/lock|disable|suspend|restrict|banned/.test(blob)) {
+    return 'COMPTE RESTREINT : Facebook a bloqué ce compte — vérifie facebook.com avec ce compte et suis les étapes de déblocage.';
+  }
+  if (/expired|stale|not logged in|session/.test(blob)) {
+    return 'COOKIES EXPIRÉS : reconnecte le compte bot dans un navigateur puis réexporte l’appstate (les cookies tournent à chaque nouvelle connexion ailleurs).';
+  }
+  return null;
+}
+
+/*
  * Bibliothèques FCA supportées, par priorité :
  *   1. @dongdev/fca-unofficial (défaut, demandé par le propriétaire)
  *   2. ws3-fca (secours automatique)
@@ -260,6 +302,8 @@ async function createWs3Adapter(config, logger, { onEvent } = {}) {
   const lib = loadFcaLibrary(config, logger);
   const { login } = lib;
   const appState = readAppState(config);
+  const sum = stateSummary(appState);
+  logger.info(`[facebook] appstate chargé — compte c_user=${sum.cUser || '?'} (${sum.cookies} cookies${sum.hasDatr ? ', datr ✓' : ', ⚠️ datr absent'})`);
   const options = {
     online: true,
     updatePresence: true,
@@ -269,7 +313,13 @@ async function createWs3Adapter(config, logger, { onEvent } = {}) {
     autoMarkDelivery: false,
   };
   const api = await new Promise((resolve, reject) => {
-    login({ appState }, options, (err, fbApi) => (err ? reject(normalizeError(err, 'FB_LOGIN_FAILED')) : resolve(fbApi)));
+    login({ appState }, options, (err, fbApi) => {
+      if (!err) return resolve(fbApi);
+      const e = normalizeError(err, 'FB_LOGIN_FAILED');
+      const hint = explainLoginError(e);
+      if (hint) e.message = `${e.message} — ${hint}`;
+      reject(e);
+    });
   });
 
   const capabilities = detectCapabilities(api);
@@ -284,11 +334,15 @@ async function createWs3Adapter(config, logger, { onEvent } = {}) {
     }
   }
 
-  logger.info(`[facebook] connecté (${lib.name}). Capacités:`, capabilities);
+  const connectedAs = api.getCurrentUserID ? String(api.getCurrentUserID()) : '';
+  if (sum.cUser && connectedAs && connectedAs !== sum.cUser) {
+    logger.warn(`[facebook] ⚠️ connecté sous le compte ${connectedAs} alors que l’appstate est celui de ${sum.cUser} — vérifie ton APPSTATE_JSON.`);
+  }
+  logger.info(`[facebook] connecté en tant que ${connectedAs || '?'} (${lib.name}). Capacités:`, capabilities);
   return {
     mode: lib.name,
     api,
-    botID: api.getCurrentUserID ? String(api.getCurrentUserID()) : '',
+    botID: connectedAs,
     capabilities,
     userCache,
     send: (payload, threadID) => sendMessage(api, payload, threadID),
@@ -429,4 +483,4 @@ async function connect(config, logger, hooks = {}) {
   return createWs3Adapter(config, logger, hooks);
 }
 
-module.exports = { connect, sendMessage, UserInfoCache, detectCapabilities, readAppState, normalizeCookie };
+module.exports = { connect, sendMessage, UserInfoCache, detectCapabilities, readAppState, normalizeCookie, stateSummary, explainLoginError };
