@@ -598,6 +598,281 @@ describe('Xcity — infection, soins, morts, anonymat', () => {
   });
 });
 
+describe('Xcity — élection du PRÉSIDENT GÉNÉRAL 🏛️', () => {
+  function setup(bot) {
+    const g = game(bot);
+    g.create(UIDS.shadow, 'Alpha', 'S');   // candidat A (pop 50)
+    g.create(UIDS.paul, 'Beta', 'P');      // candidat B (pop 90)
+    g.create(UIDS.fortiche, 'Gamma', 'F'); // électeur
+    g.create(UIDS.spammer, 'Delta', 'D');  // électeur
+    g.create(UIDS.owner, 'Epsilon', 'O');  // électeur
+    g.cityOf(UIDS.shadow).gold = 60000;
+    g.cityOf(UIDS.paul).gold = 60000;
+    g.cityOf(UIDS.paul).pop = 90;
+    return g;
+  }
+  test('candidatures (caution 50 000 au trésor) + vote pondéré + trahison', async () => {
+    const { bot } = await freshBot();
+    const g = setup(bot);
+    // sans élection ouverte → refus
+    assert.ok(g.candidater(UIDS.shadow).err.includes('Aucune candidature'));
+    g.openElection(UIDS.shadow);
+    const r = g.candidater(UIDS.shadow);
+    assert.equal(r.ok, true);
+    assert.equal(g.candidater(UIDS.shadow).err.includes('déjà candidat'), true);
+    g.candidater(UIDS.paul);
+    const A = g.assembly();
+    assert.equal(A.treasury, 100000); // 2 cautions
+    assert.equal(g.cityOf(UIDS.shadow).gold, 10000);
+    // pas encore de phase de vote
+    assert.ok(g.castVote(UIDS.fortiche, 'Alpha').err.includes('Aucun vote'));
+    // → phase de vote
+    A.election.deadline = g.now() - 1;
+    g.assembly();
+    assert.equal(g.assembly().election.phase, 'voting');
+    // 3 maires VOTENT ALPHA (le petit) — trahison de l'évidence
+    for (const voter of [UIDS.fortiche, UIDS.spammer, UIDS.owner]) {
+      const v = g.castVote(voter, 'Alpha');
+      assert.equal(v.ok, true);
+    }
+    // un vote B puis changement → dernier vote compte (trahison assumée)
+    g.castVote(UIDS.owner, 'Beta');
+    g.castVote(UIDS.owner, 'Alpha');
+    // scores : Alpha 50+60=110 · Beta 90+0=90 → ALPHA gagne malgré sa petite taille
+    g.assembly().election.deadline = g.now() - 1;
+    g.assembly();
+    assert.equal(g.presidentUid(), String(UIDS.shadow));
+    assert.ok(g.store.data.news.some((n) => n.txt.includes('PRÉSIDENT GÉNÉRAL')));
+    assert.ok(g.cityOf(UIDS.paul).notif.some((n) => n.includes('PRÉSIDENT')));
+    // candidature refusée au Président en exercice
+    assert.ok(g.candidater(UIDS.shadow).err.includes('présides déjà'));
+  });
+
+  test('pouvoirs : taxes/min, dons, batir, monnaie, pocket = scandale', async () => {
+    const { bot } = await freshBot();
+    const g = setup(bot);
+    g.openElection(UIDS.shadow);
+    g.candidater(UIDS.shadow);
+    g.assembly().election.deadline = g.now() - 1;
+    g.assembly(); // → voting
+    g.assembly().election.deadline = g.now() - 1;
+    g.assembly(); // → Alpha élu (seul candidat)
+    assert.equal(g.presidentUid(), String(UIDS.shadow));
+    // garde : un non-président ne peut rien
+    assert.ok(g.don(UIDS.paul, 'Gamma', 100).err.includes('PRÉSIDENT'));
+    // taxes : 5 min écoulées × 10 × 5 villes = 250
+    const A = g.assembly();
+    A.lastTick -= 5 * 60_000;
+    g.assembly();
+    assert.equal(g.assembly().treasury, 50000 + 10 * 5 * 5);
+    // don public au bien commun
+    const d = g.don(UIDS.shadow, 'Gamma', 1000);
+    assert.equal(d.ok, true);
+    assert.equal(g.cityOf(UIDS.fortiche).gold, 6000);
+    // construire pour les autres
+    const b = g.buildFor(UIDS.shadow, 'Delta', 'school');
+    assert.equal(b.ok, true);
+    assert.equal(g.cityOf(UIDS.spammer).b.school, 1);
+    // changer la monnaie
+    assert.equal(g.setCurrency(UIDS.shadow, '€').currency, '€');
+    assert.equal(g.cur(), '€');
+    assert.ok(g.setCurrency(UIDS.shadow, 'bitcoin').err.includes('Monnaies disponibles'));
+    // 🥀 détournement personnel : scandale
+    const repBefore = g.cityOf(UIDS.shadow).rep;
+    const p = g.pocket(UIDS.shadow, 2000);
+    assert.equal(p.ok, true);
+    assert.equal(g.cityOf(UIDS.shadow).scandals, 1);
+    assert.equal(g.cityOf(UIDS.shadow).rep, repBefore - 15);
+    assert.ok(g.store.data.news.some((n) => n.txt.includes('SCANDALE')));
+    // fin de mandat → plus président, nouvelles élections possibles
+    g.assembly().until = g.now() - 1;
+    g.assembly();
+    assert.equal(g.presidentUid(), null);
+    assert.ok(g.openElection(UIDS.paul).ok); // l'ex-président pourra se représenter
+  });
+});
+
+describe('Xcity — ops : espion, biotoxine, sabotage, faux-monnayeur', () => {
+  function duo(bot) {
+    const g = game(bot);
+    g.create(UIDS.shadow, 'Alpha', 'S');
+    g.create(UIDS.paul, 'Beta', 'P');
+    const a = g.cityOf(UIDS.shadow);
+    a.gold = 999999;
+    return { g, a };
+  }
+  test('spy : archer requis, rapport complet, ou espion attrapé (écoles)', async () => {
+    const { bot } = await freshBot();
+    const { g, a } = duo(bot);
+    assert.ok(g.spy(UIDS.shadow, 'Beta').err.includes('archer'));
+    a.units.archer = 1;
+    g.rng = () => 0.99; // jamais attrapé
+    const r = g.spy(UIDS.shadow, 'Beta');
+    assert.equal(r.caught, false);
+    assert.equal(r.gold, g.cityOf(UIDS.paul).gold);
+    assert.ok(r.units.includes('🪖0'));
+    // écoles → espion attrapé
+    g.cityOf(UIDS.paul).b.school = 4;
+    a.cds.spy = 0;
+    g.rng = () => 0.01;
+    const c = g.spy(UIDS.shadow, 'Beta');
+    assert.equal(c.caught, true);
+    assert.equal(a.rep, -5);
+    assert.ok(g.cityOf(UIDS.paul).notif.some((n) => n.includes('espion')));
+  });
+
+  test('biotoxine : fermes improductives 3 collects ; vaccin national bloque', async () => {
+    const { bot } = await freshBot();
+    const { g, a } = duo(bot);
+    a.b.lab = 1; a.scientists = 2;
+    a.elements = { soufre: 1, phosphore: 1 };
+    const t = g.cityOf(UIDS.paul);
+    t.lastCollect = 0;
+    const base = g.collect(UIDS.paul).income;
+    t.lastCollect = 0;
+    const r = g.biotoxin(UIDS.shadow, 'Beta');
+    assert.equal(r.ok, true);
+    t.lastCollect = 0;
+    const blighted = g.collect(UIDS.paul);
+    assert.equal(blighted.income, base - 15); // ferme ×1 neutralisée
+    assert.ok(blighted.blightNote.includes('Biotoxine'));
+    // expirera après 3 collects (on force les 2 restantes)
+    t.farmBlight = 0;
+    // vaccin national (sur la cible)
+    const b2 = g.cityOf(UIDS.paul);
+    b2.gold = 999999; b2.b.lab = 1; b2.scientists = 2; b2.elements = { calcium: 1 };
+    assert.equal(g.vaccinate(UIDS.paul).ok, true);
+    a.cds.biotoxin = 0; a.elements = { soufre: 1, phosphore: 1 };
+    assert.ok(g.biotoxin(UIDS.shadow, 'Beta').err.includes('VACCINÉE'));
+    // et l'infection aussi est bloquée
+    const v = { name: 'Vx', creator: UIDS.shadow, tier: 'virus', power: 10, life: 600000, deadline: 0, infected: {}, cured: {} };
+    g.store.data.viruses.push(v);
+    g.store.data.virusArchive.Vx = String(UIDS.shadow);
+    assert.ok(g.infect(UIDS.shadow, 'Beta', 'Vx').err.includes('VACCINÉE'));
+  });
+
+  test('sabotage : revenus /2 pendant 2 collects (anonyme si pas écoles)', async () => {
+    const { bot } = await freshBot();
+    const { g, a } = duo(bot);
+    a.units.archer = 1;
+    g.rng = () => 0.99;
+    const t = g.cityOf(UIDS.paul);
+    t.lastCollect = 0;
+    const base = g.collect(UIDS.paul).income;
+    const r = g.sabotage(UIDS.shadow, 'Beta');
+    assert.equal(r.caught, false);
+    t.lastCollect = 0;
+    const hit = g.collect(UIDS.paul);
+    assert.equal(hit.income, Math.floor(base * 0.5));
+    assert.ok(hit.sabNote.includes('Sabotage'));
+  });
+
+  test('faux-monnayage : usine requise, gain ou amende/scandale', async () => {
+    const { bot } = await freshBot();
+    const { g, a } = duo(bot);
+    assert.ok(g.counterfeit(UIDS.shadow).err.includes('usine'));
+    a.b.factory = 1;
+    g.rng = () => 0.10; // 60 % de réussite → succès
+    const r = g.counterfeit(UIDS.shadow);
+    assert.equal(r.success, true);
+    assert.equal(a.gold, 999999 - 500 + 2500);
+    a.cds.counterfeit = 0;
+    g.rng = () => 0.70; // échec
+    const f = g.counterfeit(UIDS.shadow);
+    assert.equal(f.success, false);
+    assert.equal(a.rep, -5);
+  });
+});
+
+describe('Xcity — dissuasion nucléaire ☢️ + enquêtes + vaccins noirs', () => {
+  test('nuke : garde-fous, frappe dévastatrice, répulsion mondiale, quarantaine', async () => {
+    const { bot } = await freshBot();
+    const g = game(bot);
+    g.create(UIDS.shadow, 'Empire', 'S');
+    g.create(UIDS.paul, 'Cible', 'P');
+    const e = g.cityOf(UIDS.shadow);
+    e.gold = 999999;
+    assert.ok(g.nukeBuild(UIDS.shadow).err.includes('laboratoires'));
+    e.b.lab = 3;
+    assert.ok(g.nukeBuild(UIDS.shadow).err.includes('scientifiques'));
+    e.scientists = 6;
+    assert.ok(g.nukeBuild(UIDS.shadow).err.includes('Plutonium'));
+    e.elements = { plutonium: 3 };
+    const b = g.nukeBuild(UIDS.shadow);
+    assert.equal(b.nukes, 1);
+    assert.equal(e.elements.plutonium, 0);
+    const t = g.cityOf(UIDS.paul);
+    t.gold = 20000;
+    const goldBefore = e.gold;
+    const r = g.nuke(UIDS.shadow, 'Cible');
+    assert.equal(r.deaths, 15); // 30 % de 50
+    assert.equal(t.pop, 35);
+    assert.equal(e.gold, goldBefore + 5000); // 25 % de 20000 pillés
+    assert.equal(e.rep, -30);
+    assert.ok(g.store.data.news.some((n) => n.txt.includes('NUCLÉAIRE')));
+    assert.ok(g.cityOf(UIDS.paul).notif.some((n) => n.includes('NUCLÉAIRE')));
+    // cooldown 24 h entre deux frappes (la cible sort d'abord de quarantaine)
+    t.quarantineUntil = 0;
+    e.nukes = 1;
+    assert.ok(g.nuke(UIDS.shadow, 'Cible').err.includes('24 h'));
+    // zone en quarantaine : plus rien ne passe
+    t.quarantineUntil = Date.now() + 60_000;
+    assert.ok(g.attack(UIDS.shadow, 'Cible').err.includes('quarantaine'));
+  });
+
+  test('enquête de presse : démasque le créateur du virus', async () => {
+    const { bot } = await freshBot();
+    const g = game(bot);
+    g.create(UIDS.shadow, 'Journal', 'S');
+    g.create(UIDS.paul, 'LaboSecret', 'P');
+    const j = g.cityOf(UIDS.shadow);
+    j.gold = 999999; j.b.school = 2;
+    const v = { name: 'Mystere', creator: String(UIDS.paul), tier: 'virus', power: 10, life: 600000, deadline: 0, infected: { [UIDS.shadow]: 5 }, cured: {} };
+    g.store.data.viruses.push(v);
+    g.store.data.virusArchive.Mystere = String(UIDS.paul);
+    j.lastVirusHit = 'Mystere';
+    g.rng = () => 0.01; // enquête réussie
+    const r = g.investigate(UIDS.shadow, '');
+    assert.equal(r.revealed, true);
+    assert.equal(r.creatorName, 'LaboSecret');
+    assert.ok(g.store.data.news.some((n) => n.txt.includes('ENQUÊTE')));
+  });
+
+  test('vaccin du marché noir : soigne une ville infectée pour 80/habitant', async () => {
+    const { bot } = await freshBot();
+    const g = game(bot);
+    g.create(UIDS.shadow, 'Pharma', 'S');
+    g.create(UIDS.paul, 'Malade', 'P');
+    const ph = g.cityOf(UIDS.shadow);
+    ph.gold = 0;
+    ph.b.lab = 1; ph.scientists = 2; ph.elements = { calcium: 1 };
+    const v = { name: 'Sale', creator: '999999', tier: 'virus', power: 10, life: 600000, deadline: 0, infected: { [UIDS.paul]: 5 }, cured: {} };
+    g.store.data.viruses.push(v);
+    const t = g.cityOf(UIDS.paul);
+    t.gold = 1000;
+    const r = g.vaccine(UIDS.shadow, 'Malade', 'Sale');
+    assert.equal(r.price, 400);
+    assert.equal(ph.gold, 400);
+    assert.equal(t.gold, 600);
+    assert.equal(v.infected[UIDS.paul], undefined);
+    assert.equal(ph.rep, 2);
+  });
+
+  test('quarantaine civile (3 000) sur ville infectée → blocage total', async () => {
+    const { bot } = await freshBot();
+    const g = game(bot);
+    g.create(UIDS.shadow, 'Vigile', 'S');
+    g.create(UIDS.paul, 'Contaminee', 'P');
+    const v = { name: 'Bug', creator: '888888', tier: 'virus', power: 10, life: 600000, deadline: 0, infected: { [UIDS.paul]: 5 }, cured: {} };
+    g.store.data.viruses.push(v);
+    const q = g.quarantine(UIDS.shadow, 'Contaminee');
+    assert.equal(q.ok, true);
+    assert.equal(g.cityOf(UIDS.shadow).gold, 2000); // 5000 − 3000
+    assert.ok(g.attack(UIDS.paul, 'Vigile').err.includes('QUARANTAINE'));
+    assert.ok(g.attack(UIDS.shadow, 'Contaminee').err.includes('quarantaine'));
+  });
+});
+
 describe('Xcity — monde, commande & XCoins intacts', () => {
   test('top / news / notif', async () => {
     const { bot } = await freshBot();
@@ -666,6 +941,39 @@ describe('Xcity — monde, commande & XCoins intacts', () => {
     assert.ok(all.some((b) => /SOMMAIRE/i.test(b)));
     // Le build réussit VRAIMENT (pas de débit sans confirmation)
     assert.ok(all.some((b) => /CONSTRUCTION/i.test(b) && /Maisons n°2/i.test(b)));
+  });
+
+  test('assemblee & ops : sweep bot sans INTERNAL_ERROR, monnaie € en status', async () => {
+    const { bot, adapter } = await freshBot();
+    clearCooldowns(bot);
+    await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcity create Monde'));
+    await FLUSH();
+    const subs = [
+      'Xcity assemblee', 'Xcity candidater', 'Xcity vote Monde', 'Xcity monnaie €',
+      'Xcity don Monde 500', 'Xcity batir Monde house', 'Xcity pocket 500',
+      'Xcity quarantine Monde', 'Xcity spy', 'Xcity biotoxin Monde', 'Xcity propaganda Monde',
+      'Xcity sabotage Monde', 'Xcity counterfeit', 'Xcity investigate', 'Xcity nuke',
+      'Xcity nuke build', 'Xcity vaccinate', 'Xcity vaccine Monde Vx',
+    ];
+    for (const sub of subs) {
+      clearCooldowns(bot);
+      await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, sub));
+      await FLUSH();
+    }
+    const all = bodies(adapter).map(unbold);
+    assert.deepEqual(all.filter((b) => /EN PAUSE|INTERNAL_ERROR/i.test(b)), [], 'aucune erreur système');
+    // la monnaie € posée par le Président (directement via moteur) apparaît en status
+    const { CityGame } = require('../systems/city');
+    const g = new CityGame(bot.db.cities, { rng: () => 0.99 });
+    g.assembly().currency = '€';
+    g.store.data.assembly.president = String(UIDS.shadow);
+    g.store.data.assembly.until = Date.now() + 3600_000;
+    clearCooldowns(bot);
+    await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcity status'));
+    await FLUSH();
+    const status = bodies(adapter).map(unbold).slice(-1)[0];
+    assert.ok(/€/.test(status), 'le status affiche la monnaie du Président');
+    assert.ok(/MONDE/i.test(status));
   });
 
   test('constantes exposées : trahison 80 %, taxe 10 %, pillage 15 %', () => {
