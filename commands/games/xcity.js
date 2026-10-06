@@ -8,7 +8,7 @@
  *   Xcity collect                 → lever les impôts (1 min) + événements 10 %
  *   Xcity upgrade                 → niveau supérieur (pop + or + bâtiments)
  *   Xcity expand                  → +1 km² (touristes → plus d'or)
- *   Xcity train <soldat|archer|cavalier> · Xcity officer <capitaine|general>
+ *   Xcity train <soldat|archer|cavalier> · Xcity officer <capitaine|général>  (FR accepté)
  *   Xcity decree <conscription|festival|tax|none>
  *   Xcity send <ville> money <somme> | send <ville> <res> <qté>
  *   Xcity market · buy <res> <qté> · sell <res> <qté>
@@ -19,6 +19,18 @@
  */
 
 const { CityGame, BUILD_COST, BUILD_LABEL, UNITS, OFFICERS, DECREES, RES, RES_LABEL, TREATY_TYPES, ELEMENTS, CURE_PRICE } = require('../../systems/city');
+
+/* 🇫🇷 Alias FR → clés du moteur : « soldat », « capitaine », « général »…
+ * fonctionnent EXACTEMENT comme les termes techniques. */
+const UNIT_ALIASES = {
+  soldat: 'soldier', soldier: 'soldier', soldats: 'soldier',
+  archer: 'archer', archers: 'archer', tireur: 'archer',
+  cavalier: 'cavalry', cavalry: 'cavalry', chevalier: 'cavalry',
+};
+const OFFICER_ALIASES = {
+  capitaine: 'captain', captain: 'captain',
+  general: 'general', 'général': 'general', generale: 'general', 'générale': 'general',
+};
 
 function nfc(n) { return String(Math.floor(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
 
@@ -172,11 +184,13 @@ module.exports = {
 
     /* ── TRAIN / OFFICER ── */
     if (sub === 'train') {
+      if (a[0]) a[0] = UNIT_ALIASES[String(a[0]).toLowerCase()] || String(a[0]).toLowerCase();
       if (!a[0]) {
         return ctx.send(ctx.fmt.frame('🪖 UNITÉS À RECRUTER', [
           ...Object.entries(UNITS).map(([k, u]) => `${u.label} — ${nfc(u.cost)}${cur()} · puissance ${u.pow} · 𝗟𝘃𝗹 ${u.minLvl}+`),
           '',
-          '📌 ' + ctx.fmt.bold('Format') + ' : Xcity train <type> (caserne requise)',
+          '📌 ' + ctx.fmt.bold('Format') + ' : Xcity train <soldat|archer|cavalier> (caserne requise)',
+          '🧮 Capacité : 15 unités par caserne — Xcity build barracks pour agrandir',
         ]));
       }
       const res = game.train(uid, String(a[0] || '').toLowerCase());
@@ -188,6 +202,7 @@ module.exports = {
       ]));
     }
     if (sub === 'officer') {
+      if (a[0]) a[0] = OFFICER_ALIASES[String(a[0]).toLowerCase()] || String(a[0]).toLowerCase();
       if (!a[0]) {
         return ctx.send(ctx.fmt.frame('🎖️ OFFICIERS À RECRUTER', [
           ...Object.entries(OFFICERS).map(([k, o]) => `${o.label} — ${nfc(o.cost)}${cur()} · 𝗟𝘃𝗹 ${o.minLvl}+ · ${o.txt}`),
@@ -472,13 +487,14 @@ module.exports = {
       const v = game.assemblyView();
       const lines = [];
       if (v.president) {
-        lines.push(`👑 PRÉSIDENT GÉNÉRAL : ${ctx.fmt.bold(v.president.name)} — mandat encore ${v.president.hoursLeft} h`);
+        lines.push(`👑 PRÉSIDENT GÉNÉRAL : ${ctx.fmt.bold(v.president.name)} — mandat encore ${v.president.label}`);
       } else if (v.phase) {
         lines.push(v.phase === 'candidacy' ? `📜 CANDIDATURES ouvertes (${v.minutesLeft} min)` : `🗳️ VOTE EN COURS (${v.minutesLeft} min)`);
       } else lines.push('🏛️ Aucun Président en exercice — Xcity assemblee ouvrir');
       lines.push('');
 
-      lines.push(`🏦 Trésor de l'Assemblée : ${nfc(v.treasury)}${cur()} (+10${cur()}/min/ville) · 💱 Monnaie : ${ctx.fmt.bold(v.currency)}`);
+      lines.push(`🏦 Trésor de l'Assemblée : ${nfc(v.treasury)}${cur()} — alimenté par le GOUVERNEMENT SUPÉRIEUR (+10${cur()}/min/ville, jamais pris sur les villes)`);
+      lines.push(`💱 Monnaie : ${ctx.fmt.bold(v.currency)} · 💵 Salaire présidentiel : 50 000${cur()}/h`);
       if (v.candidates.length) {
         lines.push('');
 
@@ -728,7 +744,7 @@ module.exports = {
       '• expand — +1 km² → touristes → or 💰',
       '',
       '🪖 𝗔𝗥𝗠𝗘́𝗘',
-      '• train <type> · officer <type> · army',
+      '• train <soldat|archer|cavalier> · officer <capitaine|général> · army',
       '• decree <conscription|festival|tax|none>',
       '',
       '🧪 𝗟𝗔𝗕𝗢𝗥𝗔𝗧𝗢𝗜𝗥𝗘 ☣️',
@@ -753,7 +769,7 @@ module.exports = {
       '• barbarians · raid <n°> — butin sans ennemi joueur',
       '🏛️ 𝗔𝗦𝗦𝗘𝗠𝗕𝗟𝗘́𝗘 𝗗𝗘𝗦 𝗩𝗜𝗟𝗟𝗘𝗦',
       '• assemblee ouvrir · candidater (caution 50 000) · vote <ville>',
-      '• President 48 h : don <ville> <somme> · batir <ville> <type>',
+      '• Président 3 JOURS : don <ville> <somme> · batir <ville> <type> · salaire 50 000/h',
       '• monnaie <$ € ¥ ¢ £ XOF FC FCFA…> · pocket (détournement…)',
       '🧠 𝗢𝗣𝗦 𝗦𝗣𝗘́𝗖𝗜𝗔𝗟𝗘𝗦',
       '• spy <ville> · sabotage <ville> · propaganda <ville> · biotoxin <ville>',

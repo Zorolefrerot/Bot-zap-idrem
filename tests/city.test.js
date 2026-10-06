@@ -11,7 +11,7 @@ const assert = require('node:assert');
 
 const { boot, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
 const { CityGame, RES } = require('../systems/city');
-const { CURE_PRICE, DEATH_BOUNTY, DEATH_RATE } = require('../systems/city');
+const { CURE_PRICE, DEATH_BOUNTY, DEATH_RATE, PRES_SALARY, MANDATE_MS } = require('../systems/city');
 const { BETRAY_RATE, LOOT_RATE, SEND_TAX } = require('../systems/city');
 
 const FLUSH = async (n = 10) => { for (let i = 0; i < n; i++) await new Promise((r) => setImmediate(r)); };
@@ -144,10 +144,14 @@ describe('Xcity — armée : unités, casernes, officiers', () => {
     c.lvl = 2;
     assert.ok(g.train(UIDS.shadow, 'cavalry').err.includes('𝗟𝘃𝗹 3'));
     c.lvl = 3;
-    for (let i = 0; i < 9; i++) { c.gold = 9999; c.lastTrain = 0; assert.equal(g.train(UIDS.shadow, 'soldier').ok, true); }
-    assert.equal(g.unitCount(c), 10);
+    for (let i = 0; i < 14; i++) { c.gold = 9999; c.lastTrain = 0; assert.equal(g.train(UIDS.shadow, 'soldier').ok, true); }
+    assert.equal(g.unitCount(c), 15); // capacité 1 caserne = 15
     c.gold = 9999; c.lastTrain = 0;
     assert.ok(g.train(UIDS.shadow, 'soldier').err.includes('pleine'));
+    // PLUS DE PLAFOND 60 : une 5ᵉ caserne porte la capacité à 75
+    c.gold = 99999;
+    for (let i = 0; i < 4; i++) { assert.equal(g.build(UIDS.shadow, 'barracks').ok, true); }
+    assert.equal(g.unitCapacity(c), 75);
   });
 
   test('officiers : Capitaine (+15 % att) et Général (+20 % déf)', async () => {
@@ -677,6 +681,21 @@ describe('Xcity — élection du PRÉSIDENT GÉNÉRAL 🏛️', () => {
     assert.equal(g.setCurrency(UIDS.shadow, '€').currency, '€');
     assert.equal(g.cur(), '€');
     assert.ok(g.setCurrency(UIDS.shadow, 'bitcoin').err.includes('Monnaies disponibles'));
+    // 💵 Salaire présidentiel : 50 000/h frappés par le Gouvernement Supérieur
+    const presGold = g.cityOf(UIDS.shadow).gold;
+    const neighbourGold = g.cityOf(UIDS.fortiche).gold;
+    const tresoBefore = g.assembly().treasury;
+    g.assembly().lastSalary -= 2 * 3_600_000;
+    g.assembly().lastTick -= 5 * 60_000; // 5 min écoulées → le trésor ticque aussi
+    g.assembly();
+    assert.equal(g.cityOf(UIDS.shadow).gold, presGold + 2 * PRES_SALARY); // 100 000
+    assert.ok(g.cityOf(UIDS.shadow).notif.some((n) => n.includes('Salaire présidentiel')));
+    assert.equal(g.cityOf(UIDS.fortiche).gold, neighbourGold); // RIEN pris sur les villes
+    assert.ok(g.assembly().treasury > tresoBefore); // trésor frappé à part
+    // Mandat de 3 JOURS
+    assert.equal(MANDATE_MS, 72 * 3_600_000);
+    const view = g.assemblyView();
+    assert.ok(view.president.label.includes('j')); // « 2 j 23 h »
     // 🥀 détournement personnel : scandale
     const repBefore = g.cityOf(UIDS.shadow).rep;
     const p = g.pocket(UIDS.shadow, 2000);
@@ -941,6 +960,32 @@ describe('Xcity — monde, commande & XCoins intacts', () => {
     assert.ok(all.some((b) => /SOMMAIRE/i.test(b)));
     // Le build réussit VRAIMENT (pas de débit sans confirmation)
     assert.ok(all.some((b) => /CONSTRUCTION/i.test(b) && /Maisons n°2/i.test(b)));
+  });
+
+  test('alias FR : « train soldat » et « officer capitaine » via le bot', async () => {
+    const { bot, adapter } = await freshBot();
+    clearCooldowns(bot);
+    await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcity create Franche'));
+    await FLUSH();
+    const g = game(bot);
+    const c = g.cityOf(UIDS.shadow);
+    c.gold = 999999;
+    c.lvl = 3;
+    clearCooldowns(bot);
+    await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcity build barracks'));
+    await FLUSH();
+    clearCooldowns(bot);
+    await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcity train soldat'));
+    await FLUSH();
+    clearCooldowns(bot);
+    await bot.handleMessage(makeMsg('thread-1', UIDS.shadow, 'Xcity officer capitaine'));
+    await FLUSH();
+    const all = bodies(adapter).map(unbold);
+    assert.deepEqual(all.filter((b) => /EN PAUSE|INTERNAL_ERROR/i.test(b)), []);
+    assert.ok(all.some((b) => /RECRUTEMENT/i.test(b) && /Soldat/i.test(b)));
+    assert.ok(all.some((b) => /OFFICER RECRUTÉ/i.test(b) && /Capitaine/i.test(b)));
+    assert.equal(c.units.soldier, 1);
+    assert.equal(c.officers.captain, true);
   });
 
   test('assemblee & ops : sweep bot sans INTERNAL_ERROR, monnaie € en status', async () => {

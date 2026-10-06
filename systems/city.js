@@ -68,7 +68,9 @@ const RANSOM_MIN = 500;
 const CANDIDACY_FEE = 50_000;      // caution de candidature (versée au trésor de l'Assemblée)
 const CANDIDACY_MS = 30 * 60_000;  // période de candidature
 const VOTING_MS = 24 * 3_600_000;  // période de vote
-const MANDATE_MS = 48 * 3_600_000; // mandat du Président
+const MANDATE_MS = 72 * 3_600_000; // mandat du Président : 3 JOURS
+const PRES_SALARY = 50_000;        // salaire horaire du Président (frappé par le Gouvernement Supérieur)
+const SALARY_MS = 3_600_000;
 const VOTE_WEIGHT = 20;            // le vote d'un maire vaut 20 points
 const PRES_TAX = 10;               // $/min/ville versés au trésor de l'Assemblée
 const SCANDAL_PENALTY = 1000;      // malus par scandale au comptage des voix
@@ -174,6 +176,7 @@ class CityGame {
     if (typeof A.treasury !== 'number') A.treasury = 0;
     if (typeof A.currency !== 'string' || !A.currency) A.currency = '$';
     if (typeof A.lastTick !== 'number') A.lastTick = 0;
+    if (typeof A.lastSalary !== 'number') A.lastSalary = 0;
     if (typeof A.until !== 'number') A.until = 0;
     if (A.president === undefined) A.president = null;
     if (!A.election || typeof A.election !== 'object') A.election = null;
@@ -440,14 +443,14 @@ class CityGame {
 
   /* ══════════════ ARMÉE : UNITÉS & OFFICIERS ══════════════ */
 
-  unitCapacity(c) { return Math.min(60, (c.b.barracks || 0) * 10); }
+  unitCapacity(c) { return (c.b.barracks || 0) * 15; } // plus de plafond : chaque caserne agrandit l'armée
   unitCount(c) { return (c.units.soldier || 0) + (c.units.archer || 0) + (c.units.cavalry || 0); }
 
   train(uid, unit) {
     const c = this.cityOf(uid);
     if (!c) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
     const u = UNITS[unit];
-    if (!u) return { ok: false, err: `Unités : ${Object.keys(UNITS).join(', ')}` };
+    if (!u) return { ok: false, err: 'Unités : soldat, archer, cavalier' };
     if (c.lvl < u.minLvl) return { ok: false, err: `${u.label} débloqué au 𝗟𝘃𝗹 ${u.minLvl} (tu es ${c.lvl}).` };
     if (!(c.b.barracks > 0)) return { ok: false, err: 'Construis d’abord une 🪖 caserne (Xcity build barracks).' };
     if (this.unitCount(c) >= this.unitCapacity(c)) {
@@ -467,7 +470,7 @@ class CityGame {
     const c = this.cityOf(uid);
     if (!c) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
     const o = OFFICERS[which];
-    if (!o) return { ok: false, err: 'Officiers : capitaine, general' };
+    if (!o) return { ok: false, err: 'Officiers : capitaine, général' };
     if (c.officers[which]) return { ok: false, err: `${o.label} est déjà à ton service.` };
     if (c.lvl < o.minLvl) return { ok: false, err: `${o.label} débloqué au 𝗟𝘃𝗹 ${o.minLvl}.` };
     if (c.gold < o.cost) return { ok: false, err: `Fonds insuffisants (${nf(o.cost)}${this.cur()}).` };
@@ -1179,13 +1182,28 @@ class CityGame {
   _assemblyTick() {
     const A = this.store.data.assembly;
     if (!A.president || !A.until || this.now() >= A.until) return;
-    if (!A.lastTick) { A.lastTick = this.now(); return; }
-    const ticks = Math.floor((this.now() - A.lastTick) / 60_000);
+    const now = this.now();
+    if (!A.lastTick) { A.lastTick = now; A.lastSalary = now; return; }
+    const ticks = Math.floor((now - A.lastTick) / 60_000);
     if (ticks > 0) {
+      /* Le trésor de l'Assemblée est alimenté par le GOUVERNEMENT SUPÉRIEUR :
+       * l'argent apparaît, JAMAIS pris sur les villes. */
       A.treasury += ticks * PRES_TAX * Math.max(1, this.allCities().length);
       A.lastTick += ticks * 60_000;
-      this.save();
     }
+    /* 💵 Salaire présidentiel : 50 000/heure, versé au trésor personnel du
+     * Président, avec notification de reçu. */
+    if (!A.lastSalary) A.lastSalary = now;
+    const salaries = Math.floor((now - A.lastSalary) / SALARY_MS);
+    if (salaries > 0) {
+      const pres = this.cityOf(A.president);
+      A.lastSalary += salaries * SALARY_MS;
+      if (pres) {
+        pres.gold += salaries * PRES_SALARY;
+        this.notify(pres, `💵 Salaire présidentiel reçu : +${nf(salaries * PRES_SALARY)}${this.cur()} (Gouvernement Supérieur).`);
+      }
+    }
+    this.save();
   }
 
   _assemblyPhase() {
@@ -1225,7 +1243,7 @@ class CityGame {
       }
     }
     return {
-      president: this.presidentUid() ? { name: this.nameOf(A.president), hoursLeft: Math.ceil((A.until - this.now()) / 3_600_000) } : null,
+      president: this.presidentUid() ? (() => { const h = Math.max(0, Math.ceil((A.until - this.now()) / 3_600_000)); return { name: this.nameOf(A.president), hoursLeft: h, label: h >= 24 ? `${Math.floor(h / 24)} j ${h % 24} h` : `${h} h` }; })() : null,
       treasury: A.treasury, currency: A.currency,
       phase: E ? E.phase : null,
       minutesLeft: E ? Math.max(0, Math.ceil((E.deadline - this.now()) / 60_000)) : null,
@@ -1298,9 +1316,10 @@ class CityGame {
     A.president = best;
     A.until = this.now() + MANDATE_MS;
     A.lastTick = this.now();
+    A.lastSalary = this.now();
     const c = this.cityOf(best);
-    this.addNews(`🏛️ ${c.name} (${c.mayor}) est élu PRÉSIDENT GÉNÉRAL de l’Assemblée des villes — mandat 48 h !`);
-    for (const [, cc] of this.allCities()) this.notify(cc, `🏛️ ${c.name} est le nouveau PRÉSIDENT GÉNÉRAL (48 h) — il gère le trésor de l’Assemblée.`);
+    this.addNews(`🏛️ ${c.name} (${c.mayor}) est élu PRÉSIDENT GÉNÉRAL de l’Assemblée des villes — mandat de 3 JOURS !`);
+    for (const [, cc] of this.allCities()) this.notify(cc, `🏛️ ${c.name} est le nouveau PRÉSIDENT GÉNÉRAL (3 jours) — il gère le trésor de l’Assemblée.`);
     this.save();
   }
 
@@ -1735,6 +1754,7 @@ module.exports = {
   RANSOM_MIN,
   CANDIDACY_FEE, CANDIDACY_MS, VOTING_MS, MANDATE_MS, VOTE_WEIGHT, PRES_TAX,
   SCANDAL_PENALTY, CURRENCIES, QUARANTINE_MS, VACCINE_PRICE,
+  PRES_SALARY, SALARY_MS,
   BETRAY_RATE, BETRAY_REP, LOOT_RATE, LOOT_CAP, SEND_TAX, EXPAND_BASE,
   COLLECT_CD, ATTACK_CD, EXPAND_CD, TRAIN_CD, MARKET_MS, TREATY_MS, SHIELD_MS,
   titleFor,
