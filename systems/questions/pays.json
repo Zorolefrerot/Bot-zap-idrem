@@ -1,0 +1,1507 @@
+[
+ {
+  "pays": "Albanie",
+  "cap": "Tirana",
+  "iso": "AL",
+  "en": "Albania",
+  "capEn": "Tirana"
+ },
+ {
+  "pays": "Allemagne",
+  "cap": "Berlin",
+  "iso": "DE",
+  "en": "Germany",
+  "capEn": "Berlin"
+ },
+ {
+  "pays": "Andorre",
+  "cap": "Andorre-la-Vieille",
+  "iso": "AD",
+  "en": "Andorra",
+  "capEn": "Andorra la Vella"
+ },
+ {
+  "pays": "Autriche",
+  "cap": "Vienne",
+  "iso": "AT",
+  "en": "Austria",
+  "capEn": "Vienna"
+ },
+ {
+  "pays": "Belgique",
+  "cap": "Bruxelles",
+  "iso": "BE",
+  "en": "Belgium",
+  "capEn": "Brussels"
+ },
+ {
+  "pays": "Biélorussie",
+  "cap": "Minsk",
+  "iso": "BY",
+  "en": "Belarus",
+  "capEn": "Minsk"
+ },
+ {
+  "pays": "Bosnie-Herzégovine",
+  "cap": "Sarajevo",
+  "iso": "BA",
+  "en": "Bosnia and Herzegovina",
+  "capEn": "Sarajevo"
+ },
+ {
+  "pays": "Bulgarie",
+  "cap": "Sofia",
+  "iso": "BG",
+  "en": "Bulgaria",
+  "capEn": "Sofia"
+ },
+ {
+  "pays": "Chypre",
+  "cap": "Nicosie",
+  "iso": "CY",
+  "en": "Cyprus",
+  "capEn": "Nicosia"
+ },
+ {
+  "pays": "Croatie",
+  "cap": "Zagreb",
+  "iso": "HR",
+  "en": "Croatia",
+  "capEn": "Zagreb"
+ },
+ {
+  "pays": "Danemark",
+  "cap": "Copenhague",
+  "iso": "DK",
+  "en": "Denmark",
+  "capEn": "Copenhagen"
+ },
+ {
+  "pays": "Espagne",
+  "cap": "Madrid",
+  "iso": "ES",
+  "en": "Spain",
+  "capEn": "Madrid"
+ },
+ {
+  "pays": "Estonie",
+  "cap": "Tallinn",
+  "iso": "EE",
+  "en": "Estonia",
+  "capEn": "Tallinn"
+ },
+ {
+  "pays": "Finlande",
+  "cap": "Helsinki",
+  "iso": "FI",
+  "en": "Finland",
+  "capEn": "Helsinki"
+ },
+ {
+  "pays": "France",
+  "cap": "Paris",
+  "iso": "FR",
+  "en": "France",
+  "capEn": "Paris"
+ },
+ {
+  "pays": "Grèce",
+  "cap": "Athènes",
+  "iso": "GR",
+  "en": "Greece",
+  "capEn": "Athens"
+ },
+ {
+  "pays": "Hongrie",
+  "cap": "Budapest",
+  "iso": "HU",
+  "en": "Hungary",
+  "capEn": "Budapest"
+ },
+ {
+  "pays": "Irlande",
+  "cap": "Dublin",
+  "iso": "IE",
+  "en": "Ireland",
+  "capEn": "Dublin"
+ },
+ {
+  "pays": "Islande",
+  "cap": "Reykjavik",
+  "iso": "IS",
+  "en": "Iceland",
+  "capEn": "Reykjavik"
+ },
+ {
+  "pays": "Italie",
+  "cap": "Rome",
+  "iso": "IT",
+  "en": "Italy",
+  "capEn": "Rome"
+ },
+ {
+  "pays": "Lettonie",
+  "cap": "Riga",
+  "iso": "LV",
+  "en": "Latvia",
+  "capEn": "Riga"
+ },
+ {
+  "pays": "Liechtenstein",
+  "cap": "Vaduz",
+  "iso": "LI",
+  "en": "Liechtenstein",
+  "capEn": "Vaduz"
+ },
+ {
+  "pays": "Lituanie",
+  "cap": "Vilnius",
+  "iso": "LT",
+  "en": "Lithuania",
+  "capEn": "Vilnius"
+ },
+ {
+  "pays": "Luxembourg",
+  "cap": "Luxembourg",
+  "iso": "LU",
+  "en": "Luxembourg",
+  "capEn": "Luxembourg City"
+ },
+ {
+  "pays": "Macédoine du Nord",
+  "cap": "Skopje",
+  "iso": "MK",
+  "en": "North Macedonia",
+  "capEn": "Skopje"
+ },
+ {
+  "pays": "Malte",
+  "cap": "La Valette",
+  "iso": "MT",
+  "en": "Malta",
+  "capEn": "Valletta"
+ },
+ {
+  "pays": "Moldavie",
+  "cap": "Chisinau",
+  "iso": "MD",
+  "en": "Moldova",
+  "capEn": "Chisinau"
+ },
+ {
+  "pays": "Monaco",
+  "cap": "Monaco",
+  "iso": "MC",
+  "en": "Monaco",
+  "capEn": "Monaco"
+ },
+ {
+  "pays": "Monténégro",
+  "cap": "Podgorica",
+  "iso": "ME",
+  "en": "Montenegro",
+  "capEn": "Podgorica"
+ },
+ {
+  "pays": "Norvège",
+  "cap": "Oslo",
+  "iso": "NO",
+  "en": "Norway",
+  "capEn": "Oslo"
+ },
+ {
+  "pays": "Pays-Bas",
+  "cap": "Amsterdam",
+  "iso": "NL",
+  "en": "Netherlands",
+  "capEn": "Amsterdam"
+ },
+ {
+  "pays": "Pologne",
+  "cap": "Varsovie",
+  "iso": "PL",
+  "en": "Poland",
+  "capEn": "Warsaw"
+ },
+ {
+  "pays": "Portugal",
+  "cap": "Lisbonne",
+  "iso": "PT",
+  "en": "Portugal",
+  "capEn": "Lisbon"
+ },
+ {
+  "pays": "Roumanie",
+  "cap": "Bucarest",
+  "iso": "RO",
+  "en": "Romania",
+  "capEn": "Bucharest"
+ },
+ {
+  "pays": "Royaume-Uni",
+  "cap": "Londres",
+  "iso": "GB",
+  "en": "United Kingdom",
+  "capEn": "London"
+ },
+ {
+  "pays": "Russie",
+  "cap": "Moscou",
+  "iso": "RU",
+  "en": "Russia",
+  "capEn": "Moscow"
+ },
+ {
+  "pays": "Saint-Marin",
+  "cap": "Saint-Marin",
+  "iso": "SM",
+  "en": "San Marino",
+  "capEn": "San Marino"
+ },
+ {
+  "pays": "Serbie",
+  "cap": "Belgrade",
+  "iso": "RS",
+  "en": "Serbia",
+  "capEn": "Belgrade"
+ },
+ {
+  "pays": "Slovaquie",
+  "cap": "Bratislava",
+  "iso": "SK",
+  "en": "Slovakia",
+  "capEn": "Bratislava"
+ },
+ {
+  "pays": "Slovénie",
+  "cap": "Ljubljana",
+  "iso": "SI",
+  "en": "Slovenia",
+  "capEn": "Ljubljana"
+ },
+ {
+  "pays": "Suède",
+  "cap": "Stockholm",
+  "iso": "SE",
+  "en": "Sweden",
+  "capEn": "Stockholm"
+ },
+ {
+  "pays": "Suisse",
+  "cap": "Berne",
+  "iso": "CH",
+  "en": "Switzerland",
+  "capEn": "Bern"
+ },
+ {
+  "pays": "Tchéquie",
+  "cap": "Prague",
+  "iso": "CZ",
+  "en": "Czech Republic",
+  "capEn": "Prague"
+ },
+ {
+  "pays": "Ukraine",
+  "cap": "Kiev",
+  "iso": "UA",
+  "en": "Ukraine",
+  "capEn": "Kyiv"
+ },
+ {
+  "pays": "Vatican",
+  "cap": "Vatican",
+  "iso": "VA",
+  "en": "Vatican City",
+  "capEn": "Vatican City"
+ },
+ {
+  "pays": "Afrique du Sud",
+  "cap": "Pretoria",
+  "iso": "ZA",
+  "en": "South Africa",
+  "capEn": "Pretoria"
+ },
+ {
+  "pays": "Algérie",
+  "cap": "Alger",
+  "iso": "DZ",
+  "en": "Algeria",
+  "capEn": "Algiers"
+ },
+ {
+  "pays": "Angola",
+  "cap": "Luanda",
+  "iso": "AO",
+  "en": "Angola",
+  "capEn": "Luanda"
+ },
+ {
+  "pays": "Bénin",
+  "cap": "Porto-Novo",
+  "iso": "BJ",
+  "en": "Benin",
+  "capEn": "Porto-Novo"
+ },
+ {
+  "pays": "Botswana",
+  "cap": "Gaborone",
+  "iso": "BW",
+  "en": "Botswana",
+  "capEn": "Gaborone"
+ },
+ {
+  "pays": "Burkina Faso",
+  "cap": "Ouagadougou",
+  "iso": "BF",
+  "en": "Burkina Faso",
+  "capEn": "Ouagadougou"
+ },
+ {
+  "pays": "Burundi",
+  "cap": "Gitega",
+  "iso": "BI",
+  "en": "Burundi",
+  "capEn": "Gitega"
+ },
+ {
+  "pays": "Cameroun",
+  "cap": "Yaoundé",
+  "iso": "CM",
+  "en": "Cameroon",
+  "capEn": "Yaounde"
+ },
+ {
+  "pays": "Cap-Vert",
+  "cap": "Praia",
+  "iso": "CV",
+  "en": "Cape Verde",
+  "capEn": "Praia"
+ },
+ {
+  "pays": "République centrafricaine",
+  "cap": "Bangui",
+  "iso": "CF",
+  "en": "Central African Republic",
+  "capEn": "Bangui"
+ },
+ {
+  "pays": "Comores",
+  "cap": "Moroni",
+  "iso": "KM",
+  "en": "Comoros",
+  "capEn": "Moroni"
+ },
+ {
+  "pays": "Congo",
+  "cap": "Brazzaville",
+  "iso": "CG",
+  "en": "Republic of the Congo",
+  "capEn": "Brazzaville"
+ },
+ {
+  "pays": "RD Congo",
+  "cap": "Kinshasa",
+  "iso": "CD",
+  "en": "Democratic Republic of the Congo",
+  "capEn": "Kinshasa"
+ },
+ {
+  "pays": "Côte d'Ivoire",
+  "cap": "Yamoussoukro",
+  "iso": "CI",
+  "en": "Ivory Coast",
+  "capEn": "Yamoussoukro"
+ },
+ {
+  "pays": "Djibouti",
+  "cap": "Djibouti",
+  "iso": "DJ",
+  "en": "Djibouti",
+  "capEn": "Djibouti"
+ },
+ {
+  "pays": "Égypte",
+  "cap": "Le Caire",
+  "iso": "EG",
+  "en": "Egypt",
+  "capEn": "Cairo"
+ },
+ {
+  "pays": "Érythrée",
+  "cap": "Asmara",
+  "iso": "ER",
+  "en": "Eritrea",
+  "capEn": "Asmara"
+ },
+ {
+  "pays": "Eswatini",
+  "cap": "Mbabane",
+  "iso": "SZ",
+  "en": "Eswatini",
+  "capEn": "Mbabane"
+ },
+ {
+  "pays": "Éthiopie",
+  "cap": "Addis-Abeba",
+  "iso": "ET",
+  "en": "Ethiopia",
+  "capEn": "Addis Ababa"
+ },
+ {
+  "pays": "Gabon",
+  "cap": "Libreville",
+  "iso": "GA",
+  "en": "Gabon",
+  "capEn": "Libreville"
+ },
+ {
+  "pays": "Gambie",
+  "cap": "Banjul",
+  "iso": "GM",
+  "en": "Gambia",
+  "capEn": "Banjul"
+ },
+ {
+  "pays": "Ghana",
+  "cap": "Accra",
+  "iso": "GH",
+  "en": "Ghana",
+  "capEn": "Accra"
+ },
+ {
+  "pays": "Guinée",
+  "cap": "Conakry",
+  "iso": "GN",
+  "en": "Guinea",
+  "capEn": "Conakry"
+ },
+ {
+  "pays": "Guinée-Bissau",
+  "cap": "Bissau",
+  "iso": "GW",
+  "en": "Guinea-Bissau",
+  "capEn": "Bissau"
+ },
+ {
+  "pays": "Guinée équatoriale",
+  "cap": "Malabo",
+  "iso": "GQ",
+  "en": "Equatorial Guinea",
+  "capEn": "Malabo"
+ },
+ {
+  "pays": "Kenya",
+  "cap": "Nairobi",
+  "iso": "KE",
+  "en": "Kenya",
+  "capEn": "Nairobi"
+ },
+ {
+  "pays": "Lesotho",
+  "cap": "Maseru",
+  "iso": "LS",
+  "en": "Lesotho",
+  "capEn": "Maseru"
+ },
+ {
+  "pays": "Liberia",
+  "cap": "Monrovia",
+  "iso": "LR",
+  "en": "Liberia",
+  "capEn": "Monrovia"
+ },
+ {
+  "pays": "Libye",
+  "cap": "Tripoli",
+  "iso": "LY",
+  "en": "Libya",
+  "capEn": "Tripoli"
+ },
+ {
+  "pays": "Madagascar",
+  "cap": "Antananarivo",
+  "iso": "MG",
+  "en": "Madagascar",
+  "capEn": "Antananarivo"
+ },
+ {
+  "pays": "Malawi",
+  "cap": "Lilongwe",
+  "iso": "MW",
+  "en": "Malawi",
+  "capEn": "Lilongwe"
+ },
+ {
+  "pays": "Mali",
+  "cap": "Bamako",
+  "iso": "ML",
+  "en": "Mali",
+  "capEn": "Bamako"
+ },
+ {
+  "pays": "Maroc",
+  "cap": "Rabat",
+  "iso": "MA",
+  "en": "Morocco",
+  "capEn": "Rabat"
+ },
+ {
+  "pays": "Maurice",
+  "cap": "Port-Louis",
+  "iso": "MU",
+  "en": "Mauritius",
+  "capEn": "Port Louis"
+ },
+ {
+  "pays": "Mauritanie",
+  "cap": "Nouakchott",
+  "iso": "MR",
+  "en": "Mauritania",
+  "capEn": "Nouakchott"
+ },
+ {
+  "pays": "Mozambique",
+  "cap": "Maputo",
+  "iso": "MZ",
+  "en": "Mozambique",
+  "capEn": "Maputo"
+ },
+ {
+  "pays": "Namibie",
+  "cap": "Windhoek",
+  "iso": "NA",
+  "en": "Namibia",
+  "capEn": "Windhoek"
+ },
+ {
+  "pays": "Niger",
+  "cap": "Niamey",
+  "iso": "NE",
+  "en": "Niger",
+  "capEn": "Niamey"
+ },
+ {
+  "pays": "Nigeria",
+  "cap": "Abuja",
+  "iso": "NG",
+  "en": "Nigeria",
+  "capEn": "Abuja"
+ },
+ {
+  "pays": "Ouganda",
+  "cap": "Kampala",
+  "iso": "UG",
+  "en": "Uganda",
+  "capEn": "Kampala"
+ },
+ {
+  "pays": "Rwanda",
+  "cap": "Kigali",
+  "iso": "RW",
+  "en": "Rwanda",
+  "capEn": "Kigali"
+ },
+ {
+  "pays": "São Tomé-et-Príncipe",
+  "cap": "São Tomé",
+  "iso": "ST",
+  "en": "Sao Tome and Principe",
+  "capEn": "Sao Tome"
+ },
+ {
+  "pays": "Sénégal",
+  "cap": "Dakar",
+  "iso": "SN",
+  "en": "Senegal",
+  "capEn": "Dakar"
+ },
+ {
+  "pays": "Seychelles",
+  "cap": "Victoria",
+  "iso": "SC",
+  "en": "Seychelles",
+  "capEn": "Victoria"
+ },
+ {
+  "pays": "Sierra Leone",
+  "cap": "Freetown",
+  "iso": "SL",
+  "en": "Sierra Leone",
+  "capEn": "Freetown"
+ },
+ {
+  "pays": "Somalie",
+  "cap": "Mogadiscio",
+  "iso": "SO",
+  "en": "Somalia",
+  "capEn": "Mogadishu"
+ },
+ {
+  "pays": "Soudan",
+  "cap": "Khartoum",
+  "iso": "SD",
+  "en": "Sudan",
+  "capEn": "Khartoum"
+ },
+ {
+  "pays": "Soudan du Sud",
+  "cap": "Djouba",
+  "iso": "SS",
+  "en": "South Sudan",
+  "capEn": "Juba"
+ },
+ {
+  "pays": "Tanzanie",
+  "cap": "Dodoma",
+  "iso": "TZ",
+  "en": "Tanzania",
+  "capEn": "Dodoma"
+ },
+ {
+  "pays": "Tchad",
+  "cap": "N'Djamena",
+  "iso": "TD",
+  "en": "Chad",
+  "capEn": "N'Djamena"
+ },
+ {
+  "pays": "Togo",
+  "cap": "Lomé",
+  "iso": "TG",
+  "en": "Togo",
+  "capEn": "Lome"
+ },
+ {
+  "pays": "Tunisie",
+  "cap": "Tunis",
+  "iso": "TN",
+  "en": "Tunisia",
+  "capEn": "Tunis"
+ },
+ {
+  "pays": "Zambie",
+  "cap": "Lusaka",
+  "iso": "ZM",
+  "en": "Zambia",
+  "capEn": "Lusaka"
+ },
+ {
+  "pays": "Zimbabwe",
+  "cap": "Harare",
+  "iso": "ZW",
+  "en": "Zimbabwe",
+  "capEn": "Harare"
+ },
+ {
+  "pays": "Afghanistan",
+  "cap": "Kaboul",
+  "iso": "AF",
+  "en": "Afghanistan",
+  "capEn": "Kabul"
+ },
+ {
+  "pays": "Arabie saoudite",
+  "cap": "Riyad",
+  "iso": "SA",
+  "en": "Saudi Arabia",
+  "capEn": "Riyadh"
+ },
+ {
+  "pays": "Arménie",
+  "cap": "Erevan",
+  "iso": "AM",
+  "en": "Armenia",
+  "capEn": "Yerevan"
+ },
+ {
+  "pays": "Azerbaïdjan",
+  "cap": "Baku",
+  "iso": "AZ",
+  "en": "Azerbaijan",
+  "capEn": "Baku"
+ },
+ {
+  "pays": "Bahreïn",
+  "cap": "Manama",
+  "iso": "BH",
+  "en": "Bahrain",
+  "capEn": "Manama"
+ },
+ {
+  "pays": "Bangladesh",
+  "cap": "Dacca",
+  "iso": "BD",
+  "en": "Bangladesh",
+  "capEn": "Dhaka"
+ },
+ {
+  "pays": "Bhoutan",
+  "cap": "Thimphou",
+  "iso": "BT",
+  "en": "Bhutan",
+  "capEn": "Thimphu"
+ },
+ {
+  "pays": "Birmanie",
+  "cap": "Naypyidaw",
+  "iso": "MM",
+  "en": "Myanmar",
+  "capEn": "Naypyidaw"
+ },
+ {
+  "pays": "Brunei",
+  "cap": "Bandar Seri Begawan",
+  "iso": "BN",
+  "en": "Brunei",
+  "capEn": "Bandar Seri Begawan"
+ },
+ {
+  "pays": "Cambodge",
+  "cap": "Phnom Penh",
+  "iso": "KH",
+  "en": "Cambodia",
+  "capEn": "Phnom Penh"
+ },
+ {
+  "pays": "Chine",
+  "cap": "Pékin",
+  "iso": "CN",
+  "en": "China",
+  "capEn": "Beijing"
+ },
+ {
+  "pays": "Corée du Nord",
+  "cap": "Pyongyang",
+  "iso": "KP",
+  "en": "North Korea",
+  "capEn": "Pyongyang"
+ },
+ {
+  "pays": "Corée du Sud",
+  "cap": "Séoul",
+  "iso": "KR",
+  "en": "South Korea",
+  "capEn": "Seoul"
+ },
+ {
+  "pays": "Émirats arabes unis",
+  "cap": "Abou Dabi",
+  "iso": "AE",
+  "en": "United Arab Emirates",
+  "capEn": "Abu Dhabi"
+ },
+ {
+  "pays": "Géorgie",
+  "cap": "Tbilissi",
+  "iso": "GE",
+  "en": "Georgia",
+  "capEn": "Tbilisi"
+ },
+ {
+  "pays": "Inde",
+  "cap": "New Delhi",
+  "iso": "IN",
+  "en": "India",
+  "capEn": "New Delhi"
+ },
+ {
+  "pays": "Indonésie",
+  "cap": "Jakarta",
+  "iso": "ID",
+  "en": "Indonesia",
+  "capEn": "Jakarta"
+ },
+ {
+  "pays": "Irak",
+  "cap": "Bagdad",
+  "iso": "IQ",
+  "en": "Iraq",
+  "capEn": "Baghdad"
+ },
+ {
+  "pays": "Iran",
+  "cap": "Téhéran",
+  "iso": "IR",
+  "en": "Iran",
+  "capEn": "Tehran"
+ },
+ {
+  "pays": "Israël",
+  "cap": "Jérusalem",
+  "iso": "IL",
+  "en": "Israel",
+  "capEn": "Jerusalem"
+ },
+ {
+  "pays": "Japon",
+  "cap": "Tokyo",
+  "iso": "JP",
+  "en": "Japan",
+  "capEn": "Tokyo"
+ },
+ {
+  "pays": "Jordanie",
+  "cap": "Amman",
+  "iso": "JO",
+  "en": "Jordan",
+  "capEn": "Amman"
+ },
+ {
+  "pays": "Kazakhstan",
+  "cap": "Astana",
+  "iso": "KZ",
+  "en": "Kazakhstan",
+  "capEn": "Astana"
+ },
+ {
+  "pays": "Kirghizistan",
+  "cap": "Bichkek",
+  "iso": "KG",
+  "en": "Kyrgyzstan",
+  "capEn": "Bishkek"
+ },
+ {
+  "pays": "Koweït",
+  "cap": "Koweït",
+  "iso": "KW",
+  "en": "Kuwait",
+  "capEn": "Kuwait City"
+ },
+ {
+  "pays": "Laos",
+  "cap": "Vientiane",
+  "iso": "LA",
+  "en": "Laos",
+  "capEn": "Vientiane"
+ },
+ {
+  "pays": "Liban",
+  "cap": "Beyrouth",
+  "iso": "LB",
+  "en": "Lebanon",
+  "capEn": "Beirut"
+ },
+ {
+  "pays": "Malaisie",
+  "cap": "Kuala Lumpur",
+  "iso": "MY",
+  "en": "Malaysia",
+  "capEn": "Kuala Lumpur"
+ },
+ {
+  "pays": "Maldives",
+  "cap": "Malé",
+  "iso": "MV",
+  "en": "Maldives",
+  "capEn": "Male"
+ },
+ {
+  "pays": "Mongolie",
+  "cap": "Oulan-Bator",
+  "iso": "MN",
+  "en": "Mongolia",
+  "capEn": "Ulaanbaatar"
+ },
+ {
+  "pays": "Népal",
+  "cap": "Katmandou",
+  "iso": "NP",
+  "en": "Nepal",
+  "capEn": "Kathmandu"
+ },
+ {
+  "pays": "Oman",
+  "cap": "Mascate",
+  "iso": "OM",
+  "en": "Oman",
+  "capEn": "Muscat"
+ },
+ {
+  "pays": "Ouzbékistan",
+  "cap": "Tachkent",
+  "iso": "UZ",
+  "en": "Uzbekistan",
+  "capEn": "Tashkent"
+ },
+ {
+  "pays": "Pakistan",
+  "cap": "Islamabad",
+  "iso": "PK",
+  "en": "Pakistan",
+  "capEn": "Islamabad"
+ },
+ {
+  "pays": "Palestine",
+  "cap": "Ramallah",
+  "iso": "PS",
+  "en": "Palestine",
+  "capEn": "Ramallah"
+ },
+ {
+  "pays": "Philippines",
+  "cap": "Manille",
+  "iso": "PH",
+  "en": "Philippines",
+  "capEn": "Manila"
+ },
+ {
+  "pays": "Qatar",
+  "cap": "Doha",
+  "iso": "QA",
+  "en": "Qatar",
+  "capEn": "Doha"
+ },
+ {
+  "pays": "Singapour",
+  "cap": "Singapour",
+  "iso": "SG",
+  "en": "Singapore",
+  "capEn": "Singapore"
+ },
+ {
+  "pays": "Sri Lanka",
+  "cap": "Sri Jayawardenepura",
+  "iso": "LK",
+  "en": "Sri Lanka",
+  "capEn": "Colombo"
+ },
+ {
+  "pays": "Syrie",
+  "cap": "Damas",
+  "iso": "SY",
+  "en": "Syria",
+  "capEn": "Damascus"
+ },
+ {
+  "pays": "Tadjikistan",
+  "cap": "Douchanbé",
+  "iso": "TJ",
+  "en": "Tajikistan",
+  "capEn": "Dushanbe"
+ },
+ {
+  "pays": "Taïwan",
+  "cap": "Taipei",
+  "iso": "TW",
+  "en": "Taiwan",
+  "capEn": "Taipei"
+ },
+ {
+  "pays": "Thaïlande",
+  "cap": "Bangkok",
+  "iso": "TH",
+  "en": "Thailand",
+  "capEn": "Bangkok"
+ },
+ {
+  "pays": "Timor oriental",
+  "cap": "Dili",
+  "iso": "TL",
+  "en": "East Timor",
+  "capEn": "Dili"
+ },
+ {
+  "pays": "Turquie",
+  "cap": "Ankara",
+  "iso": "TR",
+  "en": "Turkey",
+  "capEn": "Ankara"
+ },
+ {
+  "pays": "Turkménistan",
+  "cap": "Ashgabat",
+  "iso": "TM",
+  "en": "Turkmenistan",
+  "capEn": "Ashgabat"
+ },
+ {
+  "pays": "Viêt Nam",
+  "cap": "Hanoï",
+  "iso": "VN",
+  "en": "Vietnam",
+  "capEn": "Hanoi"
+ },
+ {
+  "pays": "Yémen",
+  "cap": "Sanaa",
+  "iso": "YE",
+  "en": "Yemen",
+  "capEn": "Sanaa"
+ },
+ {
+  "pays": "Antigua-et-Barbuda",
+  "cap": "Saint John's",
+  "iso": "AG",
+  "en": "Antigua and Barbuda",
+  "capEn": "Saint John's"
+ },
+ {
+  "pays": "Argentine",
+  "cap": "Buenos Aires",
+  "iso": "AR",
+  "en": "Argentina",
+  "capEn": "Buenos Aires"
+ },
+ {
+  "pays": "Bahamas",
+  "cap": "Nassau",
+  "iso": "BS",
+  "en": "Bahamas",
+  "capEn": "Nassau"
+ },
+ {
+  "pays": "Barbade",
+  "cap": "Bridgetown",
+  "iso": "BB",
+  "en": "Barbados",
+  "capEn": "Bridgetown"
+ },
+ {
+  "pays": "Belize",
+  "cap": "Belmopan",
+  "iso": "BZ",
+  "en": "Belize",
+  "capEn": "Belmopan"
+ },
+ {
+  "pays": "Bolivie",
+  "cap": "Sucre",
+  "iso": "BO",
+  "en": "Bolivia",
+  "capEn": "Sucre"
+ },
+ {
+  "pays": "Brésil",
+  "cap": "Brasilia",
+  "iso": "BR",
+  "en": "Brazil",
+  "capEn": "Brasilia"
+ },
+ {
+  "pays": "Canada",
+  "cap": "Ottawa",
+  "iso": "CA",
+  "en": "Canada",
+  "capEn": "Ottawa"
+ },
+ {
+  "pays": "Chili",
+  "cap": "Santiago",
+  "iso": "CL",
+  "en": "Chile",
+  "capEn": "Santiago"
+ },
+ {
+  "pays": "Colombie",
+  "cap": "Bogota",
+  "iso": "CO",
+  "en": "Colombia",
+  "capEn": "Bogota"
+ },
+ {
+  "pays": "Costa Rica",
+  "cap": "San José",
+  "iso": "CR",
+  "en": "Costa Rica",
+  "capEn": "San Jose"
+ },
+ {
+  "pays": "Cuba",
+  "cap": "La Havane",
+  "iso": "CU",
+  "en": "Cuba",
+  "capEn": "Havana"
+ },
+ {
+  "pays": "Dominique",
+  "cap": "Roseau",
+  "iso": "DM",
+  "en": "Dominica",
+  "capEn": "Roseau"
+ },
+ {
+  "pays": "Équateur",
+  "cap": "Quito",
+  "iso": "EC",
+  "en": "Ecuador",
+  "capEn": "Quito"
+ },
+ {
+  "pays": "États-Unis",
+  "cap": "Washington",
+  "iso": "US",
+  "en": "United States",
+  "capEn": "Washington"
+ },
+ {
+  "pays": "Grenade",
+  "cap": "Saint-Georges",
+  "iso": "GD",
+  "en": "Grenada",
+  "capEn": "Saint George's"
+ },
+ {
+  "pays": "Guatemala",
+  "cap": "Guatemala",
+  "iso": "GT",
+  "en": "Guatemala",
+  "capEn": "Guatemala City"
+ },
+ {
+  "pays": "Guyana",
+  "cap": "Georgetown",
+  "iso": "GY",
+  "en": "Guyana",
+  "capEn": "Georgetown"
+ },
+ {
+  "pays": "Haïti",
+  "cap": "Port-au-Prince",
+  "iso": "HT",
+  "en": "Haiti",
+  "capEn": "Port-au-Prince"
+ },
+ {
+  "pays": "Honduras",
+  "cap": "Tegucigalpa",
+  "iso": "HN",
+  "en": "Honduras",
+  "capEn": "Tegucigalpa"
+ },
+ {
+  "pays": "Jamaïque",
+  "cap": "Kingston",
+  "iso": "JM",
+  "en": "Jamaica",
+  "capEn": "Kingston"
+ },
+ {
+  "pays": "Mexique",
+  "cap": "Mexico",
+  "iso": "MX",
+  "en": "Mexico",
+  "capEn": "Mexico City"
+ },
+ {
+  "pays": "Nicaragua",
+  "cap": "Managua",
+  "iso": "NI",
+  "en": "Nicaragua",
+  "capEn": "Managua"
+ },
+ {
+  "pays": "Panama",
+  "cap": "Panama",
+  "iso": "PA",
+  "en": "Panama",
+  "capEn": "Panama City"
+ },
+ {
+  "pays": "Paraguay",
+  "cap": "Asuncion",
+  "iso": "PY",
+  "en": "Paraguay",
+  "capEn": "Asuncion"
+ },
+ {
+  "pays": "Pérou",
+  "cap": "Lima",
+  "iso": "PE",
+  "en": "Peru",
+  "capEn": "Lima"
+ },
+ {
+  "pays": "République dominicaine",
+  "cap": "Saint-Domingue",
+  "iso": "DO",
+  "en": "Dominican Republic",
+  "capEn": "Santo Domingo"
+ },
+ {
+  "pays": "Saint-Christophe-et-Niévès",
+  "cap": "Basseterre",
+  "iso": "KN",
+  "en": "Saint Kitts and Nevis",
+  "capEn": "Basseterre"
+ },
+ {
+  "pays": "Sainte-Lucie",
+  "cap": "Castries",
+  "iso": "LC",
+  "en": "Saint Lucia",
+  "capEn": "Castries"
+ },
+ {
+  "pays": "Saint-Vincent-et-les-Grenadines",
+  "cap": "Kingstown",
+  "iso": "VC",
+  "en": "Saint Vincent and the Grenadines",
+  "capEn": "Kingstown"
+ },
+ {
+  "pays": "Salvador",
+  "cap": "San Salvador",
+  "iso": "SV",
+  "en": "El Salvador",
+  "capEn": "San Salvador"
+ },
+ {
+  "pays": "Suriname",
+  "cap": "Paramaribo",
+  "iso": "SR",
+  "en": "Suriname",
+  "capEn": "Paramaribo"
+ },
+ {
+  "pays": "Trinité-et-Tobago",
+  "cap": "Port-d'Espagne",
+  "iso": "TT",
+  "en": "Trinidad and Tobago",
+  "capEn": "Port of Spain"
+ },
+ {
+  "pays": "Uruguay",
+  "cap": "Montevideo",
+  "iso": "UY",
+  "en": "Uruguay",
+  "capEn": "Montevideo"
+ },
+ {
+  "pays": "Venezuela",
+  "cap": "Caracas",
+  "iso": "VE",
+  "en": "Venezuela",
+  "capEn": "Caracas"
+ },
+ {
+  "pays": "Australie",
+  "cap": "Canberra",
+  "iso": "AU",
+  "en": "Australia",
+  "capEn": "Canberra"
+ },
+ {
+  "pays": "Fidji",
+  "cap": "Suva",
+  "iso": "FJ",
+  "en": "Fiji",
+  "capEn": "Suva"
+ },
+ {
+  "pays": "Kiribati",
+  "cap": "Tarawa",
+  "iso": "KI",
+  "en": "Kiribati",
+  "capEn": "Tarawa"
+ },
+ {
+  "pays": "Marshall",
+  "cap": "Majuro",
+  "iso": "MH",
+  "en": "Marshall Islands",
+  "capEn": "Majuro"
+ },
+ {
+  "pays": "Micronésie",
+  "cap": "Palikir",
+  "iso": "FM",
+  "en": "Micronesia",
+  "capEn": "Palikir"
+ },
+ {
+  "pays": "Nauru",
+  "cap": "Yaren",
+  "iso": "NR",
+  "en": "Nauru",
+  "capEn": "Yaren"
+ },
+ {
+  "pays": "Nouvelle-Zélande",
+  "cap": "Wellington",
+  "iso": "NZ",
+  "en": "New Zealand",
+  "capEn": "Wellington"
+ },
+ {
+  "pays": "Palaos",
+  "cap": "Ngerulmud",
+  "iso": "PW",
+  "en": "Palau",
+  "capEn": "Ngerulmud"
+ },
+ {
+  "pays": "Papouasie-Nouvelle-Guinée",
+  "cap": "Port Moresby",
+  "iso": "PG",
+  "en": "Papua New Guinea",
+  "capEn": "Port Moresby"
+ },
+ {
+  "pays": "Salomon",
+  "cap": "Honiara",
+  "iso": "SB",
+  "en": "Solomon Islands",
+  "capEn": "Honiara"
+ },
+ {
+  "pays": "Samoa",
+  "cap": "Apia",
+  "iso": "WS",
+  "en": "Samoa",
+  "capEn": "Apia"
+ },
+ {
+  "pays": "Tonga",
+  "cap": "Nuku'alofa",
+  "iso": "TO",
+  "en": "Tonga",
+  "capEn": "Nukualofa"
+ },
+ {
+  "pays": "Tuvalu",
+  "cap": "Funafuti",
+  "iso": "TV",
+  "en": "Tuvalu",
+  "capEn": "Funafuti"
+ },
+ {
+  "pays": "Vanuatu",
+  "cap": "Port-Vila",
+  "iso": "VU",
+  "en": "Vanuatu",
+  "capEn": "Port Vila"
+ },
+ {
+  "pays": "Hong Kong",
+  "cap": "Hong Kong",
+  "iso": "HK",
+  "en": "Hong Kong",
+  "capEn": "Hong Kong"
+ },
+ {
+  "pays": "Macao",
+  "cap": "Macao",
+  "iso": "MO",
+  "en": "Macao",
+  "capEn": "Macao"
+ },
+ {
+  "pays": "Groenland",
+  "cap": "Nuuk",
+  "iso": "GL",
+  "en": "Greenland",
+  "capEn": "Nuuk"
+ },
+ {
+  "pays": "Porto Rico",
+  "cap": "San Juan",
+  "iso": "PR",
+  "en": "Puerto Rico",
+  "capEn": "San Juan"
+ },
+ {
+  "pays": "Aruba",
+  "cap": "Oranjestad",
+  "iso": "AW",
+  "en": "Aruba",
+  "capEn": "Oranjestad"
+ },
+ {
+  "pays": "Bermudes",
+  "cap": "Hamilton",
+  "iso": "BM",
+  "en": "Bermuda",
+  "capEn": "Hamilton"
+ },
+ {
+  "pays": "Curaçao",
+  "cap": "Willemstad",
+  "iso": "CW",
+  "en": "Curacao",
+  "capEn": "Willemstad"
+ },
+ {
+  "pays": "Îles Féroé",
+  "cap": "Tórshavn",
+  "iso": "FO",
+  "en": "Faroe Islands",
+  "capEn": "Torshavn"
+ },
+ {
+  "pays": "Polynésie française",
+  "cap": "Papeete",
+  "iso": "PF",
+  "en": "French Polynesia",
+  "capEn": "Papeete"
+ },
+ {
+  "pays": "Guam",
+  "cap": "Hagatna",
+  "iso": "GU",
+  "en": "Guam",
+  "capEn": "Hagatna"
+ },
+ {
+  "pays": "Nouvelle-Calédonie",
+  "cap": "Nouméa",
+  "iso": "NC",
+  "en": "New Caledonia",
+  "capEn": "Noumea"
+ },
+ {
+  "pays": "Anguilla",
+  "cap": "The Valley",
+  "iso": "AI",
+  "en": "Anguilla",
+  "capEn": "The Valley"
+ },
+ {
+  "pays": "Îles Caïmans",
+  "cap": "George Town",
+  "iso": "KY",
+  "en": "Cayman Islands",
+  "capEn": "George Town"
+ },
+ {
+  "pays": "Jersey",
+  "cap": "Saint-Hélier",
+  "iso": "JE",
+  "en": "Jersey",
+  "capEn": "Saint Helier"
+ },
+ {
+  "pays": "Guernesey",
+  "cap": "Saint-Peter-Port",
+  "iso": "GG",
+  "en": "Guernsey",
+  "capEn": "Saint Peter Port"
+ },
+ {
+  "pays": "Île de Man",
+  "cap": "Douglas",
+  "iso": "IM",
+  "en": "Isle of Man",
+  "capEn": "Douglas"
+ },
+ {
+  "pays": "Saint-Martin",
+  "cap": "Marigot",
+  "iso": "MF",
+  "en": "Saint Martin",
+  "capEn": "Marigot"
+ },
+ {
+  "pays": "Îles Turques-et-Caïques",
+  "cap": "Cockburn Town",
+  "iso": "TC",
+  "en": "Turks and Caicos Islands",
+  "capEn": "Cockburn Town"
+ },
+ {
+  "pays": "Îles Vierges britanniques",
+  "cap": "Road Town",
+  "iso": "VG",
+  "en": "British Virgin Islands",
+  "capEn": "Road Town"
+ }
+]

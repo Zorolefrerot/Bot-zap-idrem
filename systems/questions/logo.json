@@ -1,0 +1,2230 @@
+[
+ {
+  "q": "Paris Saint-Germain",
+  "wiki": "Paris_Saint-Germain",
+  "alts": [
+   "psg"
+  ],
+  "tag": "Football",
+  "a": "Paris Saint-Germain"
+ },
+ {
+  "q": "Olympique de Marseille",
+  "wiki": "Olympique_de_Marseille",
+  "alts": [
+   "om",
+   "marseille"
+  ],
+  "tag": "Football",
+  "a": "Olympique de Marseille"
+ },
+ {
+  "q": "Olympique Lyonnais",
+  "wiki": "Olympique_lyonnais",
+  "alts": [
+   "ol",
+   "lyon"
+  ],
+  "tag": "Football",
+  "a": "Olympique Lyonnais"
+ },
+ {
+  "q": "AS Monaco",
+  "wiki": "AS_Monaco_FC",
+  "alts": [
+   "monaco",
+   "as monaco fc"
+  ],
+  "tag": "Football",
+  "a": "AS Monaco"
+ },
+ {
+  "q": "Real Madrid",
+  "wiki": "Real_Madrid",
+  "alts": [
+   "real",
+   "real madrid cf"
+  ],
+  "tag": "Football",
+  "a": "Real Madrid"
+ },
+ {
+  "q": "FC Barcelone",
+  "wiki": "FC_Barcelone",
+  "alts": [
+   "barca",
+   "barcelone",
+   "fc barcelone"
+  ],
+  "tag": "Football",
+  "a": "FC Barcelone"
+ },
+ {
+  "q": "Atlético de Madrid",
+  "wiki": "Atlético_de_Madrid",
+  "alts": [
+   "atletico",
+   "atletico madrid"
+  ],
+  "tag": "Football",
+  "a": "Atlético de Madrid"
+ },
+ {
+  "q": "Valence CF",
+  "wiki": "Valence_CF",
+  "alts": [
+   "valencia cf",
+   "valencia"
+  ],
+  "tag": "Football",
+  "a": "Valence CF"
+ },
+ {
+  "q": "Séville FC",
+  "wiki": "Séville_FC",
+  "alts": [
+   "sevilla fc",
+   "sevilla"
+  ],
+  "tag": "Football",
+  "a": "Séville FC"
+ },
+ {
+  "q": "Villarreal",
+  "wiki": "Villarreal_CF",
+  "alts": [
+   "villarreal club"
+  ],
+  "tag": "Football",
+  "a": "Villarreal"
+ },
+ {
+  "q": "Real Sociedad",
+  "wiki": "Real_Sociedad",
+  "alts": [
+   "la real"
+  ],
+  "tag": "Football",
+  "a": "Real Sociedad"
+ },
+ {
+  "q": "Athletic Bilbao",
+  "wiki": "Athletic_Club",
+  "alts": [
+   "athletic club",
+   "athletic bilbao"
+  ],
+  "tag": "Football",
+  "a": "Athletic Bilbao"
+ },
+ {
+  "q": "Getafe",
+  "wiki": "Getafe_CF",
+  "alts": [
+   "getafe"
+  ],
+  "tag": "Football",
+  "a": "Getafe"
+ },
+ {
+  "q": "Celta Vigo",
+  "wiki": "Celta_de_Vigo",
+  "alts": [
+   "celta",
+   "celta vigo"
+  ],
+  "tag": "Football",
+  "a": "Celta Vigo"
+ },
+ {
+  "q": "Manchester United",
+  "wiki": "Manchester_United",
+  "alts": [
+   "man united",
+   "manchester utd"
+  ],
+  "tag": "Football",
+  "a": "Manchester United"
+ },
+ {
+  "q": "Manchester City",
+  "wiki": "Manchester_City",
+  "alts": [
+   "man city",
+   "citizens"
+  ],
+  "tag": "Football",
+  "a": "Manchester City"
+ },
+ {
+  "q": "Liverpool",
+  "wiki": "Liverpool_FC",
+  "alts": [
+   "liverpool fc",
+   "the reds"
+  ],
+  "tag": "Football",
+  "a": "Liverpool"
+ },
+ {
+  "q": "Chelsea",
+  "wiki": "Chelsea_FC",
+  "alts": [
+   "chelsea fc",
+   "the blues"
+  ],
+  "tag": "Football",
+  "a": "Chelsea"
+ },
+ {
+  "q": "Arsenal",
+  "wiki": "Arsenal_FC",
+  "alts": [
+   "arsenal fc",
+   "gunners"
+  ],
+  "tag": "Football",
+  "a": "Arsenal"
+ },
+ {
+  "q": "Tottenham",
+  "wiki": "Tottenham_Hotspur",
+  "alts": [
+   "tottenham hotspur",
+   "spurs"
+  ],
+  "tag": "Football",
+  "a": "Tottenham"
+ },
+ {
+  "q": "Everton",
+  "wiki": "Everton_FC",
+  "alts": [
+   "everton fc",
+   "the toffees"
+  ],
+  "tag": "Football",
+  "a": "Everton"
+ },
+ {
+  "q": "West Ham",
+  "wiki": "West_Ham_United",
+  "alts": [
+   "west ham united",
+   "the hammers"
+  ],
+  "tag": "Football",
+  "a": "West Ham"
+ },
+ {
+  "q": "Leicester City",
+  "wiki": "Leicester_City_FC",
+  "alts": [
+   "leicester",
+   "the foxes"
+  ],
+  "tag": "Football",
+  "a": "Leicester City"
+ },
+ {
+  "q": "Aston Villa",
+  "wiki": "Aston_Villa_FC",
+  "alts": [
+   "aston villa",
+   "villans"
+  ],
+  "tag": "Football",
+  "a": "Aston Villa"
+ },
+ {
+  "q": "Newcastle",
+  "wiki": "Newcastle_United_FC",
+  "alts": [
+   "newcastle united",
+   "magpies"
+  ],
+  "tag": "Football",
+  "a": "Newcastle"
+ },
+ {
+  "q": "Juventus",
+  "wiki": "Juventus_Football_Club",
+  "alts": [
+   "la juve",
+   "juve"
+  ],
+  "tag": "Football",
+  "a": "Juventus"
+ },
+ {
+  "q": "AC Milan",
+  "wiki": "AC_Milan",
+  "alts": [
+   "milan",
+   "rossoneri"
+  ],
+  "tag": "Football",
+  "a": "AC Milan"
+ },
+ {
+  "q": "Inter Milan",
+  "wiki": "Inter_Milan",
+  "alts": [
+   "inter",
+   "nerazzurri"
+  ],
+  "tag": "Football",
+  "a": "Inter Milan"
+ },
+ {
+  "q": "Naples",
+  "wiki": "SSC_Naples",
+  "alts": [
+   "ssc napoli",
+   "napoli"
+  ],
+  "tag": "Football",
+  "a": "Naples"
+ },
+ {
+  "q": "AS Rome",
+  "wiki": "AS_Rome",
+  "alts": [
+   "as roma",
+   "roma"
+  ],
+  "tag": "Football",
+  "a": "AS Rome"
+ },
+ {
+  "q": "Lazio",
+  "wiki": "SS_Lazio",
+  "alts": [
+   "lazio rome",
+   "lazio"
+  ],
+  "tag": "Football",
+  "a": "Lazio"
+ },
+ {
+  "q": "Atalanta",
+  "wiki": "Atalanta_BC",
+  "alts": [
+   "atalanta bergame"
+  ],
+  "tag": "Football",
+  "a": "Atalanta"
+ },
+ {
+  "q": "Fiorentina",
+  "wiki": "ACF_Fiorentina",
+  "alts": [
+   "la fiorentina",
+   "viola"
+  ],
+  "tag": "Football",
+  "a": "Fiorentina"
+ },
+ {
+  "q": "Torino",
+  "wiki": "Torino_FC",
+  "alts": [
+   "torino fc",
+   "granata"
+  ],
+  "tag": "Football",
+  "a": "Torino"
+ },
+ {
+  "q": "Bayern Munich",
+  "wiki": "Bayern_Munich",
+  "alts": [
+   "bayern",
+   "fc bayern"
+  ],
+  "tag": "Football",
+  "a": "Bayern Munich"
+ },
+ {
+  "q": "Borussia Dortmund",
+  "wiki": "Borussia_Dortmund",
+  "alts": [
+   "dortmund",
+   "bvb"
+  ],
+  "tag": "Football",
+  "a": "Borussia Dortmund"
+ },
+ {
+  "q": "Bayer Leverkusen",
+  "wiki": "Bayer_Leverkusen",
+  "alts": [
+   "leverkusen",
+   "bayer 04"
+  ],
+  "tag": "Football",
+  "a": "Bayer Leverkusen"
+ },
+ {
+  "q": "RB Leipzig",
+  "wiki": "RB_Leipzig",
+  "alts": [
+   "red bull leipzig"
+  ],
+  "tag": "Football",
+  "a": "RB Leipzig"
+ },
+ {
+  "q": "Eintracht Francfort",
+  "wiki": "Eintracht_Francfort",
+  "alts": [
+   "eintracht",
+   "francfort"
+  ],
+  "tag": "Football",
+  "a": "Eintracht Francfort"
+ },
+ {
+  "q": "VfB Stuttgart",
+  "wiki": "VfB_Stuttgart",
+  "alts": [
+   "stuttgart"
+  ],
+  "tag": "Football",
+  "a": "VfB Stuttgart"
+ },
+ {
+  "q": "Schalke 04",
+  "wiki": "Schalke_04",
+  "alts": [
+   "schalke",
+   "fc schalke"
+  ],
+  "tag": "Football",
+  "a": "Schalke 04"
+ },
+ {
+  "q": "Werder Brême",
+  "wiki": "Werder_Brême",
+  "alts": [
+   "werder bremen",
+   "werder"
+  ],
+  "tag": "Football",
+  "a": "Werder Brême"
+ },
+ {
+  "q": "Ajax Amsterdam",
+  "wiki": "Ajax_Amsterdam",
+  "alts": [
+   "ajax",
+   "afc ajax"
+  ],
+  "tag": "Football",
+  "a": "Ajax Amsterdam"
+ },
+ {
+  "q": "PSV Eindhoven",
+  "wiki": "PSV_Eindhoven",
+  "alts": [
+   "psv",
+   "philips sport vereniging"
+  ],
+  "tag": "Football",
+  "a": "PSV Eindhoven"
+ },
+ {
+  "q": "Feyenoord",
+  "wiki": "Feyenoord",
+  "alts": [
+   "feyenoord rotterdam"
+  ],
+  "tag": "Football",
+  "a": "Feyenoord"
+ },
+ {
+  "q": "Benfica",
+  "wiki": "Benfica",
+  "alts": [
+   "sl benfica",
+   "lisbonne eagles"
+  ],
+  "tag": "Football",
+  "a": "Benfica"
+ },
+ {
+  "q": "Porto",
+  "wiki": "FC_Porto",
+  "alts": [
+   "fc porto",
+   "dragons"
+  ],
+  "tag": "Football",
+  "a": "Porto"
+ },
+ {
+  "q": "Sporting CP",
+  "wiki": "Sporting_Clube_de_Portugal",
+  "alts": [
+   "sporting lisbonne",
+   "sporting portugal"
+  ],
+  "tag": "Football",
+  "a": "Sporting CP"
+ },
+ {
+  "q": "Celtic Glasgow",
+  "wiki": "Celtic_FC",
+  "alts": [
+   "celtic",
+   "the bhoys"
+  ],
+  "tag": "Football",
+  "a": "Celtic Glasgow"
+ },
+ {
+  "q": "Rangers FC",
+  "wiki": "Rangers_FC",
+  "alts": [
+   "glasgow rangers",
+   "rangers"
+  ],
+  "tag": "Football",
+  "a": "Rangers FC"
+ },
+ {
+  "q": "Galatasaray",
+  "wiki": "Galatasaray_SK",
+  "alts": [
+   "galatasaray sk",
+   "cimbom"
+  ],
+  "tag": "Football",
+  "a": "Galatasaray"
+ },
+ {
+  "q": "Fenerbahçe",
+  "wiki": "Fenerbahçe_SK",
+  "alts": [
+   "fenerbahce sk",
+   "fener"
+  ],
+  "tag": "Football",
+  "a": "Fenerbahçe"
+ },
+ {
+  "q": "Beşiktaş",
+  "wiki": "Beşiktaş_JK",
+  "alts": [
+   "besiktas jk",
+   "besiktas"
+  ],
+  "tag": "Football",
+  "a": "Beşiktaş"
+ },
+ {
+  "q": "Olympiakos",
+  "wiki": "Olympiakós",
+  "alts": [
+   "olympiacos fc",
+   "thrylos"
+  ],
+  "tag": "Football",
+  "a": "Olympiakos"
+ },
+ {
+  "q": "PAOK Salonique",
+  "wiki": "PAOK_Salonique",
+  "alts": [
+   "paok"
+  ],
+  "tag": "Football",
+  "a": "PAOK Salonique"
+ },
+ {
+  "q": "Red Star Belgrade",
+  "wiki": "Étoile_rouge_de_Belgrade",
+  "alts": [
+   "etoile rouge",
+   "crvena zvezda"
+  ],
+  "tag": "Football",
+  "a": "Red Star Belgrade"
+ },
+ {
+  "q": "Dynamo Kyiv",
+  "wiki": "Dynamo_Kiev",
+  "alts": [
+   "dynamo kyiv",
+   "dynamo kiev"
+  ],
+  "tag": "Football",
+  "a": "Dynamo Kyiv"
+ },
+ {
+  "q": "Shakhtar Donetsk",
+  "wiki": "Chakhtar_Donetsk",
+  "alts": [
+   "shakhtar donetsk",
+   "chakhtar"
+  ],
+  "tag": "Football",
+  "a": "Shakhtar Donetsk"
+ },
+ {
+  "q": "Zenit Saint-Pétersbourg",
+  "wiki": "Zenit_Saint-Pétersbourg",
+  "alts": [
+   "zenit",
+   "zenit spb"
+  ],
+  "tag": "Football",
+  "a": "Zenit Saint-Pétersbourg"
+ },
+ {
+  "q": "Spartak Moscou",
+  "wiki": "Spartak_Moscou",
+  "alts": [
+   "spartak moskva"
+  ],
+  "tag": "Football",
+  "a": "Spartak Moscou"
+ },
+ {
+  "q": "CSKA Moscou",
+  "wiki": "CSKA_Moscou",
+  "alts": [
+   "cska moskva",
+   "armée rouge"
+  ],
+  "tag": "Football",
+  "a": "CSKA Moscou"
+ },
+ {
+  "q": "Boca Juniors",
+  "wiki": "Boca_Juniors",
+  "alts": [
+   "boca",
+   "xeneizes"
+  ],
+  "tag": "Football",
+  "a": "Boca Juniors"
+ },
+ {
+  "q": "River Plate",
+  "wiki": "River_Plate",
+  "alts": [
+   "los millonarios",
+   "river"
+  ],
+  "tag": "Football",
+  "a": "River Plate"
+ },
+ {
+  "q": "Flamengo",
+  "wiki": "Clube_de_Regatas_do_Flamengo",
+  "alts": [
+   "flamengo",
+   "mengao"
+  ],
+  "tag": "Football",
+  "a": "Flamengo"
+ },
+ {
+  "q": "Corinthians",
+  "wiki": "Sport_Club_Corinthians_Paulista",
+  "alts": [
+   "corinthians paulista"
+  ],
+  "tag": "Football",
+  "a": "Corinthians"
+ },
+ {
+  "q": "Santos FC",
+  "wiki": "Santos_Futebol_Clube",
+  "alts": [
+   "santos fc",
+   "peixe"
+  ],
+  "tag": "Football",
+  "a": "Santos FC"
+ },
+ {
+  "q": "Palmeiras",
+  "wiki": "Sociedade_Esportiva_Palmeiras",
+  "alts": [
+   "palmeiras",
+   "verdão"
+  ],
+  "tag": "Football",
+  "a": "Palmeiras"
+ },
+ {
+  "q": "São Paulo FC",
+  "wiki": "São_Paulo_FC",
+  "alts": [
+   "sao paulo fc",
+   "tricolor"
+  ],
+  "tag": "Football",
+  "a": "São Paulo FC"
+ },
+ {
+  "q": "Grêmio",
+  "wiki": "Grêmio_Foot-Ball_Porto_Alegrense",
+  "alts": [
+   "gremio",
+   "tricolor gaúcho"
+  ],
+  "tag": "Football",
+  "a": "Grêmio"
+ },
+ {
+  "q": "Atlético Nacional",
+  "wiki": "Atlético_Nacional",
+  "alts": [
+   "nacional medellin",
+   "verdelaga"
+  ],
+  "tag": "Football",
+  "a": "Atlético Nacional"
+ },
+ {
+  "q": "América de Cali",
+  "wiki": "América_de_Cali",
+  "alts": [
+   "america cali",
+   "los diablos rojos"
+  ],
+  "tag": "Football",
+  "a": "América de Cali"
+ },
+ {
+  "q": "Al Ahly",
+  "wiki": "Al_Ahly_SC",
+  "alts": [
+   "al ahly sc",
+   "les rouges"
+  ],
+  "tag": "Football",
+  "a": "Al Ahly"
+ },
+ {
+  "q": "Zamalek",
+  "wiki": "Zamalek_SC",
+  "alts": [
+   "zamalek sc",
+   "les blancs"
+  ],
+  "tag": "Football",
+  "a": "Zamalek"
+ },
+ {
+  "q": "Espérance de Tunis",
+  "wiki": "Espérance_sportive_de_Tunis",
+  "alts": [
+   "esperance tunis",
+   "taraji"
+  ],
+  "tag": "Football",
+  "a": "Espérance de Tunis"
+ },
+ {
+  "q": "Club Africain",
+  "wiki": "Club_Africain",
+  "alts": [
+   "club africain tunis",
+   "ca"
+  ],
+  "tag": "Football",
+  "a": "Club Africain"
+ },
+ {
+  "q": "Raja Casablanca",
+  "wiki": "Raja_Club_Athlétique",
+  "alts": [
+   "raja",
+   "raja club"
+  ],
+  "tag": "Football",
+  "a": "Raja Casablanca"
+ },
+ {
+  "q": "Wydad Casablanca",
+  "wiki": "Wydad_AC",
+  "alts": [
+   "wydad ac",
+   "wydad"
+  ],
+  "tag": "Football",
+  "a": "Wydad Casablanca"
+ },
+ {
+  "q": "TP Mazembe",
+  "wiki": "Tout_Puissant_Mazembe",
+  "alts": [
+   "tp mazembe",
+   "les corbeaux"
+  ],
+  "tag": "Football",
+  "a": "TP Mazembe"
+ },
+ {
+  "q": "Vita Club",
+  "wiki": "Association_sportive_Vita_Club",
+  "alts": [
+   "as vita club",
+   "dauphins noirs"
+  ],
+  "tag": "Football",
+  "a": "Vita Club"
+ },
+ {
+  "q": "Daring Doho?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Daring Doho?"
+ },
+ {
+  "q": "FC Renard?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "FC Renard?"
+ },
+ {
+  "q": "AS Vita déjà",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "AS Vita déjà"
+ },
+ {
+  "q": "Motema Pembe",
+  "wiki": "DC_Motema_Pembe",
+  "alts": [
+   "motema pembe",
+   "les immaculés"
+  ],
+  "tag": "Football",
+  "a": "Motema Pembe"
+ },
+ {
+  "q": "Lakers",
+  "wiki": "Lakers_de_Los_Angeles",
+  "alts": [
+   "los angeles lakers",
+   "la lakers"
+  ],
+  "tag": "Basket",
+  "a": "Lakers"
+ },
+ {
+  "q": "Celtics",
+  "wiki": "Celtics_de_Boston",
+  "alts": [
+   "boston celtics",
+   "the celtics"
+  ],
+  "tag": "Basket",
+  "a": "Celtics"
+ },
+ {
+  "q": "Bulls",
+  "wiki": "Bulls_de_Chicago",
+  "alts": [
+   "chicago bulls",
+   "the bulls"
+  ],
+  "tag": "Basket",
+  "a": "Bulls"
+ },
+ {
+  "q": "Warriors",
+  "wiki": "Warriors_de_Golden_State",
+  "alts": [
+   "golden state warriors",
+   "gsw"
+  ],
+  "tag": "Basket",
+  "a": "Warriors"
+ },
+ {
+  "q": "Knicks",
+  "wiki": "Knicks_de_New_York",
+  "alts": [
+   "new york knicks",
+   "the knicks"
+  ],
+  "tag": "Basket",
+  "a": "Knicks"
+ },
+ {
+  "q": "Heat",
+  "wiki": "Heat_de_Miami",
+  "alts": [
+   "miami heat",
+   "the heat"
+  ],
+  "tag": "Basket",
+  "a": "Heat"
+ },
+ {
+  "q": "Nets",
+  "wiki": "Nets_de_Brooklyn",
+  "alts": [
+   "brooklyn nets",
+   "the nets"
+  ],
+  "tag": "Basket",
+  "a": "Nets"
+ },
+ {
+  "q": "Raptors",
+  "wiki": "Raptors_de_Toronto",
+  "alts": [
+   "toronto raptors",
+   "the raptors"
+  ],
+  "tag": "Basket",
+  "a": "Raptors"
+ },
+ {
+  "q": "Bucks",
+  "wiki": "Bucks_de_Milwaukee",
+  "alts": [
+   "milwaukee bucks",
+   "the bucks"
+  ],
+  "tag": "Basket",
+  "a": "Bucks"
+ },
+ {
+  "q": "Mavericks",
+  "wiki": "Mavericks_de_Dallas",
+  "alts": [
+   "dallas mavericks",
+   "the mavs"
+  ],
+  "tag": "Basket",
+  "a": "Mavericks"
+ },
+ {
+  "q": "Rockets",
+  "wiki": "Rockets_de_Houston",
+  "alts": [
+   "houston rockets",
+   "the rockets"
+  ],
+  "tag": "Basket",
+  "a": "Rockets"
+ },
+ {
+  "q": "Spurs",
+  "wiki": "Spurs_de_San_Antonio",
+  "alts": [
+   "san antonio spurs",
+   "the spurs"
+  ],
+  "tag": "Basket",
+  "a": "Spurs"
+ },
+ {
+  "q": "Suns",
+  "wiki": "Suns_de_Phoenix",
+  "alts": [
+   "phoenix suns",
+   "the suns"
+  ],
+  "tag": "Basket",
+  "a": "Suns"
+ },
+ {
+  "q": "Clippers",
+  "wiki": "Clippers_de_Los_Angeles",
+  "alts": [
+   "los angeles clippers",
+   "la clippers"
+  ],
+  "tag": "Basket",
+  "a": "Clippers"
+ },
+ {
+  "q": "Thunder",
+  "wiki": "Thunder_d’Oklahoma_City",
+  "alts": [
+   "oklahoma city thunder",
+   "okc"
+  ],
+  "tag": "Basket",
+  "a": "Thunder"
+ },
+ {
+  "q": "76ers",
+  "wiki": "76ers_de_Philadelphie",
+  "alts": [
+   "philadelphia 76ers",
+   "sixers"
+  ],
+  "tag": "Basket",
+  "a": "76ers"
+ },
+ {
+  "q": "Pacers",
+  "wiki": "Pacers_de_l’Indiana",
+  "alts": [
+   "indiana pacers",
+   "the pacers"
+  ],
+  "tag": "Basket",
+  "a": "Pacers"
+ },
+ {
+  "q": "Hornets",
+  "wiki": "Hornets_de_Charlotte",
+  "alts": [
+   "charlotte hornets",
+   "the hornets"
+  ],
+  "tag": "Basket",
+  "a": "Hornets"
+ },
+ {
+  "q": "Grizzlies",
+  "wiki": "Grizzlies_de_Memphis",
+  "alts": [
+   "memphis grizzlies",
+   "the grizzlies"
+  ],
+  "tag": "Basket",
+  "a": "Grizzlies"
+ },
+ {
+  "q": "Pelicans",
+  "wiki": "Pelicans_de_la_Nouvelle-Orléans",
+  "alts": [
+   "new orleans pelicans",
+   "the pelicans"
+  ],
+  "tag": "Basket",
+  "a": "Pelicans"
+ },
+ {
+  "q": "Mercedes-Benz",
+  "wiki": "Mercedes-Benz",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Mercedes-Benz"
+ },
+ {
+  "q": "BMW",
+  "wiki": "BMW",
+  "alts": [],
+  "tag": "Auto",
+  "a": "BMW"
+ },
+ {
+  "q": "Audi",
+  "wiki": "Audi",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Audi"
+ },
+ {
+  "q": "Volkswagen",
+  "wiki": "Volkswagen",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Volkswagen"
+ },
+ {
+  "q": "Porsche",
+  "wiki": "Porsche",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Porsche"
+ },
+ {
+  "q": "Ferrari",
+  "wiki": "Ferrari",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Ferrari"
+ },
+ {
+  "q": "Lamborghini",
+  "wiki": "Lamborghini",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Lamborghini"
+ },
+ {
+  "q": "Maserati",
+  "wiki": "Maserati",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Maserati"
+ },
+ {
+  "q": "Bugatti",
+  "wiki": "Bugatti",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Bugatti"
+ },
+ {
+  "q": "Bentley",
+  "wiki": "Bentley",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Bentley"
+ },
+ {
+  "q": "Rolls-Royce",
+  "wiki": "Rolls-Royce_(automobile)",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Rolls-Royce"
+ },
+ {
+  "q": "Peugeot",
+  "wiki": "Peugeot",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Peugeot"
+ },
+ {
+  "q": "Renault",
+  "wiki": "Renault",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Renault"
+ },
+ {
+  "q": "Citroën",
+  "wiki": "Citroën",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Citroën"
+ },
+ {
+  "q": "DS Automobiles",
+  "wiki": "DS_Automobiles",
+  "alts": [],
+  "tag": "Auto",
+  "a": "DS Automobiles"
+ },
+ {
+  "q": "Alpine",
+  "wiki": "Alpine_(constructeur)",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Alpine"
+ },
+ {
+  "q": "Toyota",
+  "wiki": "Toyota",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Toyota"
+ },
+ {
+  "q": "Honda",
+  "wiki": "Honda",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Honda"
+ },
+ {
+  "q": "Nissan",
+  "wiki": "Nissan",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Nissan"
+ },
+ {
+  "q": "Mazda",
+  "wiki": "Mazda",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Mazda"
+ },
+ {
+  "q": "Subaru",
+  "wiki": "Subaru",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Subaru"
+ },
+ {
+  "q": "Mitsubishi Motors",
+  "wiki": "Mitsubishi_Motors",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Mitsubishi Motors"
+ },
+ {
+  "q": "Suzuki",
+  "wiki": "Suzuki_(entreprise)",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Suzuki"
+ },
+ {
+  "q": "Kia",
+  "wiki": "Kia",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Kia"
+ },
+ {
+  "q": "Hyundai",
+  "wiki": "Hyundai_(entreprise)",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Hyundai"
+ },
+ {
+  "q": "Tesla",
+  "wiki": "Tesla_(entreprise)",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Tesla"
+ },
+ {
+  "q": "Chevrolet",
+  "wiki": "Chevrolet",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Chevrolet"
+ },
+ {
+  "q": "Ford",
+  "wiki": "Ford_(entreprise)",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Ford"
+ },
+ {
+  "q": "Dodge",
+  "wiki": "Dodge",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Dodge"
+ },
+ {
+  "q": "Jeep",
+  "wiki": "Jeep",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Jeep"
+ },
+ {
+  "q": "Cadillac",
+  "wiki": "Cadillac",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Cadillac"
+ },
+ {
+  "q": "Chrysler",
+  "wiki": "Chrysler",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Chrysler"
+ },
+ {
+  "q": "GMC",
+  "wiki": "GMC_(automobile)",
+  "alts": [],
+  "tag": "Auto",
+  "a": "GMC"
+ },
+ {
+  "q": "Lincoln",
+  "wiki": "Lincoln_(automobile)",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Lincoln"
+ },
+ {
+  "q": "Volvo",
+  "wiki": "Volvo",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Volvo"
+ },
+ {
+  "q": "Land Rover",
+  "wiki": "Land_Rover",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Land Rover"
+ },
+ {
+  "q": "Mini",
+  "wiki": "Mini_(automobile)",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Mini"
+ },
+ {
+  "q": "Skoda",
+  "wiki": "Škoda_Auto",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Skoda"
+ },
+ {
+  "q": "Seat",
+  "wiki": "Seat",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Seat"
+ },
+ {
+  "q": "Cupra",
+  "wiki": "Cupra",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Cupra"
+ },
+ {
+  "q": "Abarth",
+  "wiki": "Abarth",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Abarth"
+ },
+ {
+  "q": "Lotus",
+  "wiki": "Lotus_Cars",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Lotus"
+ },
+ {
+  "q": "McLaren Automotive",
+  "wiki": "McLaren_Automotive",
+  "alts": [],
+  "tag": "Auto",
+  "a": "McLaren Automotive"
+ },
+ {
+  "q": "Pagani",
+  "wiki": "Pagani_Automobili",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Pagani"
+ },
+ {
+  "q": "Koenigsegg",
+  "wiki": "Koenigsegg",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Koenigsegg"
+ },
+ {
+  "q": "Morgan",
+  "wiki": "Morgan_Motor_Company",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Morgan"
+ },
+ {
+  "q": "Ferrari F1",
+  "wiki": "Scuderia_Ferrari",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Ferrari F1"
+ },
+ {
+  "q": "Red Bull Racing",
+  "wiki": "Red_Bull_Racing",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Red Bull Racing"
+ },
+ {
+  "q": "Mercedes F1",
+  "wiki": "Mercedes-AMG_F1",
+  "alts": [],
+  "tag": "Auto",
+  "a": "Mercedes F1"
+ },
+ {
+  "q": "McLaren F1",
+  "wiki": "McLaren",
+  "alts": [],
+  "tag": "Auto",
+  "a": "McLaren F1"
+ },
+ {
+  "q": "McDonald’s",
+  "wiki": "McDonald’s",
+  "alts": [],
+  "tag": "Resto",
+  "a": "McDonald’s"
+ },
+ {
+  "q": "Burger King",
+  "wiki": "Burger_King",
+  "alts": [],
+  "tag": "Resto",
+  "a": "Burger King"
+ },
+ {
+  "q": "KFC",
+  "wiki": "KFC",
+  "alts": [],
+  "tag": "Resto",
+  "a": "KFC"
+ },
+ {
+  "q": "Starbucks",
+  "wiki": "Starbucks",
+  "alts": [],
+  "tag": "Resto",
+  "a": "Starbucks"
+ },
+ {
+  "q": "Subway",
+  "wiki": "Subway_(restauration)",
+  "alts": [],
+  "tag": "Resto",
+  "a": "Subway"
+ },
+ {
+  "q": "Pizza Hut",
+  "wiki": "Pizza_Hut",
+  "alts": [],
+  "tag": "Resto",
+  "a": "Pizza Hut"
+ },
+ {
+  "q": "Domino's Pizza",
+  "wiki": "Domino’s_Pizza",
+  "alts": [],
+  "tag": "Resto",
+  "a": "Domino's Pizza"
+ },
+ {
+  "q": "Quick",
+  "wiki": "Quick_(restauration)",
+  "alts": [],
+  "tag": "Resto",
+  "a": "Quick"
+ },
+ {
+  "q": "Papa John's",
+  "wiki": "Papa_John’s",
+  "alts": [],
+  "tag": "Resto",
+  "a": "Papa John's"
+ },
+ {
+  "q": "Taco Bell",
+  "wiki": "Taco_Bell",
+  "alts": [],
+  "tag": "Resto",
+  "a": "Taco Bell"
+ },
+ {
+  "q": "Wendy’s",
+  "wiki": "Wendy’s",
+  "alts": [],
+  "tag": "Resto",
+  "a": "Wendy’s"
+ },
+ {
+  "q": "Hard Rock Café",
+  "wiki": "Hard_Rock_Café",
+  "alts": [],
+  "tag": "Resto",
+  "a": "Hard Rock Café"
+ },
+ {
+  "q": "Coca-Cola",
+  "wiki": "Coca-Cola",
+  "alts": [],
+  "tag": "Boisson",
+  "a": "Coca-Cola"
+ },
+ {
+  "q": "Pepsi",
+  "wiki": "Pepsi",
+  "alts": [],
+  "tag": "Boisson",
+  "a": "Pepsi"
+ },
+ {
+  "q": "Fanta",
+  "wiki": "Fanta",
+  "alts": [],
+  "tag": "Boisson",
+  "a": "Fanta"
+ },
+ {
+  "q": "Sprite",
+  "wiki": "Sprite_(soda)",
+  "alts": [],
+  "tag": "Boisson",
+  "a": "Sprite"
+ },
+ {
+  "q": "Red Bull",
+  "wiki": "Red_Bull",
+  "alts": [],
+  "tag": "Boisson",
+  "a": "Red Bull"
+ },
+ {
+  "q": "Monster Energy",
+  "wiki": "Monster_Energy",
+  "alts": [],
+  "tag": "Boisson",
+  "a": "Monster Energy"
+ },
+ {
+  "q": "Orangina",
+  "wiki": "Orangina",
+  "alts": [],
+  "tag": "Boisson",
+  "a": "Orangina"
+ },
+ {
+  "q": "Perrier",
+  "wiki": "Perrier",
+  "alts": [],
+  "tag": "Boisson",
+  "a": "Perrier"
+ },
+ {
+  "q": "Evian",
+  "wiki": "Evian_(marque_d’eau)",
+  "alts": [],
+  "tag": "Boisson",
+  "a": "Evian"
+ },
+ {
+  "q": "Volvic",
+  "wiki": "Volvic",
+  "alts": [],
+  "tag": "Boisson",
+  "a": "Volvic"
+ },
+ {
+  "q": "Nescafé",
+  "wiki": "Nescafé",
+  "alts": [],
+  "tag": "Boisson",
+  "a": "Nescafé"
+ },
+ {
+  "q": "Nespresso",
+  "wiki": "Nespresso",
+  "alts": [],
+  "tag": "Boisson",
+  "a": "Nespresso"
+ },
+ {
+  "q": "Danone",
+  "wiki": "Danone",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Danone"
+ },
+ {
+  "q": "Nestlé",
+  "wiki": "Nestlé",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Nestlé"
+ },
+ {
+  "q": "Nutella",
+  "wiki": "Nutella",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Nutella"
+ },
+ {
+  "q": "Ferrero",
+  "wiki": "Ferrero_(entreprise)",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Ferrero"
+ },
+ {
+  "q": "Haribo",
+  "wiki": "Haribo",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Haribo"
+ },
+ {
+  "q": "Oreo",
+  "wiki": "Oreo",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Oreo"
+ },
+ {
+  "q": "Pringles",
+  "wiki": "Pringles",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Pringles"
+ },
+ {
+  "q": "Kinder",
+  "wiki": "Kinder_(chocolat)",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Kinder"
+ },
+ {
+  "q": "Magnum",
+  "wiki": "Magnum_(crème_glacée)",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Magnum"
+ },
+ {
+  "q": "Bacardi",
+  "wiki": "Bacardi",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Bacardi"
+ },
+ {
+  "q": "Jack Daniel’s",
+  "wiki": "Jack_Daniel’s",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Jack Daniel’s"
+ },
+ {
+  "q": "Johnnie Walker",
+  "wiki": "Johnnie_Walker",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Johnnie Walker"
+ },
+ {
+  "q": "Hennessy",
+  "wiki": "Hennessy_(cognac)",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Hennessy"
+ },
+ {
+  "q": "Martini",
+  "wiki": "Martini_(vermouth)",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Martini"
+ },
+ {
+  "q": "Corona",
+  "wiki": "Corona_(bière)",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Corona"
+ },
+ {
+  "q": "Heineken",
+  "wiki": "Heineken",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Heineken"
+ },
+ {
+  "q": "Budweiser",
+  "wiki": "Budweiser",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Budweiser"
+ },
+ {
+  "q": "Guinness",
+  "wiki": "Guinness",
+  "alts": [],
+  "tag": "Alimentaire",
+  "a": "Guinness"
+ },
+ {
+  "q": "Nike",
+  "wiki": "Nike_(entreprise)",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Nike"
+ },
+ {
+  "q": "Adidas",
+  "wiki": "Adidas",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Adidas"
+ },
+ {
+  "q": "Puma",
+  "wiki": "Puma_(entreprise)",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Puma"
+ },
+ {
+  "q": "Reebok",
+  "wiki": "Reebok",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Reebok"
+ },
+ {
+  "q": "New Balance",
+  "wiki": "New_Balance",
+  "alts": [],
+  "tag": "Mode",
+  "a": "New Balance"
+ },
+ {
+  "q": "Under Armour",
+  "wiki": "Under_Armour",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Under Armour"
+ },
+ {
+  "q": "Asics",
+  "wiki": "Asics",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Asics"
+ },
+ {
+  "q": "Fila",
+  "wiki": "Fila_(entreprise)",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Fila"
+ },
+ {
+  "q": "Converse",
+  "wiki": "Converse_(entreprise)",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Converse"
+ },
+ {
+  "q": "Vans",
+  "wiki": "Vans",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Vans"
+ },
+ {
+  "q": "Skechers",
+  "wiki": "Skechers",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Skechers"
+ },
+ {
+  "q": "The North Face",
+  "wiki": "The_North_Face",
+  "alts": [],
+  "tag": "Mode",
+  "a": "The North Face"
+ },
+ {
+  "q": "Lacoste",
+  "wiki": "Lacoste",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Lacoste"
+ },
+ {
+  "q": "Ralph Lauren",
+  "wiki": "Ralph_Lauren_Corporation",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Ralph Lauren"
+ },
+ {
+  "q": "Tommy Hilfiger",
+  "wiki": "Tommy_Hilfiger_(entreprise)",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Tommy Hilfiger"
+ },
+ {
+  "q": "Calvin Klein",
+  "wiki": "Calvin_Klein_(entreprise)",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Calvin Klein"
+ },
+ {
+  "q": "Zara",
+  "wiki": "Zara",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Zara"
+ },
+ {
+  "q": "H&M",
+  "wiki": "H&M",
+  "alts": [],
+  "tag": "Mode",
+  "a": "H&M"
+ },
+ {
+  "q": "Uniqlo",
+  "wiki": "Uniqlo",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Uniqlo"
+ },
+ {
+  "q": "Levi's",
+  "wiki": "Levi_Strauss_&_Co.",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Levi's"
+ },
+ {
+  "q": "Gucci",
+  "wiki": "Gucci",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Gucci"
+ },
+ {
+  "q": "Louis Vuitton",
+  "wiki": "Louis_Vuitton",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Louis Vuitton"
+ },
+ {
+  "q": "Chanel",
+  "wiki": "Chanel",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Chanel"
+ },
+ {
+  "q": "Dior",
+  "wiki": "Christian_Dior_SE",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Dior"
+ },
+ {
+  "q": "Hermès",
+  "wiki": "Hermès_International",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Hermès"
+ },
+ {
+  "q": "Prada",
+  "wiki": "Prada",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Prada"
+ },
+ {
+  "q": "Versace",
+  "wiki": "Versace",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Versace"
+ },
+ {
+  "q": "Armani",
+  "wiki": "Giorgio_Armani_(entreprise)",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Armani"
+ },
+ {
+  "q": "Balenciaga",
+  "wiki": "Balenciaga",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Balenciaga"
+ },
+ {
+  "q": "Burberry",
+  "wiki": "Burberry",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Burberry"
+ },
+ {
+  "q": "Givenchy",
+  "wiki": "Givenchy",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Givenchy"
+ },
+ {
+  "q": "Yves Saint Laurent",
+  "wiki": "Yves_Saint-Laurent_(marque)",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Yves Saint Laurent"
+ },
+ {
+  "q": "Cartier",
+  "wiki": "Cartier_(maison)",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Cartier"
+ },
+ {
+  "q": "Rolex",
+  "wiki": "Rolex",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Rolex"
+ },
+ {
+  "q": "Omega",
+  "wiki": "Omega_SA",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Omega"
+ },
+ {
+  "q": "Casio",
+  "wiki": "Casio",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Casio"
+ },
+ {
+  "q": "Swatch",
+  "wiki": "Swatch",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Swatch"
+ },
+ {
+  "q": "Ray-Ban",
+  "wiki": "Ray-Ban",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Ray-Ban"
+ },
+ {
+  "q": "Oakley",
+  "wiki": "Oakley,_Inc.",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Oakley"
+ },
+ {
+  "q": "Crocs",
+  "wiki": "Crocs",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Crocs"
+ },
+ {
+  "q": "Dr. Martens",
+  "wiki": "Dr._Martens",
+  "alts": [],
+  "tag": "Mode",
+  "a": "Dr. Martens"
+ },
+ {
+  "q": "Apple",
+  "wiki": "Apple",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Apple"
+ },
+ {
+  "q": "Samsung",
+  "wiki": "Samsung_Group",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Samsung"
+ },
+ {
+  "q": "Google",
+  "wiki": "Google",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Google"
+ },
+ {
+  "q": "Microsoft",
+  "wiki": "Microsoft",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Microsoft"
+ },
+ {
+  "q": "Meta",
+  "wiki": "Meta_(entreprise)",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Meta"
+ },
+ {
+  "q": "Amazon",
+  "wiki": "Amazon_(entreprise)",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Amazon"
+ },
+ {
+  "q": "Netflix",
+  "wiki": "Netflix",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Netflix"
+ },
+ {
+  "q": "YouTube",
+  "wiki": "YouTube",
+  "alts": [],
+  "tag": "Tech",
+  "a": "YouTube"
+ },
+ {
+  "q": "TikTok",
+  "wiki": "TikTok",
+  "alts": [],
+  "tag": "Tech",
+  "a": "TikTok"
+ },
+ {
+  "q": "Instagram",
+  "wiki": "Instagram",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Instagram"
+ },
+ {
+  "q": "Facebook",
+  "wiki": "Facebook",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Facebook"
+ },
+ {
+  "q": "X",
+  "wiki": "X_(réseau_social)",
+  "alts": [],
+  "tag": "Tech",
+  "a": "X"
+ },
+ {
+  "q": "WhatsApp",
+  "wiki": "WhatsApp",
+  "alts": [],
+  "tag": "Tech",
+  "a": "WhatsApp"
+ },
+ {
+  "q": "Telegram",
+  "wiki": "Telegram_(logiciel)",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Telegram"
+ },
+ {
+  "q": "Snapchat",
+  "wiki": "Snapchat",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Snapchat"
+ },
+ {
+  "q": "Spotify",
+  "wiki": "Spotify",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Spotify"
+ },
+ {
+  "q": "IBM",
+  "wiki": "IBM",
+  "alts": [],
+  "tag": "Tech",
+  "a": "IBM"
+ },
+ {
+  "q": "Intel",
+  "wiki": "Intel",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Intel"
+ },
+ {
+  "q": "Nvidia",
+  "wiki": "Nvidia",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Nvidia"
+ },
+ {
+  "q": "AMD",
+  "wiki": "AMD",
+  "alts": [],
+  "tag": "Tech",
+  "a": "AMD"
+ },
+ {
+  "q": "Sony",
+  "wiki": "Sony",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Sony"
+ },
+ {
+  "q": "Nintendo",
+  "wiki": "Nintendo",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Nintendo"
+ },
+ {
+  "q": "PlayStation",
+  "wiki": "PlayStation",
+  "alts": [],
+  "tag": "Tech",
+  "a": "PlayStation"
+ },
+ {
+  "q": "Xbox",
+  "wiki": "Xbox",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Xbox"
+ },
+ {
+  "q": "Sega",
+  "wiki": "Sega",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Sega"
+ },
+ {
+  "q": "Atari",
+  "wiki": "Atari",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Atari"
+ },
+ {
+  "q": "Huawei",
+  "wiki": "Huawei",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Huawei"
+ },
+ {
+  "q": "Xiaomi",
+  "wiki": "Xiaomi",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Xiaomi"
+ },
+ {
+  "q": "Oppo",
+  "wiki": "Oppo",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Oppo"
+ },
+ {
+  "q": "OnePlus",
+  "wiki": "OnePlus",
+  "alts": [],
+  "tag": "Tech",
+  "a": "OnePlus"
+ },
+ {
+  "q": "Nokia",
+  "wiki": "Nokia",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Nokia"
+ },
+ {
+  "q": "Motorola",
+  "wiki": "Motorola",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Motorola"
+ },
+ {
+  "q": "Philips",
+  "wiki": "Philips",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Philips"
+ },
+ {
+  "q": "Panasonic",
+  "wiki": "Panasonic",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Panasonic"
+ },
+ {
+  "q": "Canon",
+  "wiki": "Canon_(entreprise)",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Canon"
+ },
+ {
+  "q": "Fujifilm",
+  "wiki": "Fujifilm",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Fujifilm"
+ },
+ {
+  "q": "GoPro",
+  "wiki": "GoPro",
+  "alts": [],
+  "tag": "Tech",
+  "a": "GoPro"
+ },
+ {
+  "q": "DJI",
+  "wiki": "DJI_(entreprise)",
+  "alts": [],
+  "tag": "Tech",
+  "a": "DJI"
+ },
+ {
+  "q": "Dyson",
+  "wiki": "Dyson_(entreprise)",
+  "alts": [],
+  "tag": "Tech",
+  "a": "Dyson"
+ },
+ {
+  "q": "IKEA",
+  "wiki": "IKEA",
+  "alts": [],
+  "tag": "Tech",
+  "a": "IKEA"
+ }
+]

@@ -1,0 +1,2219 @@
+[
+ {
+  "q": "Tour Eiffel",
+  "wiki": "Tour_Eiffel",
+  "alts": [
+   "eiffel",
+   "la tour eiffel"
+  ],
+  "tag": "France",
+  "a": "Tour Eiffel"
+ },
+ {
+  "q": "Colisée",
+  "wiki": "Colisée",
+  "alts": [
+   "le colisée",
+   "colisee"
+  ],
+  "tag": "Italie",
+  "a": "Colisée"
+ },
+ {
+  "q": "Tour de Pise",
+  "wiki": "Tour_de_Pise",
+  "alts": [
+   "pise",
+   "la tour de pise"
+  ],
+  "tag": "Italie",
+  "a": "Tour de Pise"
+ },
+ {
+  "q": "Taj Mahal",
+  "wiki": "Taj_Mahal",
+  "alts": [
+   "taj"
+  ],
+  "tag": "Inde",
+  "a": "Taj Mahal"
+ },
+ {
+  "q": "Big Ben",
+  "wiki": "Big_Ben",
+  "alts": [
+   "bigben",
+   "la big ben"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "Big Ben"
+ },
+ {
+  "q": "Statue de la Liberté",
+  "wiki": "Statue_de_la_Liberté",
+  "alts": [
+   "la statue de la liberte",
+   "liberty"
+  ],
+  "tag": "États-Unis",
+  "a": "Statue de la Liberté"
+ },
+ {
+  "q": "Sagrada Família",
+  "wiki": "Sagrada_Família",
+  "alts": [
+   "sagrada familia",
+   "sagrada"
+  ],
+  "tag": "Espagne",
+  "a": "Sagrada Família"
+ },
+ {
+  "q": "Mont-Saint-Michel",
+  "wiki": "Mont-Saint-Michel",
+  "alts": [
+   "mont saint michel",
+   "le mont saint michel"
+  ],
+  "tag": "France",
+  "a": "Mont-Saint-Michel"
+ },
+ {
+  "q": "Pyramides de Gizeh",
+  "wiki": "Nécropole_de_Gizeh",
+  "alts": [
+   "gizeh",
+   "pyramides",
+   "pyramides de khéops"
+  ],
+  "tag": "Égypte",
+  "a": "Pyramides de Gizeh"
+ },
+ {
+  "q": "Grand Sphinx de Gizeh",
+  "wiki": "Sphinx_de_Gizèh",
+  "alts": [
+   "sphinx",
+   "le sphinx"
+  ],
+  "tag": "Égypte",
+  "a": "Grand Sphinx de Gizeh"
+ },
+ {
+  "q": "Machu Picchu",
+  "wiki": "Machu_Picchu",
+  "alts": [
+   "machupicchu"
+  ],
+  "tag": "Pérou",
+  "a": "Machu Picchu"
+ },
+ {
+  "q": "Christ Rédempteur",
+  "wiki": "Christ_Rédempteur",
+  "alts": [
+   "le christ redempteur",
+   "corcovado"
+  ],
+  "tag": "Brésil",
+  "a": "Christ Rédempteur"
+ },
+ {
+  "q": "Grande Muraille de Chine",
+  "wiki": "Grande_Muraille",
+  "alts": [
+   "muraille de chine",
+   "la grande muraille"
+  ],
+  "tag": "Chine",
+  "a": "Grande Muraille de Chine"
+ },
+ {
+  "q": "Cité interdite",
+  "wiki": "Cité_interdite",
+  "alts": [
+   "la cite interdite",
+   "palais impérial"
+  ],
+  "tag": "Chine",
+  "a": "Cité interdite"
+ },
+ {
+  "q": "Mont Fuji",
+  "wiki": "Mont_Fuji",
+  "alts": [
+   "fuji",
+   "le mont fuji"
+  ],
+  "tag": "Japon",
+  "a": "Mont Fuji"
+ },
+ {
+  "q": "Tour de Londres",
+  "wiki": "Tour_de_Londres",
+  "alts": [
+   "la tour de londres"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "Tour de Londres"
+ },
+ {
+  "q": "Tower Bridge",
+  "wiki": "Tower_Bridge",
+  "alts": [
+   "pont de londres",
+   "le tower bridge"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "Tower Bridge"
+ },
+ {
+  "q": "Arc de Triomphe",
+  "wiki": "Arc_de_triomphe_de_l’Étoile",
+  "alts": [
+   "arc de triomphe",
+   "l’arc de triomphe"
+  ],
+  "tag": "France",
+  "a": "Arc de Triomphe"
+ },
+ {
+  "q": "Cathédrale Notre-Dame de Paris",
+  "wiki": "Cathédrale_Notre-Dame_de_Paris",
+  "alts": [
+   "notre-dame",
+   "notre dame"
+  ],
+  "tag": "France",
+  "a": "Cathédrale Notre-Dame de Paris"
+ },
+ {
+  "q": "Basilique du Sacré-Cœur",
+  "wiki": "Basilique_du_Sacré-Cœur_de_Montmartre",
+  "alts": [
+   "sacre coeur",
+   "le sacre coeur"
+  ],
+  "tag": "France",
+  "a": "Basilique du Sacré-Cœur"
+ },
+ {
+  "q": "Moulin Rouge",
+  "wiki": "Moulin_Rouge",
+  "alts": [
+   "le moulin rouge"
+  ],
+  "tag": "France",
+  "a": "Moulin Rouge"
+ },
+ {
+  "q": "Porte de Brandebourg",
+  "wiki": "Porte_de_Brandebourg",
+  "alts": [
+   "la porte de brandebourg"
+  ],
+  "tag": "Allemagne",
+  "a": "Porte de Brandebourg"
+ },
+ {
+  "q": "Atomium",
+  "wiki": "Atomium",
+  "alts": [
+   "l’atomium"
+  ],
+  "tag": "Belgique",
+  "a": "Atomium"
+ },
+ {
+  "q": "Manneken Pis",
+  "wiki": "Manneken_Pis",
+  "alts": [
+   "le manneken pis"
+  ],
+  "tag": "Belgique",
+  "a": "Manneken Pis"
+ },
+ {
+  "q": "Grand-Place de Bruxelles",
+  "wiki": "Grand-Place_(Bruxelles)",
+  "alts": [
+   "grand place",
+   "la grand place"
+  ],
+  "tag": "Belgique",
+  "a": "Grand-Place de Bruxelles"
+ },
+ {
+  "q": "Alhambra",
+  "wiki": "Alhambra",
+  "alts": [
+   "l’alhambra"
+  ],
+  "tag": "Espagne",
+  "a": "Alhambra"
+ },
+ {
+  "q": "Burj Khalifa",
+  "wiki": "Burj_Khalifa",
+  "alts": [
+   "burj dubai",
+   "la burj khalifa"
+  ],
+  "tag": "Émirats",
+  "a": "Burj Khalifa"
+ },
+ {
+  "q": "Burj Al Arab",
+  "wiki": "Burj_al-Arab",
+  "alts": [
+   "le burj al arab"
+  ],
+  "tag": "Émirats",
+  "a": "Burj Al Arab"
+ },
+ {
+  "q": "Empire State Building",
+  "wiki": "Empire_State_Building",
+  "alts": [
+   "empire state",
+   "l’empire state"
+  ],
+  "tag": "États-Unis",
+  "a": "Empire State Building"
+ },
+ {
+  "q": "Golden Gate Bridge",
+  "wiki": "Golden_Gate_Bridge",
+  "alts": [
+   "golden gate",
+   "le golden gate"
+  ],
+  "tag": "États-Unis",
+  "a": "Golden Gate Bridge"
+ },
+ {
+  "q": "Pont de Brooklyn",
+  "wiki": "Pont_de_Brooklyn",
+  "alts": [
+   "brooklyn bridge",
+   "le pont de brooklyn"
+  ],
+  "tag": "États-Unis",
+  "a": "Pont de Brooklyn"
+ },
+ {
+  "q": "Times Square",
+  "wiki": "Times_Square",
+  "alts": [
+   "le times square"
+  ],
+  "tag": "États-Unis",
+  "a": "Times Square"
+ },
+ {
+  "q": "Central Park",
+  "wiki": "Central_Park",
+  "alts": [
+   "le central park"
+  ],
+  "tag": "États-Unis",
+  "a": "Central Park"
+ },
+ {
+  "q": "Opéra de Sydney",
+  "wiki": "Opéra_de_Sydney",
+  "alts": [
+   "sydney opera house",
+   "l’opéra de sydney"
+  ],
+  "tag": "Australie",
+  "a": "Opéra de Sydney"
+ },
+ {
+  "q": "Louvre",
+  "wiki": "Musée_du_Louvre",
+  "alts": [
+   "le louvre",
+   "musée du louvre"
+  ],
+  "tag": "France",
+  "a": "Louvre"
+ },
+ {
+  "q": "Musée d’Orsay",
+  "wiki": "Musée_d’Orsay",
+  "alts": [
+   "orsay"
+  ],
+  "tag": "France",
+  "a": "Musée d’Orsay"
+ },
+ {
+  "q": "British Museum",
+  "wiki": "British_Museum",
+  "alts": [
+   "le british museum"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "British Museum"
+ },
+ {
+  "q": "Musée du Prado",
+  "wiki": "Musée_du_Prado",
+  "alts": [
+   "prado",
+   "le prado"
+  ],
+  "tag": "Espagne",
+  "a": "Musée du Prado"
+ },
+ {
+  "q": "Musée de l’Ermitage",
+  "wiki": "Musée_de_l’Ermitage",
+  "alts": [
+   "ermitage",
+   "l’ermitage"
+  ],
+  "tag": "Russie",
+  "a": "Musée de l’Ermitage"
+ },
+ {
+  "q": "Château de Versailles",
+  "wiki": "Château_de_Versailles",
+  "alts": [
+   "versailles",
+   "le château de versailles"
+  ],
+  "tag": "France",
+  "a": "Château de Versailles"
+ },
+ {
+  "q": "Palais de Buckingham",
+  "wiki": "Palais_de_Buckingham",
+  "alts": [
+   "buckingham",
+   "le palais buckingham"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "Palais de Buckingham"
+ },
+ {
+  "q": "Place Rouge",
+  "wiki": "Place_Rouge",
+  "alts": [
+   "la place rouge"
+  ],
+  "tag": "Russie",
+  "a": "Place Rouge"
+ },
+ {
+  "q": "Kremlin",
+  "wiki": "Kremlin_de_Moscou",
+  "alts": [
+   "le kremlin"
+  ],
+  "tag": "Russie",
+  "a": "Kremlin"
+ },
+ {
+  "q": "Cathédrale Saint-Basile",
+  "wiki": "Cathédrale_Saint-Basile-de-Moscou",
+  "alts": [
+   "saint basile",
+   "basile le bienheureux"
+  ],
+  "tag": "Russie",
+  "a": "Cathédrale Saint-Basile"
+ },
+ {
+  "q": "London Eye",
+  "wiki": "London_Eye",
+  "alts": [
+   "london eye",
+   "la grande roue de londres"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "London Eye"
+ },
+ {
+  "q": "Château de Neuschwanstein",
+  "wiki": "Château_Neuschwanstein",
+  "alts": [
+   "neuschwanstein",
+   "le château de louis ii"
+  ],
+  "tag": "Allemagne",
+  "a": "Château de Neuschwanstein"
+ },
+ {
+  "q": "Pont du Gard",
+  "wiki": "Pont_du_Gard",
+  "alts": [
+   "le pont du gard"
+  ],
+  "tag": "France",
+  "a": "Pont du Gard"
+ },
+ {
+  "q": "Palais des Papes",
+  "wiki": "Palais_des_Papes_(Avignon)",
+  "alts": [
+   "le palais des papes",
+   "avignon"
+  ],
+  "tag": "France",
+  "a": "Palais des Papes"
+ },
+ {
+  "q": "Chutes du Niagara",
+  "wiki": "Chutes_du_Niagara",
+  "alts": [
+   "niagara",
+   "les chutes niagara"
+  ],
+  "tag": "Canada",
+  "a": "Chutes du Niagara"
+ },
+ {
+  "q": "Chutes Victoria",
+  "wiki": "Chutes_Victoria",
+  "alts": [
+   "victoria falls"
+  ],
+  "tag": "Zambie",
+  "a": "Chutes Victoria"
+ },
+ {
+  "q": "Grand Canyon",
+  "wiki": "Grand_Canyon",
+  "alts": [
+   "le grand canyon"
+  ],
+  "tag": "États-Unis",
+  "a": "Grand Canyon"
+ },
+ {
+  "q": "Éverest",
+  "wiki": "Everest",
+  "alts": [
+   "mont everest",
+   "l’everest"
+  ],
+  "tag": "Népal",
+  "a": "Éverest"
+ },
+ {
+  "q": "Kilimandjaro",
+  "wiki": "Kilimandjaro",
+  "alts": [
+   "le kilimandjaro"
+  ],
+  "tag": "Tanzanie",
+  "a": "Kilimandjaro"
+ },
+ {
+  "q": "Pétra",
+  "wiki": "Pétra",
+  "alts": [
+   "petra"
+  ],
+  "tag": "Jordanie",
+  "a": "Pétra"
+ },
+ {
+  "q": "Île de Pâques",
+  "wiki": "Île_de_Pâques",
+  "alts": [
+   "paques",
+   "les moais"
+  ],
+  "tag": "Chili",
+  "a": "Île de Pâques"
+ },
+ {
+  "q": "Stonehenge",
+  "wiki": "Stonehenge",
+  "alts": [
+   "le stonehenge"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "Stonehenge"
+ },
+ {
+  "q": "Basilique Saint-Pierre",
+  "wiki": "Basilique_Saint-Pierre",
+  "alts": [
+   "saint pierre de rome",
+   "la basilique saint pierre"
+  ],
+  "tag": "Vatican",
+  "a": "Basilique Saint-Pierre"
+ },
+ {
+  "q": "Fontaine de Trevi",
+  "wiki": "Fontaine_de_Trevi",
+  "alts": [
+   "trevi",
+   "la fontaine de trevi"
+  ],
+  "tag": "Italie",
+  "a": "Fontaine de Trevi"
+ },
+ {
+  "q": "Panthéon de Rome",
+  "wiki": "Panthéon_(Rome)",
+  "alts": [
+   "pantheon",
+   "le pantheon"
+  ],
+  "tag": "Italie",
+  "a": "Panthéon de Rome"
+ },
+ {
+  "q": "Vésuve",
+  "wiki": "Vésuve",
+  "alts": [
+   "le vésuve"
+  ],
+  "tag": "Italie",
+  "a": "Vésuve"
+ },
+ {
+  "q": "Pompéi",
+  "wiki": "Pompéi",
+  "alts": [
+   "pompei",
+   "les ruines de pompei"
+  ],
+  "tag": "Italie",
+  "a": "Pompéi"
+ },
+ {
+  "q": "Acropole d’Athènes",
+  "wiki": "Acropole_d’Athènes",
+  "alts": [
+   "acropole",
+   "l’acropole"
+  ],
+  "tag": "Grèce",
+  "a": "Acropole d’Athènes"
+ },
+ {
+  "q": "Parthénon",
+  "wiki": "Parthénon",
+  "alts": [
+   "le parthenon"
+  ],
+  "tag": "Grèce",
+  "a": "Parthénon"
+ },
+ {
+  "q": "Grande Mosquée de Cordoue",
+  "wiki": "Grande_Mosquée_de_Cordoue",
+  "alts": [
+   "cordoue",
+   "la mezquita"
+  ],
+  "tag": "Espagne",
+  "a": "Grande Mosquée de Cordoue"
+ },
+ {
+  "q": "Sainte-Sophie",
+  "wiki": "Sainte-Sophie",
+  "alts": [
+   "hagia sophia",
+   "aya sofya"
+  ],
+  "tag": "Turquie",
+  "a": "Sainte-Sophie"
+ },
+ {
+  "q": "Mosquée Bleue",
+  "wiki": "Mosquée_Bleue",
+  "alts": [
+   "la mosquée bleue",
+   "sultan ahmet"
+  ],
+  "tag": "Turquie",
+  "a": "Mosquée Bleue"
+ },
+ {
+  "q": "Palais du Potala",
+  "wiki": "Palais_du_Potala",
+  "alts": [
+   "potala",
+   "le palais potala"
+  ],
+  "tag": "Chine",
+  "a": "Palais du Potala"
+ },
+ {
+  "q": "Angkor Vat",
+  "wiki": "Angkor_Vat",
+  "alts": [
+   "angkor wat",
+   "angkor"
+  ],
+  "tag": "Cambodge",
+  "a": "Angkor Vat"
+ },
+ {
+  "q": "Tours Petronas",
+  "wiki": "Tours_Petronas",
+  "alts": [
+   "petronas",
+   "les tours petronas"
+  ],
+  "tag": "Malaisie",
+  "a": "Tours Petronas"
+ },
+ {
+  "q": "Chutes d’Iguazú",
+  "wiki": "Chutes_d’Iguaçu",
+  "alts": [
+   "iguazu",
+   "les chutes iguazu"
+  ],
+  "tag": "Argentine",
+  "a": "Chutes d’Iguazú"
+ },
+ {
+  "q": "Mer de Glace",
+  "wiki": "Mer_de_Glace",
+  "alts": [
+   "la mer de glace"
+  ],
+  "tag": "France",
+  "a": "Mer de Glace"
+ },
+ {
+  "q": "Mont Blanc",
+  "wiki": "Mont_Blanc",
+  "alts": [
+   "le mont blanc"
+  ],
+  "tag": "France",
+  "a": "Mont Blanc"
+ },
+ {
+  "q": "Étretat",
+  "wiki": "Étretat",
+  "alts": [
+   "les falaises d’etretat"
+  ],
+  "tag": "France",
+  "a": "Étretat"
+ },
+ {
+  "q": "Baie d’Halong",
+  "wiki": "Baie_d’Hạ_Long",
+  "alts": [
+   "halong",
+   "la baie d’halong"
+  ],
+  "tag": "Vietnam",
+  "a": "Baie d’Halong"
+ },
+ {
+  "q": "Rocher d’Uluru",
+  "wiki": "Uluru",
+  "alts": [
+   "ayers rock",
+   "uluru"
+  ],
+  "tag": "Australie",
+  "a": "Rocher d’Uluru"
+ },
+ {
+  "q": "Mur des Lamentations",
+  "wiki": "Mur_des_Lamentations",
+  "alts": [
+   "lamentations",
+   "le mur des lamentations"
+  ],
+  "tag": "Israël",
+  "a": "Mur des Lamentations"
+ },
+ {
+  "q": "Dôme du Rocher",
+  "wiki": "Dôme_du_Rocher",
+  "alts": [
+   "dome du rocher",
+   "jerusalem dome"
+  ],
+  "tag": "Israël",
+  "a": "Dôme du Rocher"
+ },
+ {
+  "q": "Méroé",
+  "wiki": "Méroé",
+  "alts": [
+   "pyramides de méroé",
+   "les pyramides de meröe"
+  ],
+  "tag": "Soudan",
+  "a": "Méroé"
+ },
+ {
+  "q": "Île de Gorée",
+  "wiki": "Île_de_Gorée",
+  "alts": [
+   "goree",
+   "l’île de gorée"
+  ],
+  "tag": "Sénégal",
+  "a": "Île de Gorée"
+ },
+ {
+  "q": "Grande Mosquée de Djenné",
+  "wiki": "Grande_Mosquée_de_Djenné",
+  "alts": [
+   "djenne",
+   "la grande mosquee de djenné"
+  ],
+  "tag": "Mali",
+  "a": "Grande Mosquée de Djenné"
+ },
+ {
+  "q": "Tombouctou",
+  "wiki": "Tombouctou",
+  "alts": [
+   "timbuktu"
+  ],
+  "tag": "Mali",
+  "a": "Tombouctou"
+ },
+ {
+  "q": "Porte du Non-Retour",
+  "wiki": "Porte_du_Non-Retour",
+  "alts": [
+   "la porte du non retour",
+   "ouidah porte"
+  ],
+  "tag": "Bénin",
+  "a": "Porte du Non-Retour"
+ },
+ {
+  "q": "Place de l’Étoile Rouge",
+  "wiki": "Place_de_l’Étoile_Rouge",
+  "alts": [
+   "etoile rouge",
+   "la place de l’étoile rouge"
+  ],
+  "tag": "Bénin",
+  "a": "Place de l’Étoile Rouge"
+ },
+ {
+  "q": "Nyiragongo",
+  "wiki": "Nyiragongo",
+  "alts": [
+   "le nyiragongo",
+   "volcan nyiragongo"
+  ],
+  "tag": "RDC",
+  "a": "Nyiragongo"
+ },
+ {
+  "q": "Parc des Virunga",
+  "wiki": "Parc_national_des_Virunga",
+  "alts": [
+   "virunga",
+   "les virunga"
+  ],
+  "tag": "RDC",
+  "a": "Parc des Virunga"
+ },
+ {
+  "q": "Barrage d’Inga",
+  "wiki": "Barrages_d’Inga",
+  "alts": [
+   "inga",
+   "le barrage d’inga"
+  ],
+  "tag": "RDC",
+  "a": "Barrage d’Inga"
+ },
+ {
+  "q": "Cathédrale Notre-Dame du Congo",
+  "wiki": "Cathédrale_Notre-Dame-du-Congo",
+  "alts": [
+   "cathedrale de kinshasa",
+   "notre dame du congo"
+  ],
+  "tag": "RDC",
+  "a": "Cathédrale Notre-Dame du Congo"
+ },
+ {
+  "q": "Stade Tata Raphaël",
+  "wiki": "Stade_Tata_Raphaël",
+  "alts": [
+   "tata raphael",
+   "stade du 24 septembre"
+  ],
+  "tag": "RDC",
+  "a": "Stade Tata Raphaël"
+ },
+ {
+  "q": "Centrafore",
+  "wiki": "Centrafore",
+  "alts": [
+   "la centrafore",
+   "monument centrafore"
+  ],
+  "tag": "RDC",
+  "a": "Centrafore"
+ },
+ {
+  "q": "Mont Cameroun",
+  "wiki": "Mont_Caméroun",
+  "alts": [
+   "le mont cameroun",
+   "mount cameroon"
+  ],
+  "tag": "Cameroun",
+  "a": "Mont Cameroun"
+ },
+ {
+  "q": "Lacs de Tweed?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Lacs de Tweed?"
+ },
+ {
+  "q": "Table Mountain",
+  "wiki": "Montagne_de_la_Table",
+  "alts": [
+   "la montagne de la table",
+   "table mountain"
+  ],
+  "tag": "Afrique du Sud",
+  "a": "Table Mountain"
+ },
+ {
+  "q": "Opéra de Copenhague?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Opéra de Copenhague?"
+ },
+ {
+  "q": "La Petite Sirène",
+  "wiki": "La_Petite_Sirène_(statue)",
+  "alts": [
+   "petite sirene",
+   "la statue de la petite sirène"
+  ],
+  "tag": "Danemark",
+  "a": "La Petite Sirène"
+ },
+ {
+  "q": "Pont des Soupirs",
+  "wiki": "Pont_des_Soupirs",
+  "alts": [
+   "le pont des soupirs"
+  ],
+  "tag": "Italie",
+  "a": "Pont des Soupirs"
+ },
+ {
+  "q": "Place Saint-Marc",
+  "wiki": "Place_Saint-Marc",
+  "alts": [
+   "la place saint marc",
+   "saint marc"
+  ],
+  "tag": "Italie",
+  "a": "Place Saint-Marc"
+ },
+ {
+  "q": "Canal Grande",
+  "wiki": "Canal_Grande",
+  "alts": [
+   "le grand canal",
+   "venise grand canal"
+  ],
+  "tag": "Italie",
+  "a": "Canal Grande"
+ },
+ {
+  "q": "Tour de Belém",
+  "wiki": "Tour_de_Belém",
+  "alts": [
+   "belem",
+   "la tour de belem"
+  ],
+  "tag": "Portugal",
+  "a": "Tour de Belém"
+ },
+ {
+  "q": "Monastère des Hiéronymites",
+  "wiki": "Monastère_des_Hiéronymites",
+  "alts": [
+   "jerónimos",
+   "les jeronimos"
+  ],
+  "tag": "Portugal",
+  "a": "Monastère des Hiéronymites"
+ },
+ {
+  "q": "Mur de Berlin",
+  "wiki": "Mur_de_Berlin",
+  "alts": [
+   "le mur de berlin",
+   "berliner mauer"
+  ],
+  "tag": "Allemagne",
+  "a": "Mur de Berlin"
+ },
+ {
+  "q": "Château de Chambord",
+  "wiki": "Château_de_Chambord",
+  "alts": [
+   "chambord",
+   "le château de chambord"
+  ],
+  "tag": "France",
+  "a": "Château de Chambord"
+ },
+ {
+  "q": "Abbaye du Mont-Saint-Michel",
+  "wiki": "Abbaye_du_Mont-Saint-Michel",
+  "alts": [
+   "l’abbaye du mont"
+  ],
+  "tag": "France",
+  "a": "Abbaye du Mont-Saint-Michel"
+ },
+ {
+  "q": "Château d’Édimbourg",
+  "wiki": "Château_d’Édimbourg",
+  "alts": [
+   "edimbourg",
+   "le château d’edimbourg"
+  ],
+  "tag": "Écosse",
+  "a": "Château d’Édimbourg"
+ },
+ {
+  "q": "Tour de Shanghai",
+  "wiki": "Tour_Shanghai",
+  "alts": [
+   "shanghai tower",
+   "la tour de shanghai"
+  ],
+  "tag": "Chine",
+  "a": "Tour de Shanghai"
+ },
+ {
+  "q": "Tour CN",
+  "wiki": "Tour_CN",
+  "alts": [
+   "cn tower",
+   "la tour cn"
+  ],
+  "tag": "Canada",
+  "a": "Tour CN"
+ },
+ {
+  "q": "Hôtel de ville de Paris?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Hôtel de ville de Paris?"
+ },
+ {
+  "q": "One World Trade Center",
+  "wiki": "One_World_Trade_Center",
+  "alts": [
+   "one world",
+   "freedom tower"
+  ],
+  "tag": "États-Unis",
+  "a": "One World Trade Center"
+ },
+ {
+  "q": "Monument Washington",
+  "wiki": "Washington_Monument",
+  "alts": [
+   "washington monument",
+   "le monument de washington"
+  ],
+  "tag": "États-Unis",
+  "a": "Monument Washington"
+ },
+ {
+  "q": "Mémorial Lincoln",
+  "wiki": "Lincoln_Memorial",
+  "alts": [
+   "lincoln memorial",
+   "le mémorial lincoln"
+  ],
+  "tag": "États-Unis",
+  "a": "Mémorial Lincoln"
+ },
+ {
+  "q": "Pont de la Tour?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Pont de la Tour?"
+ },
+ {
+  "q": "Viaduc de Millau",
+  "wiki": "Viaduc_de_Millau",
+  "alts": [
+   "millau",
+   "le viaduc de millau"
+  ],
+  "tag": "France",
+  "a": "Viaduc de Millau"
+ },
+ {
+  "q": "Île de Bora Bora?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Île de Bora Bora?"
+ },
+ {
+  "q": "Mer Morte",
+  "wiki": "Mer_Morte",
+  "alts": [
+   "la mer morte"
+  ],
+  "tag": "Israël",
+  "a": "Mer Morte"
+ },
+ {
+  "q": "Mont Everest Base Camp?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Mont Everest Base Camp?"
+ },
+ {
+  "q": "Palais Royal de Bruxelles?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Palais Royal de Bruxelles?"
+ },
+ {
+  "q": "Stade de Wembley",
+  "wiki": "Wembley_Stadium",
+  "alts": [
+   "wembley",
+   "le wembley"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "Stade de Wembley"
+ },
+ {
+  "q": "Camp Nou",
+  "wiki": "Camp_Nou",
+  "alts": [
+   "le camp nou",
+   "nou camp"
+  ],
+  "tag": "Espagne",
+  "a": "Camp Nou"
+ },
+ {
+  "q": "Santiago Bernabéu",
+  "wiki": "Santiago_Bernabéu",
+  "alts": [
+   "bernabeu",
+   "le bernabeu"
+  ],
+  "tag": "Espagne",
+  "a": "Santiago Bernabéu"
+ },
+ {
+  "q": "Maracanã",
+  "wiki": "Maracanã",
+  "alts": [
+   "maracana",
+   "le maracana"
+  ],
+  "tag": "Brésil",
+  "a": "Maracanã"
+ },
+ {
+  "q": "Old Trafford",
+  "wiki": "Old_Trafford",
+  "alts": [
+   "theatre of dreams",
+   "old traford"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "Old Trafford"
+ },
+ {
+  "q": "Parc des Princes",
+  "wiki": "Parc_des_Pinces",
+  "alts": [
+   "le parc des princes",
+   "pdp"
+  ],
+  "tag": "France",
+  "a": "Parc des Princes"
+ },
+ {
+  "q": "Allianz Arena",
+  "wiki": "Allianz_Arena",
+  "alts": [
+   "l’allianz arena"
+  ],
+  "tag": "Allemagne",
+  "a": "Allianz Arena"
+ },
+ {
+  "q": "San Siro",
+  "wiki": "Stade_Giuseppe-Meazza",
+  "alts": [
+   "meazza",
+   "le san siro"
+  ],
+  "tag": "Italie",
+  "a": "San Siro"
+ },
+ {
+  "q": "Stade Olympique de Barcelone?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Stade Olympique de Barcelone?"
+ },
+ {
+  "q": "Stade de France",
+  "wiki": "Stade_de_France",
+  "alts": [
+   "le stade de france"
+  ],
+  "tag": "France",
+  "a": "Stade de France"
+ },
+ {
+  "q": "Signal Iduna Park",
+  "wiki": "Signal_Iduna_Park",
+  "alts": [
+   "westfalenstadion",
+   "dortmund stade"
+  ],
+  "tag": "Allemagne",
+  "a": "Signal Iduna Park"
+ },
+ {
+  "q": "Anfield",
+  "wiki": "Anfield",
+  "alts": [
+   "anfield road",
+   "l’anfield"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "Anfield"
+ },
+ {
+  "q": "Emirates Stadium",
+  "wiki": "Emirates_Stadium",
+  "alts": [
+   "l’emirates",
+   "arsenal stadium"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "Emirates Stadium"
+ },
+ {
+  "q": "Stamford Bridge",
+  "wiki": "Stamford_Bridge_(stade)",
+  "alts": [
+   "le stamford bridge"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "Stamford Bridge"
+ },
+ {
+  "q": "Etihad Stadium",
+  "wiki": "Etihad_Stadium",
+  "alts": [
+   "city of manchester",
+   "l’etihad"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "Etihad Stadium"
+ },
+ {
+  "q": "Estádio da Luz",
+  "wiki": "Estádio_da_Luz",
+  "alts": [
+   "da luz",
+   "stade de la lumiere"
+  ],
+  "tag": "Portugal",
+  "a": "Estádio da Luz"
+ },
+ {
+  "q": "Estádio do Dragão",
+  "wiki": "Estádio_do_Dragão",
+  "alts": [
+   "dragao",
+   "stade du dragon"
+  ],
+  "tag": "Portugal",
+  "a": "Estádio do Dragão"
+ },
+ {
+  "q": "Stade Vélodrome",
+  "wiki": "Stade_Vélodrome",
+  "alts": [
+   "le vélodrome",
+   "velodrome marseille"
+  ],
+  "tag": "France",
+  "a": "Stade Vélodrome"
+ },
+ {
+  "q": "Signal Iduna? déjà",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Signal Iduna? déjà"
+ },
+ {
+  "q": "Estadio Azteca",
+  "wiki": "Estadio_Azteca",
+  "alts": [
+   "l’azteca",
+   "azteca"
+  ],
+  "tag": "Mexique",
+  "a": "Estadio Azteca"
+ },
+ {
+  "q": "Stade Luis II",
+  "wiki": "Stade_Louis-II",
+  "alts": [
+   "louis ii",
+   "stade louis deux"
+  ],
+  "tag": "Monaco",
+  "a": "Stade Luis II"
+ },
+ {
+  "q": "Stade des Martyrs",
+  "wiki": "Stade_des_Martyrs",
+  "alts": [
+   "le stade des martyrs",
+   "kamanyola"
+  ],
+  "tag": "RDC",
+  "a": "Stade des Martyrs"
+ },
+ {
+  "q": "Stade Léopold Senghor",
+  "wiki": "Stade_Léopold-Sédar-Senghor",
+  "alts": [
+   "senghor",
+   "le stade senghor"
+  ],
+  "tag": "Sénégal",
+  "a": "Stade Léopold Senghor"
+ },
+ {
+  "q": "Stade Baba Yara?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Stade Baba Yara?"
+ },
+ {
+  "q": "Stade de la Réunification",
+  "wiki": "Stade_de_la_Réunification",
+  "alts": [
+   "la reunification",
+   "stade reunification douala"
+  ],
+  "tag": "Cameroun",
+  "a": "Stade de la Réunification"
+ },
+ {
+  "q": "Stade Modibo Keïta",
+  "wiki": "Stade_Modibo_Keïta",
+  "alts": [
+   "modibo keita",
+   "stade de bamako"
+  ],
+  "tag": "Mali",
+  "a": "Stade Modibo Keïta"
+ },
+ {
+  "q": "Stade d’Angondjé",
+  "wiki": "Stade_d’Angondjé",
+  "alts": [
+   "angondje",
+   "stade d’angondje"
+  ],
+  "tag": "Gabon",
+  "a": "Stade d’Angondjé"
+ },
+ {
+  "q": "Grande Muraille Mutianyu?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Grande Muraille Mutianyu?"
+ },
+ {
+  "q": "Tokyo Tower",
+  "wiki": "Tokyo_Tower",
+  "alts": [
+   "la tour de tokyo",
+   "tokyo taeru"
+  ],
+  "tag": "Japon",
+  "a": "Tokyo Tower"
+ },
+ {
+  "q": "Tokyo Skytree",
+  "wiki": "Tokyo_Skytree",
+  "alts": [
+   "skytree",
+   "la skytree"
+  ],
+  "tag": "Japon",
+  "a": "Tokyo Skytree"
+ },
+ {
+  "q": "Shibuya Crossing?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Shibuya Crossing?"
+ },
+ {
+  "q": "Palais impérial de Tokyo",
+  "wiki": "Palais_impérial_de_Tokyo",
+  "alts": [
+   "le palais impérial",
+   "imperial palace"
+  ],
+  "tag": "Japon",
+  "a": "Palais impérial de Tokyo"
+ },
+ {
+  "q": "Château d’Osaka",
+  "wiki": "Château_d’Osaka",
+  "alts": [
+   "osaka castle",
+   "le château d’osaka"
+  ],
+  "tag": "Japon",
+  "a": "Château d’Osaka"
+ },
+ {
+  "q": "Temple Fushimi Inari",
+  "wiki": "Fushimi_Inari-taisha",
+  "alts": [
+   "fushimi inari",
+   "inari"
+  ],
+  "tag": "Japon",
+  "a": "Temple Fushimi Inari"
+ },
+ {
+  "q": "Potala déjà",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Potala déjà"
+ },
+ {
+  "q": "Terracotta Army",
+  "wiki": "Armée_en_terre_cuite_de_Xi’an",
+  "alts": [
+   "l’armée de terre cuite",
+   "xi’an soldats"
+  ],
+  "tag": "Chine",
+  "a": "Terracotta Army"
+ },
+ {
+  "q": "Leshan Giant Buddha",
+  "wiki": "Grand_Bouddha_de_Leshan",
+  "alts": [
+   "bouddha de leshan",
+   "le grand bouddha"
+  ],
+  "tag": "Chine",
+  "a": "Leshan Giant Buddha"
+ },
+ {
+  "q": "Harbour Bridge",
+  "wiki": "Harbour_Bridge_de_Sydney",
+  "alts": [
+   "sydney harbour",
+   "le harbour bridge"
+  ],
+  "tag": "Australie",
+  "a": "Harbour Bridge"
+ },
+ {
+  "q": "Bondi Beach?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Bondi Beach?"
+ },
+ {
+  "q": "Milford Sound",
+  "wiki": "Milford_Sound",
+  "alts": [
+   "le milford sound"
+  ],
+  "tag": "Nouvelle-Zélande",
+  "a": "Milford Sound"
+ },
+ {
+  "q": "Hobbiton (film set)?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Hobbiton (film set)?"
+ },
+ {
+  "q": "Cité de Carcassonne",
+  "wiki": "Cité_de_Carcassonne",
+  "alts": [
+   "carcassonne",
+   "la cité de carcassonne"
+  ],
+  "tag": "France",
+  "a": "Cité de Carcassonne"
+ },
+ {
+  "q": "Abbaye de Westminster",
+  "wiki": "Abbaye_de_Westminster",
+  "alts": [
+   "westminster abbey",
+   "l’abbaye de westminster"
+  ],
+  "tag": "Royaume-Uni",
+  "a": "Abbaye de Westminster"
+ },
+ {
+  "q": "Cathédrale de Salisbury?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Cathédrale de Salisbury?"
+ },
+ {
+  "q": "Cathédrale Notre-Dame de Reims",
+  "wiki": "Cathédrale_Notre-Dame_de_Reims",
+  "alts": [
+   "reims",
+   "la cathédrale de reims"
+  ],
+  "tag": "France",
+  "a": "Cathédrale Notre-Dame de Reims"
+ },
+ {
+  "q": "Cathédrale de Chartres",
+  "wiki": "Cathédrale_Notre-Dame_de_Chartres",
+  "alts": [
+   "chartres",
+   "la cathédrale de chartres"
+  ],
+  "tag": "France",
+  "a": "Cathédrale de Chartres"
+ },
+ {
+  "q": "Saint-Malo",
+  "wiki": "Saint-Malo",
+  "alts": [
+   "la cité corsaire",
+   "saint malo ville"
+  ],
+  "tag": "France",
+  "a": "Saint-Malo"
+ },
+ {
+  "q": "Gorges du Verdon",
+  "wiki": "Gorges_du_Verdon",
+  "alts": [
+   "les gorges du verdon",
+   "verdon"
+  ],
+  "tag": "France",
+  "a": "Gorges du Verdon"
+ },
+ {
+  "q": "Cinque Terre",
+  "wiki": "Cinque_Terre",
+  "alts": [
+   "les cinque terre",
+   "cinq terres"
+  ],
+  "tag": "Italie",
+  "a": "Cinque Terre"
+ },
+ {
+  "q": "Positano",
+  "wiki": "Positano",
+  "alts": [
+   "la côte amalfitaine positano"
+  ],
+  "tag": "Italie",
+  "a": "Positano"
+ },
+ {
+  "q": "Santorin",
+  "wiki": "Santorin",
+  "alts": [
+   "santorini",
+   "l’île de santorin"
+  ],
+  "tag": "Grèce",
+  "a": "Santorin"
+ },
+ {
+  "q": "Mykonos",
+  "wiki": "Mykonos",
+  "alts": [
+   "l’île de mykonos"
+  ],
+  "tag": "Grèce",
+  "a": "Mykonos"
+ },
+ {
+  "q": "Cap Nord",
+  "wiki": "Cap_Nord",
+  "alts": [
+   "le cap nord",
+   "nordkapp"
+  ],
+  "tag": "Norvège",
+  "a": "Cap Nord"
+ },
+ {
+  "q": "Fjords de Norvège?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Fjords de Norvège?"
+ },
+ {
+  "q": "Geiranger",
+  "wiki": "Geirangerfjord",
+  "alts": [
+   "le geirangerfjord",
+   "geiranger fjord"
+  ],
+  "tag": "Norvège",
+  "a": "Geiranger"
+ },
+ {
+  "q": "Trolltunga",
+  "wiki": "Trolltunga",
+  "alts": [
+   "la langue du troll",
+   "troll langue"
+  ],
+  "tag": "Norvège",
+  "a": "Trolltunga"
+ },
+ {
+  "q": "Kjeragbolten?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Kjeragbolten?"
+ },
+ {
+  "q": "Antelope Canyon",
+  "wiki": "Antelope_Canyon",
+  "alts": [
+   "l’antelope canyon",
+   "le canyon antilope"
+  ],
+  "tag": "États-Unis",
+  "a": "Antelope Canyon"
+ },
+ {
+  "q": "Monument Valley",
+  "wiki": "Monument_Valley",
+  "alts": [
+   "la monument valley",
+   "valley of the rocks"
+  ],
+  "tag": "États-Unis",
+  "a": "Monument Valley"
+ },
+ {
+  "q": "Yosemite",
+  "wiki": "Yosemite",
+  "alts": [
+   "le yosemite",
+   "yosemite valley"
+  ],
+  "tag": "États-Unis",
+  "a": "Yosemite"
+ },
+ {
+  "q": "Yellowstone",
+  "wiki": "Parc_de_Yellowstone",
+  "alts": [
+   "le yellowstone"
+  ],
+  "tag": "États-Unis",
+  "a": "Yellowstone"
+ },
+ {
+  "q": "Séquoia géant?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Séquoia géant?"
+ },
+ {
+  "q": "Bryce Canyon",
+  "wiki": "Bryce_Canyon",
+  "alts": [
+   "le bryce canyon"
+  ],
+  "tag": "États-Unis",
+  "a": "Bryce Canyon"
+ },
+ {
+  "q": "Hoover Dam?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Hoover Dam?"
+ },
+ {
+  "q": "Route 66",
+  "wiki": "U.S._Route_66",
+  "alts": [
+   "la route 66",
+   "mother road"
+  ],
+  "tag": "États-Unis",
+  "a": "Route 66"
+ },
+ {
+  "q": "Mesa Verde?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Mesa Verde?"
+ },
+ {
+  "q": "Salines de Maras?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Salines de Maras?"
+ },
+ {
+  "q": "Desert d’Atacama",
+  "wiki": "Désert_d’Atacama",
+  "alts": [
+   "atacama",
+   "le désert d’atacama"
+  ],
+  "tag": "Chili",
+  "a": "Desert d’Atacama"
+ },
+ {
+  "q": "Salar d’Uyuni",
+  "wiki": "Salar_d’Uyuni",
+  "alts": [
+   "uyuni",
+   "le salar d’uyuni"
+  ],
+  "tag": "Bolivie",
+  "a": "Salar d’Uyuni"
+ },
+ {
+  "q": "Lagune Colorada?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Lagune Colorada?"
+ },
+ {
+  "q": "Iguaçu déjà?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Iguaçu déjà?"
+ },
+ {
+  "q": "Panama Canal?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Panama Canal?"
+ },
+ {
+  "q": "Palm Jumeirah",
+  "wiki": "Palm_Jumeirah",
+  "alts": [
+   "la palm jumeirah",
+   "palm island"
+  ],
+  "tag": "Émirats",
+  "a": "Palm Jumeirah"
+ },
+ {
+  "q": "Sheikh Zayed Mosque",
+  "wiki": "Mosquée_Sheikh-Zayed",
+  "alts": [
+   "la mosquée sheikh zayed",
+   "abu dhabi mosquée"
+  ],
+  "tag": "Émirats",
+  "a": "Sheikh Zayed Mosque"
+ },
+ {
+  "q": "Masjid al-Haram",
+  "wiki": "Masjid_al-Haram",
+  "alts": [
+   "la mosquée sacrée",
+   "grande mosquée de la mecque"
+  ],
+  "tag": "Arabie",
+  "a": "Masjid al-Haram"
+ },
+ {
+  "q": "Prophète Médine?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Prophète Médine?"
+ },
+ {
+  "q": "Mont Sinaï",
+  "wiki": "Mont_Sinaï",
+  "alts": [
+   "le mont sinaï",
+   "djebel mousa"
+  ],
+  "tag": "Égypte",
+  "a": "Mont Sinaï"
+ },
+ {
+  "q": "Luxor",
+  "wiki": "Luxor",
+  "alts": [
+   "louxor",
+   "les temples de louxor"
+  ],
+  "tag": "Égypte",
+  "a": "Luxor"
+ },
+ {
+  "q": "Karnak",
+  "wiki": "Karnak",
+  "alts": [
+   "le temple de karnak"
+  ],
+  "tag": "Égypte",
+  "a": "Karnak"
+ },
+ {
+  "q": "Vallée des Rois",
+  "wiki": "Vallée_des_Rois",
+  "alts": [
+   "la vallée des rois",
+   "kv62"
+  ],
+  "tag": "Égypte",
+  "a": "Vallée des Rois"
+ },
+ {
+  "q": "Abou Simbel",
+  "wiki": "Abou_Simbel",
+  "alts": [
+   "le temple d’abou simbel"
+  ],
+  "tag": "Égypte",
+  "a": "Abou Simbel"
+ },
+ {
+  "q": "Lalibela",
+  "wiki": "Églises_de_Lalibela",
+  "alts": [
+   "lalibela",
+   "les églises de lalibela"
+  ],
+  "tag": "Éthiopie",
+  "a": "Lalibela"
+ },
+ {
+  "q": "Mont Kenya?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Mont Kenya?"
+ },
+ {
+  "q": "Maasai Mara",
+  "wiki": "Réserve_nationale_du_Maasai_Mara",
+  "alts": [
+   "maasai mara",
+   "le masai mara"
+  ],
+  "tag": "Kenya",
+  "a": "Maasai Mara"
+ },
+ {
+  "q": "Serengeti",
+  "wiki": "Serengeti",
+  "alts": [
+   "le serengeti"
+  ],
+  "tag": "Tanzanie",
+  "a": "Serengeti"
+ },
+ {
+  "q": "Ngorongoro",
+  "wiki": "Aire_de_conservation_du_Ngorongoro",
+  "alts": [
+   "le ngorongoro",
+   "cratère ngorongoro"
+  ],
+  "tag": "Tanzanie",
+  "a": "Ngorongoro"
+ },
+ {
+  "q": "Okavango",
+  "wiki": "Delta_de_l’Okavango",
+  "alts": [
+   "l’okavango",
+   "delta okavango"
+  ],
+  "tag": "Botswana",
+  "a": "Okavango"
+ },
+ {
+  "q": "Etosha",
+  "wiki": "Parc_d’Etosha",
+  "alts": [
+   "l’etosha",
+   "etosha pan"
+  ],
+  "tag": "Namibie",
+  "a": "Etosha"
+ },
+ {
+  "q": "Namib Desert",
+  "wiki": "Désert_du_Namib",
+  "alts": [
+   "le namib",
+   "dunes du namib"
+  ],
+  "tag": "Namibie",
+  "a": "Namib Desert"
+ },
+ {
+  "q": "Dune 45?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Dune 45?"
+ },
+ {
+  "q": "Kalahari",
+  "wiki": "Désert_du_Kalahari",
+  "alts": [
+   "le kalahari"
+  ],
+  "tag": "Botswana",
+  "a": "Kalahari"
+ },
+ {
+  "q": "Blyde River Canyon?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Blyde River Canyon?"
+ },
+ {
+  "q": "Table Mountain Cape Town?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Table Mountain Cape Town?"
+ },
+ {
+  "q": "Robben Island",
+  "wiki": "Robben_Island",
+  "alts": [
+   "l’île de robben",
+   "prison mandela"
+  ],
+  "tag": "Afrique du Sud",
+  "a": "Robben Island"
+ },
+ {
+  "q": "Apartheid Museum?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Apartheid Museum?"
+ },
+ {
+  "q": "Cascades de Blue Nile?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Cascades de Blue Nile?"
+ },
+ {
+  "q": "Kibale Forest?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Kibale Forest?"
+ },
+ {
+  "q": "Sources du Nil",
+  "wiki": "Sources_du_Nil",
+  "alts": [
+   "la source du nil",
+   "jinja source"
+  ],
+  "tag": "Ouganda",
+  "a": "Sources du Nil"
+ },
+ {
+  "q": "Bwindi",
+  "wiki": "Forêt_impénétrable_de_Bwindi",
+  "alts": [
+   "bwindi",
+   "la forêt de bwindi"
+  ],
+  "tag": "Ouganda",
+  "a": "Bwindi"
+ },
+ {
+  "q": "Volcans Virunga?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Volcans Virunga?"
+ },
+ {
+  "q": "Kibira National Park?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Kibira National Park?"
+ },
+ {
+  "q": "Lac Kivu",
+  "wiki": "Lac_Kivu",
+  "alts": [
+   "le lac kivu"
+  ],
+  "tag": "RDC",
+  "a": "Lac Kivu"
+ },
+ {
+  "q": "Île Idjwi",
+  "wiki": "Idjwi",
+  "alts": [
+   "l’île d’idjwi",
+   "idjwi"
+  ],
+  "tag": "RDC",
+  "a": "Île Idjwi"
+ },
+ {
+  "q": "Boyoma Falls",
+  "wiki": "Chutes_Boyoma",
+  "alts": [
+   "les chutes boyoma",
+   "stanley falls"
+  ],
+  "tag": "RDC",
+  "a": "Boyoma Falls"
+ },
+ {
+  "q": "Zongo Falls?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Zongo Falls?"
+ },
+ {
+  "q": "Kinkole?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Kinkole?"
+ },
+ {
+  "q": "Lola ya Bonobo",
+  "wiki": "Lola_ya_Bonobo",
+  "alts": [
+   "lola",
+   "la vallée des bonobos"
+  ],
+  "tag": "RDC",
+  "a": "Lola ya Bonobo"
+ },
+ {
+  "q": "Kisantu Botanical Garden?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Kisantu Botanical Garden?"
+ },
+ {
+  "q": "Mbanza Kongo?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Mbanza Kongo?"
+ },
+ {
+  "q": "Kalamu?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Kalamu?"
+ },
+ {
+  "q": "Ganvié",
+  "wiki": "Ganvié",
+  "alts": [
+   "ganvie",
+   "la venise de l’afrique"
+  ],
+  "tag": "Bénin",
+  "a": "Ganvié"
+ },
+ {
+  "q": "Palais royal d’Abomey",
+  "wiki": "Palais_du_Roi_Ghezo",
+  "alts": [
+   "abomey",
+   "le palais d’abomey"
+  ],
+  "tag": "Bénin",
+  "a": "Palais royal d’Abomey"
+ },
+ {
+  "q": "Temple des Pythons",
+  "wiki": "Temple_des_Pythons",
+  "alts": [
+   "le temple des pythons",
+   "oudah"
+  ],
+  "tag": "Bénin",
+  "a": "Temple des Pythons"
+ },
+ {
+  "q": "Fidjrossè Beach?",
+  "wiki": "?",
+  "alts": [
+   "?"
+  ],
+  "tag": "?",
+  "a": "Fidjrossè Beach?"
+ },
+ {
+  "q": "Pendjari",
+  "wiki": "Parc_national_de_la_Pendjari",
+  "alts": [
+   "la pendjari",
+   "parc pendjari"
+  ],
+  "tag": "Bénin",
+  "a": "Pendjari"
+ }
+]

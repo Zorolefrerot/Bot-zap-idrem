@@ -1,0 +1,1209 @@
+[
+ {
+  "q": "Albanie",
+  "a": "Tirana",
+  "alts": []
+ },
+ {
+  "q": "Allemagne",
+  "a": "Berlin",
+  "alts": []
+ },
+ {
+  "q": "Andorre",
+  "a": "Andorre-la-Vieille",
+  "alts": [
+   "Andorra la Vella"
+  ]
+ },
+ {
+  "q": "Autriche",
+  "a": "Vienne",
+  "alts": [
+   "Vienna"
+  ]
+ },
+ {
+  "q": "Belgique",
+  "a": "Bruxelles",
+  "alts": [
+   "Brussels"
+  ]
+ },
+ {
+  "q": "Biélorussie",
+  "a": "Minsk",
+  "alts": []
+ },
+ {
+  "q": "Bosnie-Herzégovine",
+  "a": "Sarajevo",
+  "alts": []
+ },
+ {
+  "q": "Bulgarie",
+  "a": "Sofia",
+  "alts": []
+ },
+ {
+  "q": "Chypre",
+  "a": "Nicosie",
+  "alts": [
+   "Nicosia"
+  ]
+ },
+ {
+  "q": "Croatie",
+  "a": "Zagreb",
+  "alts": []
+ },
+ {
+  "q": "Danemark",
+  "a": "Copenhague",
+  "alts": [
+   "Copenhagen"
+  ]
+ },
+ {
+  "q": "Espagne",
+  "a": "Madrid",
+  "alts": []
+ },
+ {
+  "q": "Estonie",
+  "a": "Tallinn",
+  "alts": []
+ },
+ {
+  "q": "Finlande",
+  "a": "Helsinki",
+  "alts": []
+ },
+ {
+  "q": "France",
+  "a": "Paris",
+  "alts": []
+ },
+ {
+  "q": "Grèce",
+  "a": "Athènes",
+  "alts": [
+   "Athens"
+  ]
+ },
+ {
+  "q": "Hongrie",
+  "a": "Budapest",
+  "alts": []
+ },
+ {
+  "q": "Irlande",
+  "a": "Dublin",
+  "alts": []
+ },
+ {
+  "q": "Islande",
+  "a": "Reykjavik",
+  "alts": []
+ },
+ {
+  "q": "Italie",
+  "a": "Rome",
+  "alts": []
+ },
+ {
+  "q": "Lettonie",
+  "a": "Riga",
+  "alts": []
+ },
+ {
+  "q": "Liechtenstein",
+  "a": "Vaduz",
+  "alts": []
+ },
+ {
+  "q": "Lituanie",
+  "a": "Vilnius",
+  "alts": []
+ },
+ {
+  "q": "Luxembourg",
+  "a": "Luxembourg",
+  "alts": [
+   "Luxembourg City"
+  ]
+ },
+ {
+  "q": "Macédoine du Nord",
+  "a": "Skopje",
+  "alts": []
+ },
+ {
+  "q": "Malte",
+  "a": "La Valette",
+  "alts": [
+   "Valletta"
+  ]
+ },
+ {
+  "q": "Moldavie",
+  "a": "Chisinau",
+  "alts": []
+ },
+ {
+  "q": "Monaco",
+  "a": "Monaco",
+  "alts": []
+ },
+ {
+  "q": "Monténégro",
+  "a": "Podgorica",
+  "alts": []
+ },
+ {
+  "q": "Norvège",
+  "a": "Oslo",
+  "alts": []
+ },
+ {
+  "q": "Pays-Bas",
+  "a": "Amsterdam",
+  "alts": []
+ },
+ {
+  "q": "Pologne",
+  "a": "Varsovie",
+  "alts": [
+   "Warsaw"
+  ]
+ },
+ {
+  "q": "Portugal",
+  "a": "Lisbonne",
+  "alts": [
+   "Lisbon"
+  ]
+ },
+ {
+  "q": "Roumanie",
+  "a": "Bucarest",
+  "alts": [
+   "Bucharest"
+  ]
+ },
+ {
+  "q": "Royaume-Uni",
+  "a": "Londres",
+  "alts": [
+   "London"
+  ]
+ },
+ {
+  "q": "Russie",
+  "a": "Moscou",
+  "alts": [
+   "Moscow"
+  ]
+ },
+ {
+  "q": "Saint-Marin",
+  "a": "Saint-Marin",
+  "alts": [
+   "San Marino"
+  ]
+ },
+ {
+  "q": "Serbie",
+  "a": "Belgrade",
+  "alts": []
+ },
+ {
+  "q": "Slovaquie",
+  "a": "Bratislava",
+  "alts": []
+ },
+ {
+  "q": "Slovénie",
+  "a": "Ljubljana",
+  "alts": []
+ },
+ {
+  "q": "Suède",
+  "a": "Stockholm",
+  "alts": []
+ },
+ {
+  "q": "Suisse",
+  "a": "Berne",
+  "alts": [
+   "Bern"
+  ]
+ },
+ {
+  "q": "Tchéquie",
+  "a": "Prague",
+  "alts": []
+ },
+ {
+  "q": "Ukraine",
+  "a": "Kiev",
+  "alts": [
+   "Kyiv"
+  ]
+ },
+ {
+  "q": "Vatican",
+  "a": "Vatican",
+  "alts": [
+   "Vatican City"
+  ]
+ },
+ {
+  "q": "Afrique du Sud",
+  "a": "Pretoria",
+  "alts": []
+ },
+ {
+  "q": "Algérie",
+  "a": "Alger",
+  "alts": [
+   "Algiers"
+  ]
+ },
+ {
+  "q": "Angola",
+  "a": "Luanda",
+  "alts": []
+ },
+ {
+  "q": "Bénin",
+  "a": "Porto-Novo",
+  "alts": []
+ },
+ {
+  "q": "Botswana",
+  "a": "Gaborone",
+  "alts": []
+ },
+ {
+  "q": "Burkina Faso",
+  "a": "Ouagadougou",
+  "alts": []
+ },
+ {
+  "q": "Burundi",
+  "a": "Gitega",
+  "alts": []
+ },
+ {
+  "q": "Cameroun",
+  "a": "Yaoundé",
+  "alts": [
+   "Yaounde"
+  ]
+ },
+ {
+  "q": "Cap-Vert",
+  "a": "Praia",
+  "alts": []
+ },
+ {
+  "q": "République centrafricaine",
+  "a": "Bangui",
+  "alts": []
+ },
+ {
+  "q": "Comores",
+  "a": "Moroni",
+  "alts": []
+ },
+ {
+  "q": "Congo",
+  "a": "Brazzaville",
+  "alts": []
+ },
+ {
+  "q": "RD Congo",
+  "a": "Kinshasa",
+  "alts": []
+ },
+ {
+  "q": "Côte d'Ivoire",
+  "a": "Yamoussoukro",
+  "alts": []
+ },
+ {
+  "q": "Djibouti",
+  "a": "Djibouti",
+  "alts": []
+ },
+ {
+  "q": "Égypte",
+  "a": "Le Caire",
+  "alts": [
+   "Cairo"
+  ]
+ },
+ {
+  "q": "Érythrée",
+  "a": "Asmara",
+  "alts": []
+ },
+ {
+  "q": "Eswatini",
+  "a": "Mbabane",
+  "alts": []
+ },
+ {
+  "q": "Éthiopie",
+  "a": "Addis-Abeba",
+  "alts": [
+   "Addis Ababa"
+  ]
+ },
+ {
+  "q": "Gabon",
+  "a": "Libreville",
+  "alts": []
+ },
+ {
+  "q": "Gambie",
+  "a": "Banjul",
+  "alts": []
+ },
+ {
+  "q": "Ghana",
+  "a": "Accra",
+  "alts": []
+ },
+ {
+  "q": "Guinée",
+  "a": "Conakry",
+  "alts": []
+ },
+ {
+  "q": "Guinée-Bissau",
+  "a": "Bissau",
+  "alts": []
+ },
+ {
+  "q": "Guinée équatoriale",
+  "a": "Malabo",
+  "alts": []
+ },
+ {
+  "q": "Kenya",
+  "a": "Nairobi",
+  "alts": []
+ },
+ {
+  "q": "Lesotho",
+  "a": "Maseru",
+  "alts": []
+ },
+ {
+  "q": "Liberia",
+  "a": "Monrovia",
+  "alts": []
+ },
+ {
+  "q": "Libye",
+  "a": "Tripoli",
+  "alts": []
+ },
+ {
+  "q": "Madagascar",
+  "a": "Antananarivo",
+  "alts": []
+ },
+ {
+  "q": "Malawi",
+  "a": "Lilongwe",
+  "alts": []
+ },
+ {
+  "q": "Mali",
+  "a": "Bamako",
+  "alts": []
+ },
+ {
+  "q": "Maroc",
+  "a": "Rabat",
+  "alts": []
+ },
+ {
+  "q": "Maurice",
+  "a": "Port-Louis",
+  "alts": [
+   "Port Louis"
+  ]
+ },
+ {
+  "q": "Mauritanie",
+  "a": "Nouakchott",
+  "alts": []
+ },
+ {
+  "q": "Mozambique",
+  "a": "Maputo",
+  "alts": []
+ },
+ {
+  "q": "Namibie",
+  "a": "Windhoek",
+  "alts": []
+ },
+ {
+  "q": "Niger",
+  "a": "Niamey",
+  "alts": []
+ },
+ {
+  "q": "Nigeria",
+  "a": "Abuja",
+  "alts": []
+ },
+ {
+  "q": "Ouganda",
+  "a": "Kampala",
+  "alts": []
+ },
+ {
+  "q": "Rwanda",
+  "a": "Kigali",
+  "alts": []
+ },
+ {
+  "q": "São Tomé-et-Príncipe",
+  "a": "São Tomé",
+  "alts": [
+   "Sao Tome"
+  ]
+ },
+ {
+  "q": "Sénégal",
+  "a": "Dakar",
+  "alts": []
+ },
+ {
+  "q": "Seychelles",
+  "a": "Victoria",
+  "alts": []
+ },
+ {
+  "q": "Sierra Leone",
+  "a": "Freetown",
+  "alts": []
+ },
+ {
+  "q": "Somalie",
+  "a": "Mogadiscio",
+  "alts": [
+   "Mogadishu"
+  ]
+ },
+ {
+  "q": "Soudan",
+  "a": "Khartoum",
+  "alts": []
+ },
+ {
+  "q": "Soudan du Sud",
+  "a": "Djouba",
+  "alts": [
+   "Juba"
+  ]
+ },
+ {
+  "q": "Tanzanie",
+  "a": "Dodoma",
+  "alts": []
+ },
+ {
+  "q": "Tchad",
+  "a": "N'Djamena",
+  "alts": []
+ },
+ {
+  "q": "Togo",
+  "a": "Lomé",
+  "alts": [
+   "Lome"
+  ]
+ },
+ {
+  "q": "Tunisie",
+  "a": "Tunis",
+  "alts": []
+ },
+ {
+  "q": "Zambie",
+  "a": "Lusaka",
+  "alts": []
+ },
+ {
+  "q": "Zimbabwe",
+  "a": "Harare",
+  "alts": []
+ },
+ {
+  "q": "Afghanistan",
+  "a": "Kaboul",
+  "alts": [
+   "Kabul"
+  ]
+ },
+ {
+  "q": "Arabie saoudite",
+  "a": "Riyad",
+  "alts": [
+   "Riyadh"
+  ]
+ },
+ {
+  "q": "Arménie",
+  "a": "Erevan",
+  "alts": [
+   "Yerevan"
+  ]
+ },
+ {
+  "q": "Azerbaïdjan",
+  "a": "Baku",
+  "alts": []
+ },
+ {
+  "q": "Bahreïn",
+  "a": "Manama",
+  "alts": []
+ },
+ {
+  "q": "Bangladesh",
+  "a": "Dacca",
+  "alts": [
+   "Dhaka"
+  ]
+ },
+ {
+  "q": "Bhoutan",
+  "a": "Thimphou",
+  "alts": [
+   "Thimphu"
+  ]
+ },
+ {
+  "q": "Birmanie",
+  "a": "Naypyidaw",
+  "alts": []
+ },
+ {
+  "q": "Brunei",
+  "a": "Bandar Seri Begawan",
+  "alts": []
+ },
+ {
+  "q": "Cambodge",
+  "a": "Phnom Penh",
+  "alts": []
+ },
+ {
+  "q": "Chine",
+  "a": "Pékin",
+  "alts": [
+   "Beijing"
+  ]
+ },
+ {
+  "q": "Corée du Nord",
+  "a": "Pyongyang",
+  "alts": []
+ },
+ {
+  "q": "Corée du Sud",
+  "a": "Séoul",
+  "alts": [
+   "Seoul"
+  ]
+ },
+ {
+  "q": "Émirats arabes unis",
+  "a": "Abou Dabi",
+  "alts": [
+   "Abu Dhabi"
+  ]
+ },
+ {
+  "q": "Géorgie",
+  "a": "Tbilissi",
+  "alts": [
+   "Tbilisi"
+  ]
+ },
+ {
+  "q": "Inde",
+  "a": "New Delhi",
+  "alts": []
+ },
+ {
+  "q": "Indonésie",
+  "a": "Jakarta",
+  "alts": []
+ },
+ {
+  "q": "Irak",
+  "a": "Bagdad",
+  "alts": [
+   "Baghdad"
+  ]
+ },
+ {
+  "q": "Iran",
+  "a": "Téhéran",
+  "alts": [
+   "Tehran"
+  ]
+ },
+ {
+  "q": "Israël",
+  "a": "Jérusalem",
+  "alts": [
+   "Jerusalem"
+  ]
+ },
+ {
+  "q": "Japon",
+  "a": "Tokyo",
+  "alts": []
+ },
+ {
+  "q": "Jordanie",
+  "a": "Amman",
+  "alts": []
+ },
+ {
+  "q": "Kazakhstan",
+  "a": "Astana",
+  "alts": []
+ },
+ {
+  "q": "Kirghizistan",
+  "a": "Bichkek",
+  "alts": [
+   "Bishkek"
+  ]
+ },
+ {
+  "q": "Koweït",
+  "a": "Koweït",
+  "alts": [
+   "Kuwait City"
+  ]
+ },
+ {
+  "q": "Laos",
+  "a": "Vientiane",
+  "alts": []
+ },
+ {
+  "q": "Liban",
+  "a": "Beyrouth",
+  "alts": [
+   "Beirut"
+  ]
+ },
+ {
+  "q": "Malaisie",
+  "a": "Kuala Lumpur",
+  "alts": []
+ },
+ {
+  "q": "Maldives",
+  "a": "Malé",
+  "alts": [
+   "Male"
+  ]
+ },
+ {
+  "q": "Mongolie",
+  "a": "Oulan-Bator",
+  "alts": [
+   "Ulaanbaatar"
+  ]
+ },
+ {
+  "q": "Népal",
+  "a": "Katmandou",
+  "alts": [
+   "Kathmandu"
+  ]
+ },
+ {
+  "q": "Oman",
+  "a": "Mascate",
+  "alts": [
+   "Muscat"
+  ]
+ },
+ {
+  "q": "Ouzbékistan",
+  "a": "Tachkent",
+  "alts": [
+   "Tashkent"
+  ]
+ },
+ {
+  "q": "Pakistan",
+  "a": "Islamabad",
+  "alts": []
+ },
+ {
+  "q": "Palestine",
+  "a": "Ramallah",
+  "alts": []
+ },
+ {
+  "q": "Philippines",
+  "a": "Manille",
+  "alts": [
+   "Manila"
+  ]
+ },
+ {
+  "q": "Qatar",
+  "a": "Doha",
+  "alts": []
+ },
+ {
+  "q": "Singapour",
+  "a": "Singapour",
+  "alts": [
+   "Singapore"
+  ]
+ },
+ {
+  "q": "Sri Lanka",
+  "a": "Sri Jayawardenepura",
+  "alts": [
+   "Colombo"
+  ]
+ },
+ {
+  "q": "Syrie",
+  "a": "Damas",
+  "alts": [
+   "Damascus"
+  ]
+ },
+ {
+  "q": "Tadjikistan",
+  "a": "Douchanbé",
+  "alts": [
+   "Dushanbe"
+  ]
+ },
+ {
+  "q": "Taïwan",
+  "a": "Taipei",
+  "alts": []
+ },
+ {
+  "q": "Thaïlande",
+  "a": "Bangkok",
+  "alts": []
+ },
+ {
+  "q": "Timor oriental",
+  "a": "Dili",
+  "alts": []
+ },
+ {
+  "q": "Turquie",
+  "a": "Ankara",
+  "alts": []
+ },
+ {
+  "q": "Turkménistan",
+  "a": "Ashgabat",
+  "alts": []
+ },
+ {
+  "q": "Viêt Nam",
+  "a": "Hanoï",
+  "alts": [
+   "Hanoi"
+  ]
+ },
+ {
+  "q": "Yémen",
+  "a": "Sanaa",
+  "alts": []
+ },
+ {
+  "q": "Antigua-et-Barbuda",
+  "a": "Saint John's",
+  "alts": []
+ },
+ {
+  "q": "Argentine",
+  "a": "Buenos Aires",
+  "alts": []
+ },
+ {
+  "q": "Bahamas",
+  "a": "Nassau",
+  "alts": []
+ },
+ {
+  "q": "Barbade",
+  "a": "Bridgetown",
+  "alts": []
+ },
+ {
+  "q": "Belize",
+  "a": "Belmopan",
+  "alts": []
+ },
+ {
+  "q": "Bolivie",
+  "a": "Sucre",
+  "alts": []
+ },
+ {
+  "q": "Brésil",
+  "a": "Brasilia",
+  "alts": []
+ },
+ {
+  "q": "Canada",
+  "a": "Ottawa",
+  "alts": []
+ },
+ {
+  "q": "Chili",
+  "a": "Santiago",
+  "alts": []
+ },
+ {
+  "q": "Colombie",
+  "a": "Bogota",
+  "alts": []
+ },
+ {
+  "q": "Costa Rica",
+  "a": "San José",
+  "alts": [
+   "San Jose"
+  ]
+ },
+ {
+  "q": "Cuba",
+  "a": "La Havane",
+  "alts": [
+   "Havana"
+  ]
+ },
+ {
+  "q": "Dominique",
+  "a": "Roseau",
+  "alts": []
+ },
+ {
+  "q": "Équateur",
+  "a": "Quito",
+  "alts": []
+ },
+ {
+  "q": "États-Unis",
+  "a": "Washington",
+  "alts": []
+ },
+ {
+  "q": "Grenade",
+  "a": "Saint-Georges",
+  "alts": [
+   "Saint George's"
+  ]
+ },
+ {
+  "q": "Guatemala",
+  "a": "Guatemala",
+  "alts": [
+   "Guatemala City"
+  ]
+ },
+ {
+  "q": "Guyana",
+  "a": "Georgetown",
+  "alts": []
+ },
+ {
+  "q": "Haïti",
+  "a": "Port-au-Prince",
+  "alts": []
+ },
+ {
+  "q": "Honduras",
+  "a": "Tegucigalpa",
+  "alts": []
+ },
+ {
+  "q": "Jamaïque",
+  "a": "Kingston",
+  "alts": []
+ },
+ {
+  "q": "Mexique",
+  "a": "Mexico",
+  "alts": [
+   "Mexico City"
+  ]
+ },
+ {
+  "q": "Nicaragua",
+  "a": "Managua",
+  "alts": []
+ },
+ {
+  "q": "Panama",
+  "a": "Panama",
+  "alts": [
+   "Panama City"
+  ]
+ },
+ {
+  "q": "Paraguay",
+  "a": "Asuncion",
+  "alts": []
+ },
+ {
+  "q": "Pérou",
+  "a": "Lima",
+  "alts": []
+ },
+ {
+  "q": "République dominicaine",
+  "a": "Saint-Domingue",
+  "alts": [
+   "Santo Domingo"
+  ]
+ },
+ {
+  "q": "Saint-Christophe-et-Niévès",
+  "a": "Basseterre",
+  "alts": []
+ },
+ {
+  "q": "Sainte-Lucie",
+  "a": "Castries",
+  "alts": []
+ },
+ {
+  "q": "Saint-Vincent-et-les-Grenadines",
+  "a": "Kingstown",
+  "alts": []
+ },
+ {
+  "q": "Salvador",
+  "a": "San Salvador",
+  "alts": []
+ },
+ {
+  "q": "Suriname",
+  "a": "Paramaribo",
+  "alts": []
+ },
+ {
+  "q": "Trinité-et-Tobago",
+  "a": "Port-d'Espagne",
+  "alts": [
+   "Port of Spain"
+  ]
+ },
+ {
+  "q": "Uruguay",
+  "a": "Montevideo",
+  "alts": []
+ },
+ {
+  "q": "Venezuela",
+  "a": "Caracas",
+  "alts": []
+ },
+ {
+  "q": "Australie",
+  "a": "Canberra",
+  "alts": []
+ },
+ {
+  "q": "Fidji",
+  "a": "Suva",
+  "alts": []
+ },
+ {
+  "q": "Kiribati",
+  "a": "Tarawa",
+  "alts": []
+ },
+ {
+  "q": "Marshall",
+  "a": "Majuro",
+  "alts": []
+ },
+ {
+  "q": "Micronésie",
+  "a": "Palikir",
+  "alts": []
+ },
+ {
+  "q": "Nauru",
+  "a": "Yaren",
+  "alts": []
+ },
+ {
+  "q": "Nouvelle-Zélande",
+  "a": "Wellington",
+  "alts": []
+ },
+ {
+  "q": "Palaos",
+  "a": "Ngerulmud",
+  "alts": []
+ },
+ {
+  "q": "Papouasie-Nouvelle-Guinée",
+  "a": "Port Moresby",
+  "alts": []
+ },
+ {
+  "q": "Salomon",
+  "a": "Honiara",
+  "alts": []
+ },
+ {
+  "q": "Samoa",
+  "a": "Apia",
+  "alts": []
+ },
+ {
+  "q": "Tonga",
+  "a": "Nuku'alofa",
+  "alts": [
+   "Nukualofa"
+  ]
+ },
+ {
+  "q": "Tuvalu",
+  "a": "Funafuti",
+  "alts": []
+ },
+ {
+  "q": "Vanuatu",
+  "a": "Port-Vila",
+  "alts": [
+   "Port Vila"
+  ]
+ },
+ {
+  "q": "Hong Kong",
+  "a": "Hong Kong",
+  "alts": []
+ },
+ {
+  "q": "Macao",
+  "a": "Macao",
+  "alts": []
+ },
+ {
+  "q": "Groenland",
+  "a": "Nuuk",
+  "alts": []
+ },
+ {
+  "q": "Porto Rico",
+  "a": "San Juan",
+  "alts": []
+ },
+ {
+  "q": "Aruba",
+  "a": "Oranjestad",
+  "alts": []
+ },
+ {
+  "q": "Bermudes",
+  "a": "Hamilton",
+  "alts": []
+ },
+ {
+  "q": "Curaçao",
+  "a": "Willemstad",
+  "alts": []
+ },
+ {
+  "q": "Îles Féroé",
+  "a": "Tórshavn",
+  "alts": [
+   "Torshavn"
+  ]
+ },
+ {
+  "q": "Polynésie française",
+  "a": "Papeete",
+  "alts": []
+ },
+ {
+  "q": "Guam",
+  "a": "Hagatna",
+  "alts": []
+ },
+ {
+  "q": "Nouvelle-Calédonie",
+  "a": "Nouméa",
+  "alts": [
+   "Noumea"
+  ]
+ },
+ {
+  "q": "Anguilla",
+  "a": "The Valley",
+  "alts": []
+ },
+ {
+  "q": "Îles Caïmans",
+  "a": "George Town",
+  "alts": []
+ },
+ {
+  "q": "Jersey",
+  "a": "Saint-Hélier",
+  "alts": [
+   "Saint Helier"
+  ]
+ },
+ {
+  "q": "Guernesey",
+  "a": "Saint-Peter-Port",
+  "alts": [
+   "Saint Peter Port"
+  ]
+ },
+ {
+  "q": "Île de Man",
+  "a": "Douglas",
+  "alts": []
+ },
+ {
+  "q": "Saint-Martin",
+  "a": "Marigot",
+  "alts": []
+ },
+ {
+  "q": "Îles Turques-et-Caïques",
+  "a": "Cockburn Town",
+  "alts": []
+ },
+ {
+  "q": "Îles Vierges britanniques",
+  "a": "Road Town",
+  "alts": []
+ }
+]

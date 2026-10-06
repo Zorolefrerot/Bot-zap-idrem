@@ -1,0 +1,2684 @@
+[
+  {
+    "q": "🇦🇱",
+    "options": [
+      "Pologne",
+      "Eswatini",
+      "Albanie",
+      "Polynésie française"
+    ],
+    "answer": "Albanie",
+    "alts": [
+      "Albania"
+    ]
+  },
+  {
+    "q": "🇩🇪",
+    "options": [
+      "Nauru",
+      "Namibie",
+      "Lesotho",
+      "Allemagne"
+    ],
+    "answer": "Allemagne",
+    "alts": [
+      "Germany"
+    ]
+  },
+  {
+    "q": "🇦🇩",
+    "options": [
+      "Togo",
+      "Géorgie",
+      "Australie",
+      "Andorre"
+    ],
+    "answer": "Andorre",
+    "alts": [
+      "Andorra"
+    ]
+  },
+  {
+    "q": "🇦🇹",
+    "options": [
+      "Autriche",
+      "Indonésie",
+      "Monténégro",
+      "Zambie"
+    ],
+    "answer": "Autriche",
+    "alts": [
+      "Austria"
+    ]
+  },
+  {
+    "q": "🇧🇪",
+    "options": [
+      "Éthiopie",
+      "Belgique",
+      "Sénégal",
+      "Honduras"
+    ],
+    "answer": "Belgique",
+    "alts": [
+      "Belgium"
+    ]
+  },
+  {
+    "q": "🇧🇾",
+    "options": [
+      "Turquie",
+      "Biélorussie",
+      "Îles Féroé",
+      "Marshall"
+    ],
+    "answer": "Biélorussie",
+    "alts": [
+      "Belarus"
+    ]
+  },
+  {
+    "q": "🇧🇦",
+    "options": [
+      "Birmanie",
+      "Bosnie-Herzégovine",
+      "Gabon",
+      "Argentine"
+    ],
+    "answer": "Bosnie-Herzégovine",
+    "alts": [
+      "Bosnia and Herzegovina"
+    ]
+  },
+  {
+    "q": "🇧🇬",
+    "options": [
+      "Nouvelle-Zélande",
+      "Bolivie",
+      "Bulgarie",
+      "Kirghizistan"
+    ],
+    "answer": "Bulgarie",
+    "alts": [
+      "Bulgaria"
+    ]
+  },
+  {
+    "q": "🇨🇾",
+    "options": [
+      "Luxembourg",
+      "Chypre",
+      "Yémen",
+      "Soudan du Sud"
+    ],
+    "answer": "Chypre",
+    "alts": [
+      "Cyprus"
+    ]
+  },
+  {
+    "q": "🇭🇷",
+    "options": [
+      "Croatie",
+      "Polynésie française",
+      "Éthiopie",
+      "Zimbabwe"
+    ],
+    "answer": "Croatie",
+    "alts": [
+      "Croatia"
+    ]
+  },
+  {
+    "q": "🇩🇰",
+    "options": [
+      "Danemark",
+      "Tunisie",
+      "Afrique du Sud",
+      "Corée du Nord"
+    ],
+    "answer": "Danemark",
+    "alts": [
+      "Denmark"
+    ]
+  },
+  {
+    "q": "🇪🇸",
+    "options": [
+      "Autriche",
+      "Espagne",
+      "Monaco",
+      "Guinée"
+    ],
+    "answer": "Espagne",
+    "alts": [
+      "Spain"
+    ]
+  },
+  {
+    "q": "🇪🇪",
+    "options": [
+      "Estonie",
+      "Moldavie",
+      "Niger",
+      "Burkina Faso"
+    ],
+    "answer": "Estonie",
+    "alts": [
+      "Estonia"
+    ]
+  },
+  {
+    "q": "🇫🇮",
+    "options": [
+      "Chine",
+      "Finlande",
+      "Italie",
+      "Irlande"
+    ],
+    "answer": "Finlande",
+    "alts": [
+      "Finland"
+    ]
+  },
+  {
+    "q": "🇫🇷",
+    "options": [
+      "France",
+      "Kirghizistan",
+      "Tunisie",
+      "Liban"
+    ],
+    "answer": "France",
+    "alts": []
+  },
+  {
+    "q": "🇬🇷",
+    "options": [
+      "Mozambique",
+      "Barbade",
+      "Mali",
+      "Grèce"
+    ],
+    "answer": "Grèce",
+    "alts": [
+      "Greece"
+    ]
+  },
+  {
+    "q": "🇭🇺",
+    "options": [
+      "Guyana",
+      "Curaçao",
+      "Hongrie",
+      "Érythrée"
+    ],
+    "answer": "Hongrie",
+    "alts": [
+      "Hungary"
+    ]
+  },
+  {
+    "q": "🇮🇪",
+    "options": [
+      "Sri Lanka",
+      "Irlande",
+      "Érythrée",
+      "Îles Féroé"
+    ],
+    "answer": "Irlande",
+    "alts": [
+      "Ireland"
+    ]
+  },
+  {
+    "q": "🇮🇸",
+    "options": [
+      "Mozambique",
+      "Islande",
+      "Érythrée",
+      "Porto Rico"
+    ],
+    "answer": "Islande",
+    "alts": [
+      "Iceland"
+    ]
+  },
+  {
+    "q": "🇮🇹",
+    "options": [
+      "Italie",
+      "Autriche",
+      "Eswatini",
+      "Ouganda"
+    ],
+    "answer": "Italie",
+    "alts": [
+      "Italy"
+    ]
+  },
+  {
+    "q": "🇱🇻",
+    "options": [
+      "Kenya",
+      "Liechtenstein",
+      "Corée du Sud",
+      "Lettonie"
+    ],
+    "answer": "Lettonie",
+    "alts": [
+      "Latvia"
+    ]
+  },
+  {
+    "q": "🇱🇮",
+    "options": [
+      "Nouvelle-Calédonie",
+      "Liechtenstein",
+      "Bhoutan",
+      "Kenya"
+    ],
+    "answer": "Liechtenstein",
+    "alts": []
+  },
+  {
+    "q": "🇱🇹",
+    "options": [
+      "Serbie",
+      "Tunisie",
+      "Lituanie",
+      "Mali"
+    ],
+    "answer": "Lituanie",
+    "alts": [
+      "Lithuania"
+    ]
+  },
+  {
+    "q": "🇱🇺",
+    "options": [
+      "États-Unis",
+      "Tanzanie",
+      "Somalie",
+      "Luxembourg"
+    ],
+    "answer": "Luxembourg",
+    "alts": []
+  },
+  {
+    "q": "🇲🇰",
+    "options": [
+      "Liberia",
+      "Jersey",
+      "Bhoutan",
+      "Macédoine du Nord"
+    ],
+    "answer": "Macédoine du Nord",
+    "alts": [
+      "North Macedonia"
+    ]
+  },
+  {
+    "q": "🇲🇹",
+    "options": [
+      "Guernesey",
+      "Malte",
+      "Irak",
+      "Côte d'Ivoire"
+    ],
+    "answer": "Malte",
+    "alts": [
+      "Malta"
+    ]
+  },
+  {
+    "q": "🇲🇩",
+    "options": [
+      "Moldavie",
+      "Ukraine",
+      "Malawi",
+      "Trinité-et-Tobago"
+    ],
+    "answer": "Moldavie",
+    "alts": [
+      "Moldova"
+    ]
+  },
+  {
+    "q": "🇲🇨",
+    "options": [
+      "Norvège",
+      "Porto Rico",
+      "Macao",
+      "Monaco"
+    ],
+    "answer": "Monaco",
+    "alts": []
+  },
+  {
+    "q": "🇲🇪",
+    "options": [
+      "Monténégro",
+      "Géorgie",
+      "Corée du Nord",
+      "Pakistan"
+    ],
+    "answer": "Monténégro",
+    "alts": [
+      "Montenegro"
+    ]
+  },
+  {
+    "q": "🇳🇴",
+    "options": [
+      "Norvège",
+      "Chili",
+      "Saint-Vincent-et-les-Grenadines",
+      "Cameroun"
+    ],
+    "answer": "Norvège",
+    "alts": [
+      "Norway"
+    ]
+  },
+  {
+    "q": "🇳🇱",
+    "options": [
+      "Iran",
+      "Somalie",
+      "Guyana",
+      "Pays-Bas"
+    ],
+    "answer": "Pays-Bas",
+    "alts": [
+      "Netherlands",
+      "Holland",
+      "Hollande"
+    ]
+  },
+  {
+    "q": "🇵🇱",
+    "options": [
+      "Dominique",
+      "Pologne",
+      "Niger",
+      "Allemagne"
+    ],
+    "answer": "Pologne",
+    "alts": [
+      "Poland"
+    ]
+  },
+  {
+    "q": "🇵🇹",
+    "options": [
+      "Jordanie",
+      "Thaïlande",
+      "Trinité-et-Tobago",
+      "Portugal"
+    ],
+    "answer": "Portugal",
+    "alts": []
+  },
+  {
+    "q": "🇷🇴",
+    "options": [
+      "Roumanie",
+      "Finlande",
+      "Palestine",
+      "Estonie"
+    ],
+    "answer": "Roumanie",
+    "alts": [
+      "Romania"
+    ]
+  },
+  {
+    "q": "🇬🇧",
+    "options": [
+      "Grenade",
+      "Samoa",
+      "Hong Kong",
+      "Royaume-Uni"
+    ],
+    "answer": "Royaume-Uni",
+    "alts": [
+      "United Kingdom",
+      "UK",
+      "England",
+      "Angleterre",
+      "Great Britain"
+    ]
+  },
+  {
+    "q": "🇷🇺",
+    "options": [
+      "Tanzanie",
+      "Guinée équatoriale",
+      "Congo",
+      "Russie"
+    ],
+    "answer": "Russie",
+    "alts": [
+      "Russia"
+    ]
+  },
+  {
+    "q": "🇸🇲",
+    "options": [
+      "Saint-Marin",
+      "Gambie",
+      "Estonie",
+      "Azerbaïdjan"
+    ],
+    "answer": "Saint-Marin",
+    "alts": [
+      "San Marino"
+    ]
+  },
+  {
+    "q": "🇷🇸",
+    "options": [
+      "Irak",
+      "Îles Vierges britanniques",
+      "Soudan du Sud",
+      "Serbie"
+    ],
+    "answer": "Serbie",
+    "alts": [
+      "Serbia"
+    ]
+  },
+  {
+    "q": "🇸🇰",
+    "options": [
+      "Slovaquie",
+      "Costa Rica",
+      "Cap-Vert",
+      "Mongolie"
+    ],
+    "answer": "Slovaquie",
+    "alts": [
+      "Slovakia"
+    ]
+  },
+  {
+    "q": "🇸🇮",
+    "options": [
+      "Slovénie",
+      "Cambodge",
+      "Micronésie",
+      "République centrafricaine"
+    ],
+    "answer": "Slovénie",
+    "alts": [
+      "Slovenia"
+    ]
+  },
+  {
+    "q": "🇸🇪",
+    "options": [
+      "Inde",
+      "Togo",
+      "Suède",
+      "Taïwan"
+    ],
+    "answer": "Suède",
+    "alts": [
+      "Sweden"
+    ]
+  },
+  {
+    "q": "🇨🇭",
+    "options": [
+      "Laos",
+      "Suisse",
+      "Guatemala",
+      "Éthiopie"
+    ],
+    "answer": "Suisse",
+    "alts": [
+      "Switzerland"
+    ]
+  },
+  {
+    "q": "🇨🇿",
+    "options": [
+      "Jersey",
+      "Belgique",
+      "Tchéquie",
+      "Éthiopie"
+    ],
+    "answer": "Tchéquie",
+    "alts": [
+      "Czech Republic"
+    ]
+  },
+  {
+    "q": "🇺🇦",
+    "options": [
+      "Autriche",
+      "Île de Man",
+      "Équateur",
+      "Ukraine"
+    ],
+    "answer": "Ukraine",
+    "alts": []
+  },
+  {
+    "q": "🇻🇦",
+    "options": [
+      "Bosnie-Herzégovine",
+      "Azerbaïdjan",
+      "Vatican",
+      "Salvador"
+    ],
+    "answer": "Vatican",
+    "alts": [
+      "Vatican City"
+    ]
+  },
+  {
+    "q": "🇿🇦",
+    "options": [
+      "Corée du Sud",
+      "Jersey",
+      "Afrique du Sud",
+      "Viêt Nam"
+    ],
+    "answer": "Afrique du Sud",
+    "alts": [
+      "South Africa"
+    ]
+  },
+  {
+    "q": "🇩🇿",
+    "options": [
+      "Algérie",
+      "Sénégal",
+      "Irak",
+      "France"
+    ],
+    "answer": "Algérie",
+    "alts": [
+      "Algeria"
+    ]
+  },
+  {
+    "q": "🇦🇴",
+    "options": [
+      "Oman",
+      "Angola",
+      "Arabie saoudite",
+      "Afghanistan"
+    ],
+    "answer": "Angola",
+    "alts": []
+  },
+  {
+    "q": "🇧🇯",
+    "options": [
+      "Croatie",
+      "Saint-Martin",
+      "Bénin",
+      "Malaisie"
+    ],
+    "answer": "Bénin",
+    "alts": [
+      "Benin"
+    ]
+  },
+  {
+    "q": "🇧🇼",
+    "options": [
+      "Grenade",
+      "Vatican",
+      "Madagascar",
+      "Botswana"
+    ],
+    "answer": "Botswana",
+    "alts": []
+  },
+  {
+    "q": "🇧🇫",
+    "options": [
+      "Lituanie",
+      "Uruguay",
+      "Burkina Faso",
+      "Barbade"
+    ],
+    "answer": "Burkina Faso",
+    "alts": []
+  },
+  {
+    "q": "🇧🇮",
+    "options": [
+      "Guinée-Bissau",
+      "Liechtenstein",
+      "Malaisie",
+      "Burundi"
+    ],
+    "answer": "Burundi",
+    "alts": []
+  },
+  {
+    "q": "🇨🇲",
+    "options": [
+      "Polynésie française",
+      "Cameroun",
+      "Yémen",
+      "Libye"
+    ],
+    "answer": "Cameroun",
+    "alts": [
+      "Cameroon"
+    ]
+  },
+  {
+    "q": "🇨🇻",
+    "options": [
+      "Paraguay",
+      "Pérou",
+      "Mongolie",
+      "Cap-Vert"
+    ],
+    "answer": "Cap-Vert",
+    "alts": [
+      "Cape Verde"
+    ]
+  },
+  {
+    "q": "🇨🇫",
+    "options": [
+      "République centrafricaine",
+      "Sénégal",
+      "Barbade",
+      "Saint-Vincent-et-les-Grenadines"
+    ],
+    "answer": "République centrafricaine",
+    "alts": [
+      "Central African Republic"
+    ]
+  },
+  {
+    "q": "🇰🇲",
+    "options": [
+      "Monténégro",
+      "Autriche",
+      "Chine",
+      "Comores"
+    ],
+    "answer": "Comores",
+    "alts": [
+      "Comoros"
+    ]
+  },
+  {
+    "q": "🇨🇬",
+    "options": [
+      "Congo",
+      "Pologne",
+      "Tonga",
+      "Azerbaïdjan"
+    ],
+    "answer": "Congo",
+    "alts": [
+      "Republic of the Congo"
+    ]
+  },
+  {
+    "q": "🇨🇩",
+    "options": [
+      "Estonie",
+      "Congo",
+      "RD Congo",
+      "Honduras"
+    ],
+    "answer": "RD Congo",
+    "alts": [
+      "Democratic Republic of the Congo"
+    ]
+  },
+  {
+    "q": "🇨🇮",
+    "options": [
+      "Ouzbékistan",
+      "Antigua-et-Barbuda",
+      "Jersey",
+      "Côte d'Ivoire"
+    ],
+    "answer": "Côte d'Ivoire",
+    "alts": [
+      "Ivory Coast",
+      "CI",
+      "Cote d Ivoire"
+    ]
+  },
+  {
+    "q": "🇩🇯",
+    "options": [
+      "Eswatini",
+      "Djibouti",
+      "Curaçao",
+      "Bolivie"
+    ],
+    "answer": "Djibouti",
+    "alts": []
+  },
+  {
+    "q": "🇪🇬",
+    "options": [
+      "Libye",
+      "Norvège",
+      "Slovaquie",
+      "Égypte"
+    ],
+    "answer": "Égypte",
+    "alts": [
+      "Egypt"
+    ]
+  },
+  {
+    "q": "🇪🇷",
+    "options": [
+      "Liechtenstein",
+      "Micronésie",
+      "Érythrée",
+      "Luxembourg"
+    ],
+    "answer": "Érythrée",
+    "alts": [
+      "Eritrea"
+    ]
+  },
+  {
+    "q": "🇸🇿",
+    "options": [
+      "Saint-Vincent-et-les-Grenadines",
+      "Eswatini",
+      "Somalie",
+      "Sierra Leone"
+    ],
+    "answer": "Eswatini",
+    "alts": []
+  },
+  {
+    "q": "🇪🇹",
+    "options": [
+      "Liechtenstein",
+      "Estonie",
+      "Niger",
+      "Éthiopie"
+    ],
+    "answer": "Éthiopie",
+    "alts": [
+      "Ethiopia"
+    ]
+  },
+  {
+    "q": "🇬🇦",
+    "options": [
+      "Aruba",
+      "Jersey",
+      "Gabon",
+      "Malte"
+    ],
+    "answer": "Gabon",
+    "alts": []
+  },
+  {
+    "q": "🇬🇲",
+    "options": [
+      "Groenland",
+      "Gambie",
+      "Jamaïque",
+      "Bulgarie"
+    ],
+    "answer": "Gambie",
+    "alts": [
+      "Gambia"
+    ]
+  },
+  {
+    "q": "🇬🇭",
+    "options": [
+      "Équateur",
+      "Corée du Nord",
+      "Nigeria",
+      "Ghana"
+    ],
+    "answer": "Ghana",
+    "alts": []
+  },
+  {
+    "q": "🇬🇳",
+    "options": [
+      "Bénin",
+      "Guinée",
+      "Pays-Bas",
+      "Colombie"
+    ],
+    "answer": "Guinée",
+    "alts": [
+      "Guinea"
+    ]
+  },
+  {
+    "q": "🇬🇼",
+    "options": [
+      "Oman",
+      "Côte d'Ivoire",
+      "Costa Rica",
+      "Guinée-Bissau"
+    ],
+    "answer": "Guinée-Bissau",
+    "alts": [
+      "Guinea-Bissau"
+    ]
+  },
+  {
+    "q": "🇬🇶",
+    "options": [
+      "Grèce",
+      "Maurice",
+      "Allemagne",
+      "Guinée équatoriale"
+    ],
+    "answer": "Guinée équatoriale",
+    "alts": [
+      "Equatorial Guinea"
+    ]
+  },
+  {
+    "q": "🇰🇪",
+    "options": [
+      "Groenland",
+      "Kenya",
+      "Zambie",
+      "Tonga"
+    ],
+    "answer": "Kenya",
+    "alts": []
+  },
+  {
+    "q": "🇱🇸",
+    "options": [
+      "Lesotho",
+      "Turquie",
+      "Saint-Christophe-et-Niévès",
+      "Slovénie"
+    ],
+    "answer": "Lesotho",
+    "alts": []
+  },
+  {
+    "q": "🇱🇷",
+    "options": [
+      "République dominicaine",
+      "Guatemala",
+      "Liberia",
+      "Madagascar"
+    ],
+    "answer": "Liberia",
+    "alts": []
+  },
+  {
+    "q": "🇱🇾",
+    "options": [
+      "Somalie",
+      "Timor oriental",
+      "Libye",
+      "Guatemala"
+    ],
+    "answer": "Libye",
+    "alts": [
+      "Libya"
+    ]
+  },
+  {
+    "q": "🇲🇬",
+    "options": [
+      "Madagascar",
+      "Saint-Christophe-et-Niévès",
+      "Botswana",
+      "États-Unis"
+    ],
+    "answer": "Madagascar",
+    "alts": []
+  },
+  {
+    "q": "🇲🇼",
+    "options": [
+      "Bahamas",
+      "Papouasie-Nouvelle-Guinée",
+      "Malawi",
+      "Jersey"
+    ],
+    "answer": "Malawi",
+    "alts": []
+  },
+  {
+    "q": "🇲🇱",
+    "options": [
+      "Arabie saoudite",
+      "Venezuela",
+      "Trinité-et-Tobago",
+      "Mali"
+    ],
+    "answer": "Mali",
+    "alts": []
+  },
+  {
+    "q": "🇲🇦",
+    "options": [
+      "Espagne",
+      "Tonga",
+      "Cameroun",
+      "Maroc"
+    ],
+    "answer": "Maroc",
+    "alts": [
+      "Morocco"
+    ]
+  },
+  {
+    "q": "🇲🇺",
+    "options": [
+      "Guinée-Bissau",
+      "Monaco",
+      "Kazakhstan",
+      "Maurice"
+    ],
+    "answer": "Maurice",
+    "alts": [
+      "Mauritius"
+    ]
+  },
+  {
+    "q": "🇲🇷",
+    "options": [
+      "Sierra Leone",
+      "Mauritanie",
+      "Gabon",
+      "Iran"
+    ],
+    "answer": "Mauritanie",
+    "alts": [
+      "Mauritania"
+    ]
+  },
+  {
+    "q": "🇲🇿",
+    "options": [
+      "Mozambique",
+      "Inde",
+      "Géorgie",
+      "Madagascar"
+    ],
+    "answer": "Mozambique",
+    "alts": []
+  },
+  {
+    "q": "🇳🇦",
+    "options": [
+      "Namibie",
+      "Somalie",
+      "Ukraine",
+      "Andorre"
+    ],
+    "answer": "Namibie",
+    "alts": [
+      "Namibia"
+    ]
+  },
+  {
+    "q": "🇳🇪",
+    "options": [
+      "Hongrie",
+      "Niger",
+      "Royaume-Uni",
+      "Jamaïque"
+    ],
+    "answer": "Niger",
+    "alts": []
+  },
+  {
+    "q": "🇳🇬",
+    "options": [
+      "Maurice",
+      "Nigeria",
+      "Panama",
+      "Royaume-Uni"
+    ],
+    "answer": "Nigeria",
+    "alts": []
+  },
+  {
+    "q": "🇺🇬",
+    "options": [
+      "Ouganda",
+      "Haïti",
+      "Somalie",
+      "Liberia"
+    ],
+    "answer": "Ouganda",
+    "alts": [
+      "Uganda"
+    ]
+  },
+  {
+    "q": "🇷🇼",
+    "options": [
+      "Inde",
+      "Rwanda",
+      "Afrique du Sud",
+      "Honduras"
+    ],
+    "answer": "Rwanda",
+    "alts": []
+  },
+  {
+    "q": "🇸🇹",
+    "options": [
+      "São Tomé-et-Príncipe",
+      "France",
+      "Fidji",
+      "Kirghizistan"
+    ],
+    "answer": "São Tomé-et-Príncipe",
+    "alts": [
+      "Sao Tome and Principe"
+    ]
+  },
+  {
+    "q": "🇸🇳",
+    "options": [
+      "Sénégal",
+      "Kirghizistan",
+      "Congo",
+      "Émirats arabes unis"
+    ],
+    "answer": "Sénégal",
+    "alts": [
+      "Senegal"
+    ]
+  },
+  {
+    "q": "🇸🇨",
+    "options": [
+      "Namibie",
+      "Taïwan",
+      "Norvège",
+      "Seychelles"
+    ],
+    "answer": "Seychelles",
+    "alts": []
+  },
+  {
+    "q": "🇸🇱",
+    "options": [
+      "Sierra Leone",
+      "Birmanie",
+      "Nicaragua",
+      "Togo"
+    ],
+    "answer": "Sierra Leone",
+    "alts": []
+  },
+  {
+    "q": "🇸🇴",
+    "options": [
+      "Équateur",
+      "Birmanie",
+      "Eswatini",
+      "Somalie"
+    ],
+    "answer": "Somalie",
+    "alts": [
+      "Somalia"
+    ]
+  },
+  {
+    "q": "🇸🇩",
+    "options": [
+      "Grenade",
+      "Soudan",
+      "Corée du Nord",
+      "Émirats arabes unis"
+    ],
+    "answer": "Soudan",
+    "alts": [
+      "Sudan"
+    ]
+  },
+  {
+    "q": "🇸🇸",
+    "options": [
+      "Guernesey",
+      "Soudan du Sud",
+      "Corée du Sud",
+      "Belize"
+    ],
+    "answer": "Soudan du Sud",
+    "alts": [
+      "South Sudan"
+    ]
+  },
+  {
+    "q": "🇹🇿",
+    "options": [
+      "Palaos",
+      "Tanzanie",
+      "Viêt Nam",
+      "Royaume-Uni"
+    ],
+    "answer": "Tanzanie",
+    "alts": [
+      "Tanzania"
+    ]
+  },
+  {
+    "q": "🇹🇩",
+    "options": [
+      "Burkina Faso",
+      "Tchéquie",
+      "Ouganda",
+      "Tchad"
+    ],
+    "answer": "Tchad",
+    "alts": [
+      "Chad"
+    ]
+  },
+  {
+    "q": "🇹🇬",
+    "options": [
+      "Togo",
+      "Vanuatu",
+      "Curaçao",
+      "Slovénie"
+    ],
+    "answer": "Togo",
+    "alts": []
+  },
+  {
+    "q": "🇹🇳",
+    "options": [
+      "Tunisie",
+      "Niger",
+      "Birmanie",
+      "Thaïlande"
+    ],
+    "answer": "Tunisie",
+    "alts": [
+      "Tunisia"
+    ]
+  },
+  {
+    "q": "🇿🇲",
+    "options": [
+      "Bhoutan",
+      "Zambie",
+      "Belize",
+      "Maurice"
+    ],
+    "answer": "Zambie",
+    "alts": [
+      "Zambia"
+    ]
+  },
+  {
+    "q": "🇿🇼",
+    "options": [
+      "Jersey",
+      "Japon",
+      "Zimbabwe",
+      "Malawi"
+    ],
+    "answer": "Zimbabwe",
+    "alts": []
+  },
+  {
+    "q": "🇦🇫",
+    "options": [
+      "Madagascar",
+      "Corée du Sud",
+      "Afghanistan",
+      "Suède"
+    ],
+    "answer": "Afghanistan",
+    "alts": []
+  },
+  {
+    "q": "🇸🇦",
+    "options": [
+      "Taïwan",
+      "Haïti",
+      "Arabie saoudite",
+      "Mozambique"
+    ],
+    "answer": "Arabie saoudite",
+    "alts": [
+      "Saudi Arabia"
+    ]
+  },
+  {
+    "q": "🇦🇲",
+    "options": [
+      "Arménie",
+      "Liberia",
+      "Afrique du Sud",
+      "Suède"
+    ],
+    "answer": "Arménie",
+    "alts": [
+      "Armenia"
+    ]
+  },
+  {
+    "q": "🇦🇿",
+    "options": [
+      "Azerbaïdjan",
+      "Pakistan",
+      "Îles Féroé",
+      "Sénégal"
+    ],
+    "answer": "Azerbaïdjan",
+    "alts": [
+      "Azerbaijan"
+    ]
+  },
+  {
+    "q": "🇧🇭",
+    "options": [
+      "Îles Caïmans",
+      "Bahreïn",
+      "Costa Rica",
+      "Niger"
+    ],
+    "answer": "Bahreïn",
+    "alts": [
+      "Bahrain"
+    ]
+  },
+  {
+    "q": "🇧🇩",
+    "options": [
+      "Équateur",
+      "Norvège",
+      "Bahreïn",
+      "Bangladesh"
+    ],
+    "answer": "Bangladesh",
+    "alts": []
+  },
+  {
+    "q": "🇧🇹",
+    "options": [
+      "Bhoutan",
+      "Moldavie",
+      "Antigua-et-Barbuda",
+      "Paraguay"
+    ],
+    "answer": "Bhoutan",
+    "alts": [
+      "Bhutan"
+    ]
+  },
+  {
+    "q": "🇲🇲",
+    "options": [
+      "Birmanie",
+      "Brésil",
+      "Italie",
+      "Burkina Faso"
+    ],
+    "answer": "Birmanie",
+    "alts": [
+      "Myanmar"
+    ]
+  },
+  {
+    "q": "🇧🇳",
+    "options": [
+      "Brunei",
+      "Singapour",
+      "Éthiopie",
+      "Turquie"
+    ],
+    "answer": "Brunei",
+    "alts": []
+  },
+  {
+    "q": "🇰🇭",
+    "options": [
+      "Cambodge",
+      "Burkina Faso",
+      "Malte",
+      "République centrafricaine"
+    ],
+    "answer": "Cambodge",
+    "alts": [
+      "Cambodia"
+    ]
+  },
+  {
+    "q": "🇨🇳",
+    "options": [
+      "Finlande",
+      "Pologne",
+      "Timor oriental",
+      "Chine"
+    ],
+    "answer": "Chine",
+    "alts": [
+      "China"
+    ]
+  },
+  {
+    "q": "🇰🇵",
+    "options": [
+      "Botswana",
+      "Corée du Nord",
+      "Eswatini",
+      "Curaçao"
+    ],
+    "answer": "Corée du Nord",
+    "alts": [
+      "North Korea"
+    ]
+  },
+  {
+    "q": "🇰🇷",
+    "options": [
+      "Népal",
+      "Corée du Sud",
+      "Îles Turques-et-Caïques",
+      "São Tomé-et-Príncipe"
+    ],
+    "answer": "Corée du Sud",
+    "alts": [
+      "South Korea",
+      "Korea",
+      "Coree du Sud"
+    ]
+  },
+  {
+    "q": "🇦🇪",
+    "options": [
+      "Inde",
+      "Indonésie",
+      "Zimbabwe",
+      "Émirats arabes unis"
+    ],
+    "answer": "Émirats arabes unis",
+    "alts": [
+      "United Arab Emirates",
+      "UAE",
+      "Emirats",
+      "Émirats"
+    ]
+  },
+  {
+    "q": "🇬🇪",
+    "options": [
+      "Israël",
+      "Venezuela",
+      "Pays-Bas",
+      "Géorgie"
+    ],
+    "answer": "Géorgie",
+    "alts": [
+      "Georgia"
+    ]
+  },
+  {
+    "q": "🇮🇳",
+    "options": [
+      "Rwanda",
+      "Liechtenstein",
+      "Autriche",
+      "Inde"
+    ],
+    "answer": "Inde",
+    "alts": [
+      "India"
+    ]
+  },
+  {
+    "q": "🇮🇩",
+    "options": [
+      "Philippines",
+      "Indonésie",
+      "Russie",
+      "Macao"
+    ],
+    "answer": "Indonésie",
+    "alts": [
+      "Indonesia"
+    ]
+  },
+  {
+    "q": "🇮🇶",
+    "options": [
+      "Irak",
+      "Mali",
+      "Comores",
+      "Bulgarie"
+    ],
+    "answer": "Irak",
+    "alts": [
+      "Iraq"
+    ]
+  },
+  {
+    "q": "🇮🇷",
+    "options": [
+      "Ouzbékistan",
+      "Éthiopie",
+      "Libye",
+      "Iran"
+    ],
+    "answer": "Iran",
+    "alts": []
+  },
+  {
+    "q": "🇮🇱",
+    "options": [
+      "Tchéquie",
+      "Lettonie",
+      "Afghanistan",
+      "Israël"
+    ],
+    "answer": "Israël",
+    "alts": [
+      "Israel"
+    ]
+  },
+  {
+    "q": "🇯🇵",
+    "options": [
+      "Fidji",
+      "Taïwan",
+      "Afghanistan",
+      "Japon"
+    ],
+    "answer": "Japon",
+    "alts": [
+      "Japan"
+    ]
+  },
+  {
+    "q": "🇯🇴",
+    "options": [
+      "Haïti",
+      "Sri Lanka",
+      "Jordanie",
+      "Tanzanie"
+    ],
+    "answer": "Jordanie",
+    "alts": [
+      "Jordan"
+    ]
+  },
+  {
+    "q": "🇰🇿",
+    "options": [
+      "Vanuatu",
+      "Micronésie",
+      "Saint-Martin",
+      "Kazakhstan"
+    ],
+    "answer": "Kazakhstan",
+    "alts": []
+  },
+  {
+    "q": "🇰🇬",
+    "options": [
+      "Macédoine du Nord",
+      "Eswatini",
+      "Kirghizistan",
+      "Cambodge"
+    ],
+    "answer": "Kirghizistan",
+    "alts": [
+      "Kyrgyzstan"
+    ]
+  },
+  {
+    "q": "🇰🇼",
+    "options": [
+      "Koweït",
+      "Pologne",
+      "Uruguay",
+      "Birmanie"
+    ],
+    "answer": "Koweït",
+    "alts": [
+      "Kuwait"
+    ]
+  },
+  {
+    "q": "🇱🇦",
+    "options": [
+      "Andorre",
+      "Laos",
+      "Suède",
+      "Sri Lanka"
+    ],
+    "answer": "Laos",
+    "alts": []
+  },
+  {
+    "q": "🇱🇧",
+    "options": [
+      "Djibouti",
+      "Costa Rica",
+      "Liban",
+      "Tchad"
+    ],
+    "answer": "Liban",
+    "alts": [
+      "Lebanon"
+    ]
+  },
+  {
+    "q": "🇲🇾",
+    "options": [
+      "Suède",
+      "Italie",
+      "Biélorussie",
+      "Malaisie"
+    ],
+    "answer": "Malaisie",
+    "alts": [
+      "Malaysia"
+    ]
+  },
+  {
+    "q": "🇲🇻",
+    "options": [
+      "Micronésie",
+      "Maldives",
+      "États-Unis",
+      "Mongolie"
+    ],
+    "answer": "Maldives",
+    "alts": []
+  },
+  {
+    "q": "🇲🇳",
+    "options": [
+      "São Tomé-et-Príncipe",
+      "Afghanistan",
+      "Mongolie",
+      "Maurice"
+    ],
+    "answer": "Mongolie",
+    "alts": [
+      "Mongolia"
+    ]
+  },
+  {
+    "q": "🇳🇵",
+    "options": [
+      "Corée du Nord",
+      "São Tomé-et-Príncipe",
+      "Érythrée",
+      "Népal"
+    ],
+    "answer": "Népal",
+    "alts": [
+      "Nepal"
+    ]
+  },
+  {
+    "q": "🇴🇲",
+    "options": [
+      "Barbade",
+      "Oman",
+      "Espagne",
+      "Philippines"
+    ],
+    "answer": "Oman",
+    "alts": []
+  },
+  {
+    "q": "🇺🇿",
+    "options": [
+      "Maldives",
+      "Ouzbékistan",
+      "RD Congo",
+      "Bahreïn"
+    ],
+    "answer": "Ouzbékistan",
+    "alts": [
+      "Uzbekistan"
+    ]
+  },
+  {
+    "q": "🇵🇰",
+    "options": [
+      "Cameroun",
+      "Hong Kong",
+      "Pakistan",
+      "Oman"
+    ],
+    "answer": "Pakistan",
+    "alts": []
+  },
+  {
+    "q": "🇵🇸",
+    "options": [
+      "Soudan du Sud",
+      "Palestine",
+      "Comores",
+      "Guernesey"
+    ],
+    "answer": "Palestine",
+    "alts": []
+  },
+  {
+    "q": "🇵🇭",
+    "options": [
+      "Cap-Vert",
+      "Saint-Marin",
+      "Botswana",
+      "Philippines"
+    ],
+    "answer": "Philippines",
+    "alts": []
+  },
+  {
+    "q": "🇶🇦",
+    "options": [
+      "Nauru",
+      "Qatar",
+      "Éthiopie",
+      "Paraguay"
+    ],
+    "answer": "Qatar",
+    "alts": []
+  },
+  {
+    "q": "🇸🇬",
+    "options": [
+      "Jordanie",
+      "Érythrée",
+      "Singapour",
+      "Îles Turques-et-Caïques"
+    ],
+    "answer": "Singapour",
+    "alts": [
+      "Singapore"
+    ]
+  },
+  {
+    "q": "🇱🇰",
+    "options": [
+      "Hong Kong",
+      "Tonga",
+      "Bolivie",
+      "Sri Lanka"
+    ],
+    "answer": "Sri Lanka",
+    "alts": [
+      "Ceylan"
+    ]
+  },
+  {
+    "q": "🇸🇾",
+    "options": [
+      "Turkménistan",
+      "Angola",
+      "Islande",
+      "Syrie"
+    ],
+    "answer": "Syrie",
+    "alts": [
+      "Syria"
+    ]
+  },
+  {
+    "q": "🇹🇯",
+    "options": [
+      "Tadjikistan",
+      "Bahamas",
+      "Burundi",
+      "Chine"
+    ],
+    "answer": "Tadjikistan",
+    "alts": [
+      "Tajikistan"
+    ]
+  },
+  {
+    "q": "🇹🇼",
+    "options": [
+      "Taïwan",
+      "Syrie",
+      "Philippines",
+      "Moldavie"
+    ],
+    "answer": "Taïwan",
+    "alts": [
+      "Taiwan"
+    ]
+  },
+  {
+    "q": "🇹🇭",
+    "options": [
+      "Lettonie",
+      "Thaïlande",
+      "Liban",
+      "Mozambique"
+    ],
+    "answer": "Thaïlande",
+    "alts": [
+      "Thailand"
+    ]
+  },
+  {
+    "q": "🇹🇱",
+    "options": [
+      "Maroc",
+      "Équateur",
+      "Tanzanie",
+      "Timor oriental"
+    ],
+    "answer": "Timor oriental",
+    "alts": [
+      "East Timor"
+    ]
+  },
+  {
+    "q": "🇹🇷",
+    "options": [
+      "Algérie",
+      "Anguilla",
+      "Turquie",
+      "Allemagne"
+    ],
+    "answer": "Turquie",
+    "alts": [
+      "Turkey"
+    ]
+  },
+  {
+    "q": "🇹🇲",
+    "options": [
+      "Turkménistan",
+      "Luxembourg",
+      "Barbade",
+      "Émirats arabes unis"
+    ],
+    "answer": "Turkménistan",
+    "alts": [
+      "Turkmenistan"
+    ]
+  },
+  {
+    "q": "🇻🇳",
+    "options": [
+      "Malaisie",
+      "Égypte",
+      "Viêt Nam",
+      "Syrie"
+    ],
+    "answer": "Viêt Nam",
+    "alts": [
+      "Vietnam"
+    ]
+  },
+  {
+    "q": "🇾🇪",
+    "options": [
+      "Tonga",
+      "Chili",
+      "Yémen",
+      "Polynésie française"
+    ],
+    "answer": "Yémen",
+    "alts": [
+      "Yemen"
+    ]
+  },
+  {
+    "q": "🇦🇬",
+    "options": [
+      "Vatican",
+      "Antigua-et-Barbuda",
+      "Maldives",
+      "Grenade"
+    ],
+    "answer": "Antigua-et-Barbuda",
+    "alts": [
+      "Antigua and Barbuda"
+    ]
+  },
+  {
+    "q": "🇦🇷",
+    "options": [
+      "Égypte",
+      "RD Congo",
+      "Argentine",
+      "Gabon"
+    ],
+    "answer": "Argentine",
+    "alts": [
+      "Argentina"
+    ]
+  },
+  {
+    "q": "🇧🇸",
+    "options": [
+      "Saint-Vincent-et-les-Grenadines",
+      "France",
+      "Bahamas",
+      "Congo"
+    ],
+    "answer": "Bahamas",
+    "alts": []
+  },
+  {
+    "q": "🇧🇧",
+    "options": [
+      "Botswana",
+      "Chili",
+      "Barbade",
+      "Slovénie"
+    ],
+    "answer": "Barbade",
+    "alts": [
+      "Barbados"
+    ]
+  },
+  {
+    "q": "🇧🇿",
+    "options": [
+      "Belize",
+      "Malawi",
+      "Îles Féroé",
+      "Afghanistan"
+    ],
+    "answer": "Belize",
+    "alts": []
+  },
+  {
+    "q": "🇧🇴",
+    "options": [
+      "Île de Man",
+      "Bolivie",
+      "Moldavie",
+      "Bosnie-Herzégovine"
+    ],
+    "answer": "Bolivie",
+    "alts": [
+      "Bolivia"
+    ]
+  },
+  {
+    "q": "🇧🇷",
+    "options": [
+      "Brésil",
+      "Sierra Leone",
+      "Tchad",
+      "Samoa"
+    ],
+    "answer": "Brésil",
+    "alts": [
+      "Brazil"
+    ]
+  },
+  {
+    "q": "🇨🇦",
+    "options": [
+      "Salomon",
+      "Israël",
+      "Canada",
+      "Paraguay"
+    ],
+    "answer": "Canada",
+    "alts": []
+  },
+  {
+    "q": "🇨🇱",
+    "options": [
+      "Cameroun",
+      "Chili",
+      "Nouvelle-Calédonie",
+      "Cambodge"
+    ],
+    "answer": "Chili",
+    "alts": [
+      "Chile"
+    ]
+  },
+  {
+    "q": "🇨🇴",
+    "options": [
+      "Colombie",
+      "Tanzanie",
+      "Danemark",
+      "Burkina Faso"
+    ],
+    "answer": "Colombie",
+    "alts": [
+      "Colombia"
+    ]
+  },
+  {
+    "q": "🇨🇷",
+    "options": [
+      "Tuvalu",
+      "Éthiopie",
+      "République dominicaine",
+      "Costa Rica"
+    ],
+    "answer": "Costa Rica",
+    "alts": []
+  },
+  {
+    "q": "🇨🇺",
+    "options": [
+      "Guernesey",
+      "Viêt Nam",
+      "Cuba",
+      "Taïwan"
+    ],
+    "answer": "Cuba",
+    "alts": []
+  },
+  {
+    "q": "🇩🇲",
+    "options": [
+      "Dominique",
+      "Allemagne",
+      "Oman",
+      "Groenland"
+    ],
+    "answer": "Dominique",
+    "alts": [
+      "Dominica"
+    ]
+  },
+  {
+    "q": "🇪🇨",
+    "options": [
+      "Équateur",
+      "Liban",
+      "Djibouti",
+      "Belize"
+    ],
+    "answer": "Équateur",
+    "alts": [
+      "Ecuador"
+    ]
+  },
+  {
+    "q": "🇺🇸",
+    "options": [
+      "Lituanie",
+      "Mexique",
+      "Inde",
+      "États-Unis"
+    ],
+    "answer": "États-Unis",
+    "alts": [
+      "United States",
+      "USA",
+      "US",
+      "America"
+    ]
+  },
+  {
+    "q": "🇬🇩",
+    "options": [
+      "Jordanie",
+      "Allemagne",
+      "Cambodge",
+      "Grenade"
+    ],
+    "answer": "Grenade",
+    "alts": [
+      "Grenada"
+    ]
+  },
+  {
+    "q": "🇬🇹",
+    "options": [
+      "Égypte",
+      "Lettonie",
+      "Guatemala",
+      "Libye"
+    ],
+    "answer": "Guatemala",
+    "alts": []
+  },
+  {
+    "q": "🇬🇾",
+    "options": [
+      "Guyana",
+      "Canada",
+      "Mozambique",
+      "Lituanie"
+    ],
+    "answer": "Guyana",
+    "alts": []
+  },
+  {
+    "q": "🇭🇹",
+    "options": [
+      "Timor oriental",
+      "Grenade",
+      "Haïti",
+      "Monaco"
+    ],
+    "answer": "Haïti",
+    "alts": [
+      "Haiti"
+    ]
+  },
+  {
+    "q": "🇭🇳",
+    "options": [
+      "Tchad",
+      "Honduras",
+      "Suède",
+      "Gambie"
+    ],
+    "answer": "Honduras",
+    "alts": []
+  },
+  {
+    "q": "🇯🇲",
+    "options": [
+      "Jamaïque",
+      "Pologne",
+      "Allemagne",
+      "Djibouti"
+    ],
+    "answer": "Jamaïque",
+    "alts": [
+      "Jamaica"
+    ]
+  },
+  {
+    "q": "🇲🇽",
+    "options": [
+      "Moldavie",
+      "Mexique",
+      "Gambie",
+      "Cambodge"
+    ],
+    "answer": "Mexique",
+    "alts": [
+      "Mexico"
+    ]
+  },
+  {
+    "q": "🇳🇮",
+    "options": [
+      "Chypre",
+      "Somalie",
+      "São Tomé-et-Príncipe",
+      "Nicaragua"
+    ],
+    "answer": "Nicaragua",
+    "alts": []
+  },
+  {
+    "q": "🇵🇦",
+    "options": [
+      "Panama",
+      "Norvège",
+      "Russie",
+      "Soudan du Sud"
+    ],
+    "answer": "Panama",
+    "alts": []
+  },
+  {
+    "q": "🇵🇾",
+    "options": [
+      "Afrique du Sud",
+      "Paraguay",
+      "Royaume-Uni",
+      "Mongolie"
+    ],
+    "answer": "Paraguay",
+    "alts": []
+  },
+  {
+    "q": "🇵🇪",
+    "options": [
+      "Thaïlande",
+      "Pérou",
+      "Yémen",
+      "Curaçao"
+    ],
+    "answer": "Pérou",
+    "alts": [
+      "Peru"
+    ]
+  },
+  {
+    "q": "🇩🇴",
+    "options": [
+      "Turkménistan",
+      "Palestine",
+      "Bhoutan",
+      "République dominicaine"
+    ],
+    "answer": "République dominicaine",
+    "alts": [
+      "Dominican Republic"
+    ]
+  },
+  {
+    "q": "🇰🇳",
+    "options": [
+      "Grèce",
+      "Îles Caïmans",
+      "Saint-Christophe-et-Niévès",
+      "Maurice"
+    ],
+    "answer": "Saint-Christophe-et-Niévès",
+    "alts": [
+      "Saint Kitts and Nevis"
+    ]
+  },
+  {
+    "q": "🇱🇨",
+    "options": [
+      "Bahamas",
+      "Soudan du Sud",
+      "Sainte-Lucie",
+      "Estonie"
+    ],
+    "answer": "Sainte-Lucie",
+    "alts": [
+      "Saint Lucia"
+    ]
+  },
+  {
+    "q": "🇻🇨",
+    "options": [
+      "Saint-Vincent-et-les-Grenadines",
+      "Chypre",
+      "Géorgie",
+      "Costa Rica"
+    ],
+    "answer": "Saint-Vincent-et-les-Grenadines",
+    "alts": [
+      "Saint Vincent and the Grenadines"
+    ]
+  },
+  {
+    "q": "🇸🇻",
+    "options": [
+      "Jamaïque",
+      "Salvador",
+      "Panama",
+      "Kazakhstan"
+    ],
+    "answer": "Salvador",
+    "alts": [
+      "El Salvador"
+    ]
+  },
+  {
+    "q": "🇸🇷",
+    "options": [
+      "Togo",
+      "Suriname",
+      "Estonie",
+      "Pologne"
+    ],
+    "answer": "Suriname",
+    "alts": []
+  },
+  {
+    "q": "🇹🇹",
+    "options": [
+      "Chili",
+      "Antigua-et-Barbuda",
+      "Chine",
+      "Trinité-et-Tobago"
+    ],
+    "answer": "Trinité-et-Tobago",
+    "alts": [
+      "Trinidad and Tobago"
+    ]
+  },
+  {
+    "q": "🇺🇾",
+    "options": [
+      "Uruguay",
+      "Tchad",
+      "Turquie",
+      "Antigua-et-Barbuda"
+    ],
+    "answer": "Uruguay",
+    "alts": []
+  },
+  {
+    "q": "🇻🇪",
+    "options": [
+      "Serbie",
+      "Colombie",
+      "Venezuela",
+      "Mongolie"
+    ],
+    "answer": "Venezuela",
+    "alts": []
+  },
+  {
+    "q": "🇦🇺",
+    "options": [
+      "Albanie",
+      "Australie",
+      "Estonie",
+      "Monténégro"
+    ],
+    "answer": "Australie",
+    "alts": [
+      "Australia"
+    ]
+  },
+  {
+    "q": "🇫🇯",
+    "options": [
+      "Fidji",
+      "Trinité-et-Tobago",
+      "Lituanie",
+      "Guatemala"
+    ],
+    "answer": "Fidji",
+    "alts": [
+      "Fiji"
+    ]
+  },
+  {
+    "q": "🇰🇮",
+    "options": [
+      "Papouasie-Nouvelle-Guinée",
+      "Kiribati",
+      "Kazakhstan",
+      "Koweït"
+    ],
+    "answer": "Kiribati",
+    "alts": []
+  },
+  {
+    "q": "🇲🇭",
+    "options": [
+      "Marshall",
+      "Macao",
+      "Iran",
+      "Aruba"
+    ],
+    "answer": "Marshall",
+    "alts": [
+      "Marshall Islands"
+    ]
+  },
+  {
+    "q": "🇫🇲",
+    "options": [
+      "Micronésie",
+      "Somalie",
+      "Costa Rica",
+      "République centrafricaine"
+    ],
+    "answer": "Micronésie",
+    "alts": [
+      "Micronesia"
+    ]
+  },
+  {
+    "q": "🇳🇷",
+    "options": [
+      "Tunisie",
+      "Nauru",
+      "Papouasie-Nouvelle-Guinée",
+      "Zimbabwe"
+    ],
+    "answer": "Nauru",
+    "alts": []
+  },
+  {
+    "q": "🇳🇿",
+    "options": [
+      "Kazakhstan",
+      "Nouvelle-Zélande",
+      "Îles Vierges britanniques",
+      "Saint-Vincent-et-les-Grenadines"
+    ],
+    "answer": "Nouvelle-Zélande",
+    "alts": [
+      "New Zealand",
+      "NZ"
+    ]
+  },
+  {
+    "q": "🇵🇼",
+    "options": [
+      "Palaos",
+      "Tchéquie",
+      "Malawi",
+      "Niger"
+    ],
+    "answer": "Palaos",
+    "alts": [
+      "Palau"
+    ]
+  },
+  {
+    "q": "🇵🇬",
+    "options": [
+      "Nouvelle-Calédonie",
+      "Seychelles",
+      "Venezuela",
+      "Papouasie-Nouvelle-Guinée"
+    ],
+    "answer": "Papouasie-Nouvelle-Guinée",
+    "alts": [
+      "Papua New Guinea"
+    ]
+  },
+  {
+    "q": "🇸🇧",
+    "options": [
+      "Grèce",
+      "Dominique",
+      "Croatie",
+      "Salomon"
+    ],
+    "answer": "Salomon",
+    "alts": [
+      "Solomon Islands"
+    ]
+  },
+  {
+    "q": "🇼🇸",
+    "options": [
+      "Congo",
+      "Grèce",
+      "Samoa",
+      "Soudan"
+    ],
+    "answer": "Samoa",
+    "alts": []
+  },
+  {
+    "q": "🇹🇴",
+    "options": [
+      "Koweït",
+      "Cap-Vert",
+      "Tonga",
+      "Gambie"
+    ],
+    "answer": "Tonga",
+    "alts": []
+  },
+  {
+    "q": "🇹🇻",
+    "options": [
+      "Suisse",
+      "Tuvalu",
+      "Kenya",
+      "Cameroun"
+    ],
+    "answer": "Tuvalu",
+    "alts": []
+  },
+  {
+    "q": "🇻🇺",
+    "options": [
+      "Hongrie",
+      "Estonie",
+      "Vanuatu",
+      "Kazakhstan"
+    ],
+    "answer": "Vanuatu",
+    "alts": []
+  },
+  {
+    "q": "🇭🇰",
+    "options": [
+      "Bangladesh",
+      "Philippines",
+      "Seychelles",
+      "Hong Kong"
+    ],
+    "answer": "Hong Kong",
+    "alts": []
+  },
+  {
+    "q": "🇲🇴",
+    "options": [
+      "Sénégal",
+      "Somalie",
+      "Macao",
+      "Norvège"
+    ],
+    "answer": "Macao",
+    "alts": []
+  },
+  {
+    "q": "🇬🇱",
+    "options": [
+      "République dominicaine",
+      "Groenland",
+      "Émirats arabes unis",
+      "Suriname"
+    ],
+    "answer": "Groenland",
+    "alts": [
+      "Greenland"
+    ]
+  },
+  {
+    "q": "🇵🇷",
+    "options": [
+      "Porto Rico",
+      "Côte d'Ivoire",
+      "Afrique du Sud",
+      "Slovénie"
+    ],
+    "answer": "Porto Rico",
+    "alts": [
+      "Puerto Rico"
+    ]
+  },
+  {
+    "q": "🇦🇼",
+    "options": [
+      "Pakistan",
+      "Biélorussie",
+      "Aruba",
+      "Iran"
+    ],
+    "answer": "Aruba",
+    "alts": []
+  },
+  {
+    "q": "🇧🇲",
+    "options": [
+      "Uruguay",
+      "Somalie",
+      "Bermudes",
+      "Indonésie"
+    ],
+    "answer": "Bermudes",
+    "alts": [
+      "Bermuda"
+    ]
+  },
+  {
+    "q": "🇨🇼",
+    "options": [
+      "Curaçao",
+      "Soudan du Sud",
+      "Groenland",
+      "RD Congo"
+    ],
+    "answer": "Curaçao",
+    "alts": [
+      "Curacao"
+    ]
+  },
+  {
+    "q": "🇫🇴",
+    "options": [
+      "Îles Féroé",
+      "Fidji",
+      "Irak",
+      "Zambie"
+    ],
+    "answer": "Îles Féroé",
+    "alts": [
+      "Faroe Islands",
+      "Faroe"
+    ]
+  },
+  {
+    "q": "🇵🇫",
+    "options": [
+      "Azerbaïdjan",
+      "Estonie",
+      "Serbie",
+      "Polynésie française"
+    ],
+    "answer": "Polynésie française",
+    "alts": [
+      "French Polynesia"
+    ]
+  },
+  {
+    "q": "🇬🇺",
+    "options": [
+      "Guam",
+      "Hong Kong",
+      "Portugal",
+      "Papouasie-Nouvelle-Guinée"
+    ],
+    "answer": "Guam",
+    "alts": []
+  },
+  {
+    "q": "🇳🇨",
+    "options": [
+      "Guam",
+      "Polynésie française",
+      "Nouvelle-Calédonie",
+      "Lettonie"
+    ],
+    "answer": "Nouvelle-Calédonie",
+    "alts": [
+      "New Caledonia"
+    ]
+  },
+  {
+    "q": "🇦🇮",
+    "options": [
+      "Anguilla",
+      "Guyana",
+      "République centrafricaine",
+      "Îles Féroé"
+    ],
+    "answer": "Anguilla",
+    "alts": []
+  },
+  {
+    "q": "🇰🇾",
+    "options": [
+      "Hongrie",
+      "Îles Caïmans",
+      "Kiribati",
+      "Pays-Bas"
+    ],
+    "answer": "Îles Caïmans",
+    "alts": [
+      "Cayman Islands",
+      "Cayman"
+    ]
+  },
+  {
+    "q": "🇯🇪",
+    "options": [
+      "Jersey",
+      "Taïwan",
+      "Cambodge",
+      "Finlande"
+    ],
+    "answer": "Jersey",
+    "alts": []
+  },
+  {
+    "q": "🇬🇬",
+    "options": [
+      "Comores",
+      "Colombie",
+      "Djibouti",
+      "Guernesey"
+    ],
+    "answer": "Guernesey",
+    "alts": [
+      "Guernsey"
+    ]
+  },
+  {
+    "q": "🇮🇲",
+    "options": [
+      "Île de Man",
+      "France",
+      "Paraguay",
+      "Guatemala"
+    ],
+    "answer": "Île de Man",
+    "alts": [
+      "Isle of Man"
+    ]
+  },
+  {
+    "q": "🇲🇫",
+    "options": [
+      "Biélorussie",
+      "Bahamas",
+      "Paraguay",
+      "Saint-Martin"
+    ],
+    "answer": "Saint-Martin",
+    "alts": [
+      "Saint Martin"
+    ]
+  },
+  {
+    "q": "🇹🇨",
+    "options": [
+      "Curaçao",
+      "Lesotho",
+      "Yémen",
+      "Îles Turques-et-Caïques"
+    ],
+    "answer": "Îles Turques-et-Caïques",
+    "alts": [
+      "Turks and Caicos Islands"
+    ]
+  },
+  {
+    "q": "🇻🇬",
+    "options": [
+      "Thaïlande",
+      "Maurice",
+      "Îles Vierges britanniques",
+      "Singapour"
+    ],
+    "answer": "Îles Vierges britanniques",
+    "alts": [
+      "British Virgin Islands"
+    ]
+  }
+]

@@ -1,0 +1,852 @@
+{
+ "civil": [
+  [
+   "{name} marchait tranquillement quand {voter} lui a lâché une pierre sur la tête 💀",
+   "Fin de la promenade. Le village s'incline, la pierre reste fière 🥲"
+  ],
+  [
+   "{name} est allé acheter du pain… il revient éliminé, le pain intact 🥲",
+   "Le boulanger garde la monnaie, c'est la seule justice aujourd'hui."
+  ],
+  [
+   "{voter} a levé le doigt, {name} a levé les yeux au ciel 💀",
+   "Dernière pensée : « mais je suis innocent quoi ! » 🥲"
+  ],
+  [
+   "{name} préparait du pondu pour le village…",
+   "Il a goûté son propre plat, s'est endormi, et le vote a fait le reste 🥲"
+  ],
+  [
+   "Un moustique a chanté « élimine-le » et tout le village a suivi 🥲",
+   "{name} s'est battu contre le vent. Le vent a gagné 💀"
+  ],
+  [
+   "{name} a dit « je suis innocent » avec des yeux d'ange…",
+   "Le village a répondu : « les anges ne jouent pas ici » 💀🥲"
+  ],
+  [
+   "{name} dansait le ndombolo, {voter} a coupé le son 💀",
+   "Fin de la danse, début des larmes du village 🥲"
+  ],
+  [
+   "Le village a voté {name} parce qu'il avait l'air trop calme…",
+   "Moralité : bouge un peu la tête quand tu joues 🥲"
+  ],
+  [
+   "{name} a jeté un sort à {voter}… le sort a rebondi 💀",
+   "Même les grigris refusent les débats du village 🥲"
+  ],
+  [
+   "{name} pleurait déjà avant le vote — le village a dit « trop tard » 🥲",
+   "Les larmes ne sont pas un bouclier, testé et prouvé 💀"
+  ],
+  [
+   "{name} a promis des poulets grillés à tout le monde…",
+   "{voter} a voté quand même, puis a demandé le poulet 💀🍗"
+  ],
+  [
+   "Sa grand-mère l'avait prévenu : « ne joue pas à ce jeu » 🥲",
+   "{name} n'a pas écouté. La grand-mère a toujours raison 💀"
+  ],
+  [
+   "{name} a proposé une alliance à {voter}…",
+   "{voter} a accepté le cadeau et voté quand même. Sans honneur 💀"
+  ],
+  [
+   "{name} portait un t-shirt « JE SUIS CIVIL »…",
+   "Le village a trouvé ça suspect. Trop évident, next 🥲"
+  ],
+  [
+   "{voter} a dit « c'est lui », tout le monde a dit « ok » 💀",
+   "{name} n'a pas eu le temps de dire « ok » lui-même 🥲"
+  ],
+  [
+   "{name} a fait le meilleur indice du tour…",
+   "Et le pire choix de rester charmant. Le charme ne vote pas 🥲"
+  ],
+  [
+   "{name} a échoué au test « regarde-moi dans les yeux » 💀",
+   "Personne ne réussit ce test devant un village pressé 🥲"
+  ],
+  [
+   "{name} a baissé les yeux une seconde…",
+   "Une seconde, un vote, une élimination. Bienvenue ici 🥲"
+  ],
+  [
+   "{name} a dit « je jure sur ma moto » 💀",
+   "La moto n'a pas pu témoigner, elle était en panne 🥲"
+  ],
+  [
+   "{name} a voté à voix haute, {voter} a noté son nom quelque part 🥲",
+   "Leçon : le village a de la mémoire, mais seulement pour ça 💀"
+  ],
+  [
+   "{name} est parti chercher de l'eau…",
+   "Il est revenu avec une élimination. Pas pratique, le puits 🥲"
+  ],
+  [
+   "{name} a dit « votez-moi pas »…",
+   "Le village a entendu « votez-moi » 💀. Articule mieux la prochaine fois 🥲"
+  ],
+  [
+   "Le docteur du village était en pause-café…",
+   "{name} a rendu l'âme entre deux gorgées 🥲"
+  ],
+  [
+   "{name} a montré son carnet de notes…",
+   "{voter} y a lu « stratégie de civil » et a voté par devoir 💀"
+  ],
+  [
+   "{name} a joué les bras croisés tout le tour 🥲",
+   "Le village a voté l'acteur le plus immobile 💀"
+  ],
+  [
+   "{name} a dit « c'est moi ou le jeu est facile ? »…",
+   "Le village a répondu. La leçon était gratuite 💀"
+  ],
+  [
+   "{voter} a promis de ne jamais voter {name}…",
+   "Promesse tenue : il a voté en dernier, « pour la surprise » 🥲"
+  ],
+  [
+   "{name} a souri à tout le monde ce tour-ci…",
+   "Trop de sourires = suspect. La science du village 🥲"
+  ],
+  [
+   "{name} a compté ses XCoins pendant le vote…",
+   "{voter} a compté ses votes. Les maths ont tranché 💀"
+  ],
+  [
+   "{name} a dit « confiance » cinq fois en une phrase…",
+   "Le cinquième « confiance » a déclenché le vote 🥲"
+  ],
+  [
+   "{name} a apporté des beignets pour acheter les votes…",
+   "Le village a mangé ET voté. Business is business 💀🍩"
+  ],
+  [
+   "{name} a raisonné comme un philosophe…",
+   "Le village ne vote pas les philosophes, trop compliqué 🥲"
+  ],
+  [
+   "{name} a regardé la lune pendant les débats…",
+   "La lune n'a rien dit. Le village si 💀"
+  ],
+  [
+   "{name} a fait une pause pipi au pire moment…",
+   "Retour de toilettes = accusation instantanée 🥲"
+  ],
+  [
+   "{name} a dit « mon voisin est bizarre »…",
+   "Le voisin a dit « lui aussi », et la majorité a parlé 💀"
+  ],
+  [
+   "{name} a trop insisté : « je vous JURE »…",
+   "Dans ce village, jurer = se dénoncer 🥲"
+  ],
+  [
+   "{name} a crié « traitez-moi en suspect si vous voulez ! »…",
+   "Le village a traité. Rapidement 💀"
+  ],
+  [
+   "{voter} a hésité 0,3 seconde avant de voter {name}…",
+   "Record du village. Médaille d'or du lynchage 🥲"
+  ],
+  [
+   "{name} a raconté une blague pour détendre l'ambiance…",
+   "Personne n'a ri, tout le monde a voté 🥲"
+  ],
+  [
+   "{name} a dit « je connais le tueur »…",
+   "« Ah oui ? » ont-ils dit, avant de voter le connaisseur 💀"
+  ],
+  [
+   "{name} s'est proclamé intouchable…",
+   "Le village a pris ça comme un défi personnel 🥲"
+  ],
+  [
+   "{name} a oublié de donner son indice…",
+   "Le village a voté la mémoire courte. Cruel mais logique 💀"
+  ],
+  [
+   "{name} a dit « je suis fatigué »…",
+   "Le village a entendu « je suis cuit » et a agi 🥲"
+  ],
+  [
+   "{name} a défendu deux joueurs en même temps…",
+   "{voter} a trouvé ça multitâche suspect 💀"
+  ],
+  [
+   "{name} a dit « je reviens dans 5 minutes »…",
+   "Il est revenu spectateur 🥲"
+  ],
+  [
+   "{name} a souri à {voter} pour apaiser le jeu…",
+   "{voter} a souri en retour… en votant 💀"
+  ],
+  [
+   "{name} a voulu faire un discours de 10 minutes…",
+   "Le village a coupé au mot 3 🥲"
+  ],
+  [
+   "{name} a juré sur la tombe de son arrière-grand-père…",
+   "Le village : « et lui, il était innocent ? » 💀"
+  ],
+  [
+   "{name} a analysé le jeu comme un prof de maths…",
+   "Le village a voté l'équation la plus simple : lui 🥲"
+  ],
+  [
+   "{name} a dit « Dieu sait que je suis innocent »…",
+   "Dieu sait, mais le village vote quand même 💀"
+  ],
+  [
+   "{name} a refusé de donner un 2e indice pour « préserver le mystère »…",
+   "Le mystère a été éliminé avec lui 🥲"
+  ],
+  [
+   "{name} a dit « dernier avertissement »…",
+   "C'était le sien 🥲"
+  ],
+  [
+   "{name} a parié 100 XCoins qu'il survivrait…",
+   "{voter} a gagné le pari. Cruel mais rentable 🥲"
+  ],
+  [
+   "{name} a dit qu'il était « neutre comme la Suisse »…",
+   "La Suisse n'existe pas dans ce village 🥲"
+  ],
+  [
+   "{name} a fait une analyse brillante pendant 3 minutes…",
+   "{voter} a résumé : « trop bavard ». Vote 💀"
+  ],
+  [
+   "{name} a dit « regardez mes yeux honnêtes »…",
+   "Le village a regardé. Le village a voté 🥲"
+  ],
+  [
+   "{name} a proposé de faire une prière…",
+   "Le village a prié PUIS voté. Foi et ordre 💀"
+  ],
+  [
+   "{name} a brûlé son carnet d'indices pour prouver sa loyauté…",
+   "Le village a voté le pyromane 💀"
+  ],
+  [
+   "{name} a parlé à la 3e personne toute la partie…",
+   "« {name} est innocent », disait-il. Le village a tué la 3e personne 🥲"
+  ],
+  [
+   "{name} a dit « je déjeune et je reviens »…",
+   "Le déjeuner a survécu, pas lui 🥲"
+  ],
+  [
+   "{name} a trop bien joué…",
+   "Le village n'a pas supporté l'excellence 💀"
+  ],
+  [
+   "{name} a dit « je sens l'infiltré »…",
+   "{voter} : « moi aussi, il est tout près ». Sens commun 🥲"
+  ],
+  [
+   "{name} a posé trop de questions…",
+   "Le village préfère les gens sans questions 💀"
+  ],
+  [
+   "{name} a dit « attendez le prochain tour »…",
+   "Le village n'attend jamais personne 🥲"
+  ],
+  [
+   "{name} a dit « peace » en quittant le débat…",
+   "Le village a répondu « pièce » — comme dans défunt 💀"
+  ],
+  [
+   "{name} a raconté l'histoire de sa vie…",
+   "Trop longue. Vote. Fin 🥲"
+  ],
+  [
+   "{name} a dit « j'ai une preuve » sans montrer la preuve…",
+   "Le village a voté la preuve invisible 💀"
+  ],
+  [
+   "{name} a dit « votez l'inactif à côté de moi »…",
+   "{voter} a voté l'actif devant lui. Logique du village 🥲"
+  ],
+  [
+   "{name} a dit « c'est toujours le calme qui gagne »…",
+   "Le calme a perdu 💀"
+  ],
+  [
+   "{name} a dit « je me méfie même de moi-même »…",
+   "Le village a fait pareil. Vote unanime 🥲"
+  ]
+ ],
+ "uc": [
+  [
+   "{name} a joué les plus grands acteurs du village…",
+   "Oscar du meilleur faux innocent : {name} 🕵️ Le village applaudit avant de voter 💀"
+  ],
+  [
+   "Son mot était « {word} ». Le mot du village : « démasqué » 💀",
+   "{voter} a démonté son bluff en deux votes chrono 🕵️",
+   "Adieu {name}, le village te pleure 💀"
+  ],
+  [
+   "{name} bluffait tellement bien qu'il a fini par y croire…",
+   "Le village, lui, n'a jamais cru. Adieu l'agent secret 🕵️💀"
+  ],
+  [
+   "{name} a dit « mon indice vient du cœur »…",
+   "Le cœur avait un accent étranger 🕵️ {voter} l'a entendu 💀"
+  ],
+  [
+   "Agent {name}, votre mission était de survivre…",
+   "Mission échouée. Le village décerne le prix du pire espion 💀🕵️"
+  ],
+  [
+   "{name} a dit « je suis innocent depuis naissance »…",
+   "Le certificat de naissance disait INFILTRÉ 🕵️💀"
+  ],
+  [
+   "{name} a trop insisté sur le fait qu'il n'était PAS l'infiltré…",
+   "Règle n°1 du village : celui qui insiste, sort 💀"
+  ],
+  [
+   "Son mot « {word} » n'a survécu que 2 tours…",
+   "{voter} l'a traqué à la trace comme un limier 🕵️💀",
+   "Adieu {name}, le village te pleure 💀"
+  ],
+  [
+   "{name} a imité le style des civils à la perfection…",
+   "Trop parfait. Les vrais civils sont chaotiques 🕵️💀"
+  ],
+  [
+   "{name} a dit « je n'ai rien à cacher » en cachant tout…",
+   "{voter} a trouvé la contradiction en 3 secondes chrono 💀"
+  ],
+  [
+   "Le plan de {name} : se faire tout petit…",
+   "Le village avait une loupe. Fin du plan 🕵️💀"
+  ],
+  [
+   "{name} a dit « c'est moi l'infiltré » en plaisantant…",
+   "Le village a voté la vérité, même dite en rigolant 💀"
+  ],
+  [
+   "{name} a défendu un complice qui n'existait pas…",
+   "Le village a adoré le cinéma, puis a voté 🕵️💀"
+  ],
+  [
+   "Son bluff était en 4K…",
+   "Le village a regardé en 8K. {name} démasqué 🕵️💀"
+  ],
+  [
+   "{name} a dit « jure-le sur ton mot » à {voter}…",
+   "{voter} a juré, puis a voté. Le mot du village gagne toujours 💀"
+  ],
+  [
+   "{name} a improvisé un indice pendant 20 secondes…",
+   "20 secondes de silence, 3 votes, une carrière terminée 🕵️💀"
+  ],
+  [
+   "{name} a dit « je connais le vrai tueur »…",
+   "Le vrai tueur, c'était lui. Confiance en lui : 0 🕵️💀"
+  ],
+  [
+   "{name} a loué l'indice de quelqu'un avec trop de détails…",
+   "Détail en trop = aveu. {voter} a tout noté 💀"
+  ],
+  [
+   "{name} a dit « j'ai la mémoire faible »…",
+   "Le village a une mémoire excellente : vote 🕵️💀"
+  ],
+  [
+   "{name} a souri quand le mot a été évoqué…",
+   "Ce sourire valait un aveu signé 🕵️💀"
+  ],
+  [
+   "{name} a survécu 3 tours grâce au charme…",
+   "Le charme a expiré. Démasqué par {voter} 💀"
+  ],
+  [
+   "{name} a dit « mon indice est simple comme bonjour »…",
+   "Simple comme un aveu, oui 🕵️💀"
+  ],
+  [
+   "{name} a changé d'accent entre les tours…",
+   "Le village a entendu. Le village a voté 💀"
+  ],
+  [
+   "{name} a accusé le joueur le plus évident…",
+   "Trop évident. Le village a remonté la piste 🕵️💀"
+  ],
+  [
+   "{name} a dit « votez {voter} pour l'équilibre »…",
+   "{voter} a voté {name} pour la justice 💀"
+  ],
+  [
+   "Son mot « {word} » s'est baladé dans ses indices comme un drapeau…",
+   "Le village a lu le drapeau. Fin de mission 🕵️💀",
+   "Adieu {name}, le village te pleure 💀"
+  ],
+  [
+   "{name} a dit « je transpire parce qu'il fait chaud »…",
+   "Il faisait 18 degrés. Suspect niveau maximum 💀"
+  ],
+  [
+   "{name} a proposé une trêve au milieu du vote…",
+   "Le village n'a jamais signé de traité. Mort à la trêve 🕵️💀"
+  ],
+  [
+   "{name} a fait l'erreur de trop bien connaître les règles…",
+   "Les vrais innocents ne lisent jamais les règles 🕵️💀"
+  ],
+  [
+   "{name} a dit « ma conscience est claire »…",
+   "Sa conscience était claire, son rôle non 🕵️💀"
+  ],
+  [
+   "{name} a essayé de faire voter deux joueurs entre eux…",
+   "Le village a préféré voter l'allumeur de mèche 💀"
+  ],
+  [
+   "{name} a dit « pourquoi moi ? » cinq fois…",
+   "Parce que le village sait, {name}. Parce qu'il sait 🕵️💀"
+  ],
+  [
+   "{name} a donné un indice sur SON mot par erreur…",
+   "Faute professionnelle d'espion. Le syndicat est furieux 💀"
+  ],
+  [
+   "{name} a dit « j'ai vu un fantôme »…",
+   "Le fantôme s'appelait Preuve. Il a voté 💀"
+  ],
+  [
+   "{name} a trop parlé du mot qu'il ne devait pas connaître…",
+   "{voter} a compté les mentions : 4. Trop 🕵️💀"
+  ],
+  [
+   "{name} a flippé quand le vote s'est tourné vers lui…",
+   "Un innocent flippé fait pitié. Un infiltré flippé fait des aveux 💀"
+  ],
+  [
+   "{name} a dit « je suis du côté du village »…",
+   "Le village a vérifié du côté des listes. Raté 🕵️💀"
+  ],
+  [
+   "{name} a blâmé l'inactivité des autres…",
+   "{voter} a souligné que le seul actif, c'était le mensonge 💀"
+  ],
+  [
+   "{name} a proposé un vote blanc…",
+   "Le village a voté noir sur blanc : lui 🕵️💀"
+  ],
+  [
+   "{name} a dit « je démasquerais l'infiltré moi-même »…",
+   "Prophétique : il s'est démasqué tout seul 💀"
+  ],
+  [
+   "{name} a répété le mot « honnêteté » comme un mantra…",
+   "Trop d'honnêteté tue l'honnêteté 🕵️💀"
+  ],
+  [
+   "{name} a fait un clin d'œil à son complice en plein vote…",
+   "Le complice a fermé les yeux. Le village non 💀"
+  ],
+  [
+   "{name} a dit « mon indice parle de lui-même »…",
+   "Il parlait surtout de SON mot secret 🕵️💀"
+  ],
+  [
+   "{name} a paniqué et changé d'indice en cours de route…",
+   "Le village a suivi la trace fraîche du paniqué 💀"
+  ],
+  [
+   "{name} a dit « je cuisine trop bien pour être infiltré »…",
+   "La cuisine n'est pas un alibi ici 🕵️💀"
+  ],
+  [
+   "{name} a voté contre son propre complice par erreur…",
+   "Le village a vu l'hésitation. L'hésitation a tué 💀"
+  ],
+  [
+   "{name} a dit « le mot me parle trop, je le sens »…",
+   "Normal, c'était LE sien 🕵️💀"
+  ],
+  [
+   "{name} a imité le bouclier d'un innocent blessé…",
+   "Le village a applaudi la comédie, puis voté 💀"
+  ],
+  [
+   "{name} a parlé de « nous les civils » une fois de trop…",
+   "Freudian slip du siècle 🕵️💀"
+  ],
+  [
+   "{name} a dit « mon passeport est en cours »…",
+   "Le passeport pour le ciel est immédiat 💀"
+  ],
+  [
+   "{name} a essayé de corrompre le vote avec un sourire…",
+   "Le village vend son sourire mais pas son vote 🕵️💀"
+  ],
+  [
+   "{name} a dit « promis, je ne suis pas comme les autres »…",
+   "Exact : il était PIRE que les autres 💀"
+  ],
+  [
+   "{name} a inventé un mot pour son indice…",
+   "Le mot n'existait dans aucun dictionnaire du village 🕵️💀"
+  ],
+  [
+   "{name} a dit « j'ai oublié mon rôle »…",
+   "Le village n'a pas oublié le sien 💀"
+  ],
+  [
+   "{name} a regardé {voter} pour savoir quoi dire…",
+   "Mauvais réflexe d'espion. {voter} a tout vu 🕵️💀"
+  ],
+  [
+   "{name} a dit « je suis trop beau pour être le tueur »…",
+   "Le village a voté la modestie. Il n'en avait pas 💀"
+  ],
+  [
+   "{name} a survécu par miracle 2 tours de suite…",
+   "Les miracles ont une limite : 2 🕵️💀"
+  ],
+  [
+   "{name} a dit « je jure sur mes XCoins »…",
+   "Ses XCoins ont été confisqués avec son rôle 💀"
+  ],
+  [
+   "{name} a dit « je connais ce jeu par cœur »…",
+   "Phrase fatale numéro 1 du village 🕵️💀"
+  ],
+  [
+   "{name} a trop défendu le mot qu'il ne fallait pas connaître…",
+   "{voter} a fait le calcul : suspect 100 % 💀"
+  ],
+  [
+   "{name} a dit « je protège le village »…",
+   "Le village a découvert de QUOI il le protégeait 💀"
+  ],
+  [
+   "{name} a voté le même joueur 3 tours de suite…",
+   "Ce joueur était mort depuis le tour 1. Oups 🕵️💀"
+  ],
+  [
+   "{name} a dit « on m'a forcé à jouer »…",
+   "Le village l'a forcé à sortir 🕵️💀"
+  ],
+  [
+   "{name} a souri AU MOMENT précis du vote…",
+   "Frame par frame, {voter} a analysé. Démasqué 💀"
+  ],
+  [
+   "{name} a dit « moi, mentir ? Jamais de la vie »…",
+   "Deux mensonges en une phrase, record du village 🕵️💀"
+  ],
+  [
+   "{name} a proposé de recommencer la partie…",
+   "Proposition refusée. Joueur aussi 🕵️💀"
+  ],
+  [
+   "{name} a dit « je suis fatigué, je vais dormir »…",
+   "Le village a accéléré la sieste 💀"
+  ],
+  [
+   "{name} a loué l'ambiance du village trop sincèrement…",
+   "Les infiltrés ne connaissent pas la sincérité 🕵️💀"
+  ],
+  [
+   "{name} a dit « mon cœur bat pour ce village »…",
+   "Son cœur battait pour le mot « {word} ». Démasqué 💀"
+  ],
+  [
+   "Son plan était parfait jusqu'au vote numéro un…",
+   "{voter} a fait tout dérailler. Adieu l'architecte 🕵️💀",
+   "Adieu {name}, le village te pleure 💀"
+  ]
+ ],
+ "mw": [
+  [
+   "{name} parlait de tout, sauf du mot. Normal : il ne le connaissait pas 💀",
+   "Le village a remarqué le vide. {voter} a rempli le vide avec un vote ⚪💀"
+  ],
+  [
+   "{name} a bluffé comme un chef d'orchestre…",
+   "Le village a coupé la musique ⚪💀"
+  ],
+  [
+   "{name} a dit « j'ai tout compris » au tour 1…",
+   "Il n'avait rien compris depuis le début ⚪💀"
+  ],
+  [
+   "{name} a inventé un indice sur un mot qu'il ignorait…",
+   "Le hasard fait bien les choses. Sauf ici ⚪💀"
+  ],
+  [
+   "{name} a dit « évidemment que je sais de quoi on parle »…",
+   "Évidemment que non ⚪💀"
+  ],
+  [
+   "{name} a suivi le regard des autres pour deviner le mot…",
+   "{voter} a remarqué la tête de perroquet ⚪💀"
+  ],
+  [
+   "{name} a répété les indices des autres avec un autre mot…",
+   "Plagiat détecté par {voter}. Vote immédiat ⚪💀"
+  ],
+  [
+   "{name} a dit « moi je penche pour un fruit »…",
+   "Le village ne parlait pas de fruit ⚪💀"
+  ],
+  [
+   "{name} a bluffé avec un sourire d'avocat…",
+   "Le village n'a pas signé le contrat ⚪💀"
+  ],
+  [
+   "{name} a dit « c'est évident, c'est un animal »…",
+   "C'était un métier. Freud a tout compris ⚪💀"
+  ],
+  [
+   "{name} a inventé un mot qui n'existait pas…",
+   "Le dictionnaire du village l'a démasqué ⚪💀"
+  ],
+  [
+   "{name} a parlé pendant 5 minutes sans rien dire…",
+   "Performance reconnue, vote mérité ⚪💀"
+  ],
+  [
+   "{name} a dit « je confirme ce que dit {voter} »…",
+   "{voter} a changé d'avis rien que pour le piéger ⚪💀"
+  ],
+  [
+   "{name} a dit « mon instinct ne trompe jamais »…",
+   "Son instinct avait oublié le mot ⚪💀"
+  ],
+  [
+   "{name} a souri à chaque indice comme s'il comprenait…",
+   "Il ne comprenait rien. Le village si ⚪💀"
+  ],
+  [
+   "{name} a deviné le thème en criant « le FOOT ! »…",
+   "Le thème était la cuisine. Fin de la carrière du devin ⚪💀"
+  ],
+  [
+   "{name} a dit « je suis dans le secret des dieux »…",
+   "Les dieux ne l'avaient pas informé ⚪💀"
+  ],
+  [
+   "{name} a blâmé « le calme suspect » de {voter}…",
+   "{voter} était juste concentré. Vote retourné ⚪💀"
+  ],
+  [
+   "{name} a improvisé un indice trop général…",
+   "« ça existe, ça s'utilise » — merci pour rien ⚪💀"
+  ],
+  [
+   "{name} a dit « je joue avec mon cœur »…",
+   "Son cœur n'avait pas le mot. Le village non plus ⚪💀"
+  ],
+  [
+   "{name} a fait semblant de réfléchir pendant 30 secondes…",
+   "30 secondes de vide. Le village a compté ⚪💀"
+  ],
+  [
+   "{name} a dit « laissez-moi vous expliquer le jeu »…",
+   "Il expliquait un jeu qu'il ne connaissait pas ⚪💀"
+  ],
+  [
+   "{name} a deviné à voix haute le mauvais mot…",
+   "3 fois. Trois. Fois. Le village a compté ⚪💀"
+  ],
+  [
+   "{name} a dit « mon indice est crypté »…",
+   "Crypté si fort que lui-même ne l'avait pas ⚪💀"
+  ],
+  [
+   "{name} a regardé le plafond pendant les débats…",
+   "Le mot n'était pas écrit au plafond ⚪💀"
+  ],
+  [
+   "{name} a dit « mon alibi est parfait »…",
+   "Un alibi parfait sans mot = une élimination parfaite ⚪💀"
+  ],
+  [
+   "{name} a blâmé le hasard…",
+   "Le hasard a voté contre lui, ironie totale ⚪💀"
+  ],
+  [
+   "{name} a dit « le mot me fait penser à ma grand-mère »…",
+   "La grand-mère n'avait aucun rapport. Le village a voté ⚪💀"
+  ],
+  [
+   "{name} a suivi la majorité à chaque vote…",
+   "La majorité a suivi le vote contre lui ⚪💀"
+  ],
+  [
+   "{name} a dit « je sens le mensonge à 3 mètres »…",
+   "Il en avait 5 autour de lui ⚪💀"
+  ],
+  [
+   "{name} a voté sans raison 3 fois de suite…",
+   "{voter} a demandé pourquoi. Silence. Vote ⚪💀"
+  ],
+  [
+   "{name} a dit « je réfléchis à voix haute »…",
+   "Le village a entendu le vide réfléchir ⚪💀"
+  ],
+  [
+   "{name} a fait semblant d'écrire dans un carnet…",
+   "Le carnet était vide. Le vote était plein ⚪💀"
+  ],
+  [
+   "{name} a dit « mon indice est subtil »…",
+   "Trop subtil : personne ne l'a compris, tout le monde a voté ⚪💀"
+  ],
+  [
+   "{name} a répété « je le sens » cinq fois…",
+   "Le village a senti aussi. Vote ⚪💀"
+  ],
+  [
+   "{name} a accusé {voter} sans preuve…",
+   "{voter} a accusé {name} sans preuve non plus. Le hasard a tranché ⚪💀"
+  ],
+  [
+   "{name} a dit « vous êtes forts, respect »…",
+   "Trop de respect, trop suspect. Vote ⚪💀"
+  ],
+  [
+   "{name} a fait semblant d'être fatigué pour esquiver…",
+   "La fatigue n'est pas un bouclier ⚪💀"
+  ],
+  [
+   "{name} a parlé du mot au féminin…",
+   "Le mot était masculin. {voter} a noté la grammaire suspecte ⚪💀"
+  ],
+  [
+   "{name} a dit « moi je sais TROP de choses »…",
+   "Il ne savait rien. Le village a tout su ⚪💀"
+  ],
+  [
+   "{name} a fait un pas de danse pour désamorcer le vote…",
+   "Le village a voté en dansant aussi ⚪💀"
+  ],
+  [
+   "{name} a dit « vous me faites peur »…",
+   "Le village a fait pire que peur ⚪💀"
+  ],
+  [
+   "{name} a changé d'avis sur son indice 3 fois…",
+   "Le village n'a pas changé le sien ⚪💀"
+  ],
+  [
+   "{name} a dit « je protège mon alibi comme un trésor »…",
+   "Le trésor était vide. Le vote était plein ⚪💀"
+  ],
+  [
+   "{name} a répété le dernier mot de chaque phrase des autres…",
+   "Perroquet détecté par {voter}. Vote ⚪💀"
+  ],
+  [
+   "{name} a dit « c'est clair comme de l'eau de roche »…",
+   "L'eau était trouble, le vote clair ⚪💀"
+  ],
+  [
+   "{name} a proposé une pause prière au milieu du vote…",
+   "Le village a prié puis voté ⚪💀"
+  ],
+  [
+   "{name} a dit « mon père m'a appris à lire les gens »…",
+   "Son père aurait voté contre lui aussi ⚪💀"
+  ],
+  [
+   "{name} a imité un innocent stressé…",
+   "Le stress était réaliste, le mot absent ⚪💀"
+  ],
+  [
+   "{name} a dit « le mot est sur le bout de ma langue »…",
+   "Il y est resté. Pour toujours ⚪💀"
+  ],
+  [
+   "{name} a suivi la piste de {voter} trop docilement…",
+   "{voter} a retourné sa veste et son vote ⚪💀"
+  ],
+  [
+   "{name} a dit « je fais confiance à mon instinct animal »…",
+   "Son instinct était en voie d'extinction ⚪💀"
+  ],
+  [
+   "{name} a parlé de « notre mot à tous »…",
+   "Freud a encore frappé. Vote ⚪💀"
+  ],
+  [
+   "{name} a dit « laissez-moi deux minutes de réflexion »…",
+   "Deux minutes de rien. Vote ⚪💀"
+  ],
+  [
+   "{name} a fait le quiz des autres sans connaître le sien…",
+   "Talentueux, mais démasqué ⚪💀"
+  ],
+  [
+   "{name} a dit « je suis neutre dans ce débat »…",
+   "Le village n'a pas trouvé sa neutralité ⚪💀"
+  ],
+  [
+   "{name} a souri au mot de {voter} comme s'il le connaissait…",
+   "Il ne le connaissait pas. {voter} l'a vu ⚪💀"
+  ],
+  [
+   "{name} a dit « c'est de la haute stratégie »…",
+   "La stratégie s'est effondrée au 3e vote ⚪💀"
+  ],
+  [
+   "{name} a imité l'indice d'un civil avec un autre mot…",
+   "{voter} a compté les différences. Trop ⚪💀"
+  ],
+  [
+   "{name} a dit « mon esprit est en mode analyse »…",
+   "L'analyse a crashé. Vote ⚪💀"
+  ],
+  [
+   "{name} a blâmé la malchance…",
+   "La malchance a voté aussi ⚪💀"
+  ],
+  [
+   "{name} a dit « je vous avais prévenus que j'étais dangereux »…",
+   "Le village a pris note. Vote ⚪💀"
+  ],
+  [
+   "{name} a regardé {voter} comme un perdu dans la brousse…",
+   "{voter} n'a pas aidé. Vote ⚪💀"
+  ],
+  [
+   "{name} a proposé de jouer une autre partie…",
+   "Le village a préféré terminer celle-ci. Sans lui ⚪💀"
+  ],
+  [
+   "{name} a dit « je le répète : je suis CLEAN »…",
+   "Trois fois CLEAN = un vote ⚪💀"
+  ],
+  [
+   "{name} a parlé du village comme un touriste…",
+   "Le village a voté le touriste ⚪💀"
+  ],
+  [
+   "{name} a fait semblant de noter les indices…",
+   "Il écrivait son testament, en fait ⚪💀"
+  ],
+  [
+   "{name} a dit « je ressens une énergie négative »…",
+   "C'était son propre vote qui arrivait ⚪💀"
+  ],
+  [
+   "{name} a dit « je protège le mot comme mon téléphone »…",
+   "Il ne connaissait pas le mot. Le village a voté ⚪💀"
+  ],
+  [
+   "{name} a répété les indices en les mélangeant…",
+   "{voter} a mélangé les votes contre lui ⚪💀"
+  ]
+ ]
+}

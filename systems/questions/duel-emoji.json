@@ -1,0 +1,2703 @@
+[
+ {
+  "q": "⛲",
+  "options": [
+   "omelette",
+   "montre",
+   "fontaine",
+   "steak"
+  ],
+  "answer": "fontaine",
+  "alts": [
+   "fontaines",
+   "fountain"
+  ]
+ },
+ {
+  "q": "🛷",
+  "options": [
+   "omelette",
+   "luge",
+   "cadenas",
+   "cible"
+  ],
+  "answer": "luge",
+  "alts": [
+   "luges",
+   "sledge"
+  ]
+ },
+ {
+  "q": "🎸",
+  "options": [
+   "champignon",
+   "guitare",
+   "talon",
+   "bague"
+  ],
+  "answer": "guitare",
+  "alts": [
+   "guitares",
+   "guitar"
+  ]
+ },
+ {
+  "q": "🧁",
+  "options": [
+   "cupcake",
+   "pont de nuit",
+   "voiture de police",
+   "trottinette"
+  ],
+  "answer": "cupcake",
+  "alts": [
+   "petit gateau",
+   "muffin"
+  ]
+ },
+ {
+  "q": "🌙",
+  "options": [
+   "lune",
+   "tambour",
+   "badminton",
+   "cacahuète"
+  ],
+  "answer": "lune",
+  "alts": [
+   "moon",
+   "croissant de lune"
+  ]
+ },
+ {
+  "q": "⛩️",
+  "options": [
+   "rugby",
+   "elfe",
+   "médecin",
+   "torii"
+  ],
+  "answer": "torii",
+  "alts": [
+   "portail japonais",
+   "shinto"
+  ]
+ },
+ {
+  "q": "🎅",
+  "options": [
+   "renard",
+   "sorcier",
+   "Père Noël",
+   "bourse d’or"
+  ],
+  "answer": "Père Noël",
+  "alts": [
+   "pere noel",
+   "santa"
+  ]
+ },
+ {
+  "q": "🐻",
+  "options": [
+   "ours",
+   "baleine",
+   "banjo",
+   "pickup"
+  ],
+  "answer": "ours",
+  "alts": []
+ },
+ {
+  "q": "☁️",
+  "options": [
+   "chauve-souris",
+   "nuage",
+   "baleine",
+   "médecin"
+  ],
+  "answer": "nuage",
+  "alts": [
+   "nuages",
+   "cloud"
+  ]
+ },
+ {
+  "q": "🧑‍🔧",
+  "options": [
+   "voilier",
+   "pêche",
+   "mécanicien",
+   "baleine"
+  ],
+  "answer": "mécanicien",
+  "alts": [
+   "mecanicien",
+   "plombier"
+  ]
+ },
+ {
+  "q": "🍫",
+  "options": [
+   "chocolat",
+   "volleyball",
+   "taxi",
+   "crevette"
+  ],
+  "answer": "chocolat",
+  "alts": [
+   "chocolatine",
+   "tablette"
+  ]
+ },
+ {
+  "q": "👷",
+  "options": [
+   "beignet",
+   "galaxie",
+   "falafel",
+   "ouvrier"
+  ],
+  "answer": "ouvrier",
+  "alts": [
+   "maçon",
+   "macon"
+  ]
+ },
+ {
+  "q": "🖌️",
+  "options": [
+   "chèvre",
+   "vache",
+   "koala",
+   "pinceau"
+  ],
+  "answer": "pinceau",
+  "alts": [
+   "pinceaux",
+   "brosh"
+  ]
+ },
+ {
+  "q": "🏛️",
+  "options": [
+   "musée",
+   "cadenas",
+   "abeille",
+   "elfe"
+  ],
+  "answer": "musée",
+  "alts": [
+   "musee",
+   "musees"
+  ]
+ },
+ {
+  "q": "🫑",
+  "options": [
+   "borne d’arcade",
+   "église",
+   "poivron",
+   "flocon de neige"
+  ],
+  "answer": "poivron",
+  "alts": [
+   "poivrons",
+   "pepper vegetal"
+  ]
+ },
+ {
+  "q": "🐹",
+  "options": [
+   "zombie",
+   "hamster",
+   "noix de coco",
+   "nuage"
+  ],
+  "answer": "hamster",
+  "alts": []
+ },
+ {
+  "q": "🏹",
+  "options": [
+   "école",
+   "chocolat",
+   "carotte",
+   "tir à l’arc"
+  ],
+  "answer": "tir à l’arc",
+  "alts": [
+   "arc",
+   "archer"
+  ]
+ },
+ {
+  "q": "🔑",
+  "options": [
+   "loup",
+   "ananas",
+   "clé",
+   "prince"
+  ],
+  "answer": "clé",
+  "alts": [
+   "cle",
+   "cles"
+  ]
+ },
+ {
+  "q": "📻",
+  "options": [
+   "étoile filante",
+   "rhinocéros",
+   "livre ouvert",
+   "radio"
+  ],
+  "answer": "radio",
+  "alts": [
+   "radios",
+   "radio poste"
+  ]
+ },
+ {
+  "q": "🥘",
+  "options": [
+   "paella",
+   "basketball",
+   "sac à dos",
+   "sanglier"
+  ],
+  "answer": "paella",
+  "alts": [
+   "paellas",
+   "poêlée"
+  ]
+ },
+ {
+  "q": "🐞",
+  "options": [
+   "hibou",
+   "curling",
+   "école",
+   "coccinelle"
+  ],
+  "answer": "coccinelle",
+  "alts": []
+ },
+ {
+  "q": "✏️",
+  "options": [
+   "étoile",
+   "crayon",
+   "cochon",
+   "botte de randonnée"
+  ],
+  "answer": "crayon",
+  "alts": [
+   "crayons",
+   "pencil"
+  ]
+ },
+ {
+  "q": "🏜️",
+  "options": [
+   "pêche",
+   "désert",
+   "éléphant",
+   "piment"
+  ],
+  "answer": "désert",
+  "alts": [
+   "desert",
+   "deserts"
+  ]
+ },
+ {
+  "q": "🦕",
+  "options": [
+   "crayon",
+   "cadenas",
+   "micro",
+   "dinosaure"
+  ],
+  "answer": "dinosaure",
+  "alts": []
+ },
+ {
+  "q": "⛪",
+  "options": [
+   "église",
+   "château",
+   "mouton",
+   "botte de randonnée"
+  ],
+  "answer": "église",
+  "alts": [
+   "eglise",
+   "eglises"
+  ]
+ },
+ {
+  "q": "🌭",
+  "options": [
+   "lion",
+   "école",
+   "hot-dog",
+   "torii"
+  ],
+  "answer": "hot-dog",
+  "alts": [
+   "hot dog",
+   "hotdogs"
+  ]
+ },
+ {
+  "q": "🎹",
+  "options": [
+   "médaille d’or",
+   "piano",
+   "hippopotame",
+   "football américain"
+  ],
+  "answer": "piano",
+  "alts": [
+   "pianos",
+   "pianoforte"
+  ]
+ },
+ {
+  "q": "🥩",
+  "options": [
+   "trompette",
+   "steak",
+   "tigre",
+   "basketball"
+  ],
+  "answer": "steak",
+  "alts": [
+   "viande",
+   "bifteck"
+  ]
+ },
+ {
+  "q": "🏉",
+  "options": [
+   "rugby",
+   "grenouille",
+   "éclair",
+   "casquette"
+  ],
+  "answer": "rugby",
+  "alts": [
+   "rugbys",
+   "rugby balls"
+  ]
+ },
+ {
+  "q": "🧟",
+  "options": [
+   "chèvre",
+   "Statue de la Liberté",
+   "zombie",
+   "montre"
+  ],
+  "answer": "zombie",
+  "alts": [
+   "zombies"
+  ]
+ },
+ {
+  "q": "🧑‍🚒",
+  "options": [
+   "sel",
+   "poisson-globe",
+   "pompier",
+   "renard"
+  ],
+  "answer": "pompier",
+  "alts": [
+   "pompiers"
+  ]
+ },
+ {
+  "q": "🚑",
+  "options": [
+   "hôpital",
+   "ambulance",
+   "rugby",
+   "montagnes russes"
+  ],
+  "answer": "ambulance",
+  "alts": []
+ },
+ {
+  "q": "🧃",
+  "options": [
+   "jus de fruit",
+   "banjo",
+   "cookie",
+   "souris"
+  ],
+  "answer": "jus de fruit",
+  "alts": [
+   "jus",
+   "boisson jus"
+  ]
+ },
+ {
+  "q": "🧑‍⚕️",
+  "options": [
+   "thé vert",
+   "paon",
+   "médecin",
+   "rhinocéros"
+  ],
+  "answer": "médecin",
+  "alts": [
+   "docteur",
+   "medecin"
+  ]
+ },
+ {
+  "q": "🐔",
+  "options": [
+   "poule",
+   "piano",
+   "moufette",
+   "badminton"
+  ],
+  "answer": "poule",
+  "alts": [
+   "poulet",
+   "coq"
+  ]
+ },
+ {
+  "q": "👓",
+  "options": [
+   "gardien royal",
+   "escargot",
+   "poussin",
+   "lunettes"
+  ],
+  "answer": "lunettes",
+  "alts": [
+   "lunettes de vue",
+   "glasses"
+  ]
+ },
+ {
+  "q": "🐫",
+  "options": [
+   "kangourou",
+   "canard",
+   "piment",
+   "chameau"
+  ],
+  "answer": "chameau",
+  "alts": [
+   "dromadaire"
+  ]
+ },
+ {
+  "q": "🥕",
+  "options": [
+   "paon",
+   "bourse d’or",
+   "carotte",
+   "spaghetti"
+  ],
+  "answer": "carotte",
+  "alts": [
+   "carottes"
+  ]
+ },
+ {
+  "q": "🧑‍✈️",
+  "options": [
+   "musée",
+   "maison",
+   "pilote",
+   "soleil"
+  ],
+  "answer": "pilote",
+  "alts": [
+   "pilotes",
+   "aviateur"
+  ]
+ },
+ {
+  "q": "🧀",
+  "options": [
+   "maïs",
+   "micro",
+   "fromage",
+   "guitare"
+  ],
+  "answer": "fromage",
+  "alts": [
+   "fromages"
+  ]
+ },
+ {
+  "q": "🦢",
+  "options": [
+   "frites",
+   "cygne",
+   "steak",
+   "pomme"
+  ],
+  "answer": "cygne",
+  "alts": []
+ },
+ {
+  "q": "🚲",
+  "options": [
+   "jus de fruit",
+   "fusée",
+   "vélo",
+   "grande roue"
+  ],
+  "answer": "vélo",
+  "alts": [
+   "bicyclette",
+   "velo"
+  ]
+ },
+ {
+  "q": "🦉",
+  "options": [
+   "voiture de police",
+   "prince",
+   "tortue",
+   "hibou"
+  ],
+  "answer": "hibou",
+  "alts": [
+   "chouette"
+  ]
+ },
+ {
+  "q": "🏈",
+  "options": [
+   "football américain",
+   "trompette",
+   "papillon",
+   "beignet"
+  ],
+  "answer": "football américain",
+  "alts": [
+   "foot us",
+   "american football"
+  ]
+ },
+ {
+  "q": "🛒",
+  "options": [
+   "clé",
+   "falafel",
+   "caddie",
+   "livre ouvert"
+  ],
+  "answer": "caddie",
+  "alts": [
+   "chariot de courses",
+   "panier courses"
+  ]
+ },
+ {
+  "q": "🏝️",
+  "options": [
+   "cookie",
+   "avocat",
+   "île déserte",
+   "raisin"
+  ],
+  "answer": "île déserte",
+  "alts": [
+   "ile",
+   "île"
+  ]
+ },
+ {
+  "q": "🌅",
+  "options": [
+   "clé",
+   "lever de soleil",
+   "cheval",
+   "mécanicien"
+  ],
+  "answer": "lever de soleil",
+  "alts": [
+   "aube",
+   "sunrise"
+  ]
+ },
+ {
+  "q": "🧚",
+  "options": [
+   "fée",
+   "grillon",
+   "trophée",
+   "banjo"
+  ],
+  "answer": "fée",
+  "alts": [
+   "fee",
+   "fees"
+  ]
+ },
+ {
+  "q": "📷",
+  "options": [
+   "appareil photo",
+   "grillon",
+   "étoile filante",
+   "camion"
+  ],
+  "answer": "appareil photo",
+  "alts": [
+   "photo",
+   "camera"
+  ]
+ },
+ {
+  "q": "🌠",
+  "options": [
+   "étoile filante",
+   "tente",
+   "moufette",
+   "livre ouvert"
+  ],
+  "answer": "étoile filante",
+  "alts": [
+   "etoile filante",
+   "shooting star"
+  ]
+ },
+ {
+  "q": "🧢",
+  "options": [
+   "caddie",
+   "casquette",
+   "loup",
+   "requin"
+  ],
+  "answer": "casquette",
+  "alts": [
+   "casquettes",
+   "cap"
+  ]
+ },
+ {
+  "q": "👔",
+  "options": [
+   "maïs",
+   "tortue",
+   "cravate",
+   "dé"
+  ],
+  "answer": "cravate",
+  "alts": [
+   "cravates",
+   "tie"
+  ]
+ },
+ {
+  "q": "🍩",
+  "options": [
+   "beignet",
+   "taxi",
+   "tambour",
+   "vélo"
+  ],
+  "answer": "beignet",
+  "alts": [
+   "donut",
+   "donuts"
+  ]
+ },
+ {
+  "q": "🦘",
+  "options": [
+   "piano",
+   "kangourou",
+   "cadenas",
+   "papillon"
+  ],
+  "answer": "kangourou",
+  "alts": [
+   "kangaroo"
+  ]
+ },
+ {
+  "q": "🍿",
+  "options": [
+   "pop-corn",
+   "abeille",
+   "calmar",
+   "paella"
+  ],
+  "answer": "pop-corn",
+  "alts": [
+   "popcorn",
+   "pops corn"
+  ]
+ },
+ {
+  "q": "🥙",
+  "options": [
+   "panda",
+   "kebab",
+   "sac à main",
+   "confettis"
+  ],
+  "answer": "kebab",
+  "alts": [
+   "kabab",
+   "kefta"
+  ]
+ },
+ {
+  "q": "🕍",
+  "options": [
+   "synagogue",
+   "haut-de-forme",
+   "paresseux",
+   "abeille"
+  ],
+  "answer": "synagogue",
+  "alts": [
+   "synagogues",
+   "juif temple"
+  ]
+ },
+ {
+  "q": "⌚",
+  "options": [
+   "licorne",
+   "hibou",
+   "montre",
+   "grenouille"
+  ],
+  "answer": "montre",
+  "alts": [
+   "montre-bracelet",
+   "watch"
+  ]
+ },
+ {
+  "q": "☀️",
+  "options": [
+   "médaille d’or",
+   "nuage",
+   "galaxie",
+   "soleil"
+  ],
+  "answer": "soleil",
+  "alts": [
+   "sun",
+   "soleils"
+  ]
+ },
+ {
+  "q": "🎉",
+  "options": [
+   "éclair",
+   "confettis",
+   "flocon de neige",
+   "lait"
+  ],
+  "answer": "confettis",
+  "alts": [
+   "fete",
+   "party"
+  ]
+ },
+ {
+  "q": "🦂",
+  "options": [
+   "hélicoptère",
+   "scorpion",
+   "football américain",
+   "bougie"
+  ],
+  "answer": "scorpion",
+  "alts": []
+ },
+ {
+  "q": "⛺",
+  "options": [
+   "fée",
+   "tente",
+   "licorne",
+   "voie ferrée"
+  ],
+  "answer": "tente",
+  "alts": [
+   "tentes",
+   "camping"
+  ]
+ },
+ {
+  "q": "💣",
+  "options": [
+   "poulet rôti",
+   "lapin",
+   "bombe",
+   "gâteau d’anniversaire"
+  ],
+  "answer": "bombe",
+  "alts": [
+   "bombes",
+   "bomb"
+  ]
+ },
+ {
+  "q": "🧨",
+  "options": [
+   "lever de soleil",
+   "pétard",
+   "zombie",
+   "sac à dos"
+  ],
+  "answer": "pétard",
+  "alts": [
+   "petards",
+   "firecracker"
+  ]
+ },
+ {
+  "q": "🧑‍🍳",
+  "options": [
+   "hamster",
+   "elfe",
+   "lait",
+   "cuisinier"
+  ],
+  "answer": "cuisinier",
+  "alts": [
+   "chef cuistot",
+   "cuisiniere"
+  ]
+ },
+ {
+  "q": "🛻",
+  "options": [
+   "lait",
+   "requin",
+   "pickup",
+   "dinde"
+  ],
+  "answer": "pickup",
+  "alts": [
+   "pick-up",
+   "camionnette"
+  ]
+ },
+ {
+  "q": "🦓",
+  "options": [
+   "zèbre",
+   "salade",
+   "cochon",
+   "mouton"
+  ],
+  "answer": "zèbre",
+  "alts": [
+   "zebre"
+  ]
+ },
+ {
+  "q": "🪙",
+  "options": [
+   "cadenas",
+   "cadeau",
+   "hibou",
+   "pièce"
+  ],
+  "answer": "pièce",
+  "alts": [
+   "piece",
+   "pieces"
+  ]
+ },
+ {
+  "q": "🐸",
+  "options": [
+   "grenouille",
+   "désert",
+   "voie ferrée",
+   "lever de soleil"
+  ],
+  "answer": "grenouille",
+  "alts": [
+   "crapaud"
+  ]
+ },
+ {
+  "q": "🦄",
+  "options": [
+   "pompier",
+   "montagnes russes",
+   "éclair",
+   "licorne"
+  ],
+  "answer": "licorne",
+  "alts": []
+ },
+ {
+  "q": "🦥",
+  "options": [
+   "couronne",
+   "paresseux",
+   "elfe",
+   "médaille d’or"
+  ],
+  "answer": "paresseux",
+  "alts": []
+ },
+ {
+  "q": "🏰",
+  "options": [
+   "noix de coco",
+   "miel",
+   "château",
+   "feu"
+  ],
+  "answer": "château",
+  "alts": [
+   "chateau",
+   "castles"
+  ]
+ },
+ {
+  "q": "🐐",
+  "options": [
+   "Statue de la Liberté",
+   "chèvre",
+   "super-héros",
+   "noix de coco"
+  ],
+  "answer": "chèvre",
+  "alts": [
+   "chevre",
+   "bouc"
+  ]
+ },
+ {
+  "q": "🐼",
+  "options": [
+   "calmar",
+   "moto",
+   "panda",
+   "chameau"
+  ],
+  "answer": "panda",
+  "alts": []
+ },
+ {
+  "q": "🥾",
+  "options": [
+   "botte de randonnée",
+   "piment",
+   "hippopotame",
+   "hérisson"
+  ],
+  "answer": "botte de randonnée",
+  "alts": [
+   "bottes",
+   "boot"
+  ]
+ },
+ {
+  "q": "🦋",
+  "options": [
+   "super-héros",
+   "papillon",
+   "tacos",
+   "vampire"
+  ],
+  "answer": "papillon",
+  "alts": []
+ },
+ {
+  "q": "🌮",
+  "options": [
+   "tir à l’arc",
+   "calmar",
+   "tacos",
+   "noix de coco"
+  ],
+  "answer": "tacos",
+  "alts": [
+   "taco"
+  ]
+ },
+ {
+  "q": "🚜",
+  "options": [
+   "scooter",
+   "tracteur",
+   "zèbre",
+   "gâteau d’anniversaire"
+  ],
+  "answer": "tracteur",
+  "alts": [
+   "tracteurs",
+   "tractor"
+  ]
+ },
+ {
+  "q": "🛴",
+  "options": [
+   "tomate",
+   "trottinette",
+   "hibou",
+   "canard"
+  ],
+  "answer": "trottinette",
+  "alts": [
+   "trottinettes",
+   "scooter pouce"
+  ]
+ },
+ {
+  "q": "⚾",
+  "options": [
+   "trottinette",
+   "baseball",
+   "gardien royal",
+   "café"
+  ],
+  "answer": "baseball",
+  "alts": [
+   "base-ball",
+   "baseballs"
+  ]
+ },
+ {
+  "q": "🦨",
+  "options": [
+   "moufette",
+   "manette de jeu",
+   "volleyball",
+   "ours"
+  ],
+  "answer": "moufette",
+  "alts": [
+   "putois"
+  ]
+ },
+ {
+  "q": "🥖",
+  "options": [
+   "crevette",
+   "baguette de pain",
+   "livre ouvert",
+   "lune"
+  ],
+  "answer": "baguette de pain",
+  "alts": [
+   "baguette de francaise",
+   "baguettes"
+  ]
+ },
+ {
+  "q": "⚡",
+  "options": [
+   "fromage",
+   "éclair",
+   "hamster",
+   "policier"
+  ],
+  "answer": "éclair",
+  "alts": [
+   "eclair",
+   "foudre"
+  ]
+ },
+ {
+  "q": "🎻",
+  "options": [
+   "école",
+   "gorille",
+   "violon",
+   "livres"
+  ],
+  "answer": "violon",
+  "alts": [
+   "violons",
+   "violin"
+  ]
+ },
+ {
+  "q": "🐢",
+  "options": [
+   "dinde",
+   "tortue",
+   "papillon",
+   "poivron"
+  ],
+  "answer": "tortue",
+  "alts": []
+ },
+ {
+  "q": "🏀",
+  "options": [
+   "pain",
+   "lion",
+   "vélo",
+   "basketball"
+  ],
+  "answer": "basketball",
+  "alts": [
+   "basket",
+   "basket-ball"
+  ]
+ },
+ {
+  "q": "🍣",
+  "options": [
+   "rugby",
+   "maïs",
+   "sushi",
+   "violon"
+  ],
+  "answer": "sushi",
+  "alts": [
+   "sushis",
+   "sushit"
+  ]
+ },
+ {
+  "q": "🥜",
+  "options": [
+   "cacahuète",
+   "koala",
+   "pompier",
+   "lézard"
+  ],
+  "answer": "cacahuète",
+  "alts": [
+   "arachide",
+   "cacahuettes"
+  ]
+ },
+ {
+  "q": "🧛",
+  "options": [
+   "pont de nuit",
+   "vampire",
+   "piment",
+   "crêpes"
+  ],
+  "answer": "vampire",
+  "alts": [
+   "vampires"
+  ]
+ },
+ {
+  "q": "🧑‍🌾",
+  "options": [
+   "ramen",
+   "agriculteur",
+   "montagne",
+   "château"
+  ],
+  "answer": "agriculteur",
+  "alts": [
+   "paysan",
+   "fermier"
+  ]
+ },
+ {
+  "q": "🚂",
+  "options": [
+   "torii",
+   "train",
+   "poivron",
+   "étoile"
+  ],
+  "answer": "train",
+  "alts": [
+   "locomotive",
+   "trains"
+  ]
+ },
+ {
+  "q": "🥭",
+  "options": [
+   "raisin",
+   "sac à dos",
+   "mangue",
+   "serpent"
+  ],
+  "answer": "mangue",
+  "alts": [
+   "mango",
+   "mangues"
+  ]
+ },
+ {
+  "q": "🍳",
+  "options": [
+   "football américain",
+   "omelette",
+   "falafel",
+   "mosquée"
+  ],
+  "answer": "omelette",
+  "alts": [
+   "omelete",
+   "oeufs au plat"
+  ]
+ },
+ {
+  "q": "💧",
+  "options": [
+   "goutte d’eau",
+   "jus de fruit",
+   "caddie",
+   "ramen"
+  ],
+  "answer": "goutte d’eau",
+  "alts": [
+   "goutte",
+   "water"
+  ]
+ },
+ {
+  "q": "⛵",
+  "options": [
+   "maison",
+   "bretzel",
+   "voilier",
+   "soleil"
+  ],
+  "answer": "voilier",
+  "alts": [
+   "bateau à voile",
+   "sailboat"
+  ]
+ },
+ {
+  "q": "💂",
+  "options": [
+   "thé vert",
+   "gardien royal",
+   "poisson-globe",
+   "abeille"
+  ],
+  "answer": "gardien royal",
+  "alts": [
+   "garde royal",
+   "soldat britannique"
+  ]
+ },
+ {
+  "q": "🏔️",
+  "options": [
+   "caddie",
+   "piment",
+   "montagne",
+   "araignée"
+  ],
+  "answer": "montagne",
+  "alts": [
+   "montagnes",
+   "mountain"
+  ]
+ },
+ {
+  "q": "🦎",
+  "options": [
+   "violon",
+   "falafel",
+   "lézard",
+   "hibou"
+  ],
+  "answer": "lézard",
+  "alts": [
+   "lezard"
+  ]
+ },
+ {
+  "q": "🦑",
+  "options": [
+   "Tour de Tokyo",
+   "poisson tropical",
+   "ski",
+   "calmar"
+  ],
+  "answer": "calmar",
+  "alts": [
+   "calamar",
+   "squid"
+  ]
+ },
+ {
+  "q": "🥌",
+  "options": [
+   "fée",
+   "couronne",
+   "tomate",
+   "curling"
+  ],
+  "answer": "curling",
+  "alts": [
+   "pierre curling",
+   "stone glisse"
+  ]
+ },
+ {
+  "q": "🦀",
+  "options": [
+   "poisson tropical",
+   "diamant",
+   "crabe",
+   "ping-pong"
+  ],
+  "answer": "crabe",
+  "alts": []
+ },
+ {
+  "q": "🍅",
+  "options": [
+   "étoile",
+   "appareil photo",
+   "tomate",
+   "casquette"
+  ],
+  "answer": "tomate",
+  "alts": [
+   "tomates",
+   "tomato"
+  ]
+ },
+ {
+  "q": "🕯️",
+  "options": [
+   "médecin",
+   "bougie",
+   "pingouin",
+   "bretzel"
+  ],
+  "answer": "bougie",
+  "alts": [
+   "bougies",
+   "candle"
+  ]
+ },
+ {
+  "q": "🐊",
+  "options": [
+   "Statue de la Liberté",
+   "billard",
+   "crocodile",
+   "koala"
+  ],
+  "answer": "crocodile",
+  "alts": [
+   "caiman",
+   "alligator"
+  ]
+ },
+ {
+  "q": "🍗",
+  "options": [
+   "goutte d’eau",
+   "botte de randonnée",
+   "poulet rôti",
+   "Tour de Tokyo"
+  ],
+  "answer": "poulet rôti",
+  "alts": [
+   "poulet",
+   "poulet roti"
+  ]
+ },
+ {
+  "q": "🥗",
+  "options": [
+   "avocat",
+   "salade",
+   "abeille",
+   "bretzel"
+  ],
+  "answer": "salade",
+  "alts": [
+   "salades",
+   "salade verte"
+  ]
+ },
+ {
+  "q": "🎮",
+  "options": [
+   "manette de jeu",
+   "tracteur",
+   "fourmi",
+   "baguette de pain"
+  ],
+  "answer": "manette de jeu",
+  "alts": [
+   "manette",
+   "gamepad"
+  ]
+ },
+ {
+  "q": "🐑",
+  "options": [
+   "soleil",
+   "scorpion",
+   "tortue",
+   "mouton"
+  ],
+  "answer": "mouton",
+  "alts": [
+   "brebis",
+   "agneau"
+  ]
+ },
+ {
+  "q": "🐠",
+  "options": [
+   "poisson tropical",
+   "radio",
+   "tracteur",
+   "curry"
+  ],
+  "answer": "poisson tropical",
+  "alts": [
+   "poisson"
+  ]
+ },
+ {
+  "q": "🥞",
+  "options": [
+   "crêpes",
+   "montre",
+   "pomme",
+   "camion"
+  ],
+  "answer": "crêpes",
+  "alts": [
+   "crepe",
+   "pancake"
+  ]
+ },
+ {
+  "q": "🦚",
+  "options": [
+   "violon",
+   "pain",
+   "galaxie",
+   "paon"
+  ],
+  "answer": "paon",
+  "alts": []
+ },
+ {
+  "q": "🃏",
+  "options": [
+   "montagnes russes",
+   "joker",
+   "nuage",
+   "pièce"
+  ],
+  "answer": "joker",
+  "alts": [
+   "carte joker",
+   "jokers"
+  ]
+ },
+ {
+  "q": "🌈",
+  "options": [
+   "bombe",
+   "bourse d’or",
+   "arc-en-ciel",
+   "chèvre"
+  ],
+  "answer": "arc-en-ciel",
+  "alts": [
+   "arc en ciel",
+   "rainbow"
+  ]
+ },
+ {
+  "q": "🕷️",
+  "options": [
+   "serpent",
+   "araignée",
+   "borne d’arcade",
+   "canard"
+  ],
+  "answer": "araignée",
+  "alts": [
+   "araignee"
+  ]
+ },
+ {
+  "q": "🎢",
+  "options": [
+   "grillon",
+   "lever de soleil",
+   "montagnes russes",
+   "girafe"
+  ],
+  "answer": "montagnes russes",
+  "alts": [
+   "montagnes russe",
+   "roller coaster"
+  ]
+ },
+ {
+  "q": "🚒",
+  "options": [
+   "crayon",
+   "camion de pompiers",
+   "gardien royal",
+   "poulet rôti"
+  ],
+  "answer": "camion de pompiers",
+  "alts": [
+   "camion pompiers",
+   "fire truck"
+  ]
+ },
+ {
+  "q": "🐡",
+  "options": [
+   "cuisinier",
+   "café",
+   "talon",
+   "poisson-globe"
+  ],
+  "answer": "poisson-globe",
+  "alts": [
+   "fugu"
+  ]
+ },
+ {
+  "q": "🌶️",
+  "options": [
+   "astronaute",
+   "pièce",
+   "piment",
+   "lune"
+  ],
+  "answer": "piment",
+  "alts": [
+   "piments",
+   "chili"
+  ]
+ },
+ {
+  "q": "🐙",
+  "options": [
+   "poulet rôti",
+   "poulpe",
+   "synagogue",
+   "spaghetti"
+  ],
+  "answer": "poulpe",
+  "alts": [
+   "pieuvre",
+   "octopus"
+  ]
+ },
+ {
+  "q": "🍝",
+  "options": [
+   "OVNI",
+   "spaghetti",
+   "mouton",
+   "scorpion"
+  ],
+  "answer": "spaghetti",
+  "alts": [
+   "pates",
+   "pâtes"
+  ]
+ },
+ {
+  "q": "🐵",
+  "options": [
+   "feu",
+   "cygne",
+   "fourmi",
+   "singe"
+  ],
+  "answer": "singe",
+  "alts": [
+   "macaque"
+  ]
+ },
+ {
+  "q": "🕵️",
+  "options": [
+   "poivron",
+   "ours",
+   "détective",
+   "Statue de la Liberté"
+  ],
+  "answer": "détective",
+  "alts": [
+   "detective",
+   "enquêteur"
+  ]
+ },
+ {
+  "q": "☕",
+  "options": [
+   "café",
+   "piment",
+   "badminton",
+   "fromage"
+  ],
+  "answer": "café",
+  "alts": [
+   "cafe",
+   "cafes"
+  ]
+ },
+ {
+  "q": "🌌",
+  "options": [
+   "galaxie",
+   "château",
+   "casquette",
+   "cerise"
+  ],
+  "answer": "galaxie",
+  "alts": [
+   "galaxies",
+   "voie lactee"
+  ]
+ },
+ {
+  "q": "🦈",
+  "options": [
+   "cible",
+   "steak",
+   "requin",
+   "fée"
+  ],
+  "answer": "requin",
+  "alts": []
+ },
+ {
+  "q": "🐭",
+  "options": [
+   "bague",
+   "curry",
+   "souris",
+   "poulpe"
+  ],
+  "answer": "souris",
+  "alts": [
+   "rat"
+  ]
+ },
+ {
+  "q": "🍯",
+  "options": [
+   "désert",
+   "basketball",
+   "kangourou",
+   "miel"
+  ],
+  "answer": "miel",
+  "alts": [
+   "miels",
+   "honey"
+  ]
+ },
+ {
+  "q": "📚",
+  "options": [
+   "livres",
+   "cochon",
+   "pêche",
+   "ambulance"
+  ],
+  "answer": "livres",
+  "alts": [
+   "livre",
+   "books"
+  ]
+ },
+ {
+  "q": "🛕",
+  "options": [
+   "montre",
+   "baguette de pain",
+   "crayon",
+   "temple hindou"
+  ],
+  "answer": "temple hindou",
+  "alts": [
+   "temple",
+   "temples"
+  ]
+ },
+ {
+  "q": "🍕",
+  "options": [
+   "ours",
+   "pizza",
+   "sanglier",
+   "raisin"
+  ],
+  "answer": "pizza",
+  "alts": [
+   "pizzas"
+  ]
+ },
+ {
+  "q": "🎂",
+  "options": [
+   "hibou",
+   "sel",
+   "guitare",
+   "gâteau d’anniversaire"
+  ],
+  "answer": "gâteau d’anniversaire",
+  "alts": [
+   "gateau",
+   "anniversaire"
+  ]
+ },
+ {
+  "q": "🚀",
+  "options": [
+   "galaxie",
+   "fusée",
+   "ramen",
+   "cadeau"
+  ],
+  "answer": "fusée",
+  "alts": [
+   "fusee",
+   "rocket"
+  ]
+ },
+ {
+  "q": "🦹",
+  "options": [
+   "lune",
+   "cuisinier",
+   "cheval",
+   "super-vilain"
+  ],
+  "answer": "super-vilain",
+  "alts": [
+   "supervilain",
+   "mechant"
+  ]
+ },
+ {
+  "q": "🦆",
+  "options": [
+   "canard",
+   "galaxie",
+   "super-vilain",
+   "nuage"
+  ],
+  "answer": "canard",
+  "alts": []
+ },
+ {
+  "q": "🍜",
+  "options": [
+   "dé",
+   "mangue",
+   "ramen",
+   "miel"
+  ],
+  "answer": "ramen",
+  "alts": [
+   "nouilles",
+   "ramens"
+  ]
+ },
+ {
+  "q": "🥁",
+  "options": [
+   "tambour",
+   "ananas",
+   "cadenas",
+   "botte de randonnée"
+  ],
+  "answer": "tambour",
+  "alts": [
+   "batterie",
+   "drums"
+  ]
+ },
+ {
+  "q": "🦊",
+  "options": [
+   "mangue",
+   "renard",
+   "pickup",
+   "étoile"
+  ],
+  "answer": "renard",
+  "alts": [
+   "renar"
+  ]
+ },
+ {
+  "q": "🏠",
+  "options": [
+   "maison",
+   "baguette de pain",
+   "gorille",
+   "hôpital"
+  ],
+  "answer": "maison",
+  "alts": [
+   "maisons",
+   "house"
+  ]
+ },
+ {
+  "q": "⛳",
+  "options": [
+   "ouvrier",
+   "école",
+   "golf",
+   "raisin"
+  ],
+  "answer": "golf",
+  "alts": [
+   "golfs",
+   "trou de golf"
+  ]
+ },
+ {
+  "q": "🎩",
+  "options": [
+   "haut-de-forme",
+   "gardien royal",
+   "école",
+   "pain"
+  ],
+  "answer": "haut-de-forme",
+  "alts": [
+   "chapeau haut de forme",
+   "chapeaux"
+  ]
+ },
+ {
+  "q": "🥥",
+  "options": [
+   "éclair",
+   "chapeau de soleil",
+   "noix de coco",
+   "kebab"
+  ],
+  "answer": "noix de coco",
+  "alts": [
+   "coco",
+   "coco fruit"
+  ]
+ },
+ {
+  "q": "🐷",
+  "options": [
+   "bretzel",
+   "cochon",
+   "pingouin",
+   "canard"
+  ],
+  "answer": "cochon",
+  "alts": [
+   "porc"
+  ]
+ },
+ {
+  "q": "🧑‍⚖️",
+  "options": [
+   "zombie",
+   "prince",
+   "train",
+   "juge"
+  ],
+  "answer": "juge",
+  "alts": [
+   "juges",
+   "tribunal"
+  ]
+ },
+ {
+  "q": "🐨",
+  "options": [
+   "pilote",
+   "casquette",
+   "tambour",
+   "koala"
+  ],
+  "answer": "koala",
+  "alts": []
+ },
+ {
+  "q": "🦍",
+  "options": [
+   "île déserte",
+   "chameau",
+   "gorille",
+   "zombie"
+  ],
+  "answer": "gorille",
+  "alts": []
+ },
+ {
+  "q": "🐺",
+  "options": [
+   "loup",
+   "micro",
+   "cravate",
+   "désert"
+  ],
+  "answer": "loup",
+  "alts": []
+ },
+ {
+  "q": "🏐",
+  "options": [
+   "étoile filante",
+   "volleyball",
+   "école",
+   "papillon"
+  ],
+  "answer": "volleyball",
+  "alts": [
+   "volley",
+   "volley-ball"
+  ]
+ },
+ {
+  "q": "🐝",
+  "options": [
+   "radio",
+   "abeille",
+   "casquette",
+   "volleyball"
+  ],
+  "answer": "abeille",
+  "alts": [
+   "abeilles"
+  ]
+ },
+ {
+  "q": "🦔",
+  "options": [
+   "cadeau",
+   "planète Terre",
+   "hérisson",
+   "basket"
+  ],
+  "answer": "hérisson",
+  "alts": [
+   "herisson"
+  ]
+ },
+ {
+  "q": "🛤️",
+  "options": [
+   "poisson-globe",
+   "éclair",
+   "voie ferrée",
+   "cadenas"
+  ],
+  "answer": "voie ferrée",
+  "alts": [
+   "rails",
+   "chemin de fer"
+  ]
+ },
+ {
+  "q": "🥋",
+  "options": [
+   "caddie",
+   "judo",
+   "thé vert",
+   "bretzel"
+  ],
+  "answer": "judo",
+  "alts": [
+   "karate",
+   "arts martiaux"
+  ]
+ },
+ {
+  "q": "🎤",
+  "options": [
+   "araignée",
+   "micro",
+   "baseball",
+   "baguette de pain"
+  ],
+  "answer": "micro",
+  "alts": [
+   "microphone",
+   "karaoke"
+  ]
+ },
+ {
+  "q": "🎁",
+  "options": [
+   "école",
+   "super-vilain",
+   "cadeau",
+   "flocon de neige"
+  ],
+  "answer": "cadeau",
+  "alts": [
+   "cadeaux",
+   "present"
+  ]
+ },
+ {
+  "q": "🏆",
+  "options": [
+   "crocodile",
+   "détective",
+   "cheval",
+   "trophée"
+  ],
+  "answer": "trophée",
+  "alts": [
+   "trophy",
+   "coupe championnat"
+  ]
+ },
+ {
+  "q": "🏸",
+  "options": [
+   "badminton",
+   "football",
+   "tente",
+   "ouvrier"
+  ],
+  "answer": "badminton",
+  "alts": [
+   "badmintons",
+   "volant"
+  ]
+ },
+ {
+  "q": "🕹️",
+  "options": [
+   "fontaine",
+   "borne d’arcade",
+   "café",
+   "panda"
+  ],
+  "answer": "borne d’arcade",
+  "alts": [
+   "joystick",
+   "arcade"
+  ]
+ },
+ {
+  "q": "👟",
+  "options": [
+   "football américain",
+   "tacos",
+   "basket",
+   "dauphin"
+  ],
+  "answer": "basket",
+  "alts": [
+   "baskets",
+   "sneakers"
+  ]
+ },
+ {
+  "q": "🎣",
+  "options": [
+   "pêche",
+   "confettis",
+   "super-héros",
+   "steak"
+  ],
+  "answer": "pêche",
+  "alts": [
+   "peche",
+   "pecheur"
+  ]
+ },
+ {
+  "q": "🐬",
+  "options": [
+   "dauphin",
+   "badminton",
+   "pilote",
+   "serpent"
+  ],
+  "answer": "dauphin",
+  "alts": []
+ },
+ {
+  "q": "🐯",
+  "options": [
+   "caddie",
+   "aigle",
+   "tigre",
+   "nuage"
+  ],
+  "answer": "tigre",
+  "alts": [
+   "tigresse"
+  ]
+ },
+ {
+  "q": "🚓",
+  "options": [
+   "luge",
+   "voiture de police",
+   "école",
+   "dinosaure"
+  ],
+  "answer": "voiture de police",
+  "alts": [
+   "police voiture",
+   "voiture policier"
+  ]
+ },
+ {
+  "q": "🧂",
+  "options": [
+   "boxe",
+   "beignet",
+   "pop-corn",
+   "sel"
+  ],
+  "answer": "sel",
+  "alts": [
+   "sels",
+   "salt"
+  ]
+ },
+ {
+  "q": "🎈",
+  "options": [
+   "ballon",
+   "planète Terre",
+   "escargot",
+   "football américain"
+  ],
+  "answer": "ballon",
+  "alts": [
+   "ballons",
+   "balloon"
+  ]
+ },
+ {
+  "q": "🍒",
+  "options": [
+   "voilier",
+   "cerise",
+   "cirque",
+   "rugby"
+  ],
+  "answer": "cerise",
+  "alts": [
+   "cerises",
+   "cheries"
+  ]
+ },
+ {
+  "q": "🦛",
+  "options": [
+   "hippopotame",
+   "café",
+   "montre",
+   "super-héros"
+  ],
+  "answer": "hippopotame",
+  "alts": [
+   "hippo"
+  ]
+ },
+ {
+  "q": "🥑",
+  "options": [
+   "kangourou",
+   "fourmi",
+   "dé",
+   "avocat"
+  ],
+  "answer": "avocat",
+  "alts": [
+   "avocats",
+   "avocato"
+  ]
+ },
+ {
+  "q": "👑",
+  "options": [
+   "violon",
+   "joker",
+   "couronne",
+   "fontaine"
+  ],
+  "answer": "couronne",
+  "alts": [
+   "couronnes",
+   "crown"
+  ]
+ },
+ {
+  "q": "🌽",
+  "options": [
+   "maïs",
+   "confettis",
+   "mangue",
+   "clé"
+  ],
+  "answer": "maïs",
+  "alts": [
+   "mais",
+   "corncob"
+  ]
+ },
+ {
+  "q": "🪕",
+  "options": [
+   "banjo",
+   "sirène",
+   "crêpes",
+   "mangue"
+  ],
+  "answer": "banjo",
+  "alts": [
+   "banjos",
+   "banjoo"
+  ]
+ },
+ {
+  "q": "⚽",
+  "options": [
+   "abeille",
+   "cochon",
+   "football",
+   "cupcake"
+  ],
+  "answer": "football",
+  "alts": [
+   "foot",
+   "soccer"
+  ]
+ },
+ {
+  "q": "🗽",
+  "options": [
+   "désert",
+   "livres",
+   "chèvre",
+   "Statue de la Liberté"
+  ],
+  "answer": "Statue de la Liberté",
+  "alts": [
+   "statue liberte",
+   "liberty"
+  ]
+ },
+ {
+  "q": "⭐",
+  "options": [
+   "croissant",
+   "tir à l’arc",
+   "clé",
+   "étoile"
+  ],
+  "answer": "étoile",
+  "alts": [
+   "etoile",
+   "etoiles"
+  ]
+ },
+ {
+  "q": "🍉",
+  "options": [
+   "pastèque",
+   "tambour",
+   "lion",
+   "poulpe"
+  ],
+  "answer": "pastèque",
+  "alts": [
+   "pasteque",
+   "melon deau"
+  ]
+ },
+ {
+  "q": "🎲",
+  "options": [
+   "raisin",
+   "grillon",
+   "dé",
+   "ballon"
+  ],
+  "answer": "dé",
+  "alts": [
+   "des",
+   "dice"
+  ]
+ },
+ {
+  "q": "🎺",
+  "options": [
+   "luge",
+   "trompette",
+   "baseball",
+   "panda"
+  ],
+  "answer": "trompette",
+  "alts": [
+   "trompettes",
+   "trumpet"
+  ]
+ },
+ {
+  "q": "🍱",
+  "options": [
+   "clé",
+   "bento",
+   "serpent",
+   "bague"
+  ],
+  "answer": "bento",
+  "alts": [
+   "bentos"
+  ]
+ },
+ {
+  "q": "👮",
+  "options": [
+   "botte de randonnée",
+   "médecin",
+   "sel",
+   "policier"
+  ],
+  "answer": "policier",
+  "alts": [
+   "police",
+   "gendarme"
+  ]
+ },
+ {
+  "q": "🦅",
+  "options": [
+   "aigle",
+   "koala",
+   "elfe",
+   "ski"
+  ],
+  "answer": "aigle",
+  "alts": []
+ },
+ {
+  "q": "🚁",
+  "options": [
+   "hélicoptère",
+   "sanglier",
+   "steak",
+   "tir à l’arc"
+  ],
+  "answer": "hélicoptère",
+  "alts": [
+   "helicoptere",
+   "heli"
+  ]
+ },
+ {
+  "q": "🐤",
+  "options": [
+   "poussin",
+   "poisson tropical",
+   "escargot",
+   "zombie"
+  ],
+  "answer": "poussin",
+  "alts": []
+ },
+ {
+  "q": "🔥",
+  "options": [
+   "fontaine",
+   "omelette",
+   "feu",
+   "cygne"
+  ],
+  "answer": "feu",
+  "alts": [
+   "flamme",
+   "flames"
+  ]
+ },
+ {
+  "q": "🧆",
+  "options": [
+   "Père Noël",
+   "chameau",
+   "sirène",
+   "falafel"
+  ],
+  "answer": "falafel",
+  "alts": [
+   "falafels",
+   "boulette"
+  ]
+ },
+ {
+  "q": "🦇",
+  "options": [
+   "pilote",
+   "maïs",
+   "chauve-souris",
+   "croissant"
+  ],
+  "answer": "chauve-souris",
+  "alts": [
+   "chauve souris"
+  ]
+ },
+ {
+  "q": "🎯",
+  "options": [
+   "étoile",
+   "cible",
+   "cygne",
+   "vache"
+  ],
+  "answer": "cible",
+  "alts": [
+   "darts",
+   "flechettes"
+  ]
+ },
+ {
+  "q": "🦗",
+  "options": [
+   "crayon",
+   "cirque",
+   "borne d’arcade",
+   "grillon"
+  ],
+  "answer": "grillon",
+  "alts": [
+   "sauterelle",
+   "criquet"
+  ]
+ },
+ {
+  "q": "🗼",
+  "options": [
+   "poulet rôti",
+   "pickup",
+   "Tour de Tokyo",
+   "trompette"
+  ],
+  "answer": "Tour de Tokyo",
+  "alts": [
+   "tour tokyo",
+   "tokyo tower"
+  ]
+ },
+ {
+  "q": "🍇",
+  "options": [
+   "jus de fruit",
+   "livres",
+   "salade",
+   "raisin"
+  ],
+  "answer": "raisin",
+  "alts": [
+   "raisins",
+   "grape"
+  ]
+ },
+ {
+  "q": "🐜",
+  "options": [
+   "bretzel",
+   "mangue",
+   "hélicoptère",
+   "fourmi"
+  ],
+  "answer": "fourmi",
+  "alts": []
+ },
+ {
+  "q": "🤴",
+  "options": [
+   "avocat",
+   "caddie",
+   "prince",
+   "trottinette"
+  ],
+  "answer": "prince",
+  "alts": [
+   "roi"
+  ]
+ },
+ {
+  "q": "💍",
+  "options": [
+   "crevette",
+   "pizza",
+   "zombie",
+   "bague"
+  ],
+  "answer": "bague",
+  "alts": [
+   "alliance",
+   "ring"
+  ]
+ },
+ {
+  "q": "🥦",
+  "options": [
+   "dauphin",
+   "brocoli",
+   "crabe",
+   "OVNI"
+  ],
+  "answer": "brocoli",
+  "alts": [
+   "brocolis"
+  ]
+ },
+ {
+  "q": "🕌",
+  "options": [
+   "basket",
+   "mosquée",
+   "ours",
+   "botte de randonnée"
+  ],
+  "answer": "mosquée",
+  "alts": [
+   "mosquee",
+   "mosquees"
+  ]
+ },
+ {
+  "q": "🐮",
+  "options": [
+   "pinceau",
+   "clé",
+   "cadenas",
+   "vache"
+  ],
+  "answer": "vache",
+  "alts": [
+   "boeuf",
+   "taureau"
+  ]
+ },
+ {
+  "q": "🕶️",
+  "options": [
+   "fée",
+   "lunettes de soleil",
+   "sac à main",
+   "hot-dog"
+  ],
+  "answer": "lunettes de soleil",
+  "alts": [
+   "lunettes soleil",
+   "sunglasses"
+  ]
+ },
+ {
+  "q": "🌉",
+  "options": [
+   "sirène",
+   "trottinette",
+   "pizza",
+   "pont de nuit"
+  ],
+  "answer": "pont de nuit",
+  "alts": [
+   "pont",
+   "bridge"
+  ]
+ },
+ {
+  "q": "🛵",
+  "options": [
+   "scooter",
+   "rhinocéros",
+   "rugby",
+   "cacahuète"
+  ],
+  "answer": "scooter",
+  "alts": [
+   "scooters",
+   "mobylette"
+  ]
+ },
+ {
+  "q": "🐳",
+  "options": [
+   "lever de soleil",
+   "mécanicien",
+   "cuisinier",
+   "baleine"
+  ],
+  "answer": "baleine",
+  "alts": [
+   "baleine bleue"
+  ]
+ },
+ {
+  "q": "💰",
+  "options": [
+   "lever de soleil",
+   "talon",
+   "lait",
+   "bourse d’or"
+  ],
+  "answer": "bourse d’or",
+  "alts": [
+   "argent",
+   "money"
+  ]
+ },
+ {
+  "q": "🍞",
+  "options": [
+   "noix de coco",
+   "singe",
+   "pain",
+   "taxi"
+  ],
+  "answer": "pain",
+  "alts": [
+   "pains",
+   "baguette"
+  ]
+ },
+ {
+  "q": "👠",
+  "options": [
+   "dé",
+   "talon",
+   "mouton",
+   "thé vert"
+  ],
+  "answer": "talon",
+  "alts": [
+   "talons aiguille",
+   "escarpin"
+  ]
+ }
+]
