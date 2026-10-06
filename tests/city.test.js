@@ -131,27 +131,42 @@ describe('Xcity — territoire (km²) & tourisme', () => {
 });
 
 describe('Xcity — armée : unités, casernes, officiers', () => {
-  test('train : caserne requise, lvl des unités, capacité', async () => {
+  test('train : LOTS de 𝗟𝘃𝗹×5 (tarif +25 %), casernes requises', async () => {
     const { bot } = await freshBot();
     const g = game(bot);
     g.create(UIDS.shadow, 'Racine', 'S');
     const c = g.cityOf(UIDS.shadow);
     assert.ok(g.train(UIDS.shadow, 'soldier').err.includes('caserne'));
-    c.gold = 9999; g.build(UIDS.shadow, 'barracks'); // capacité 10
+    c.gold = 999999; g.build(UIDS.shadow, 'barracks'); // 15 places
     const r = g.train(UIDS.shadow, 'soldier');
     assert.equal(r.ok, true);
-    assert.equal(c.units.soldier, 1);
+    assert.equal(r.qty, 5);        // 𝗟𝘃𝗹 1 → lot de 5
+    assert.equal(r.cost, 1250);    // 200×5×1,25 (arrondi 50)
+    assert.equal(r.perHead, 250);
+    assert.equal(c.units.soldier, 5);
     assert.ok(g.train(UIDS.shadow, 'archer').err.includes('𝗟𝘃𝗹 2'));
-    c.lvl = 2;
     assert.ok(g.train(UIDS.shadow, 'cavalry').err.includes('𝗟𝘃𝗹 3'));
     c.lvl = 3;
-    for (let i = 0; i < 14; i++) { c.gold = 9999; c.lastTrain = 0; assert.equal(g.train(UIDS.shadow, 'soldier').ok, true); }
-    assert.equal(g.unitCount(c), 15); // capacité 1 caserne = 15
-    c.gold = 9999; c.lastTrain = 0;
-    assert.ok(g.train(UIDS.shadow, 'soldier').err.includes('pleine'));
-    // PLUS DE PLAFOND 60 : une 5ᵉ caserne porte la capacité à 75
-    c.gold = 99999;
-    for (let i = 0; i < 4; i++) { assert.equal(g.build(UIDS.shadow, 'barracks').ok, true); }
+    g.build(UIDS.shadow, 'barracks');
+    g.build(UIDS.shadow, 'barracks'); // 3 casernes = 45 places
+    c.lastTrain = 0;
+    const r2 = g.train(UIDS.shadow, 'cavalry');
+    assert.equal(r2.qty, 15);      // 𝗟𝘃𝗹 3 → lot de 15
+    assert.equal(r2.cost, 15000);  // 800×15×1,25
+    c.lastTrain = 0;
+    const r3 = g.train(UIDS.shadow, 'archer'); // lot 15 → 35/45
+    assert.equal(r3.ok, true);
+    assert.equal(r3.cost, 6600);   // ceil(350×15×1,25/50)×50
+    c.lastTrain = 0;
+    assert.ok(g.train(UIDS.shadow, 'soldier').err.includes('manque')); // 35+15 > 45
+    // PAS DE PLAFOND : 5 casernes = 75 places, les lots continuent de rentrer
+    c.gold = 999999;
+    g.build(UIDS.shadow, 'barracks');
+    g.build(UIDS.shadow, 'barracks'); // 5 casernes = 75
+    c.lastTrain = 0;
+    const r4 = g.train(UIDS.shadow, 'soldier');
+    assert.equal(r4.ok, true);
+    assert.equal(g.unitCount(c), 50);
     assert.equal(g.unitCapacity(c), 75);
   });
 
@@ -181,7 +196,9 @@ describe('Xcity — attaques & trahison', () => {
     const att = g.cityOf(UIDS.shadow);
     const vic = g.cityOf(UIDS.paul);
     att.gold = 20000; g.build(UIDS.shadow, 'barracks');
-    for (let i = 0; i < 10; i++) { att.gold = 99999; att.lastTrain = 0; g.train(UIDS.shadow, 'soldier'); }
+    att.lvl = 3;
+    att.lastTrain = 0;
+    g.train(UIDS.shadow, 'soldier'); // lot de 15 soldats
     vic.gold = 10000; // butin attendu = 1500
     const r = g.attack(UIDS.shadow, 'Victime');
     assert.equal(r.ok, true);
@@ -250,8 +267,10 @@ describe('Xcity — attaques & trahison', () => {
     g.create(UIDS.shadow, 'Faible', 'S');
     g.create(UIDS.paul, 'Fort', 'P');
     const fort = g.cityOf(UIDS.paul);
-    fort.gold = 9999; g.build(UIDS.paul, 'barracks');
-    for (let i = 0; i < 10; i++) { fort.gold = 9999; fort.lastTrain = 0; g.train(UIDS.paul, 'cavalry'); }
+    fort.lvl = 3;
+    fort.gold = 99999; g.build(UIDS.paul, 'barracks');
+    fort.lastTrain = 0;
+    g.train(UIDS.paul, 'cavalry'); // lot de 15 cavaliers
     const repBefore = fort.rep;
     const r = g.attack(UIDS.shadow, 'Fort'); // attaque à mains nues → écrasée
     assert.equal(r.ok, true);
@@ -1179,7 +1198,7 @@ describe('Xcity — monde, commande & XCoins intacts', () => {
     assert.deepEqual(all.filter((b) => /EN PAUSE|INTERNAL_ERROR/i.test(b)), []);
     assert.ok(all.some((b) => /RECRUTEMENT/i.test(b) && /Soldat/i.test(b)));
     assert.ok(all.some((b) => /OFFICER RECRUTÉ/i.test(b) && /Capitaine/i.test(b)));
-    assert.equal(c.units.soldier, 1);
+    assert.equal(c.units.soldier, 15); // la ville est 𝗟𝘃𝗹 3 → lot de 15
     assert.equal(c.officers.captain, true);
   });
 

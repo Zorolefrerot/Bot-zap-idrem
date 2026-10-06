@@ -190,15 +190,17 @@ module.exports = {
           ...Object.entries(UNITS).map(([k, u]) => `${u.label} — ${nfc(u.cost)}${cur()} · puissance ${u.pow} · 𝗟𝘃𝗹 ${u.minLvl}+`),
           '',
           '📌 ' + ctx.fmt.bold('Format') + ' : Xcity train <soldat|archer|cavalier> (caserne requise)',
-          '🧮 Capacité : 15 unités par caserne — Xcity build barracks pour agrandir',
+          '🧮 LOTS : lot = 𝗟𝘃𝗹 × 5 unités · tarif lot +25 % · 15 places/caserne',
+          '🏗️ Trop petit lot ? Monte de niveau (Xcity upgrade) et agrandis les casernes',
         ]));
       }
       const res = game.train(uid, String(a[0] || '').toLowerCase());
       if (!res.ok) return bad(res.err);
       const u = UNITS[res.unit];
-      return ctx.send(ctx.fmt.frame('🪖 RECRUTEMENT', [
-        `${u.label} enrôlé — ${res.total}/${res.capacity} dans les casernes`,
-        `💰 −${nfc(res.cost)}${cur()} → trésor ${nfc(res.gold)}${cur()}`,
+      return ctx.send(ctx.fmt.frame('🪖 RECRUTEMENT PAR LOT', [
+        `${u.label} ×${res.qty} enrôlés — casernes : ${res.total}/${res.capacity}`,
+        `💰 −${nfc(res.cost)}${cur()} (${nfc(res.perHead)}${cur()}/tête, tarif lot) → trésor ${nfc(res.gold)}${cur()}`,
+        '📈 Le lot grandit avec ta ville : 𝗟𝘃𝗹 × 5 unités',
       ]));
     }
     if (sub === 'officer') {

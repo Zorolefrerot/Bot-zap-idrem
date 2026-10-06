@@ -51,6 +51,8 @@ const ELEMENTS = {
 };
 const LAB_SCI_PER = 3;          // scientifiques par laboratoire
 const HIRE_COST = 800;          // embauche d’un scientifique
+const LOT_MARKUP = 1.25;        // tarif LOT : +25 % par rapport aux unités à l’unité
+const LOT_PER_LVL = 5;          // taille du lot = 𝗟𝘃𝗹 de la ville × 5
 const RESEARCH_CD = 90_000;     // campagne de recherche
 const RESEARCH_COST = 200;
 const SYNTH_CD = 5 * 60_000;    // « pas des virus à tout moment »
@@ -485,12 +487,24 @@ class CityGame {
     }
     const now = this.now();
     if (now - c.lastTrain < TRAIN_CD) return { ok: false, err: 'Cooldown recrutement : 30 s' };
+    /* 🪖 Recrutement par LOTS : la taille dépend du 𝗟𝘃𝗹 de la ville
+     * (lvl × 5) et le tarif lot est majoré de +25 %. */
+    const qty = Math.max(1, (c.lvl || 1) * LOT_PER_LVL);
+    const free = this.unitCapacity(c) - this.unitCount(c);
+    if (free < qty) {
+      return { ok: false, err: `Casernes insuffisantes : il manque ${free < 0 ? qty : qty - free} place(s) pour le lot de ${qty} — construis une caserne (Xcity build barracks).` };
+    }
+    const cost = Math.ceil((u.cost * qty * LOT_MARKUP) / 50) * 50;
+    if (c.gold < cost) return { ok: false, err: `Le lot de ${qty} coûte ${nf(cost)}${this.cur()} (${Math.round(cost / qty)}${this.cur()}/tête) — fonds : ${nf(c.gold)}.` };
     c.lastTrain = now;
-    if (c.gold < u.cost) return { ok: false, err: `Fonds insuffisants (${nf(u.cost)}${this.cur()}).` };
-    c.gold -= u.cost;
-    c.units[unit] += 1;
+    c.gold -= cost;
+    c.units[unit] += qty;
     this.save();
-    return { ok: true, unit, cost: u.cost, count: c.units[unit], gold: c.gold, capacity: this.unitCapacity(c), total: this.unitCount(c) };
+    return {
+      ok: true, unit, qty, cost, perHead: Math.round(cost / qty),
+      count: c.units[unit], gold: c.gold,
+      capacity: this.unitCapacity(c), total: this.unitCount(c),
+    };
   }
 
   buyOfficer(uid, which) {
@@ -2191,7 +2205,7 @@ module.exports = {
   RANSOM_MIN,
   CANDIDACY_FEE, CANDIDACY_MS, VOTING_MS, MANDATE_MS, VOTE_WEIGHT, PRES_TAX,
   SCANDAL_PENALTY, CURRENCIES, QUARANTINE_MS, VACCINE_PRICE,
-  PRES_SALARY, SALARY_MS, WORKS,
+  PRES_SALARY, SALARY_MS, WORKS, LOT_MARKUP, LOT_PER_LVL,
   BETRAY_RATE, BETRAY_REP, LOOT_RATE, LOOT_CAP, SEND_TAX, EXPAND_BASE,
   COLLECT_CD, ATTACK_CD, EXPAND_CD, TRAIN_CD, MARKET_MS, TREATY_MS, SHIELD_MS,
   titleFor,
