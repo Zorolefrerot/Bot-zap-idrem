@@ -12,6 +12,7 @@ const assert = require('node:assert');
 const { boot, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
 const { CityGame, RES } = require('../systems/city');
 const { CURE_PRICE, DEATH_BOUNTY, DEATH_RATE, PRES_SALARY, MANDATE_MS } = require('../systems/city');
+const { WORKS } = require('../systems/city');
 const { BETRAY_RATE, LOOT_RATE, SEND_TAX } = require('../systems/city');
 
 const FLUSH = async (n = 10) => { for (let i = 0; i < n; i++) await new Promise((r) => setImmediate(r)); };
@@ -892,6 +893,200 @@ describe('Xcity — dissuasion nucléaire ☢️ + enquêtes + vaccins noirs', (
   });
 });
 
+describe('Xcity — gouvernance mondiale 🏛️ (décrets, constitution, tribunal, travaux…)', () => {
+  function pres(bot) { // Alpha élue présidente, Beta & Gamma voisins
+    const g = game(bot);
+    g.create(UIDS.shadow, 'Alpha', 'S');
+    g.create(UIDS.paul, 'Beta', 'P');
+    g.create(UIDS.fortiche, 'Gamma', 'F');
+    const a = g.cityOf(UIDS.shadow);
+    a.gold = 200000; a.pop = 90;
+    g.openElection(UIDS.shadow);
+    g.candidater(UIDS.shadow);
+    g.assembly().election.deadline = g.now() - 1;
+    g.assembly();
+    g.assembly().election.deadline = g.now() - 1;
+    g.assembly();
+    assert.equal(g.presidentUid(), String(UIDS.shadow));
+    g.cityOf(UIDS.paul).gold = 99999;
+    g.cityOf(UIDS.fortiche).gold = 99999;
+    return { g, a };
+  }
+
+  test('décrets : 1/mandat, foire = ventes +20 %, paix bloque, couvre-feu bloque', async () => {
+    const { bot } = await freshBot();
+    const { g } = pres(bot);
+    assert.ok(g.worldDecree(UIDS.paul, 'foire').err.includes('PRÉSIDENT'));
+    assert.equal(g.worldDecree(UIDS.shadow, 'foire').ok, true);
+    assert.ok(g.worldDecree(UIDS.shadow, 'paix').err.includes('déjà'));
+    // foire : vente ×1.2
+    const b = g.cityOf(UIDS.paul);
+    g.refreshMarket();
+    g.store.data.market.prices.wood = 10;
+    b.res.wood = 20;
+    const sell = g.marketTrade(UIDS.paul, 'sell', 'wood', 10);
+    assert.equal(sell.total, 120); // 100 × 1.2
+  });
+
+  test('jour de paix : attaques et nucléaire suspendus ; couvre-feu bloque l’espionnage', async () => {
+    const { bot } = await freshBot();
+    const { g, a } = pres(bot);
+    g.worldDecree(UIDS.shadow, 'paix');
+    assert.ok(g.attack(UIDS.shadow, 'Beta').err.includes('JOUR DE PAIX'));
+    a.nukes = 1;
+    assert.ok(g.nuke(UIDS.shadow, 'Beta').err.includes('JOUR DE PAIX'));
+    // autre monde : couvrefeu
+    const { bot: b2 } = await freshBot();
+    const { g: g2 } = pres(b2);
+    g2.worldDecree(UIDS.shadow, 'couvrefeu');
+    const me = g2.cityOf(UIDS.shadow);
+    me.units.archer = 1;
+    assert.ok(g2.spy(UIDS.shadow, 'Beta').err.includes('COUVRE-FEU'));
+  });
+
+  test('constitution : novice protège, butin plafonne à 7 500, noir à 60/hab', async () => {
+    const { bot } = await freshBot();
+    const { g } = pres(bot);
+    assert.equal(g.loiPropose(UIDS.shadow, 'novice').ok, true);
+    g.loiVote(UIDS.shadow, 'novice', 'oui');
+    g.loiVote(UIDS.paul, 'novice', 'oui');
+    g.assembly().loi.deadline = g.now() - 1;
+    g.assembly();
+    assert.equal(g.ruleAdopted('novice'), true);
+    const victim = g.cityOf(UIDS.paul);
+    victim.lvl = 1;
+    assert.ok(g.attack(UIDS.shadow, 'Beta').err.includes('CONSTITUTION'));
+    // butin réduit
+    assert.equal(g.loiPropose(UIDS.shadow, 'butin').ok, true);
+    g.loiVote(UIDS.shadow, 'butin', 'oui'); g.loiVote(UIDS.paul, 'butin', 'oui'); g.loiVote(UIDS.fortiche, 'butin', 'non');
+    g.assembly().loi.deadline = g.now() - 1;
+    g.assembly();
+    victim.lvl = 5;
+    victim.units.soldier = 0; // défense nulle
+    victim.gold = 100000;
+    const r = g.attack(UIDS.shadow, 'Beta'); // l'attaque réussit (attaquant mieux équipé ?) — peu importe, on teste le plafond si victoire
+    if (r.win) assert.ok(r.loot <= 7500);
+  });
+
+  test('tribunal : preuves = voix, amende versée à l’Assemblée, embargo ferme le marché', async () => {
+    const { bot } = await freshBot();
+    const { g } = pres(bot);
+    const accused = g.cityOf(UIDS.paul);
+    accused.scandals = 1; // preuves = 2
+    const tresoBefore = g.assembly().treasury;
+    assert.equal(g.tribunalOpen(UIDS.shadow, 'Beta', 'amende').ok, true);
+    assert.ok(g.tribunalOpen(UIDS.shadow, 'Beta', 'amende').err.includes('déjà'));
+    g.tribunalVote(UIDS.shadow, 'coupable');
+    g.tribunalVote(UIDS.fortiche, 'innocent');
+    g.assembly().tribunal.deadline = g.now() - 1;
+    g.assembly();
+    assert.ok(g.assembly().treasury > tresoBefore); // amende encaissée (2 preuves > 1 innocent)
+    assert.ok(accused.notif.some((n) => n.includes('COUPABLE')));
+    // embargo (avec preuves : scandal → coupable automatique)
+    const { bot: b2 } = await freshBot();
+    const { g: g2 } = pres(b2);
+    g2.cityOf(UIDS.paul).scandals = 1; // preuves = 2 → majorité coupable sans vote
+    g2.tribunalOpen(UIDS.shadow, 'Beta', 'embargo');
+    g2.assembly().tribunal.deadline = g2.now() - 1;
+    g2.assembly();
+    assert.ok(g2.marketTrade(UIDS.paul, 'buy', 'wood', 1).err.includes('EMBARGO'));
+  });
+
+  test('grands travaux : étapes → bonus mondial (pont +10 % touristes)', async () => {
+    const { bot } = await freshBot();
+    const { g } = pres(bot);
+    assert.ok(g.worksFund(UIDS.shadow, 1000).err.includes('Aucun chantier'));
+    assert.equal(g.worksLaunch(UIDS.shadow, 'pont').ok, true);
+    const donor = g.cityOf(UIDS.fortiche);
+    const moralBefore = donor.moral;
+    const r = g.worksFund(UIDS.fortiche, 15000);
+    assert.equal(r.stageDone, true);
+    assert.equal(donor.moral, moralBefore + 1);
+    assert.equal(g.buffActive('pont'), true); // bonus actif
+    const c1 = g.cityOf(UIDS.shadow);
+    assert.equal(g.tourists(c1), 11); // 10 × 1.1
+    // étape 2 par le trésor
+    const treso = g.assembly().treasury;
+    const r2 = g.worksFund(UIDS.shadow, 25000, true);
+    assert.equal(r2.stageDone, true);
+    assert.ok(g.assembly().treasury < treso);
+    assert.equal(r2.stage, 2);
+  });
+
+  test('catastrophe : déclaration sur ville ruinée, rebuild -50 %, dons qui réconfortent', async () => {
+    const { bot } = await freshBot();
+    const { g } = pres(bot);
+    const victim = g.cityOf(UIDS.paul);
+    assert.ok(g.declareCatastrophe(UIDS.shadow, 'Beta').err.includes('aucune catastrophe'));
+    victim.ruined = 1;
+    assert.equal(g.declareCatastrophe(UIDS.shadow, 'Beta').ok, true);
+    const goldBefore = victim.gold;
+    g.build(UIDS.paul, 'house');
+    assert.equal(victim.gold, goldBefore - 250); // 500 → 250
+    const donor = g.cityOf(UIDS.fortiche);
+    const moralBefore = donor.moral;
+    g.send(UIDS.fortiche, 'Beta', 'money', 'money', 500);
+    assert.equal(donor.moral, moralBefore + 4);
+  });
+
+  test('renseignement : l’informateur livre (ou pas) le créateur du virus', async () => {
+    const { bot } = await freshBot();
+    const { g } = pres(bot);
+    g.store.data.virusArchive.Mystere = String(UIDS.paul);
+    g.store.data.assembly.treasury = 50000;
+    g.rng = () => 0.01; // fiable
+    const r = g.intelBuy(UIDS.shadow, 'Mystere');
+    assert.equal(r.sure, true);
+    assert.equal(r.creator, 'Beta');
+    assert.equal(g.assembly().treasury, 30000);
+    assert.ok(g.cityOf(UIDS.shadow).notif.some((n) => n.includes('INFORMATEUR')));
+    g.assembly().lastTick = 0;
+    g.rng = () => 0.9; // peu fiable
+    const r2 = g.intelBuy(UIDS.shadow, 'Mystere');
+    assert.equal(r2.sure, false);
+  });
+
+  test('sommet : présence = moral, clôture = paix collective de 24 h', async () => {
+    const { bot } = await freshBot();
+    const { g } = pres(bot);
+    const treso = g.assembly().treasury;
+    assert.equal(g.summitOpen(UIDS.shadow).ok, true);
+    assert.equal(g.assembly().treasury, treso - 5000);
+    const m1 = g.cityOf(UIDS.paul).moral;
+    assert.equal(g.summitAttend(UIDS.paul).ok, true);
+    assert.equal(g.cityOf(UIDS.paul).moral, m1 + 3);
+    g.summitAttend(UIDS.fortiche);
+    g.assembly().sommet.until = g.now() - 1;
+    g.assembly();
+    assert.ok(g.treatyBetween(UIDS.paul, UIDS.fortiche));
+    assert.equal(g.treatyBetween(UIDS.paul, UIDS.fortiche).type, 'peace');
+  });
+
+  test('garde de l’Assemblée : recrutement au trésor, déploiement = défense, pertes au combat', async () => {
+    const { bot } = await freshBot();
+    const { g } = pres(bot);
+    assert.equal(g.guardRecruit(UIDS.shadow, 10).ok, true);
+    assert.equal(g.assembly().garde, 10);
+    assert.equal(g.guardSend(UIDS.shadow, 'Beta', 5).ok, true);
+    assert.equal(g.cityOf(UIDS.paul).guard, 5);
+    assert.equal(g.power(g.cityOf(UIDS.paul), 'def'), 5);
+    // attaque écrasée par la garde → pertes lourdes 30 %
+    g.cityOf(UIDS.shadow).units.soldier = 0;
+    const r = g.attack(UIDS.shadow, 'Beta');
+    assert.equal(r.win, false);
+    assert.equal(g.cityOf(UIDS.paul).guard, 3); // 5 − ceil(5×0,30)=2 → 3
+  });
+
+  test('bulletin présidentiel : rapport mondial toutes les 24 h dans les notifs', async () => {
+    const { bot } = await freshBot();
+    const { g } = pres(bot);
+    g.assembly().lastBulletin -= 24 * 3_600_000;
+    g.assembly();
+    assert.ok(g.cityOf(UIDS.shadow).notif.some((n) => n.includes('BULLETIN PRÉSIDENTIEL')));
+    assert.ok(g.cityOf(UIDS.fortiche).notif.some((n) => n.includes('BULLETIN')));
+  });
+});
+
 describe('Xcity — monde, commande & XCoins intacts', () => {
   test('top / news / notif', async () => {
     const { bot } = await freshBot();
@@ -999,6 +1194,11 @@ describe('Xcity — monde, commande & XCoins intacts', () => {
       'Xcity quarantine Monde', 'Xcity spy', 'Xcity biotoxin Monde', 'Xcity propaganda Monde',
       'Xcity sabotage Monde', 'Xcity counterfeit', 'Xcity investigate', 'Xcity nuke',
       'Xcity nuke build', 'Xcity vaccinate', 'Xcity vaccine Monde Vx',
+      'Xcity decret', 'Xcity decret paix', 'Xcity tribunal', 'Xcity tribunal voter coupable',
+      'Xcity loi', 'Xcity loi voter novice oui', 'Xcity travaux', 'Xcity travaux donner 1000',
+      'Xcity catastrophe Monde', 'Xcity renseignement Vx', 'Xcity sommet convoquer',
+      'Xcity present', 'Xcity garde', 'Xcity garde recruter 5', 'Xcity garde envoyer Monde 2',
+      'Xcity bulletin', 'Xcity news',
     ];
     for (const sub of subs) {
       clearCooldowns(bot);

@@ -18,7 +18,7 @@
  *   Xcity top <or|pop|armee|rep> · news · notif · profile <ville> · delete confirm
  */
 
-const { CityGame, BUILD_COST, BUILD_LABEL, UNITS, OFFICERS, DECREES, RES, RES_LABEL, TREATY_TYPES, ELEMENTS, CURE_PRICE } = require('../../systems/city');
+const { CityGame, BUILD_COST, BUILD_LABEL, UNITS, OFFICERS, DECREES, RES, RES_LABEL, TREATY_TYPES, ELEMENTS, CURE_PRICE, WORKS } = require('../../systems/city');
 
 /* 🇫🇷 Alias FR → clés du moteur : « soldat », « capitaine », « général »…
  * fonctionnent EXACTEMENT comme les termes techniques. */
@@ -673,6 +673,180 @@ module.exports = {
       ]));
     }
 
+    /* ── GOUVERNANCE MONDIALE 🏛️ ── */
+    if (sub === 'decret') {
+      if (!a[0]) {
+        return ctx.send(ctx.fmt.frame('📜 DÉCRETS MONDIAUX (1 par mandat)', [
+          '🎪 foire — prix de VENTE +20 % au marché (1 h)',
+          '🕊️ paix — attaques et frappes désactivées (2 h)',
+          '⚒️ corvee — +30 % de revenus partout (1 h)',
+          '🌑 couvrefeu — opérations secrètes bloquées (1 h)',
+          '',
+          '📌 ' + ctx.fmt.bold('Format') + ' : Xcity decret <type> (Président)',
+        ]));
+      }
+      const res = game.worldDecree(uid, String(a[0]).toLowerCase());
+      if (!res.ok) return bad(res.err);
+      return ctx.send(ctx.fmt.frame('📜 DÉCRET SIGNÉ', [
+        `${res.decree} — ${res.txt}`,
+        `⏳ En vigueur ${res.hours} h · annoncé à toutes les villes`,
+        'Un seul décret par mandat : choisis bien ton moment.',
+      ]));
+    }
+    if (sub === 'tribunal') {
+      const action = String(a[0] || '').toLowerCase();
+      if (!action || action === 'statut') {
+        const res = game.tribunalStatus();
+        if (!res.tribunal) return ctx.send('⚖️ Aucun procès en cours — Xcity tribunal accuser <ville> <amende|embargo>');
+        const T = res.tribunal;
+        return ctx.send(ctx.fmt.frame('⚖️ PROCÈS EN COURS', [
+          `🎯 ${T.city} — peine demandée : ${T.sentence}`,
+          `🗳️ Coupable ${T.coupable} (preuves comprises) vs Innocent ${T.innocent}`,
+          `⏳ ${T.minutes} min restantes`,
+        ]));
+      }
+      if (action === 'accuser') {
+        const res = game.tribunalOpen(uid, a[1] || '', String(a[2] || '').toLowerCase());
+        if (!res.ok) return bad(res.err);
+        return ctx.send(ctx.fmt.frame('⚖️ PROCÈS OUVERT', [
+          `${ctx.fmt.bold(res.city)} est accusé — peine demandée : ${res.sentence}`,
+          `🧾 Preuves au dossier : ${res.evidence} (scandales ×2 + trahisons)`,
+          '🗳️ Les maires votent 30 min : Xcity tribunal voter <coupable|innocent>',
+        ]));
+      }
+      if (action === 'voter') {
+        const res = game.tribunalVote(uid, a[1]);
+        if (!res.ok) return bad(res.err);
+        return ctx.send(`⚖️ Verdict enregistré : ${ctx.fmt.bold(res.verdict)} — que justice soit faite.`);
+      }
+      return bad('Usage : tribunal accuser <ville> <amende|embargo> · tribunal voter <coupable|innocent>');
+    }
+    if (sub === 'loi') {
+      const action = String(a[0] || '').toLowerCase();
+      if (!action || action === 'statut') {
+        const res = game.loiStatus();
+        const lines = [];
+        if (res.active) lines.push(`📜 EN VOTE : ${res.active.label} — oui ${res.active.oui} / non ${res.active.non} (${res.active.minutes} min)`);
+        else lines.push('📜 Aucun vote de loi en cours — Xcity loi proposer <novice|butin|noir>');
+        lines.push('');
+        lines.push(`🏛️ Adoptées : ${res.adopted.length ? res.adopted.join(', ') : 'aucune'}`);
+        return ctx.send(ctx.fmt.frame('📜 CONSTITUTION', lines));
+      }
+      if (action === 'proposer') {
+        const res = game.loiPropose(uid, String(a[1] || '').toLowerCase());
+        if (!res.ok) return bad(res.err);
+        return ctx.send(ctx.fmt.frame('📜 LOI PROPOSÉE', [
+          res.label,
+          '🗳️ Les maires votent 30 min : Xcity loi voter <nom> <oui|non>',
+          'Majorité « oui » = entrée en Constitution (effets RÉELS).',
+        ]));
+      }
+      if (action === 'voter') {
+        const res = game.loiVote(uid, a[1], a[2]);
+        if (!res.ok) return bad(res.err);
+        return ctx.send(`📜 Ton vote est enregistré : ${ctx.fmt.bold(res.verdict)}`);
+      }
+      return bad('Usage : loi proposer <novice|butin|noir> · loi voter <nom> <oui|non>');
+    }
+    if (sub === 'travaux') {
+      const action = String(a[0] || '').toLowerCase();
+      if (!action || action === 'statut') {
+        const res = game.worksView(uid);
+        if (!res.ok) return bad(res.err);
+        const lines = [];
+        if (res.works) lines.push(`🏗️ ${res.works.name} — étape ${res.works.stage + 1}/${res.works.total} : ${nfc(res.works.collected)}/${nfc(res.works.need)}${cur()}`);
+        else lines.push('🏗️ Aucun chantier en cours — le Président lance : Xcity travaux lancer <pont|aqueduc|universite>');
+        lines.push('');
+        if (res.works) lines.push(`🎁 Bonus à chaque étape : ${res.works.txt}`);
+        lines.push(`✅ Terminés : ${res.done.length ? res.done.join(' · ') : 'aucun'}`);
+        return ctx.send(ctx.fmt.frame('🏗️ GRANDS TRAVAUX', lines));
+      }
+      if (action === 'lancer') {
+        const res = game.worksLaunch(uid, String(a[1] || '').toLowerCase());
+        if (!res.ok) return bad(res.err);
+        return ctx.send(ctx.fmt.frame('🏗️ CHANTIER LANCÉ', [
+          `${res.name} — 1ʳᵉ étape : ${nfc(res.need)}${cur()}`,
+          '💠 Toutes les villes peuvent financer : Xcity travaux donner <somme>',
+        ]));
+      }
+      if (action === 'donner' || action === 'financer') {
+        const res = game.worksFund(uid, a[1], action === 'financer');
+        if (!res.ok) return bad(res.err);
+        const lines = [
+          `💰 +${nfc(res.amount)}${cur()} pour ${res.name}${res.fromTreasury ? ' (trésor de l’Assemblée)' : ''}`,
+        ];
+        if (res.finished) lines.push('', `🏆 CHANTIER TERMINÉ : ${res.name} — le monde entier profite !`);
+        else if (res.stageDone) lines.push('', `🎉 Étape achevée ! Prochaine : ${nfc(res.need)}${cur()} — le bonus mondial est ACTIF.`);
+        else lines.push('', `🧱 Progrès : ${nfc(res.collected)}/${nfc(res.need)}${cur()}`);
+        return ctx.send(ctx.fmt.frame('🏗️ GRANDS TRAVAUX', lines));
+      }
+      return bad('Usage : travaux lancer <pont|aqueduc|universite> · donner <somme> · financer <somme> (Président)');
+    }
+    if (sub === 'catastrophe') {
+      const res = game.declareCatastrophe(uid, a.join(' '));
+      if (!res.ok) return bad(res.err);
+      return ctx.send(ctx.fmt.frame('🚨 ÉTAT DE CATASTROPHE', [
+        `${res.city} — déclaré pour ${res.hours} h`,
+        '🏗️ Reconstructions à MOITIÉ PRIX · 💱 les dons reçus réconfortent doublement la population',
+      ]));
+    }
+    if (sub === 'renseignement') {
+      const res = game.intelBuy(uid, a.join(' '));
+      if (!res.ok) return bad(res.err);
+      return ctx.send(ctx.fmt.frame('🕵️ RENSEIGNEMENT', [
+        `Virus « ${res.virus} » — ${res.sure ? '✅ source fiable' : '⚠️ source peu fiable'}`,
+        `👤 Créateur présumé : ${ctx.fmt.bold(res.creator || 'inconnu')}${res.mayor ? ` (maire ${res.mayor})` : ''}`,
+        '', '💵 −20 000 au trésor de l’Assemblée · les détails sont dans ta messagerie.',
+      ]));
+    }
+    if (sub === 'sommet') {
+      if (String(a[0] || '').toLowerCase() === 'convoquer') {
+        const res = game.summitOpen(uid);
+        if (!res.ok) return bad(res.err);
+        return ctx.send(ctx.fmt.frame('🤝 SOMMET CONVOQUÉ', [
+          '📢 30 min pour répondre présent : Xcity present',
+          '😊 Chaque participant gagne du moral · 🕊️ paix COLLECTIVE de 24 h si ≥ 2 villes',
+          '💵 Organisation : −5 000 au trésor de l’Assemblée',
+        ]));
+      }
+      return bad('Usage : Xcity sommet convoquer (Président) — puis chacun tape Xcity present');
+    }
+    if (sub === 'present') {
+      const res = game.summitAttend(uid);
+      if (!res.ok) return bad(res.err);
+      return ctx.send(ctx.fmt.frame('🤝 PRÉSENT AU SOMMET', [
+        `✅ Inscription confirmée — ${res.attendees} ville(s) présente(s)`,
+        '😊 +3 de moral · à la clôture : paix collective entre participants',
+      ]));
+    }
+    if (sub === 'garde') {
+      const action = String(a[0] || '').toLowerCase();
+      if (!action) {
+        const A = game.assembly();
+        return ctx.send(ctx.fmt.frame('🛡️ GARDE DE L’ASSEMBLÉE', [
+          `Soldats disponibles : ${A.garde || 0} (armée commune)`,
+          '', '🧾 recruter <n> — 200/unité (trésor de l’Assemblée)',
+          '✈️ envoyer <ville> <n> — la ville est défendue (+1 puissance/unité)',
+        ]));
+      }
+      if (action === 'recruter') {
+        const res = game.guardRecruit(uid, a[1]);
+        if (!res.ok) return bad(res.err);
+        return ctx.send(ctx.fmt.frame('🛡️ GARDE RENFORCÉE', [
+          `${res.garde} soldats au total — −${nfc(res.cost)}${cur()} au trésor de l’Assemblée`,
+        ]));
+      }
+      if (action === 'envoyer') {
+        const res = game.guardSend(uid, a[1] || '', a[2]);
+        if (!res.ok) return bad(res.err);
+        return ctx.send(ctx.fmt.frame('🛡️ GARDE DÉPÊCHÉE', [
+          `${res.sent} soldat(s) protègent désormais ${res.city}`,
+          `🛡️ Restent disponibles : ${res.remaining}`,
+        ]));
+      }
+      return bad('Usage : garde recruter <n> · garde envoyer <ville> <n>');
+    }
+
     /* ── BARBARIANS / RAID ── */
     if (sub === 'barbarians') {
       const camps = game.ensureBarbs();
@@ -771,6 +945,12 @@ module.exports = {
       '• assemblee ouvrir · candidater (caution 50 000) · vote <ville>',
       '• Président 3 JOURS : don <ville> <somme> · batir <ville> <type> · salaire 50 000/h',
       '• monnaie <$ € ¥ ¢ £ XOF FC FCFA…> · pocket (détournement…)',
+      '• decret <foire|paix|corvee|couvrefeu> — 1 par mandat, effet mondial',
+      '• tribunal accuser <ville> <amende|embargo> · tribunal voter <verdict>',
+      '• loi proposer <novice|butin|noir> · loi voter <nom> <oui|non>',
+      '• travaux lancer <pont|aqueduc|universite> · travaux donner <somme>',
+      '• catastrophe <ville> · renseignement <virus> · sommet convoquer · present',
+      '• garde recruter <n> · garde envoyer <ville> <n> — armée commune',
       '🧠 𝗢𝗣𝗦 𝗦𝗣𝗘́𝗖𝗜𝗔𝗟𝗘𝗦',
       '• spy <ville> · sabotage <ville> · propaganda <ville> · biotoxin <ville>',
       '• counterfeit · investigate <virus> · vaccine <ville> <virus> · vaccinate',

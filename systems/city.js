@@ -78,6 +78,13 @@ const CURRENCIES = ['$', '€', '¥', '¢', '£', 'XOF', 'FC', 'FCFA', 'CFA', '�
 const QUARANTINE_MS = 30 * 60_000;
 const VACCINE_PRICE = 80;          // marché noir : remède revendu 80$/habitant (au lieu de 100$)
 
+/* 🏗️ Grands Travaux communautaires : étapes → bonus mondiaux 24 h. */
+const WORKS = {
+  pont: { label: '🌉 Grand Pont', stages: [15000, 25000, 40000], buff: 'pont', txt: '+10 % de touristes pour toutes les villes (24 h)' },
+  aqueduc: { label: '🚰 Grand Aqueduc', stages: [20000, 35000], buff: 'aqueduc', txt: '+5 habitants par collect partout (24 h)' },
+  universite: { label: '🎓 Université mondiale', stages: [20000, 30000, 50000], buff: 'universite', txt: '+5 % de revenus partout (24 h)' },
+};
+
 const TREATY_TYPES = {
   peace: { label: '🤝 Paix', hours: 48 },
   alliance: { label: '⚔️ Alliance', hours: 48 },
@@ -177,6 +184,18 @@ class CityGame {
     if (typeof A.currency !== 'string' || !A.currency) A.currency = '$';
     if (typeof A.lastTick !== 'number') A.lastTick = 0;
     if (typeof A.lastSalary !== 'number') A.lastSalary = 0;
+    if (typeof A.decreeUsed !== 'boolean') A.decreeUsed = false;
+    if (A.worldDecree === undefined) A.worldDecree = null;
+    if (A.tribunal === undefined) A.tribunal = null;
+    if (A.loi === undefined) A.loi = null;
+    if (!Array.isArray(A.constitution)) A.constitution = [];
+    if (A.works === undefined) A.works = null;
+    if (!Array.isArray(A.worksDone)) A.worksDone = [];
+    if (A.catastrophe === undefined) A.catastrophe = null;
+    if (A.sommet === undefined) A.sommet = null;
+    if (typeof A.lastBulletin !== 'number') A.lastBulletin = 0;
+    if (typeof A.garde !== 'number') A.garde = 0;
+    if (!A.buffs || typeof A.buffs !== 'object') A.buffs = {};
     if (typeof A.until !== 'number') A.until = 0;
     if (A.president === undefined) A.president = null;
     if (!A.election || typeof A.election !== 'object') A.election = null;
@@ -208,6 +227,8 @@ class CityGame {
     if (typeof c.sabotaged !== 'number') c.sabotaged = 0;
     if (typeof c.quarantineUntil !== 'number') c.quarantineUntil = 0;
     if (typeof c.lastVirusHit !== 'string') c.lastVirusHit = '';
+    if (typeof c.guard !== 'number') c.guard = 0;
+    if (typeof c.embargoUntil !== 'number') c.embargoUntil = 0;
   }
 
   save() { this.store.save(); }
@@ -266,6 +287,7 @@ class CityGame {
       elements: {}, scientists: 0,
       cds: {}, nukes: 0, scandals: 0, immuneUntil: 0,
       farmBlight: 0, sabotaged: 0, quarantineUntil: 0, lastVirusHit: '',
+      guard: 0, embargoUntil: 0,
       shieldUntil: 0,
       wins: 0, losses: 0, betrayals: 0, barbRaids: 0, treatiesSigned: 0, sentGold: 0, touristsTotal: 0,
     };
@@ -300,8 +322,9 @@ class CityGame {
     const c = this.cityOf(uid);
     if (!c) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
     if (!BUILD_COST[type]) return { ok: false, err: `Types : ${Object.keys(BUILD_COST).join(', ')}` };
-    if (c.gold < BUILD_COST[type]) return { ok: false, err: `Fonds insuffisants (${nf(BUILD_COST[type])}${this.cur()} nécessaires).` };
-    c.gold -= BUILD_COST[type];
+    const cost = this.catastropheFor(uid) ? Math.ceil(BUILD_COST[type] / 2) : BUILD_COST[type];
+    if (c.gold < cost) return { ok: false, err: `Fonds insuffisants (${nf(cost)}${this.cur()} nécessaires).` };
+    c.gold -= cost;
     c.b[type] = (c.b[type] || 0) + 1;
     if (type === 'house') c.pop += 5;
     this.save();
@@ -314,6 +337,8 @@ class CityGame {
     for (const [k, n] of Object.entries(c.b)) income += (BUILD_INCOME[k] || 0) * n;
     if (c.decree === 'conscription') income = Math.floor(income * 0.8);
     if (c.decree === 'tax') income = Math.floor(income * 1.5);
+    if (this.buffActive('universite')) income = Math.floor(income * 1.05); // 🎓 Grands Travaux
+    if (this.decreeActive('corvee')) income = Math.floor(income * 1.3);    // ⚒️ Décret mondial
     return income;
   }
 
@@ -323,7 +348,7 @@ class CityGame {
   }
 
   /* 🧳 Tourisme : les km² attirent des touristes (moral boostant). */
-  tourists(c) { return Math.floor(c.km2 * (50 + c.moral) / 10); }
+  tourists(c) { const base = Math.floor(c.km2 * (50 + c.moral) / 10); return this.buffActive('pont') ? Math.floor(base * 1.1) : base; }
 
   collect(uid) {
     const c = this.cityOf(uid);
@@ -376,6 +401,8 @@ class CityGame {
     if (c.decree === 'festival') { c.pop += 2; c.moral = clamp(c.moral + 6, 0, 100); decreeNote = '🎪 Fête : +2 habitants, moral +6'; }
     if (c.decree === 'tax') { c.moral = clamp(c.moral - 5, 0, 100); decreeNote = '💰 Impôt : moral −5'; }
     if (!c.decree) c.moral = clamp(c.moral + 1, 0, 100);
+    let aqueducNote = null;
+    if (this.buffActive('aqueduc')) { c.pop += 5; aqueducNote = '🚰 Aqueduc mondial : +5 habitants'; }
 
     // Fuite de population si le moral est effondré
     let exodus = 0;
@@ -395,7 +422,7 @@ class CityGame {
     this.save();
     return {
       ok: true, income, tourism, tourists, produced, event: event ? event.txt : null,
-      decreeNote, exodus, blightNote, sabNote, gold: c.gold, moral: c.moral,
+      decreeNote, exodus, blightNote, sabNote, aqueducNote, gold: c.gold, moral: c.moral,
     };
   }
 
@@ -487,6 +514,7 @@ class CityGame {
     for (const [k, n] of Object.entries(c.units || {})) p += (Number(n) || 0) * (UNITS[k] ? UNITS[k].pow : 0);
     if (mode === 'att' && c.officers.captain) p *= 1.15;
     if (mode === 'def' && c.officers.general) p *= 1.20;
+    if (mode === 'def') p += Number(c.guard) || 0; // 🛡️ Garde de l'Assemblée
     return p;
   }
 
@@ -541,6 +569,8 @@ class CityGame {
     if (now < target.shieldUntil) {
       return { ok: false, err: `🛡️ ${target.name} est sous bouclier (${Math.ceil((target.shieldUntil - now) / 60000)} min).` };
     }
+    if (this.decreeActive('paix')) return { ok: false, err: '🕊️ JOUR DE PAIX : les attaques sont suspendues par décret mondial.' };
+    if (this.ruleAdopted('novice') && target.lvl <= 2) return { ok: false, err: '🛡️ CONSTITUTION : les villes de niveau 1-2 sont protégées.' };
     me.lastAttack = now;
 
     const treaty = this.treatyBetween(uid, targetUid);
@@ -579,7 +609,7 @@ class CityGame {
     else win = rollA > rollD;
 
     if (win) {
-      let loot = Math.min(LOOT_CAP, Math.floor(target.gold * LOOT_RATE));
+      let loot = Math.min(this.ruleAdopted('butin') ? Math.floor(LOOT_CAP / 2) : LOOT_CAP, Math.floor(target.gold * LOOT_RATE));
       // Pillage de ressources en plus
       const pillage = {};
       const pool = [...RES];
@@ -606,6 +636,7 @@ class CityGame {
       }
       const lostA = this._applyLosses(me, 0.05);
       const lostD = this._applyLosses(target, 0.25);
+      if (target.guard > 0) target.guard -= Math.ceil(target.guard * 0.10); // défense réussie : pertes légères
       target.armyBefore = undefined;
       me.wins += 1; target.losses += 1;
       target.moral = clamp(target.moral - 8, 0, 100);
@@ -626,6 +657,7 @@ class CityGame {
     // Défaite
     const lostA = this._applyLosses(me, 0.25);
     const lostD = this._applyLosses(target, 0.05);
+    if (target.guard > 0) target.guard -= Math.ceil(target.guard * 0.30); // mur franchi : pertes lourdes
     me.losses += 1; target.wins += 1;
     me.moral = clamp(me.moral - 5, 0, 100);
     target.rep += 2; // défense victorieuse
@@ -742,6 +774,7 @@ class CityGame {
       me.gold -= qty;
       target.gold += qty - tax;
       me.sentGold += qty;
+      if (this.catastropheFor(targetUid)) me.moral = clamp(me.moral + 4, 0, 100); // 🚨 état de catastrophe
       if (qty >= 1000) me.rep += 1; // générosité
       const txt = `💱 ${me.name} t’a envoyé ${nf(qty - tax)}${this.cur()}${tax ? ` (taxe de convoi : ${nf(tax)}${this.cur()})` : ' (pacte commercial : 0 taxe)'}.`;
       this.notify(target, txt);
@@ -807,12 +840,14 @@ class CityGame {
   marketTrade(uid, action, res, qty) {
     const c = this.cityOf(uid);
     if (!c) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
+    if (this.now() < (c.embargoUntil || 0)) return { ok: false, err: '⚖️ EMBARGO : ton marché est fermé par le tribunal mondial.' };
     this.refreshMarket();
     if (!RES.includes(res)) return { ok: false, err: `Ressources : ${RES.join(', ')}` };
     qty = Math.floor(Number(qty));
     if (!Number.isFinite(qty) || qty <= 0) return { ok: false, err: 'Format : Xcity buy <res> <qté>' };
     const unit = this.priceOf(res);
-    const total = unit * qty;
+    let total = unit * qty;
+    if (action === 'sell' && this.decreeActive('foire')) total = Math.floor(total * 1.2); // 🎪 Foire mondiale
     if (action === 'buy') {
       if (c.gold < total) return { ok: false, err: `Coût : ${nf(total)}${this.cur()} — fonds : ${nf(c.gold)}${this.cur()}.` };
       c.gold -= total;
@@ -1167,6 +1202,7 @@ class CityGame {
 
   /* Rouages paresseux : taxes par minute + transitions de phases. */
   assembly() {
+    this._maybeBulletin();
     this._assemblyTick();
     this._assemblyPhase();
     return this.store.data.assembly;
@@ -1207,6 +1243,9 @@ class CityGame {
   }
 
   _assemblyPhase() {
+    this._resolveTribunal();
+    this._resolveLoi();
+    this._resolveSummit();
     const A = this.store.data.assembly;
     const now = this.now();
     if (A.president && now >= A.until) {
@@ -1308,6 +1347,7 @@ class CityGame {
       else if (score === bestScore) tie = true;
     }
     A.election = null;
+    A.decreeUsed = false; // nouveau mandat → nouveau décret mondial possible
     if (!best || tie) {
       this.addNews('🗳️ L’Assemblée n’a pas réussi à élire de Président (égalité ou sans candidate valide).');
       this.save();
@@ -1426,6 +1466,7 @@ class CityGame {
     const me = this.cityOf(uid);
     if (!me) return { err: 'Crée ta ville : Xcity create <nom>' };
     if (this.now() < me.quarantineUntil) return { err: '🚧 Ta ville est en QUARANTAINE — aucune opération extérieure.' };
+    if (this.decreeActive('couvrefeu')) return { err: '🌑 COUVRE-FEU : opérations secrètes suspendues par décret mondial.' };
     const found = this.byName(cityName);
     if (!found) return { err: 'Ville cible introuvable.' };
     if (String(found.uid) === String(uid)) return { err: 'Pas toi-même 🙃' };
@@ -1590,6 +1631,7 @@ class CityGame {
     const { me, found } = t;
     if ((me.nukes || 0) < 1) return { ok: false, err: 'Aucune ogive — Xcity nuke build (labo 3, 6 scientifiques, 3 plutonium, 10 000).' };
     if (this._cdLeft(me, 'nuke', 24 * 3_600_000)) return { ok: false, err: 'Cooldown nucléaire : 24 h' };
+    if (this.decreeActive('paix')) return { ok: false, err: '🕊️ JOUR DE PAIX : les frappes sont suspendues par décret mondial.' };
     me.nukes -= 1;
     this._cdSet(me, 'nuke');
     const target = found.city;
@@ -1641,7 +1683,7 @@ class CityGame {
     if (!v || !v.infected[String(found.uid)]) return { ok: false, err: `${found.city.name} n’est pas infectée par « ${virusName} ».` };
     me.elements.calcium -= 1;
     const cnt = v.infected[String(found.uid)];
-    const price = cnt * VACCINE_PRICE;
+    const price = cnt * (this.ruleAdopted('noir') ? 60 : VACCINE_PRICE);
     const target = found.city;
     if (target.gold < price) return { ok: false, err: `${target.name} ne peut pas payer ${nf(price)} (80/habitant × ${cnt}).` };
     target.gold -= price;
@@ -1653,6 +1695,401 @@ class CityGame {
     this.addNews(`💉 Un vaccin « officieux » a sauvé ${target.name} de « ${v.name} ».`);
     this.save();
     return { ok: true, city: target.name, virus: v.name, price, cnt, rep: me.rep };
+  }
+
+  /* ══════════════ GOUVERNANCE MONDIALE 🏛️ ══════════════ */
+
+  decreeActive(type) {
+    const d = this.store.data.assembly.worldDecree;
+    return Boolean(d && d.type === type && this.now() < d.until);
+  }
+
+  buffActive(key) {
+    const b = this.store.data.assembly.buffs;
+    return Boolean(b && b[key] && this.now() < b[key]);
+  }
+
+  ruleAdopted(rule) {
+    const A = this.store.data.assembly;
+    return Array.isArray(A.constitution) && A.constitution.includes(rule);
+  }
+
+  /* 📜 Décret mondial — 1 par mandat, annoncé à toutes les villes. */
+  worldDecree(uid, type) {
+    const MAP = {
+      foire: { label: '🎪 Foire mondiale', hours: 1, txt: 'prix de VENTE +20 % au Grand Marché' },
+      paix: { label: '🕊️ Jour de paix', hours: 2, txt: 'attaques et frappes nucléaires désactivées' },
+      corvee: { label: '⚒️ Corvée générale', hours: 1, txt: '+30 % de revenus partout' },
+      couvrefeu: { label: '🌑 Couvre-feu', hours: 1, txt: 'opérations secrètes bloquées' },
+    };
+    const dec = MAP[type];
+    if (!dec) return { ok: false, err: 'Décrets : foire, paix, corvee, couvrefeu' };
+    const guard = this._presGuard(uid);
+    if (!guard.ok) return guard;
+    const A = this.assembly();
+    if (A.decreeUsed) return { ok: false, err: 'Un décret mondial a déjà été signé pendant CE mandat (1 par mandat).' };
+    if (A.worldDecree && this.now() < A.worldDecree.until) return { ok: false, err: 'Un décret mondial est déjà en vigueur.' };
+    A.worldDecree = { type, label: dec.label, until: this.now() + dec.hours * 3_600_000 };
+    A.decreeUsed = true;
+    this.addNews(`${dec.label} : décret du Président — ${dec.txt} (${dec.hours} h).`);
+    for (const [, c] of this.allCities()) this.notify(c, `${dec.label} : ${dec.txt} (${dec.hours} h).`);
+    this.save();
+    return { ok: true, decree: dec.label, hours: dec.hours, txt: dec.txt };
+  }
+
+  /* ⚖️ Tribunal mondial : accusation → vote des maires → peine. */
+  tribunalOpen(uid, cityName, sentence) {
+    const A = this.assembly();
+    if (A.tribunal) return { ok: false, err: 'Un procès est déjà en cours (Xcity tribunal).' };
+    const found = this.byName(cityName);
+    if (!found) return { ok: false, err: 'Ville accusée introuvable.' };
+    if (!['amende', 'embargo'].includes(sentence)) return { ok: false, err: 'Peines : amende (5 000 vers l’Assemblée) ou embargo (marché fermé 12 h).' };
+    const isPres = this.presidentUid() === String(uid);
+    const accused = found.city;
+    const evidence = (accused.scandals || 0) * 2 + (accused.betrayals || 0);
+    if (!isPres && evidence < 1) return { ok: false, err: 'Sans le Président, il faut des PREUVES (scandales/trahisons) pour accuser une ville.' };
+    if (String(found.uid) === String(uid)) return { ok: false, err: 'On ne s’accuse pas soi-même 🙃' };
+    A.tribunal = { accused: String(found.uid), sentence, votes: {}, deadline: this.now() + 30 * 60_000, evidence };
+    this.addNews(`⚖️ PROCÈS : ${accused.name} est accusé — peine demandée : ${sentence === 'amende' ? 'amende de 5 000' : 'embargo de 12 h'} (preuves : ${evidence}). Les maires votent : Xcity tribunal voter <coupable|innocent>`);
+    for (const [, c] of this.allCities()) this.notify(c, `⚖️ Tribunal mondial : votez contre ${accused.name} — Xcity tribunal voter <coupable|innocent> (30 min)`);
+    this.save();
+    return { ok: true, city: accused.name, sentence, evidence };
+  }
+
+  tribunalVote(uid, verdict) {
+    const v = ['coupable', 'innocent'].includes(String(verdict || '').toLowerCase()) ? String(verdict).toLowerCase() : null;
+    if (!v) return { ok: false, err: 'Verdict : coupable ou innocent' };
+    const A = this.assembly();
+    const T = A.tribunal;
+    if (!T || this.now() > T.deadline) return { ok: false, err: 'Aucun procès en cours (ou déjà clos).' };
+    if (!this.cityOf(uid)) return { ok: false, err: 'Seuls les maires siègent au tribunal.' };
+    if (T.accused === String(uid)) return { ok: false, err: 'L’accusé ne vote pas.' };
+    T.votes[String(uid)] = v;
+    this.save();
+    return { ok: true, verdict: v };
+  }
+
+  tribunalStatus() {
+    const T = this.store.data.assembly.tribunal;
+    if (!T) return { ok: true, tribunal: null };
+    const accused = this.cityOf(T.accused);
+    let coupable = T.evidence, innocent = 0;
+    for (const vote of Object.values(T.votes)) (vote === 'coupable' ? coupable++ : innocent++);
+    return { ok: true, tribunal: { city: accused ? accused.name : '?', sentence: T.sentence, coupable, innocent, minutes: Math.max(0, Math.ceil((T.deadline - this.now()) / 60_000)) } };
+  }
+
+  _resolveTribunal() {
+    const A = this.store.data.assembly;
+    const T = A.tribunal;
+    if (!T || this.now() < T.deadline) return;
+    let guilty = T.evidence; // les preuves pèsent comme des voix
+    let innocent = 0;
+    for (const vote of Object.values(T.votes)) (vote === 'coupable' ? guilty++ : innocent++);
+    const accused = this.cityOf(T.accused);
+    A.tribunal = null;
+    if (!accused) { this.save(); return; }
+    if (guilty > innocent) {
+      if (T.sentence === 'amende') {
+        const fine = Math.min(accused.gold, 5000);
+        accused.gold -= fine;
+        A.treasury += fine;
+        this.notify(accused, `⚖️ COUPABLE : amende de ${nf(fine)}${this.cur()} versée à l’Assemblée.`);
+        this.addNews(`⚖️ ${accused.name} déclaré COUPABLE — amende de ${nf(fine)}${this.cur()}.`);
+      } else {
+        accused.embargoUntil = this.now() + 12 * 3_600_000;
+        this.notify(accused, '⚖️ COUPABLE : embargo — ton marché est fermé 12 h.');
+        this.addNews(`⚖️ ${accused.name} est sous EMBARGO commercial 12 h.`);
+      }
+    } else {
+      accused.moral = clamp(accused.moral + 2, 0, 100);
+      this.addNews(`⚖️ ${accused.name} a été DISCULPÉ par l’Assemblée.`);
+    }
+    this.save();
+  }
+
+  /* 📜 Constitution : lois votées par les maires, effets RÉELS. */
+  loiPropose(uid, rule) {
+    const MAP = {
+      novice: '🛡️ Protection des petites villes (lvl 1-2 intouchables)',
+      butin: '💰 Plafond de butin réduit de moitié (7 500)',
+      noir: '💉 Vaccin noir plafonné à 60/habitant',
+    };
+    if (!MAP[rule]) return { ok: false, err: 'Lois : novice, butin, noir' };
+    const A = this.assembly();
+    if (!this.cityOf(uid)) return { ok: false, err: 'Seuls les maires proposent des lois.' };
+    if (A.loi) return { ok: false, err: 'Un vote de loi est déjà en cours (Xcity loi).' };
+    if (this.ruleAdopted(rule)) return { ok: false, err: 'Cette loi est déjà ADOPTÉE — repropose un vote pour l’abroger.' };
+    A.loi = { rule, label: MAP[rule], votes: {}, deadline: this.now() + 30 * 60_000 };
+    this.addNews(`📜 CONSTITUTION : vote sur « ${MAP[rule]} » — Xcity loi voter ${rule} <oui|non> (30 min).`);
+    this.save();
+    return { ok: true, rule, label: MAP[rule] };
+  }
+
+  loiVote(uid, rule, verdict) {
+    const v = String(verdict || '').toLowerCase();
+    if (!['oui', 'non'].includes(v)) return { ok: false, err: 'Verdict : oui ou non' };
+    const A = this.assembly();
+    const L = A.loi;
+    if (!L || this.now() > L.deadline) return { ok: false, err: 'Aucun vote de loi en cours.' };
+    if (L.rule !== String(rule || '').toLowerCase()) return { ok: false, err: 'Ce n’est pas la loi en discussion (Xcity loi).' };
+    if (!this.cityOf(uid)) return { ok: false, err: 'Seuls les maires votent les lois.' };
+    L.votes[String(uid)] = v;
+    this.save();
+    return { ok: true, verdict: v };
+  }
+
+  loiStatus() {
+    const A = this.store.data.assembly;
+    const L = A.loi;
+    let oui = 0, non = 0;
+    if (L) for (const vote of Object.values(L.votes)) (vote === 'oui' ? oui++ : non++);
+    return { ok: true, active: L ? { rule: L.rule, label: L.label, oui, non, minutes: Math.max(0, Math.ceil((L.deadline - this.now()) / 60_000)) } : null, adopted: [...(A.constitution || [])] };
+  }
+
+  _resolveLoi() {
+    const A = this.store.data.assembly;
+    const L = A.loi;
+    if (!L || this.now() < L.deadline) return;
+    A.loi = null;
+    let oui = 0, non = 0;
+    for (const vote of Object.values(L.votes)) (vote === 'oui' ? oui++ : non++);
+    if (!Array.isArray(A.constitution)) A.constitution = [];
+    const idx = A.constitution.indexOf(L.rule);
+    if (oui > non) {
+      if (idx === -1) A.constitution.push(L.rule);
+      this.addNews(`📜 ADOPTÉE : « ${L.label} » entre dans la Constitution (${oui} pour / ${non} contre).`);
+    } else if (idx !== -1) {
+      A.constitution.splice(idx, 1);
+      this.addNews(`📜 ABROGÉE : « ${L.label} » sort de la Constitution (${oui} pour / ${non} contre).`);
+    } else {
+      this.addNews(`📜 REJETÉE : « ${L.label} » (${oui} pour / ${non} contre).`);
+    }
+    this.save();
+  }
+
+  /* 🏗️ Grands Travaux : étapes financées → bonus mondiaux 24 h. */
+  worksView(uid) {
+    const c = this.cityOf(uid);
+    if (!c) return { ok: false, err: 'Crée ta ville : Xcity create <nom>' };
+    const A = this.assembly();
+    const W = A.works;
+    return {
+      ok: true,
+      works: W ? { key: W.key, name: WORKS[W.key].label, stage: W.stage, total: WORKS[W.key].stages.length, need: WORKS[W.key].stages[W.stage], collected: W.collected, txt: WORKS[W.key].txt } : null,
+      done: [...(A.worksDone || [])],
+    };
+  }
+
+  worksLaunch(uid, key) {
+    const guard = this._presGuard(uid);
+    if (!guard.ok) return guard;
+    if (!WORKS[key]) return { ok: false, err: `Chantiers : ${Object.keys(WORKS).join(', ')}` };
+    const A = this.assembly();
+    if (A.works) return { ok: false, err: 'Un chantier est déjà en cours (Xcity travaux).' };
+    if ((A.worksDone || []).includes(WORKS[key].label)) return { ok: false, err: `${WORKS[key].label} est déjà construit !` };
+    A.works = { key, stage: 0, collected: 0 };
+    this.addNews(`🏗️ GRANDS TRAVAUX : le Président lance « ${WORKS[key].label} » — ${WORKS[key].txt}. Financez : Xcity travaux donner <somme>`);
+    this.save();
+    return { ok: true, name: WORKS[key].label, need: WORKS[key].stages[0] };
+  }
+
+  worksFund(uid, amount, fromTreasury) {
+    const A = this.assembly();
+    const W = A.works;
+    if (!W) return { ok: false, err: 'Aucun chantier en cours — le Président lance : Xcity travaux lancer <pont|aqueduc|universite>' };
+    amount = Math.floor(Number(amount));
+    if (!Number.isFinite(amount) || amount < 500) return { ok: false, err: 'Minimum 500 par versement.' };
+    const me = this.cityOf(uid);
+    if (!me) return { ok: false, err: 'Seuls les maires financent les Grands Travaux.' };
+    if (fromTreasury) {
+      const guard = this._presGuard(uid);
+      if (!guard.ok) return guard;
+      if (A.treasury < amount) return { ok: false, err: `Trésor de l’Assemblée : ${nf(A.treasury)}${this.cur()} (insuffisant).` };
+      A.treasury -= amount;
+    } else {
+      if (me.gold < amount) return { ok: false, err: `Fonds insuffisants (${nf(me.gold)}).` };
+      me.gold -= amount;
+      me.moral = clamp(me.moral + 1, 0, 100);
+    }
+    W.collected += amount;
+    const def = WORKS[W.key];
+    let stageDone = false, finished = false;
+    if (W.collected >= def.stages[W.stage]) {
+      stageDone = true;
+      W.collected -= def.stages[W.stage];
+      W.stage += 1;
+      if (!A.buffs) A.buffs = {};
+      A.buffs[def.buff] = this.now() + 24 * 3_600_000;
+      this.addNews(`🏗️ ${def.label} — étape ${W.stage}/${def.stages.length} achevée : ${def.txt}`);
+      if (W.stage >= def.stages.length) {
+        finished = true;
+        if (!Array.isArray(A.worksDone)) A.worksDone = [];
+        A.worksDone.push(def.label);
+        A.works = null;
+        this.addNews(`🏗️ GRANDS TRAVAUX TERMINÉS : ${def.label} sert désormais tout le monde !`);
+      }
+    }
+    this.save();
+    return {
+      ok: true, amount, name: def.label, stageDone, finished,
+      stage: A.works ? A.works.stage : def.stages.length,
+      need: A.works ? def.stages[A.works.stage] : 0,
+      collected: A.works ? A.works.collected : 0, fromTreasury,
+    };
+  }
+
+  /* 🚨 État de catastrophe : reconstructions -50 %, dons qui réconfortent. */
+  catastropheFor(uid) {
+    const A = this.store.data.assembly;
+    return Boolean(A.catastrophe && A.catastrophe.uid === String(uid) && this.now() < A.catastrophe.until);
+  }
+
+  declareCatastrophe(uid, cityName) {
+    const guard = this._presGuard(uid);
+    if (!guard.ok) return guard;
+    const found = this.byName(cityName);
+    if (!found) return { ok: false, err: 'Ville sinistrée introuvable.' };
+    const c = found.city;
+    const disaster = (c.ruined || 0) > 0 || this.now() < (c.quarantineUntil || 0) || this.infectionsOn(String(found.uid)) > 0;
+    if (!disaster) return { ok: false, err: `${c.name} ne subit aucune catastrophe (ni ruine, ni quarantaine, ni épidémie).` };
+    const A = this.assembly();
+    if (A.catastrophe && this.now() < A.catastrophe.until) return { ok: false, err: 'Un état de catastrophe est déjà déclaré.' };
+    A.catastrophe = { uid: String(found.uid), until: this.now() + 2 * 3_600_000 };
+    this.addNews(`🚨 ÉTAT DE CATASTROPHE déclaré sur ${c.name} — reconstructions à moitié prix, dons salués (2 h).`);
+    this.notify(c, '🚨 L’Assemblée a déclaré l’état de catastrophe pour ta ville : reconstruis à -50 % pendant 2 h !');
+    this.save();
+    return { ok: true, city: c.name, hours: 2 };
+  }
+
+  /* 🕵️ Renseignements de l’État : acheter l’identité d’un créateur de virus. */
+  intelBuy(uid, virusName) {
+    const guard = this._presGuard(uid);
+    if (!guard.ok) return guard;
+    const A = this.assembly();
+    if (A.treasury < 20000) return { ok: false, err: `Service de renseignement : 20 000 (trésor : ${nf(A.treasury)}).` };
+    const name = String(virusName || '').trim();
+    const archive = this.store.data.virusArchive || {};
+    if (!archive[name]) return { ok: false, err: `Aucune trace du virus « ${name} » dans les registres.` };
+    A.treasury -= 20000;
+    const me = this.cityOf(uid);
+    let result;
+    if (this.rng() < 0.75) {
+      const creator = this.cityOf(archive[name]);
+      result = { sure: true, virus: name, creator: creator ? creator.name : 'ville disparue', mayor: creator ? creator.mayor : '?' };
+      if (me) this.notify(me, `🕵️ INFORMATEUR : « ${name} » a été créé par ${result.creator} (${result.mayor}). Source fiable.`);
+    } else {
+      const others = this.allCities().filter(([u]) => u !== archive[name]);
+      const wrong = others.length ? pick(this.rng, others)[1].name : null;
+      result = { sure: false, virus: name, creator: wrong, mayor: null };
+      if (me) this.notify(me, `🕵️ INFORMATEUR : il se dirigerait que « ${name} » viendrait de ${wrong || 'on ne sait où'}… Source peu fiable, à vérifier.`);
+    }
+    this.save();
+    return { ok: true, ...result };
+  }
+
+  /* 🤝 Sommet diplomatique : présence = moral, clôture = paix collective. */
+  summitOpen(uid) {
+    const guard = this._presGuard(uid);
+    if (!guard.ok) return guard;
+    const A = this.assembly();
+    if (A.treasury < 5000) return { ok: false, err: `Organiser le sommet coûte 5 000 (trésor : ${nf(A.treasury)}).` };
+    if (A.sommet && this.now() < A.sommet.until) return { ok: false, err: 'Un sommet est déjà en cours.' };
+    A.treasury -= 5000;
+    A.sommet = { until: this.now() + 30 * 60_000, participants: {} };
+    if (this.cityOf(uid)) A.sommet.participants[String(uid)] = true;
+    this.addNews('🤝 SOMMET DIPLOMATIQUE convoqué par le Président ! Les maires répondent : Xcity present (30 min).');
+    for (const [, c] of this.allCities()) this.notify(c, '🤝 SOMMET : réponds présent — Xcity present (+moral, paix collective à la clé).');
+    this.save();
+    return { ok: true };
+  }
+
+  summitAttend(uid) {
+    const A = this.assembly();
+    const S = A.sommet;
+    if (!S || this.now() > S.until) return { ok: false, err: 'Aucun sommet en cours.' };
+    const me = this.cityOf(uid);
+    if (!me) return { ok: false, err: 'Seuls les maires assistent au sommet.' };
+    if (S.participants[String(uid)]) return { ok: false, err: 'Tu es déjà inscrit au sommet.' };
+    S.participants[String(uid)] = true;
+    me.moral = clamp(me.moral + 3, 0, 100);
+    this.save();
+    return { ok: true, attendees: Object.keys(S.participants).length };
+  }
+
+  _resolveSummit() {
+    const A = this.store.data.assembly;
+    const S = A.sommet;
+    if (!S || this.now() < S.until) return;
+    A.sommet = null;
+    const ids = Object.keys(S.participants).filter((u) => this.cityOf(u));
+    if (ids.length >= 2) {
+      const until = this.now() + 24 * 3_600_000;
+      for (let i = 0; i < ids.length; i++) {
+        for (let j = i + 1; j < ids.length; j++) {
+          const a = this.cityOf(ids[i]);
+          const b = this.cityOf(ids[j]);
+          a.treaties[ids[j]] = { type: 'peace', since: this.now(), until };
+          b.treaties[ids[i]] = { type: 'peace', since: this.now(), until };
+          this.notify(a, `🤝 Paix collective signée avec ${b.name} (24 h) grâce au sommet.`);
+          this.notify(b, `🤝 Paix collective signée avec ${a.name} (24 h) grâce au sommet.`);
+        }
+      }
+      this.addNews(`🤝 Le sommet s’achève : ${ids.length} villes signent une PAIX COLLECTIVE de 24 h.`);
+    } else {
+      this.addNews('🤝 Le sommet s’achève sans accord — trop peu de maires présents.');
+    }
+    this.save();
+  }
+
+  /* 🛡️ Garde de l’Assemblée : armée commune, dépêchée où le Président veut. */
+  guardRecruit(uid, n) {
+    const guard = this._presGuard(uid);
+    if (!guard.ok) return guard;
+    n = Math.floor(Number(n));
+    if (!Number.isInteger(n) || n < 1 || n > 50) return { ok: false, err: 'Combien d’unités de garde ? (1 à 50)' };
+    const A = this.assembly();
+    const cost = n * 200;
+    if (A.treasury < cost) return { ok: false, err: `Recruter ${n} gardes coûte ${nf(cost)}${this.cur()} (trésor : ${nf(A.treasury)}).` };
+    A.treasury -= cost;
+    A.garde = (A.garde || 0) + n;
+    this.addNews(`🛡️ La Garde de l’Assemblée compte désormais ${A.garde} soldats (fonds communs).`);
+    this.save();
+    return { ok: true, garde: A.garde, cost };
+  }
+
+  guardSend(uid, cityName, n) {
+    const guard = this._presGuard(uid);
+    if (!guard.ok) return guard;
+    const A = this.assembly();
+    n = Math.floor(Number(n));
+    if (!Number.isInteger(n) || n < 1) return { ok: false, err: 'Combien d’unités envoyer ?' };
+    if ((A.garde || 0) < n) return { ok: false, err: `La Garde n’a que ${A.garde || 0} soldat(s) disponible(s) — Xcity garde recruter <n>` };
+    const found = this.byName(cityName);
+    if (!found) return { ok: false, err: 'Ville à protéger introuvable.' };
+    A.garde -= n;
+    const c = found.city;
+    c.guard = (c.guard || 0) + n;
+    this.addNews(`🛡️ ${n} soldat(s) de la Garde de l’Assemblée dépêchés à ${c.name}.`);
+    this.notify(c, `🛡️ La Garde de l’Assemblée (${n} soldats) protège désormais ta ville.`);
+    this.save();
+    return { ok: true, city: c.name, sent: n, remaining: A.garde };
+  }
+
+  /* 📊 Bulletin présidentiel : rapport mondial toutes les 24 h. */
+  _maybeBulletin() {
+    const A = this.store.data.assembly;
+    const now = this.now();
+    if (!A.lastBulletin) { A.lastBulletin = now; return; }
+    if (now - A.lastBulletin < 24 * 3_600_000) return;
+    A.lastBulletin = now;
+    const cities = this.allCities();
+    if (!cities.length) return;
+    const totalGold = cities.reduce((acc, [, c]) => acc + (c.gold || 0), 0);
+    const top = cities.slice().sort((x, y) => y[1].gold - x[1].gold)[0];
+    const conflicts = this.store.data.news.filter((n) => now - n.at < 24 * 3_600_000 && /pillé|NUCLÉAIRE|TRAHI|PANDÉMIE/.test(n.txt)).length;
+    const txt = `📊 BULLETIN PRÉSIDENTIEL — ${cities.length} villes · richesse mondiale ${nf(totalGold)}${this.cur()} · ${conflicts} incident(s) en 24 h · en tête : ${top[1].name} · Trésor de l’Assemblée : ${nf(A.treasury)}${this.cur()}`;
+    for (const [, c] of cities) this.notify(c, txt);
+    this.save();
   }
 
   /* ══════════════ RENOMMAGE ══════════════ */
@@ -1754,7 +2191,7 @@ module.exports = {
   RANSOM_MIN,
   CANDIDACY_FEE, CANDIDACY_MS, VOTING_MS, MANDATE_MS, VOTE_WEIGHT, PRES_TAX,
   SCANDAL_PENALTY, CURRENCIES, QUARANTINE_MS, VACCINE_PRICE,
-  PRES_SALARY, SALARY_MS,
+  PRES_SALARY, SALARY_MS, WORKS,
   BETRAY_RATE, BETRAY_REP, LOOT_RATE, LOOT_CAP, SEND_TAX, EXPAND_BASE,
   COLLECT_CD, ATTACK_CD, EXPAND_CD, TRAIN_CD, MARKET_MS, TREATY_MS, SHIELD_MS,
   titleFor,
