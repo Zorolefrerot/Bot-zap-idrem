@@ -12,7 +12,7 @@ const assert = require('node:assert');
 const { boot, makeMsg, bodies, unbold, UIDS, clearCooldowns } = require('./helpers');
 const { CityGame, RES } = require('../systems/city');
 const { CURE_PRICE, DEATH_BOUNTY, DEATH_RATE, PRES_SALARY, MANDATE_MS } = require('../systems/city');
-const { WORKS } = require('../systems/city');
+const { WORKS, SWAT_FINE } = require('../systems/city');
 const { BETRAY_RATE, LOOT_RATE, SEND_TAX } = require('../systems/city');
 
 const FLUSH = async (n = 10) => { for (let i = 0; i < n; i++) await new Promise((r) => setImmediate(r)); };
@@ -909,6 +909,103 @@ describe('Xcity — dissuasion nucléaire ☢️ + enquêtes + vaccins noirs', (
     assert.equal(g.cityOf(UIDS.shadow).gold, 2000); // 5000 − 3000
     assert.ok(g.attack(UIDS.paul, 'Vigile').err.includes('QUARANTAINE'));
     assert.ok(g.attack(UIDS.shadow, 'Contaminee').err.includes('quarantaine'));
+  });
+});
+
+describe('Xcity — RAID SWAT ☣️ (2 virus en 24 h)', () => {
+  function biolab(bot) {
+    const g = game(bot);
+    g.create(UIDS.shadow, 'LaboSale', 'S');
+    g.create(UIDS.paul, 'Cible', 'P');
+    const c = g.cityOf(UIDS.shadow);
+    c.gold = 999999; c.lvl = 3;
+    g.build(UIDS.shadow, 'lab'); g.build(UIDS.shadow, 'lab'); g.build(UIDS.shadow, 'lab');
+    c.scientists = 9;
+    c.elements = { carbone: 5, oxygene: 4, plutonium: 2 };
+    c.lastSynth = 0;
+    return { g, c };
+  }
+  function synthKovi(g, c, name) {
+    c.elements.carbone = (c.elements.carbone || 0) + 1;
+    c.elements.oxygene = (c.elements.oxygene || 0) + 1;
+    c.elements.azote = (c.elements.azote || 0) + 1;
+    const r = g.synth(String(c.uid), name, ['carbone', 'oxygene', 'azote'], null);
+    assert.equal(r.ok, true);
+    return r.virus;
+  }
+
+  test('1 virus = rien ; 2ᵉ en 24 h = labos rasés, scientifiques arrêtés, éléments détruits, amende 200 000', async () => {
+    const { bot } = await freshBot();
+    const { g, c } = biolab(bot);
+    const victim = g.cityOf(UIDS.paul);
+    victim.pop = 100;
+    // 1er lancement : OK, pas de SWAT
+    const v1 = synthKovi(g, c, 'Vone');
+    const r1 = g.infect(UIDS.shadow, 'Cible', 'Vone');
+    assert.equal(r1.ok, true);
+    assert.equal(r1.swat, null);
+    assert.equal(c.b.lab, 3);
+    // 2ᵉ lancement dans la fenêtre → RAID
+    c.lastSynth = 0; c.lastVirus = 0;
+    const v2 = synthKovi(g, c, 'Vtwo');
+    g.cityOf(UIDS.paul).lastCollect = 0;
+    const r2 = g.infect(UIDS.shadow, 'Cible', 'Vtwo');
+    assert.equal(r2.ok, true);
+    assert.ok(r2.swat);
+    assert.equal(r2.swat.labs, 3);
+    assert.equal(r2.swat.arrested, 9);
+    assert.equal(r2.swat.elementsCount, 11); // 5+4+2
+    assert.equal(c.b.lab, 0);                // labos rasés
+    assert.equal(c.scientists, 0);           // scientifiques enfermés
+    assert.deepEqual(c.elements, {});        // éléments détruits
+    assert.equal(r2.swat.fine, SWAT_FINE);
+    // 999 999 − 3 labos (9 000) − 2 synthèses (1 000) − amende (200 000)
+    assert.equal(c.gold, 789999);
+    assert.ok(g.assembly().treasury >= SWAT_FINE); // amende reversée à l'Assemblée
+    assert.ok(c.notif.some((n) => n.includes('RAID SWAT')));
+    assert.ok(g.store.data.news.some((n) => n.txt.includes('SWAT')));
+    // un 3ᵉ lancement reste possible mais les compteurs ont été purgés
+    assert.deepEqual(c.virusLaunches, []);
+  });
+
+  test('la fenêtre expire : 2 virus à 25 h d’intervalle = AUCUN raid', async () => {
+    const { bot } = await freshBot();
+    const { g, c } = biolab(bot);
+    const v1 = synthKovi(g, c, 'Old');
+    g.infect(UIDS.shadow, 'Cible', 'Old');
+    // 25 h plus tard (fenêtre expirée)
+    c.virusLaunches[0] -= 25 * 3_600_000;
+    c.lastSynth = 0; c.lastVirus = 0;
+    const v2 = synthKovi(g, c, 'New');
+    const r2 = g.infect(UIDS.shadow, 'Cible', 'New');
+    assert.equal(r2.ok, true);
+    assert.equal(r2.swat, undefined);
+    assert.equal(c.b.lab, 3);
+    assert.equal(c.scientists, 9);
+  });
+
+  test('infect + unleash mélangés comptent pour le SWAT ; virus non lancés confisqués', async () => {
+    const { bot } = await freshBot();
+    const { g, c } = biolab(bot);
+    c.elements = { carbone: 1, oxygene: 1, azote: 1, soufre: 1, phosphore: 1, plutonium: 1 };
+    c.lastSynth = 0;
+    // pandémie prête (non lancée) dans le labo
+    g.build(UIDS.shadow, 'lab'); g.build(UIDS.shadow, 'lab'); // 2 labos déjà présents → 4
+    const pand = g.synth(String(c.uid), 'Noire', ['carbone', 'oxygene', 'azote', 'soufre', 'phosphore', 'plutonium'], 1000).virus;
+    assert.equal(pand.deadline, 0);
+    // 1er lancement : virus simple
+    c.lastSynth = 0; // sinon la synthèse du 2ᵉ virus est refusée (5 min)
+    const v1 = synthKovi(g, c, 'Simple');
+    const r1 = g.infect(UIDS.shadow, 'Cible', 'Simple');
+    assert.equal(r1.ok, true);
+    // 2ᵉ lancement : la pandémie
+    c.lastVirus = 0;
+    const r2 = g.unleash(UIDS.shadow, 'Noire');
+    assert.equal(r2.ok, true);
+    assert.ok(r2.swat);
+    assert.equal(r2.swat.confiscated, 0); // Noire vient d'être lancée, rien à confisquer
+    assert.equal(c.b.lab, 0);
+    assert.equal(c.scientists, 0);
   });
 });
 

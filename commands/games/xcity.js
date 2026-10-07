@@ -446,13 +446,17 @@ module.exports = {
       const res = game.infect(uid, a[0] || '', a[1] || '');
       if (!res.ok) return bad(res.err);
       await dmHints(res);
-      return ctx.send(ctx.fmt.frame('☣️ CONTAMINATION', [
+      const lines = [
         `Le virus ${ctx.fmt.bold(res.virus.name)} frappe ${res.targetName} — ${res.infected} habitants infectés.`,
         '',
         `⏳ ~${res.mins} min avant des morts · 💊 soins 100$/habitant · 🕵️ AUCUNE trace vers toi.`,
         '',
         '📰 L’info passe aux chroniques (nom du virus seul).',
-      ]));
+      ];
+      if (res.swat) {
+        lines.push('', `🚨 ${ctx.fmt.bold('RAID SWAT !')} 2ᵉ virus en 24 h — ${res.swat.labs} labo(s) rasé(s), ${res.swat.arrested} scientifique(s) enfermé(s), ${res.swat.elementsCount} éléments détruits, ${res.swat.confiscated} virus confisqué(s)`, `💸 Amende : ${nfc(res.swat.fine)}${cur()}`);
+      }
+      return ctx.send(ctx.fmt.frame('☣️ CONTAMINATION', lines));
     }
     if (sub === 'unleash') {
       const res = game.unleash(uid, a[0] || '');
@@ -928,6 +932,7 @@ module.exports = {
       '• synth <nom> <3 élts> = VIRUS · <6 élts> rancon <prix> = PANDEMIE',
       '• infect <ville> <nom> — ANONYME · cure <nom> — soins 100$/habitant',
       '• unleash <nom> — pandémie mondiale + rançon (envoi au NOM DU VIRUS)',
+      '⚠️ 2 virus en 24 h = RAID SWAT : labos rasés, scientifiques arrêtés, amende 200 000',
       '',
       '💱 𝗘́𝗖𝗢𝗡𝗢𝗠𝗜𝗘',
       '• market · buy <res> <qté> · sell <res> <qté>',

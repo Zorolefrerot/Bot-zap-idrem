@@ -52,6 +52,8 @@ const ELEMENTS = {
 const LAB_SCI_PER = 3;          // scientifiques par laboratoire
 const HIRE_COST = 800;          // embauche d’un scientifique
 const LOT_MARKUP = 1.25;        // tarif LOT : +25 % par rapport aux unités à l’unité
+const SWAT_WINDOW = 24 * 3_600_000; // fenêtre anti-bioterrorisme
+const SWAT_FINE = 200_000;      // amende après 2 virus lancés en 24 h
 const LOT_PER_LVL = 5;          // taille du lot = 𝗟𝘃𝗹 de la ville × 5
 const RESEARCH_CD = 90_000;     // campagne de recherche
 const RESEARCH_COST = 200;
@@ -230,6 +232,7 @@ class CityGame {
     if (typeof c.quarantineUntil !== 'number') c.quarantineUntil = 0;
     if (typeof c.lastVirusHit !== 'string') c.lastVirusHit = '';
     if (typeof c.guard !== 'number') c.guard = 0;
+    if (!Array.isArray(c.virusLaunches)) c.virusLaunches = [];
     if (typeof c.embargoUntil !== 'number') c.embargoUntil = 0;
   }
 
@@ -289,7 +292,7 @@ class CityGame {
       elements: {}, scientists: 0,
       cds: {}, nukes: 0, scandals: 0, immuneUntil: 0,
       farmBlight: 0, sabotaged: 0, quarantineUntil: 0, lastVirusHit: '',
-      guard: 0, embargoUntil: 0,
+      guard: 0, embargoUntil: 0, virusLaunches: [],
       shieldUntil: 0,
       wins: 0, losses: 0, betrayals: 0, barbRaids: 0, treatiesSigned: 0, sentGold: 0, touristsTotal: 0,
     };
@@ -1093,8 +1096,42 @@ class CityGame {
     const txt = `☣️ ALERTE : le virus « ${v.name} » frappe ta ville ! ${cnt} habitants infectés — soins urgents : ${nf(CURE_PRICE)}${this.cur()}/habitant (${nf(cnt * CURE_PRICE)}${this.cur()}) → Xcity cure ${v.name} — sans remède dans ~${mins} min, des morts à déplorer…`;
     this.notify(target, txt);
     this.addNews(`☣️ Un virus inconnu nommé « ${v.name} » frappe ${target.name} !`);
+    const swat = this._swatCheck(me);
     this.save();
-    return { ok: true, virus: v, targetName: target.name, infected: cnt, mins, dm: [{ to: found.uid, txt }] };
+    return { ok: true, virus: v, targetName: target.name, infected: cnt, mins, swat, dm: [{ to: found.uid, txt }] };
+  }
+
+  /* 🚨 SWAT : 2 virus (ou pandémies) lancés en 24 h → raid anti-bioterrorisme. */
+  _swatCheck(me) {
+    const now = this.now();
+    me.virusLaunches = (me.virusLaunches || []).filter((t) => now - t < SWAT_WINDOW);
+    me.virusLaunches.push(now);
+    if (me.virusLaunches.length < 2) return null;
+    me.virusLaunches = [];
+    const d = this.store.data;
+    const destroyedLabs = me.b.lab || 0;
+    const arrested = me.scientists || 0;
+    let elementsCount = 0;
+    for (const n of Object.values(me.elements || {})) elementsCount += Number(n) || 0;
+    let confiscated = 0;
+    for (const v of [...d.viruses]) {
+      if (String(v.creator) === String(me.uid) && !v.deadline) {
+        d.viruses.splice(d.viruses.indexOf(v), 1);
+        confiscated += 1;
+      }
+    }
+    me.b.lab = 0;
+    me.scientists = 0;
+    me.elements = {};
+    const fine = Math.min(me.gold || 0, SWAT_FINE);
+    me.gold -= fine;
+    me.moral = clamp(me.moral - 10, 0, 100);
+    const A = this.assembly();
+    A.treasury += fine;
+    const raid = `🚨 SWAT : laboratoires clandestins de ${me.name} démantelés — ${arrested} scientifique(s) arrêté(s), ${destroyedLabs} labo(s) rasé(s), ${elementsCount} éléments saisis, ${confiscated} virus confisqué(s) · amende : ${nf(fine)}${this.cur()}`;
+    this.addNews(raid);
+    this.notify(me, `🚨 RAID SWAT ! Programme biologique illégal découvert chez toi : ${destroyedLabs} labo(s) rasé(s), ${arrested} scientifique(s) enfermé(s), ${elementsCount} éléments détruits, ${confiscated} virus confisqué(s), amende de ${nf(fine)}${this.cur()}.`);
+    return { labs: destroyedLabs, arrested, elementsCount, confiscated, fine };
   }
 
   unleash(uid, virusName) {
@@ -1119,8 +1156,9 @@ class CityGame {
       this.notify(city, `🦠 PANDÉMIE « ${v.name} » ! ${cnt} habitants infectés. Soins : ${nf(CURE_PRICE)}${this.cur()}/habitant (Xcity cure ${v.name}) — ou rançon : ${nf(v.ransom)}${this.cur()} → Xcity send ${v.name} money ${v.ransom} (~${mins} min avant des morts)`);
     }
     this.addNews(`🦠 PANDÉMIE MONDIALE « ${v.name} » ! Toutes les villes sont touchées — le berger du virus exige ${nf(v.ransom)}${this.cur()} par ville pour le remède.`);
+    const swat = this._swatCheck(me);
     this.save();
-    return { ok: true, virus: v, hits, mins };
+    return { ok: true, virus: v, hits, mins, swat };
   }
 
   cure(uid, virusName) {
@@ -2206,6 +2244,7 @@ module.exports = {
   CANDIDACY_FEE, CANDIDACY_MS, VOTING_MS, MANDATE_MS, VOTE_WEIGHT, PRES_TAX,
   SCANDAL_PENALTY, CURRENCIES, QUARANTINE_MS, VACCINE_PRICE,
   PRES_SALARY, SALARY_MS, WORKS, LOT_MARKUP, LOT_PER_LVL,
+  SWAT_WINDOW, SWAT_FINE,
   BETRAY_RATE, BETRAY_REP, LOOT_RATE, LOOT_CAP, SEND_TAX, EXPAND_BASE,
   COLLECT_CD, ATTACK_CD, EXPAND_CD, TRAIN_CD, MARKET_MS, TREATY_MS, SHIELD_MS,
   titleFor,
